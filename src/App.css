@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  background: linear-gradient(90deg, #87CEFA, #B0E0E6); /* 연파랑 그라데이션 */
+  color: white; /* 글자색 */
+  padding: 0.5rem; /* 패딩 줄이기 */
+  text-align: center;
+  font-size: 1.2rem; /* 폰트 크기 줄이기 */
+  font-weight: bold; /* 글자를 굵게 */
+  border-bottom: 2px solid #87CEEB; /* 아래에 연파랑 선 추가 */
+}
+
+
+.map-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map {
+  width: 90%;
+  height: 60vh;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background: #f1f1f1;
+}
