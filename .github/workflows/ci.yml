@@ -1,0 +1,52 @@
+name: CI/CD for React App
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. GitHub 저장소 클론
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Node.js 환경 설정
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16 # React와 호환되는 LTS 버전
+
+    # 3. 의존성 설치
+    - name: Install dependencies
+      run: npm install
+
+    # 4. 빌드 실행
+    - name: Build the React app
+      run: npm run build
+
+       # 5. 빌드 파일을 EC2로 전송
+    - name: Copy files to EC2
+      env:
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "${EC2_SSH_KEY}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./build/ ${EC2_USER}@${EC2_HOST}:/var/www/html
+
+    # 6. Nginx 재시작 (EC2 내부에서)
+    - name: Restart Nginx
+      env:
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+      run: |
+        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "sudo systemctl restart nginx"
