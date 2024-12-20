@@ -7,14 +7,15 @@ body {
 }
 
 .header {
-  background: linear-gradient(90deg, #87CEFA, #B0E0E6); /* 연파랑 그라데이션 */
-  color: white; /* 글자색 */
-  padding: 0.5rem; /* 패딩 줄이기 */
+  background: linear-gradient(90deg, #DCF2FF, #b3dff0) !important; /* 연한 파랑색 그라데이션 */
+  color: rgb(124, 124, 124) !important; /* 글자색을 약간 어둡게 */
+  padding: 0.4rem; /* 패딩을 약간 더 늘림 */
   text-align: center;
-  font-size: 1.2rem; /* 폰트 크기 줄이기 */
-  font-weight: bold; /* 글자를 굵게 */
-  border-bottom: 2px solid #87CEEB; /* 아래에 연파랑 선 추가 */
+  font-size: 0.8rem; /* 적절한 폰트 크기 */
+  font-weight: 800; /* 글자 굵기 굵게 */
+  border-bottom: 1px solid #b3dff0; /* 경계선을 얇고 자연스럽게 */
 }
+
 
 
 .map-container {
@@ -35,4 +36,10 @@ body {
   text-align: center;
   padding: 1rem;
   background: #f1f1f1;
+}
+
+.slide img, .cafe-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
