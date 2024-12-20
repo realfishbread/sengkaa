@@ -19,7 +19,7 @@ import { styled } from "@mui/system";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
-import cafe1 from './assets/cafe1.jpg';
+
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   "& .MuiDrawer-paper": {
