@@ -20,7 +20,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
 
-
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   "& .MuiDrawer-paper": {
     transition: "transform 0.3s ease-in-out",
@@ -52,6 +51,20 @@ function App() {
     slidesToShow: 3,
     slidesToScroll: 1,
     arrows: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   const slides = [
@@ -61,11 +74,11 @@ function App() {
   ];
 
   const popularCafes = [
-    { name: "사랑해린", description: "뉴진스 해린", image: "/images/cafe1.jpg" },
-    { name: "카페 라떼", description: "부산 해운대의 아름다운 카페", image: "/images/cafe2.jpg" },
-    { name: "카페 모카", description: "제주도의 멋진 전망 카페", image: "/images/cafe3.jpg" },
-    { name: "카페 바닐라", description: "인천의 아늑한 카페", image: "/images/cafe4.jpg" },
-    { name: "카페 에스프레소", description: "대구의 유명 카페", image: "/images/cafe5.jpg" },
+    { name: "카페 1", description: "뉴진스 해린", image: "/images/cafe1.jpg" },
+    { name: "카페 2", description: "부산 해운대의 아름다운 카페", image: "/images/cafe2.jpg" },
+    { name: "카페 3", description: "제주도의 멋진 전망 카페", image: "/images/cafe3.jpg" },
+    { name: "카페 4", description: "인천의 아늑한 카페", image: "/images/cafe4.jpg" },
+    { name: "카페 5", description: "대구의 유명 카페", image: "/images/cafe5.jpg" },
   ];
 
   const rentableLocations = [
@@ -78,10 +91,8 @@ function App() {
 
   return (
     <div className="App" style={{ overflowY: "scroll", overflowX: "hidden", height: "100vh", scrollBehavior: "smooth" }}>
-      {/* 헤더 */}
       <AppBar position="static" className="header">
         <Toolbar>
-          {/* 드로어 버튼 */}
           <IconButton
             edge="start"
             color="inherit"
@@ -90,11 +101,11 @@ function App() {
           >
             <MenuIcon />
           </IconButton>
-          {/* 로고 */}
-          <Typography variant="h6" className="header-title">
-            EVENT CAFE
-          </Typography>
-          {/* 검색 필드 */}
+          <img
+            src="/images/logo.png"
+            alt="Event Cafe Logo"
+            style={{ height: "60px", marginLeft: "0.1rem" }}
+          />
           <div style={{ marginLeft: "auto", marginRight: "1rem" }}>
             <TextField
               variant="outlined"
@@ -106,7 +117,6 @@ function App() {
               }}
             />
           </div>
-          {/* 우측 로그인/회원가입 버튼 */}
           <div>
             <Button color="inherit">로그인</Button>
             <Button color="inherit">회원가입</Button>
@@ -114,7 +124,6 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      {/* 드로어 메뉴 */}
       <CustomDrawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <List>
           <ListItem button>
@@ -129,19 +138,17 @@ function App() {
         </List>
       </CustomDrawer>
 
-      {/* 광고 슬라이드 */}
       <main className="map-container">
         <Slider {...adSliderSettings}>
           {slides.map((slide, index) => (
             <div key={index} className="slide">
-              <img src={slide.image} alt={`Slide ${index + 1}`} />
+              <img src={slide.image} alt={`Slide ${index + 1}`} style={{ width: "100%", height: "auto" }} />
               <p>{slide.caption}</p>
             </div>
           ))}
         </Slider>
       </main>
 
-      {/* 인기 생일 카페 섹션 */}
       <section className="popular-cafes" style={{ padding: "2rem 1rem", marginTop: "3rem" }}>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", marginBottom: "1rem" }}>
           <Typography variant="h5" style={{ textAlign: "center" }}>인기 생일 카페</Typography>
@@ -156,12 +163,20 @@ function App() {
                   borderRadius: "8px",
                   padding: "1rem",
                   textAlign: "center",
+                  width: "100%",
+                  maxWidth: "300px",
+                  margin: "auto",
                 }}
               >
                 <img
                   src={cafe.image}
                   alt={cafe.name}
-                  style={{ width: "100%", borderRadius: "8px" }}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
                 />
                 <Typography variant="h6" style={{ marginTop: "0.5rem" }}>
                   {cafe.name}
@@ -175,41 +190,6 @@ function App() {
         </Slider>
       </section>
 
-      {/* 대관 가능한 장소 섹션 */}
-      <section className="rentable-locations" style={{ padding: "2rem 1rem", marginTop: "3rem" }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", marginBottom: "1rem" }}>
-          <Typography variant="h5" style={{ textAlign: "center" }}>대관 가능한 장소</Typography>
-          <Link href="#" style={{ fontSize: "0.9rem", textDecoration: "none", position: "absolute", right: 0 }}>더보기</Link>
-        </div>
-        <Slider {...cafeSliderSettings}>
-          {rentableLocations.map((location, index) => (
-            <div key={index} className="location-slide" style={{ padding: "0 1rem" }}>
-              <Box
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  padding: "1rem",
-                  textAlign: "center",
-                }}
-              >
-                <img
-                  src={location.image}
-                  alt={location.name}
-                  style={{ width: "100%", borderRadius: "8px" }}
-                />
-                <Typography variant="h6" style={{ marginTop: "0.5rem" }}>
-                  {location.name}
-                </Typography>
-                <Typography variant="body2" style={{ color: "#555" }}>
-                  {location.description}
-                </Typography>
-              </Box>
-            </div>
-          ))}
-        </Slider>
-      </section>
-
-      {/* 푸터 */}
       <footer className="footer" style={{ fontSize: "0.8rem", padding: "0.5rem" }}>
         <p>© EVENTCAFE, Inc | 고객문의 : eventcafe@gmail.com</p>
       </footer>
