@@ -81,13 +81,7 @@ function App() {
     { name: "카페 5", description: "대구의 유명 카페", image: "/images/cafe5.jpg" },
   ];
 
-  const rentableLocations = [
-    { name: "카페 루프탑", description: "서울의 루프탑 대관 가능", image: "/images/location1.jpg" },
-    { name: "카페 정원", description: "부산의 정원 카페 대관 가능", image: "/images/location2.jpg" },
-    { name: "카페 바다", description: "제주의 바닷가 카페 대관 가능", image: "/images/location3.jpg" },
-    { name: "카페 도시", description: "인천의 도심형 카페 대관 가능", image: "/images/location4.jpg" },
-    { name: "카페 산", description: "강원도의 산속 카페 대관 가능", image: "/images/location5.jpg" },
-  ];
+ 
 
   return (
     <div className="App" style={{ overflowY: "scroll", overflowX: "hidden", height: "100vh", scrollBehavior: "smooth" }}>
