@@ -8,13 +8,13 @@ body {
 }
 
 .header {
-  background: linear-gradient(90deg, #DCF2FF, #b3dff0) !important; /* 연한 파랑색 그라데이션 */
+  background: #DCF2FF !important; /* 연한 파랑색 그라데이션 */
   color: rgb(124, 124, 124) !important; /* 글자색을 약간 어둡게 */
   padding: 0.4rem; /* 패딩을 약간 더 늘림 */
   text-align: center;
   font-size: 0.8rem; /* 적절한 폰트 크기 */
   font-weight: 800; /* 글자 굵기 굵게 */
-  border-bottom: 1px solid #b3dff0; /* 경계선을 얇고 자연스럽게 */
+  
 }
 
 /* 레이아웃 스타일 */
@@ -93,3 +93,4 @@ body {
   height: auto;
   display: block;
 }
+

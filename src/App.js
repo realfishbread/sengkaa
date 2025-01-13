@@ -3,35 +3,26 @@ import Slider from "react-slick";
 import {
   AppBar,
   Toolbar,
-  IconButton,
   Typography,
   Button,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
   Box,
   TextField,
   Link,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { styled } from "@mui/system";
-import "slick-carousel/slick/slick.css"; 
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import LoginPage from "./pages/Login";
+import SignupPage from "./pages/Signup";
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
 
-const CustomDrawer = styled(Drawer)(({ theme }) => ({
-  "& .MuiDrawer-paper": {
-    transition: "transform 0.3s ease-in-out",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-  },
-}));
-
 function App() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeNavItem, setActiveNavItem] = useState(null);
+  const navigate = useNavigate();
 
-  const toggleDrawer = (open) => () => {
-    setDrawerOpen(open);
+  const handleNavItemClick = (index) => {
+    setActiveNavItem(index);
+    console.log(`Clicked nav item: ${index}`);
   };
 
   const adSliderSettings = {
@@ -81,56 +72,100 @@ function App() {
     { name: "카페 5", description: "대구의 유명 카페", image: "/images/cafe5.jpg" },
   ];
 
- 
+  const navItems = [
+    "생일카페 등록",
+    "카페 찾기",
+    "장소 대관",
+    "콜라보 소식",
+  ];
 
   return (
     <div className="App" style={{ overflowY: "scroll", overflowX: "hidden", height: "100vh", scrollBehavior: "smooth" }}>
-      <AppBar position="static" className="header">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
+      <AppBar
+        position="static"
+        className="header"
+        style={{
+          minHeight: "60px",
+          backgroundColor: "#b3dff0",
+          transition: "background-color 0.3s ease-in-out",
+        }}
+      >
+        <Toolbar style={{ minHeight: "50px", paddingLeft: "8px", paddingRight: "8px" }}>
           <img
             src="/images/logo.png"
             alt="Event Cafe Logo"
-            style={{ height: "60px", marginLeft: "0.1rem" }}
+            style={{ height: "50px", marginLeft: "0.3rem" }}
           />
           <div style={{ marginLeft: "auto", marginRight: "1rem" }}>
             <TextField
               variant="outlined"
               placeholder="찾으시는 최애가 있으신가요?"
               size="small"
-              style={{ backgroundColor: "white", borderRadius: "4px" }}
+              style={{
+                backgroundColor: "white",
+                borderRadius: "4px",
+                fontSize: "0.8rem",
+              }}
               InputProps={{
                 style: { fontSize: "0.8rem" },
               }}
             />
           </div>
           <div>
-            <Button color="inherit">로그인</Button>
-            <Button color="inherit">회원가입</Button>
+            <Button
+              style={{
+                color: "#000000",
+                fontSize: "0.8rem",
+                padding: "4px 8px",
+                minWidth: "60px",
+              }}
+              onClick={() => navigate("/login")}
+            >
+              로그인
+            </Button>
+            <Button
+              style={{
+                color: "#000000",
+                fontSize: "0.8rem",
+                padding: "4px 8px",
+                minWidth: "60px",
+              }}
+              onClick={() => navigate("/signup")}
+            >
+              회원가입
+            </Button>
           </div>
         </Toolbar>
       </AppBar>
 
-      <CustomDrawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <List>
-          <ListItem button>
-            <ListItemText primary="홈" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary="이벤트" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary="카페 찾기" />
-          </ListItem>
-        </List>
-      </CustomDrawer>
+      <Box
+        style={{
+          backgroundColor: "#DCF2FF",
+          padding: "10px 0",
+          borderBottom: "1px solid #c7c7c7",
+          display: "flex",
+          justifyContent: "flex-start",
+          paddingLeft: "70px",
+        }}
+      >
+        {navItems.map((item, index) => (
+          <Link
+            key={index}
+            href="#"
+            onClick={() => handleNavItemClick(index)}
+            style={{
+              margin: "0 15px",
+              color: activeNavItem === index ? "#0056b3" : "#000000",
+              fontSize: "1rem",
+              textDecoration: "none",
+              fontWeight: activeNavItem === index ? "bold" : "normal",
+              transition: "color 0.2s ease, font-weight 0.2s ease",
+            }}
+          >
+            {item}
+          </Link>
+        ))}
+      </Box>
 
       <main className="map-container">
         <Slider {...adSliderSettings}>
@@ -191,4 +226,16 @@ function App() {
   );
 }
 
-export default App;
+function MainApp() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default MainApp;
