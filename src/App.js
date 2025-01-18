@@ -66,7 +66,7 @@ function App() {
 
   const popularCafes = [
     { name: "카페 1", description: "뉴진스 해린", image: "/images/cafe1.jpg" },
-    { name: "카페 2", description: "부산 해운대의 아름다운 카페", image: "/images/cafe2.jpg" },
+    { name: "카페 2", description: "트리플에스 나경", image: "/images/cafe2.jpg" },
     { name: "카페 3", description: "제주도의 멋진 전망 카페", image: "/images/cafe3.jpg" },
     { name: "카페 4", description: "인천의 아늑한 카페", image: "/images/cafe4.jpg" },
     { name: "카페 5", description: "대구의 유명 카페", image: "/images/cafe5.jpg" },
@@ -77,6 +77,7 @@ function App() {
     "카페 찾기",
     "장소 대관",
     "콜라보 소식",
+    "주변 카페 지도"
   ];
 
   return (
@@ -153,19 +154,22 @@ function App() {
             key={index}
             href="#"
             onClick={() => handleNavItemClick(index)}
+            onMouseEnter={() => setActiveNavItem(index)} // 마우스 올릴 때 반응
+            onMouseLeave={() => setActiveNavItem(null)} // 마우스 뗄 때 초기화
             style={{
               margin: "0 15px",
               color: activeNavItem === index ? "#0056b3" : "#000000",
-              fontSize: "1rem",
+              fontSize: activeNavItem === index ? "1.1rem" : "1rem", // 크기 확대
               textDecoration: "none",
               fontWeight: activeNavItem === index ? "bold" : "normal",
-              transition: "color 0.2s ease, font-weight 0.2s ease",
+              transition: "color 0.3s ease, font-size 0.3s ease", // 부드러운 효과
             }}
           >
             {item}
           </Link>
         ))}
       </Box>
+
 
       <main className="map-container">
         <Slider {...adSliderSettings}>
@@ -218,6 +222,9 @@ function App() {
           ))}
         </Slider>
       </section>
+
+
+      
 
       <footer className="footer" style={{ fontSize: "0.8rem", padding: "0.5rem" }}>
         <p>© EVENTCAFE, Inc | 고객문의 : eventcafe@gmail.com</p>

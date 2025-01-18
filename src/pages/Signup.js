@@ -1,5 +1,4 @@
-// pages/SignupPage.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -10,128 +9,251 @@ import {
 } from "@mui/material";
 
 const SignupPage = () => {
+  const [email, setEmail] = useState(""); // 이메일 상태
+  const [password, setPassword] = useState(""); // 비밀번호 상태
+  const [confirmPassword, setConfirmPassword] = useState(""); // 비밀번호 확인 상태
+  const [error, setError] = useState(false); // 비밀번호 불일치 에러 상태
+  const [showEmailVerification, setShowEmailVerification] = useState(false); // 이메일 인증 필드 표시 여부
+  const [timer, setTimer] = useState(180); // 타이머 초기값(3분)
+  const [code, setCode] = useState(""); // 입력된 인증 코드 상태
+
+  useEffect(() => {
+    let timerInterval;
+    if (showEmailVerification && timer > 0) {
+      timerInterval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      clearInterval(timerInterval);
+    }
+    return () => clearInterval(timerInterval);
+  }, [showEmailVerification, timer]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
+  };
+
   const handleSignup = () => {
+    if (password !== confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    if (!code) {
+      alert("이메일 인증을 완료해주세요.");
+      return;
+    }
     // 회원가입 처리 로직
-    console.log("회원가입 요청");
+    console.log("회원가입 요청", { email, password, code });
+  };
+
+  const handleSendVerification = () => {
+    setShowEmailVerification(true);
+    setTimer(180); // 타이머 3분 초기화
+    console.log("인증 코드 전송 요청");
+  };
+
+  const handleCodeVerification = () => {
+    // 인증 코드 확인 로직 추가 가능
+    console.log("입력된 코드:", code);
   };
 
   return (
-    <Container
-      maxWidth="xs" // 너비를 좁게 설정
+    <Box
       sx={{
-        marginTop: "4rem",
-        padding: "2rem",
-        borderRadius: "12px",
-        backgroundColor: "#ffffff",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)", // 부드러운 그림자 효과
+        backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
       }}
     >
-      <Typography
-        variant="h5" // 더 작은 제목 크기
-        gutterBottom
-        textAlign="center"
+      <Container
+        maxWidth="xs"
         sx={{
-          marginBottom: "1.5rem",
-          color: "#333333",
+          padding: "2rem",
+          borderRadius: "12px",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          boxShadow: "0 6px 18px rgba(0, 0, 0, 0.1)",
         }}
       >
-        회원가입
-      </Typography>
-      <Box
-        component="form"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        <TextField
-          label="이름"
-          type="text"
-          variant="outlined"
-          required
-          fullWidth
-          InputLabelProps={{
-            sx: {
-              fontSize: "1rem",
-            },
-          }}
-        />
-        <TextField
-          label="이메일"
-          type="email"
-          variant="outlined"
-          required
-          fullWidth
-          InputLabelProps={{
-            sx: {
-              fontSize: "1rem",
-            },
-          }}
-        />
-        <TextField
-          label="비밀번호"
-          type="password"
-          variant="outlined"
-          required
-          fullWidth
-          InputLabelProps={{
-            sx: {
-              fontSize: "1rem",
-            },
-          }}
-        />
-        <TextField
-          label="비밀번호 확인"
-          type="password"
-          variant="outlined"
-          required
-          fullWidth
-          InputLabelProps={{
-            sx: {
-              fontSize: "1rem",
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={handleSignup}
+        <Typography
+          variant="h5"
+          gutterBottom
+          textAlign="center"
           sx={{
-            backgroundColor: "#007BFF",
-            color: "#ffffff",
-            padding: "10px",
-            fontSize: "1rem",
-            borderRadius: "8px",
-            "&:hover": {
-              backgroundColor: "#0056b3",
-            },
-            transition: "background-color 0.3s ease-in-out",
+            fontWeight: "bold",
+            color: "#333333",
+            marginBottom: "1.5rem",
+            textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
           }}
         >
           회원가입
-        </Button>
-        <Typography
-          variant="body2"
-          textAlign="center"
-          sx={{ color: "#555555", marginTop: "1rem" }}
+        </Typography>
+        <Box
+          component="form"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
         >
-          이미 계정이 있으신가요?{" "}
-          <Link
-            href="/login"
-            underline="hover"
+          <TextField
+            label="이름"
+            type="text"
+            variant="outlined"
+            required
+            fullWidth
+          />
+          <Box
             sx={{
-              color: "#007BFF",
-              "&:hover": {
-                textDecoration: "underline",
-              },
+              display: "flex",
+              flexDirection: "row", // 가로로 배치
+              alignItems: "center",
+              gap: 1,
             }}
           >
-            로그인
-          </Link>
-        </Typography>
-      </Box>
-    </Container>
+            <TextField
+              label="이메일"
+              type="email"
+              variant="outlined"
+              required
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                flex: 1, // 텍스트 필드가 가능한 넓게 확장되도록 설정
+              }}
+            />
+            <Button
+              variant="outlined"
+              onClick={handleSendVerification}
+              sx={{
+                padding: "10px 16px", // 버튼의 크기 조정
+                fontWeight: "bold",
+                fontSize: "0.9rem",
+                borderRadius: "6px",
+                color: "#007BFF",
+                borderColor: "#007BFF",
+                "&:hover": {
+                  backgroundColor: "#e6f4ff",
+                },
+              }}
+            >
+              인증
+            </Button>
+          </Box>
+
+          {/* 이메일 인증 코드 입력 필드 */}
+          {showEmailVerification && (
+            <Box>
+              <TextField
+                label="인증 코드"
+                type="text"
+                variant="outlined"
+                fullWidth
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                sx={{ marginBottom: "0.5rem" }}
+              />
+              <Typography
+                variant="body2"
+                sx={{
+                  textAlign: "right",
+                  color: timer > 0 ? "#555555" : "#FF0000",
+                }}
+              >
+                {timer > 0
+                  ? `남은 시간: ${formatTime(timer)}`
+                  : "인증 시간이 만료되었습니다."}
+              </Typography>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleCodeVerification}
+                disabled={timer <= 0}
+                sx={{
+                  marginTop: "0.5rem",
+                  backgroundColor: timer > 0 ? "#007BFF" : "#d3d3d3",
+                  color: "#ffffff",
+                  "&:hover": {
+                    backgroundColor: timer > 0 ? "#0056b3" : "#d3d3d3",
+                  },
+                }}
+              >
+                인증 확인
+              </Button>
+            </Box>
+          )}
+          <TextField
+            label="비밀번호"
+            type="password"
+            variant="outlined"
+            required
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            label="비밀번호 확인"
+            type="password"
+            variant="outlined"
+            required
+            fullWidth
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            error={error}
+            helperText={error ? "비밀번호가 일치하지 않습니다." : ""}
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handleSignup}
+            sx={{
+              backgroundColor: "#007BFF",
+              color: "#ffffff",
+              padding: "10px",
+              fontWeight: "bold",
+              fontSize: "1rem",
+              borderRadius: "6px",
+              "&:hover": {
+                backgroundColor: "#0056b3",
+                transform: "scale(1.02)",
+              },
+              transition: "all 0.3s ease-in-out",
+            }}
+          >
+            회원가입
+          </Button>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            sx={{
+              color: "#555555",
+              marginTop: "1rem",
+            }}
+          >
+            이미 계정이 있으신가요?{" "}
+            <Link
+              href="/login"
+              underline="hover"
+              sx={{
+                color: "#007BFF",
+                fontWeight: "bold",
+                "&:hover": {
+                  textDecoration: "underline",
+                  color: "#0056b3",
+                },
+              }}
+            >
+              로그인
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

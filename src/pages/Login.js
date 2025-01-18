@@ -1,4 +1,3 @@
-// pages/LoginPage.js
 import React from "react";
 import {
   Box,
@@ -28,7 +27,7 @@ const LoginPage = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#DCF2FF",
+        backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -37,32 +36,53 @@ const LoginPage = () => {
       }}
     >
       <Container
-        maxWidth="sm"
+        maxWidth="xs"
         sx={{
-          padding: "2rem",
+          padding: "1.5rem",
           borderRadius: "12px",
-          backgroundColor: "#ffffff",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          boxShadow: "0 6px 18px rgba(0, 0, 0, 0.1)",
         }}
       >
+        {/* 로고 섹션 */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "1.5rem", // 제목과의 간격
+          }}
+        >
+          <img
+            src="/images/logo.png" // 로고 이미지 경로
+            alt="App Logo"
+            style={{
+              height: "60px", // 로고 크기
+              width: "auto", // 비율 유지
+            }}
+          />
+        </Box>
+
+        {/* 제목 */}
         <Typography
-          variant="h4"
+          variant="h5"
           gutterBottom
           textAlign="center"
           sx={{
             fontWeight: "bold",
             color: "#333333",
             marginBottom: "1.5rem",
+            textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
           }}
         >
           로그인
         </Typography>
+
         <Box
           component="form"
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 3,
+            gap: 2,
           }}
         >
           <TextField
@@ -71,6 +91,16 @@ const LoginPage = () => {
             variant="outlined"
             required
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#007BFF",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#0056b3",
+                },
+              },
+            }}
           />
           <TextField
             label="비밀번호"
@@ -78,6 +108,16 @@ const LoginPage = () => {
             variant="outlined"
             required
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#007BFF",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#0056b3",
+                },
+              },
+            }}
           />
           <Button
             variant="contained"
@@ -86,14 +126,15 @@ const LoginPage = () => {
             sx={{
               backgroundColor: "#007BFF",
               color: "#ffffff",
-              padding: "12px",
+              padding: "10px",
               fontWeight: "bold",
-              fontSize: "1rem",
-              borderRadius: "8px",
+              fontSize: "0.9rem",
+              borderRadius: "6px",
               "&:hover": {
                 backgroundColor: "#0056b3",
+                transform: "scale(1.02)",
               },
-              transition: "background-color 0.3s ease-in-out",
+              transition: "all 0.3s ease-in-out",
             }}
           >
             로그인
@@ -108,6 +149,7 @@ const LoginPage = () => {
                 fontWeight: "bold",
                 "&:hover": {
                   textDecoration: "underline",
+                  color: "#0056b3",
                 },
               }}
             >
@@ -115,9 +157,10 @@ const LoginPage = () => {
             </Link>
           </Typography>
         </Box>
+
         <Divider
           sx={{
-            marginY: 3,
+            marginY: 2,
             borderColor: "#E0E0E0",
           }}
         >
@@ -125,11 +168,12 @@ const LoginPage = () => {
             SNS로 로그인하기
           </Typography>
         </Divider>
+
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 2,
+            gap: 1.5,
           }}
         >
           <Button
@@ -138,17 +182,19 @@ const LoginPage = () => {
             sx={{
               backgroundColor: "#FEE500",
               color: "#3C1E1E",
-              padding: "12px",
+              padding: "10px",
               fontWeight: "bold",
-              fontSize: "1rem",
-              borderRadius: "8px",
+              fontSize: "0.9rem",
+              borderRadius: "6px",
+              boxShadow: "0 3px 9px rgba(0, 0, 0, 0.1)",
               "&:hover": {
                 backgroundColor: "#e3d100",
+                transform: "scale(1.02)",
               },
-              transition: "background-color 0.3s ease-in-out",
+              transition: "all 0.3s ease-in-out",
             }}
           >
-            <SiKakaotalk size={20} style={{ marginRight: "10px" }} />
+            <SiKakaotalk size={18} style={{ marginRight: "8px" }} />
             카카오로 로그인
           </Button>
           <Button
@@ -157,18 +203,20 @@ const LoginPage = () => {
             sx={{
               backgroundColor: "#ffffff",
               color: "#757575",
-              padding: "12px",
+              padding: "10px",
               fontWeight: "bold",
-              fontSize: "1rem",
-              borderRadius: "8px",
+              fontSize: "0.9rem",
+              borderRadius: "6px",
               border: "1px solid #E0E0E0",
+              boxShadow: "0 3px 9px rgba(0, 0, 0, 0.1)",
               "&:hover": {
                 backgroundColor: "#f7f7f7",
+                transform: "scale(1.02)",
               },
-              transition: "background-color 0.3s ease-in-out",
+              transition: "all 0.3s ease-in-out",
             }}
           >
-            <FcGoogle size={20} style={{ marginRight: "10px" }} />
+            <FcGoogle size={18} style={{ marginRight: "8px" }} />
             구글로 로그인
           </Button>
         </Box>
