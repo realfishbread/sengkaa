@@ -1,20 +1,36 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 body {
   margin: 0;
-  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 .header {
-  background: #DCF2FF !important; /* 연한 파랑색 그라데이션 */
-  color: rgb(124, 124, 124) !important; /* 글자색을 약간 어둡게 */
-  padding: 0.4rem; /* 패딩을 약간 더 늘림 */
+  background: #DCF2FF !important;
+  color: #333 !important;
+  padding: 0.4rem;
   text-align: center;
-  font-size: 0.8rem; /* 적절한 폰트 크기 */
-  font-weight: 800; /* 글자 굵기 굵게 */
-  
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: "Pretendard Variable", sans-serif !important;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: black;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-family: "Pretendard Variable", sans-serif !important;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.navbar a:hover {
+  color: #0056b3;
+  font-weight: bold;
 }
 
 /* 레이아웃 스타일 */
@@ -94,3 +110,8 @@ body {
   display: block;
 }
 
+
+body {
+  margin: 0;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
