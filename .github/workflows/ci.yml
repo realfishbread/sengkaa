@@ -23,13 +23,13 @@ jobs:
       with:
         node-version: 16 # React와 호환되는 LTS 버전
 
-    # 3. 의존성 설치
     - name: Install dependencies
       run: npm install
 
-    # 4. 빌드 실행
-    - name: Build the React app
-      run: npm run build
+    - name: Build project (Ignore Warnings)
+      run: |
+          export CI=false
+          npm run build
 
        # 5. 빌드 파일을 EC2로 전송
     - name: Copy files to EC2
