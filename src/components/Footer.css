@@ -1,0 +1,13 @@
+.footer {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    background-color: #9a9a9a;  /* ✅ 푸터 배경색 */
+    text-align: center;
+    position: fixed;  /* ✅ 푸터를 항상 화면 아래 고정 */
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    z-index: 1000;
+}

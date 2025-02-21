@@ -1,0 +1,49 @@
+.navbar {
+    background-color: #DCF2FF !important;
+    min-height: 60px;
+    transition: background-color 0.3s ease-in-out !important; 
+}
+
+.logo {
+    height: 50px;
+    margin-left: 0.2rem;
+}
+
+.nav-buttons {
+    color: #000000 ;
+    fontSize: 0.8rem;
+    padding: 4px 8px; 
+    minWidth: 60px;
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
+/* ✅ 하단 네비게이션 메뉴 */
+.bottom-nav {
+    background-color: #DCF2FF !important;
+    padding: 10px 0;
+    border-bottom: 1px solid #c7c7c7;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 70px;
+}
+
+.nav-item {
+    margin: 0 11px;
+    color: #3f3f3f !important;
+    font-size: 1rem !important;
+    text-decoration: none;
+    font-weight: normal;
+    transition: font-size 0.3s ease, color 0.3s ease !important;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: #0056b3 !important;
+    font-weight: bold;
+    font-size: 1.1rem !important;
+}

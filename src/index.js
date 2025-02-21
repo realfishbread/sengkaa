@@ -1,13 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import "./styles/index.css";
+import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
-import MainApp from "./MainApp"; // ✅ MainApp을 최상위로 사용
+import App from "./App"; // ✅ MainApp을 최상위로 사용
+import Footer from "./components/Footer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <MainApp />  // ✅ MainApp을 렌더링 (Router 포함)
+    
+    <App />
+    
   </React.StrictMode>
 );
 
