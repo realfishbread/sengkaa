@@ -26,15 +26,20 @@ const theme = createTheme({
 }); // 전체 글꼴을 테마로 지정함.
 
 
+
 const Layout = () => {
-    return (
-      <>
-        <NavigationBar />  {/* ✅ 네비게이션 바 고정 */}
-        <Outlet />  {/* ✅ 이 부분만 페이지에 따라 변경됨 */}
+  return (
+    <div className="layout-container">
+      <NavigationBar />
+      <div className="layout-content">
+        <Outlet />  {/* ✅ 페이지 내용 */}
         
-      </>
-    );
-  };
+      </div>
+      <Footer />
+    </div>
+    
+  );
+};
 
 
 
@@ -45,7 +50,6 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route index element={<Footer />}/>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/register" element={<BirthdayCafeRegister />} /> {/* ✅ 생일카페 등록 추가 */}

@@ -1,12 +1,8 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 .Home {
-  overflow-y:scroll;
   overflow-x: hidden;
-  height: 100vh;
   scroll-behavior: smooth;
-  padding-top: 60px;
-  padding-bottom: 60px;
 }
 
 .map-container{
@@ -34,15 +30,17 @@ html,body {
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   display: flex;
   flex-direction: column;
-  height: auto;
+  
   padding:0;
-  overflow-y: auto;
+  overflow: visible; /* ✅ 추가 스크롤 방지 */
 }
 
 #root {
-  display: flew;
+  display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  
+  overflow-x: hidden;
+  
 }
 
 .header {
@@ -131,5 +129,11 @@ html,body {
   display: block;
 }
 
+
+/* Layout 안에서 페이지 내용을 차지할 영역을 설정 */
+.layout-content {
+  flex: 1; /* 남은 공간을 모두 차지하여 Footer를 아래로 밀어냄 */
+  overflow: visible; /* ✅ 추가 스크롤 방지 */
+}
 
 
