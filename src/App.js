@@ -1,13 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
-import NavigationBar from "./components/NavigationBar";
-import Footer from "./components/Footer";
+import NavigationBar from "./components/NavigationBar/NavigationBar";
+import Footer from "./components/footer/Footer";
 import Home from './pages/Home';
 import "./styles/App.css";
-import LoginPage from "./pages/Login";
-import SignupPage from "./pages/Signup";
-import BirthdayCafeRegister from "./pages/BirthdayCafeRegister";
+import LoginPage from "./pages/auth/Login/Login";
+import SignupPage from "./pages/auth/SignUp/Signup";
+import BirthdayCafeRegister from "./pages/BirthdayCafeRegister/BirthdayCafeRegister";
 import { createTheme, ThemeProvider } from "@mui/material";
+import RegisterPlaces from "./pages/RegisterPlaces/RegisterPlaces";
 
 
 const theme = createTheme({
@@ -52,7 +53,8 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/register" element={<BirthdayCafeRegister />} /> {/* ✅ 생일카페 등록 추가 */}
+            <Route path="/register" element={<BirthdayCafeRegister />} />
+            <Route path="/venue" element={<RegisterPlaces/>}/> {/* ✅ 생일카페 등록 추가 */}
             </Route>
         </Routes>
         </Router>

@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { SiKakaotalk } from "react-icons/si"; // 카카오톡 아이콘
 import { FcGoogle } from "react-icons/fc"; // 구글 아이콘
+import {buttonStyle}from "../../../components/common/Styles";
+import CustomTextField from "../../../components/common/CustomTextField";
 
 const LoginPage = () => {
   const handleLogin = () => {
@@ -85,10 +87,9 @@ const LoginPage = () => {
             gap: 2,
           }}
         >
-          <TextField
+          <CustomTextField
             label="이메일"
             type="email"
-            variant="outlined"
             required
             fullWidth
             sx={{
@@ -102,10 +103,9 @@ const LoginPage = () => {
               },
             }}
           />
-          <TextField
+          <CustomTextField
             label="비밀번호"
             type="password"
-            variant="outlined"
             required
             fullWidth
             sx={{
@@ -123,19 +123,7 @@ const LoginPage = () => {
             variant="contained"
             fullWidth
             onClick={handleLogin}
-            sx={{
-              backgroundColor: "#007BFF",
-              color: "#ffffff",
-              padding: "10px",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-              borderRadius: "6px",
-              "&:hover": {
-                backgroundColor: "#0056b3",
-                transform: "scale(1.02)",
-              },
-              transition: "all 0.3s ease-in-out",
-            }}
+            sx= {buttonStyle}
           >
             로그인
           </Button>

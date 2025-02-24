@@ -8,7 +8,7 @@ const NavigationBar = () => {
     const [activeNavItem, setActiveNavItem] = useState(null);
 
     const navItems =[
-      { name: "생일카페 등록", path: "/register"},
+      { name: "이벤트 등록", path: "/register"},
       { name: "카페 찾기", path: "/search" },
         { name: "장소 대관", path: "/venue" },
         { name: "콜라보 소식", path: "/collab" },
@@ -19,7 +19,10 @@ const NavigationBar = () => {
           {/* ✅ 상단 네비게이션 바 */}
       <AppBar position="static" style={{ backgroundColor: "#DCF2FF" }}>
         <Toolbar>
-          <img src="/images/logo.png" alt="Event Cafe Logo" style={{ height: "53px" }} />
+        <img src="/images/logo.png"
+             alt="Event Cafe Logo"
+            style={{ height: "53px", cursor: "pointer" }} // ✅ 클릭 가능한 포인터 스타일 적용
+            onClick={() => navigate("/")} />
           <TextField variant="outlined" placeholder="찾으시는 최애가 있으신가요?" size="small" style={{ marginLeft: "auto", backgroundColor:"white" }} />
           <Button color="inherit" sx={{color: "#000000"}} onClick={() => navigate("/login")}>로그인</Button>
           <Button color="inherit"  sx={{color: "#000000"}} onClick={() => navigate("/signup")}>회원가입</Button>

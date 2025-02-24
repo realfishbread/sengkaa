@@ -9,4 +9,6 @@
     border-top: 1px solid #ccc;
     display: flex;
     z-index: 1000;
+    justify-content: center; /* ✅ 수평 가운데 정렬 */
+    align-items: center;
 }

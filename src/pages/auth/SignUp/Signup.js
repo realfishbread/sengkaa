@@ -7,6 +7,7 @@ import {
   Link,
   Container,
 } from "@mui/material";
+import { buttonStyle } from "../../../components/common/Styles";
 
 const SignupPage = () => {
   const [email, setEmail] = useState(""); // 이메일 상태
@@ -211,19 +212,7 @@ const SignupPage = () => {
             variant="contained"
             fullWidth
             onClick={handleSignup}
-            sx={{
-              backgroundColor: "#007BFF",
-              color: "#ffffff",
-              padding: "10px",
-              fontWeight: "bold",
-              fontSize: "1rem",
-              borderRadius: "6px",
-              "&:hover": {
-                backgroundColor: "#0056b3",
-                transform: "scale(1.02)",
-              },
-              transition: "all 0.3s ease-in-out",
-            }}
+            sx={buttonStyle}
           >
             회원가입
           </Button>
