@@ -17,7 +17,7 @@ const NavigationBar = () => {
     return (
       <>
           {/* ✅ 상단 네비게이션 바 */}
-      <AppBar position="static" style={{ backgroundColor: "#DCF2FF" }}>
+      <AppBar position="static" className="navbar">
         <Toolbar>
         <img src="/images/logo.png"
              alt="Event Cafe Logo"

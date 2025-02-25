@@ -1,0 +1,6 @@
+.sns-button {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px; /* ✅ 하단 간격 추가 */
+}

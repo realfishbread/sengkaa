@@ -4,7 +4,7 @@ import ImageUploader from "../../components/common/ImageUploader";
 import NoticeText from "../../components/common/NoticeText";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { boxStyle, buttonStyle, inputFieldStyle} from "../../components/common/Styles";
+import { boxStyle, buttonStyle, inputFieldStyle, titleStyle} from "../../components/common/Styles";
 import CustomTextField from "../../components/common/CustomTextField";
 
 const BirthdayCafeRegister = () => {
@@ -27,20 +27,15 @@ const BirthdayCafeRegister = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
     <Box sx={boxStyle}>
-      <Typography variant="h5" textAlign="center" marginBottom={2} fontWeight="bold">
+      <Typography sx={titleStyle}>
         이벤트 등록
       </Typography>
       
       <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
+        <CustomTextField
           label="이벤트 이름"
-          variant="outlined"
-          margin="normal"
           value={cafeName}
           onChange={(e) => setCafeName(e.target.value)}
-          required
-          sx={inputFieldStyle} // ✅ 입력 필드 배경 흰색으로
         />
         <NoticeText text="* 이벤트 이름은 정확한 정보와 함께 기재해 주세요." />
 

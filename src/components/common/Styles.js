@@ -23,3 +23,20 @@ export const boxStyle = {
     backgroundColor: "white",
     borderRadius: "6px",
   };
+
+
+  // src/components/common/Styles.js
+export const titleStyle = {
+  textAlign: "center",
+  marginBottom: "16px",
+  fontWeight: "bold",
+  fontSize: "24px"
+};
+
+export const toggleButtonGroupStyle = {
+  display: "flex",
+  justifyContent: "center",
+  gap: "10px",
+  marginBottom: "10px"
+};
+

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { TextField, Button, Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { TextField, Button, Box, Typography, ToggleButton, ToggleButtonGroup, toggleButtonGroupClasses } from "@mui/material";
 import ImageUploader from "../../components/common/ImageUploader";
 import NoticeText from "../../components/common/NoticeText";
 import CustomTextField from "../../components/common/CustomTextField";
-import { boxStyle, buttonStyle, inputFieldStyle } from "../../components/common/Styles";
+import { boxStyle, buttonStyle, inputFieldStyle, titleStyle, toggleButtonGroupStyle } from "../../components/common/Styles";
 import CustomToggleButton from "../../components/common/ToggleButton";
 
 const VenueRegister = () => {
@@ -37,7 +37,7 @@ const VenueRegister = () => {
 
   return (
     <Box sx={boxStyle}>
-      <Typography variant="h5" textAlign="center" marginBottom={2} fontWeight="bold">
+      <Typography sx={titleStyle}>
         장소 등록
       </Typography>
 
@@ -45,6 +45,9 @@ const VenueRegister = () => {
         {/* ✅ 장소명 입력 */}
         <CustomTextField label="장소명" value={venueName} onChange={(e) => setVenueName(e.target.value)} required />
 
+         {/* ✅ 지역 선택 */}
+         <CustomTextField label="지역" value={region} onChange={(e) => setRegion(e.target.value)} required />
+       
         {/* ✅ 주소 입력 & 검색 버튼 */}
         <Box sx={{ display: "flex", gap: "10px" }}>
           <CustomTextField label="주소" value={address} onChange={(e) => setAddress(e.target.value)} required />
@@ -52,19 +55,18 @@ const VenueRegister = () => {
         </Box>
 
         {/* ✅ 장소 타입 선택 */}
-        <Typography variant="subtitle1" fontWeight="bold" marginTop={2}>장소의 타입을 선택해 주세요</Typography>
-        <ToggleButtonGroup value={venueType} exclusive onChange={(event, newValue) => setVenueType(newValue)} sx={{gap:"10px", display: "flex", justifyContent: "center"}}>
+        <Typography variant="subtitle1" fontWeight="bold" marginTop={8} marginBottom={3}>장소의 타입을 선택해 주세요</Typography>
+        <ToggleButtonGroup value={venueType} exclusive onChange={(event, newValue) => setVenueType(newValue)} sx={toggleButtonGroupStyle}>
           <ToggleButton value="카페">카페</ToggleButton>
           <ToggleButton value="음식점">음식점</ToggleButton>
           <ToggleButton value="전시회">전시회</ToggleButton>
           <ToggleButton value="포토부스">포토부스</ToggleButton>
         </ToggleButtonGroup>
 
-        {/* ✅ 지역 선택 */}
-        <CustomTextField label="지역" value={region} onChange={(e) => setRegion(e.target.value)} required />
+       
 
         {/* ✅ 가게 메인 이미지 업로드 */}
-        <Typography variant="subtitle1" fontWeight="bold" marginTop={2}>가게 메인 이미지 (필수)</Typography>
+        <Typography variant="subtitle1" fontWeight="bold" marginTop={8} >가게 메인 이미지 (필수)</Typography>
         <ImageUploader onUpload={(event) => handleImageUpload(event, setMainImage)} />
         {mainImage && <img src={mainImage} alt="미리보기" style={{ width: "100px", marginTop: "10px" }} />}
         <NoticeText text="* jpg, png만 가능합니다." />
@@ -82,7 +84,7 @@ const VenueRegister = () => {
         <CustomTextField label="운영 시간" value={operatingHours} onChange={(e) => setOperatingHours(e.target.value)} required />
 
         {/* ✅ 특전 이미지 업로드 */}
-        <Typography variant="subtitle1" fontWeight="bold" marginTop={2}>특전 배치 혹은 예시 이미지</Typography>
+        <Typography variant="subtitle1" fontWeight="bold" marginTop={8}>특전 배치 혹은 예시 이미지</Typography>
         <ImageUploader onUpload={(event) => handleImageUpload(event, setBenefitsImage)} />
         {benefitsImage && <img src={benefitsImage} alt="미리보기" style={{ width: "100px", marginTop: "10px" }} />}
         <NoticeText text="* jpg, png만 가능합니다." />
@@ -91,12 +93,12 @@ const VenueRegister = () => {
         <CustomTextField label="소개글" value={description} onChange={(e) => setDescription(e.target.value)} multiline rows={4} />
         
          {/* ✅ SNS 선택 및 계정 입력 */}
-         <Typography variant="subtitle1" fontWeight="bold" marginTop={2}>SNS 아이디</Typography>
+         <Typography variant="subtitle1" fontWeight="bold" marginTop={8}>SNS 아이디</Typography>
         <ToggleButtonGroup
           value={snsType}
           exclusive
           onChange={(event, newValue) => setSnsType(newValue)}
-          sx={{ gap: "10px", display: "flex", justifyContent: "center" }}
+          className="sns-button"
         >
           <ToggleButton value="x">x</ToggleButton>
           <ToggleButton value="Instagram">Instagram</ToggleButton>
@@ -113,7 +115,7 @@ const VenueRegister = () => {
           />
         )}
 
-        <Button fullWidth variant="contained" type="submit" sx={{ ...buttonStyle, marginBottom: "20px" }}>
+        <Button fullWidth variant="contained" type="submit" sx={{ ...buttonStyle, marginTop:"20px",marginBottom: "20px" }}>
           등록하기
         </Button>
       </form>

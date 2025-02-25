@@ -8,7 +8,7 @@ import LoginPage from "./pages/auth/Login/Login";
 import SignupPage from "./pages/auth/SignUp/Signup";
 import BirthdayCafeRegister from "./pages/BirthdayCafeRegister/BirthdayCafeRegister";
 import { createTheme, ThemeProvider } from "@mui/material";
-import RegisterPlaces from "./pages/RegisterPlaces/RegisterPlaces";
+import RegisterPlaces from "./pages/FindCafes/RegisterPlaces";
 
 
 const theme = createTheme({

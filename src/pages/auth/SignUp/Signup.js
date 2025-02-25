@@ -8,6 +8,8 @@ import {
   Container,
 } from "@mui/material";
 import { buttonStyle } from "../../../components/common/Styles";
+import CustomTextField from "../../../components/common/CustomTextField";
+
 
 const SignupPage = () => {
   const [email, setEmail] = useState(""); // 이메일 상태
@@ -88,7 +90,7 @@ const SignupPage = () => {
             fontWeight: "bold",
             color: "#333333",
             marginBottom: "1.5rem",
-            textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
+            
           }}
         >
           회원가입
@@ -98,16 +100,10 @@ const SignupPage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 2,
+            gap: 1.5,
           }}
         >
-          <TextField
-            label="이름"
-            type="text"
-            variant="outlined"
-            required
-            fullWidth
-          />
+          <CustomTextField label="이름" type="text"/>
           <Box
             sx={{
               display: "flex",
@@ -116,18 +112,8 @@ const SignupPage = () => {
               gap: 1,
             }}
           >
-            <TextField
-              label="이메일"
-              type="email"
-              variant="outlined"
-              required
-              fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              sx={{
-                flex: 1, // 텍스트 필드가 가능한 넓게 확장되도록 설정
-              }}
-            />
+            <CustomTextField label="이메일" type="email" value={email}
+              onChange={(e) => setEmail(e.target.value)}/>
             <Button
               variant="outlined"
               onClick={handleSendVerification}
@@ -188,21 +174,15 @@ const SignupPage = () => {
               </Button>
             </Box>
           )}
-          <TextField
+          <CustomTextField
             label="비밀번호"
             type="password"
-            variant="outlined"
-            required
-            fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <TextField
+          <CustomTextField
             label="비밀번호 확인"
             type="password"
-            variant="outlined"
-            required
-            fullWidth
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             error={error}
