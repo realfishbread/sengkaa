@@ -1,6 +1,14 @@
 .sns-button {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 40px; /* ✅ 하단 간격 추가 */
+}
+
+.sns-button button {
+    margin-right: 15px;
+}
+
+.sns-button button:last-child {
+    margin-right: 0; /* 마지막 버튼에는 margin 제거 */
 }

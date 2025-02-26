@@ -31,7 +31,7 @@ const Home = () => {
 
   const cafeSliderSettings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -43,16 +43,16 @@ const Home = () => {
   };
 
   const slides = [
-    { image: "/images/slide1.jpg", caption: "슬라이드 1" },
-    { image: "/images/slide2.jpg", caption: "슬라이드 2" },
-    { image: "/images/slide3.jpg", caption: "슬라이드 3" },
+    { image: "/images/genshin.jpeg", caption: "원신 x 메가커피 콜라보" },
+    { image: "/images/honkai.png", caption: "붕괴 콜라보" },
+    { image: "/images/xx.jpg", caption: "흑집사 x 애니메이트 카페 콜라보" },
   ];
 
   const popularCafes = [
     { name: "카페 1", description: "뉴진스 해린", image: "/images/cafe1.jpg" },
     { name: "카페 2", description: "트리플에스 나경", image: "/images/cafe2.jpg" },
-    { name: "카페 3", description: "제주도의 멋진 전망 카페", image: "/images/cafe3.jpg" },
-    { name: "카페 4", description: "인천의 아늑한 카페", image: "/images/cafe4.jpg" },
+    { name: "카페 3", description: "리락쿠마 x 팝퍼블", image: "/images/rirakuma.jpg" },
+    { name: "카페 4", description: "캐릭캐릭 체인지 x 팝퍼블 용산", image: "/images/chacha.jpg" },
     { name: "카페 5", description: "대구의 유명 카페", image: "/images/cafe5.jpg" },
   ];
 
@@ -67,19 +67,21 @@ const Home = () => {
   return (
     <div className="Home">
         <main className="map-container">
-            <Slider dots autoplay autoplaySpeed={3000}>
-                {slides.map((slide, index) => (
-                    <div key={index} className="slide">
-                        <img src={slide.image} alt={slide.caption} />
-                        <p>{slide.caption}</p>
-                    </div>
-                ))}
-            </Slider>
+            <div className="slider-wrapper">
+                <Slider {...adSliderSettings}>
+                    {slides.map((slide, index) => (
+                        <div key={index} className="slide">
+                            <img src={slide.image} alt={slide.caption} />
+                            <p>{slide.caption}</p>
+                        </div>
+                    ))}
+                </Slider>
+            </div>
         </main>
 
         <section className="popular-cafes">
             <Typography variant="h5">인기 생일 카페</Typography>
-            <Slider slidesToShow={2}>
+            <Slider {...cafeSliderSettings}>
                 {popularCafes.map((cafe, index) => (
                     <div key={index} className="cafe-slide">
                         <Box className="cafe-card">

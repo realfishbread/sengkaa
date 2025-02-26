@@ -1,13 +1,31 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 .Home {
-  overflow-x: hidden;
+  overflow: visible !important; /* ✅ 가로 스크롤 제한 해제 */
   scroll-behavior: smooth;
 }
 
-.map-container{
-  padding: 20px;
-  text-align:center;
+
+.map-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.slider-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 10px 0;
+}
+
+
+.slide img, .cafe-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .popular-cafes {
@@ -25,14 +43,16 @@
   text-align: center;
 }
 
+
 html,body {
   margin: 0;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-  display: flex;
   flex-direction: column;
-  
-  padding:0;
-  overflow: visible; /* ✅ 추가 스크롤 방지 */
+  padding:12;
+  overflow-x: hidden; /* ✅ 가로 스크롤 방지 */
+    overflow-y: auto; /* ✅ 세로 스크롤 허용 */
+    display: flex; /* ✅ `flex` 대신 `block` 사용 */
+    min-height: 100vh; /* ✅ 전체 화면 채우도록 설정 */
 }
 
 #root {
@@ -67,7 +87,7 @@ html,body {
 /* 카드 스타일 */
 .card {
   position: relative;
-  overflow: hidden;
+  
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -80,7 +100,8 @@ html,body {
 /* 이미지 스타일 */
 .card img {
   width: 100%;
-  height: 100%;
+  
+  height: auto;
   object-fit: cover; /* 이미지 비율 유지 */
   transition: opacity 0.3s ease-in-out;
 }
@@ -107,12 +128,7 @@ html,body {
 }
 
 
-.map-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .map {
   width: 90%;
@@ -123,11 +139,7 @@ html,body {
 
 
 
-.slide img, .cafe-slide img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
+
 
 
 /* Layout 안에서 페이지 내용을 차지할 영역을 설정 */

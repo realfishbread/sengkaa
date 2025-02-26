@@ -5,6 +5,7 @@ import NoticeText from "../../components/common/NoticeText";
 import CustomTextField from "../../components/common/CustomTextField";
 import { boxStyle, buttonStyle, inputFieldStyle, titleStyle, toggleButtonGroupStyle } from "../../components/common/Styles";
 import CustomToggleButton from "../../components/common/ToggleButton";
+import AddressInput from "../../components/common/AddressInput";
 
 const VenueRegister = () => {
   const [venueName, setVenueName] = useState("");
@@ -61,6 +62,7 @@ const VenueRegister = () => {
           <ToggleButton value="음식점">음식점</ToggleButton>
           <ToggleButton value="전시회">전시회</ToggleButton>
           <ToggleButton value="포토부스">포토부스</ToggleButton>
+          <ToggleButton value="파티룸">파티룸</ToggleButton>
         </ToggleButtonGroup>
 
        
