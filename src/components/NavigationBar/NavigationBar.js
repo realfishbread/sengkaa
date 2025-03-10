@@ -6,6 +6,7 @@ import "./NavigationBar.css";
 const NavigationBar = () => {
     const navigate = useNavigate();
     const [activeNavItem, setActiveNavItem] = useState(null);
+    const [openEventMenu, setOpenEventMenu] = useState(false);
 
     const navItems =[
       { name: "이벤트 등록", path: "/register"},
@@ -30,26 +31,26 @@ const NavigationBar = () => {
       </AppBar>
 
                       {/* ✅ 기본 메뉴 (항상 표시됨) */}
-                <Box className="bottom-nav">
-                <Button className="nav-item" onClick={() => navigate("/register")}>이벤트 등록</Button>
-                <Button className="nav-item" onClick={() => navigate("/search")}>카페 찾기</Button>
-                <Button className="nav-item" onClick={() => navigate("/venue")}>장소 대관</Button>
-                <Button className="nav-item" onClick={() => navigate("/collab")}>카페 찾기</Button>
-                <Button className="nav-item" onClick={() => navigate("/map")}>주변 카페 지도</Button>
                 
                 
-                {/* ✅ 마우스를 올리면 내려오는 추가 메뉴 */}
-                <Box className="menu-items">
-                    {navItems.map((item, index) => (
-                        <Button
-                            key={index}
-                            onClick={() => navigate(item.path)}
-                            className="nav-item"
-                        >
-                            {item.name}
-                        </Button>
-                    ))}
+                 {/* ✅ 네비게이션 바 (바 전체가 자연스럽게 확장됨) */}
+               {/* ✅ 네비게이션 바 (바가 확장되면서 서브메뉴가 자연스럽게 나옴) */}
+               <Box 
+                className={`bottom-nav ${openEventMenu ? "expanded" : ""}`} 
+                onMouseEnter={() => setOpenEventMenu(true)}
+                onMouseLeave={() => setOpenEventMenu(false)}
+            >
+                <Button className="nav-item">이벤트</Button>
+
+                {/* ✅ 서브 메뉴가 세로로 자연스럽게 확장됨 */}
+                <Box className="submenu">
+                    <Button onClick={() => navigate("/register")} className="submenu-item">이벤트 등록</Button>
+                    <Button onClick={() => navigate("/search")} className="submenu-item">이벤트 찾기</Button>
                 </Box>
+
+                <Button className="nav-item" onClick={() => navigate("/venue")}>장소 대관</Button>
+                <Button className="nav-item" onClick={() => navigate("/collab")}>콜라보 소식</Button>
+                <Button className="nav-item" onClick={() => navigate("/map")}>주변 카페 지도</Button>
             </Box>
         </>
     );

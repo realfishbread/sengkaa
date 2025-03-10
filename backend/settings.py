@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import pymysql
-pymysql.install_as.MySQLdb()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +26,8 @@ SECRET_KEY = 'django-insecure-%%j)l=t7e*z2&(h^)6i(sdp8hhd&931fhuqh@#qk7e501yo64i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["eventcafe.site", "www.eventcafe.site", "127.0.0.1", "localhost"]
+
 
 
 # Application definition
@@ -79,13 +79,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+import pymysql
+pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eventcafe',
         'USER': 'eventcafe',
-        'PASSWORD': 'endbackend!',
+        'PASSWORD': 'eventcafe',
         'HOST': 'eventcafe.c76iaa8ycok0.ap-northeast-2.rds.amazonaws.com',
         'PORT': '3306',
         'OPTIONS': {
@@ -123,6 +124,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+STATIC_ROOT = "/var/www/eventcafe-backend/static/"
 
 TIME_ZONE = 'UTC'
 

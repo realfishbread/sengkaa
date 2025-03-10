@@ -6,20 +6,25 @@ import {
   Typography,
   Link,
   Container,
+  Select,
+  MenuItem, // 🔹 추가
+  FormControl,
+  InputLabel
 } from "@mui/material";
 import { buttonStyle } from "../../../components/common/Styles";
 import CustomTextField from "../../../components/common/CustomTextField";
 import axios from "axios";
 
-
 const SignupPage = () => {
-  const [email, setEmail] = useState(""); // 이메일 상태
-  const [password, setPassword] = useState(""); // 비밀번호 상태
-  const [confirmPassword, setConfirmPassword] = useState(""); // 비밀번호 확인 상태
-  const [error, setError] = useState(false); // 비밀번호 불일치 에러 상태
-  const [showEmailVerification, setShowEmailVerification] = useState(false); // 이메일 인증 필드 표시 여부
-  const [timer, setTimer] = useState(180); // 타이머 초기값(3분)
-  const [code, setCode] = useState(""); // 입력된 인증 코드 상태
+  const [username, setUsername] = useState(""); // 🔹 추가 (이름 필드)
+  const [email, setEmail] = useState(""); 
+  const [password, setPassword] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [userType, setUserType] = useState("regular"); // 🔹 기본값은 일반 사용자
+  const [error, setError] = useState(""); // 🔹 백엔드 에러 메시지 상태 추가
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [timer, setTimer] = useState(180); 
+  const [code, setCode] = useState(""); 
 
   useEffect(() => {
     let timerInterval;
@@ -41,50 +46,46 @@ const SignupPage = () => {
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
-      alert("비밀번호가 일치하지 않습니다.");
+      setError("비밀번호가 일치하지 않습니다.");
       return;
     }
     if (!code) {
-      alert("이메일 인증을 완료해주세요.");
+      setError("이메일 인증을 완료해주세요.");
       return;
     }
-    //회원가입 요청청
+    setError(""); // 🔹 에러 초기화
+
     try {
-      const response = await axios.post("http://127.0.0.1:8000/user/register/", {
-        username: email.split("@")[0],
+      const response = await axios.post("https://eventcafe.site/user/register/", {
+        username,
         email,
         password,
+        user_type: userType // 🔹 추가
       });
 
       console.log("회원가입 성공:", response.data);
       alert("회원가입 성공! 로그인하세요.");
       window.location.href = "/login";
-    } catch (error) {
-      console.error("회원가입 실패:", error.response?.data);
-      alert("회원가입 실패. 다시 시도해주세요.");
+    } catch (err) {
+      console.error("회원가입 실패:", err.response?.data);
+      setError(err.response?.data?.error || "회원가입 실패. 다시 시도해주세요.");
     }
   };
 
- // ✅ 이메일 인증 코드 전송 API 요청
- const handleSendVerification = async () => {
-  setShowEmailVerification(true);
-  setTimer(180); // 3분 타이머 초기화
+  const handleSendVerification = async () => {
+    setShowEmailVerification(true);
+    setTimer(180);
 
-  try {
-    const response = await axios.post("http://127.0.0.1:8000/api/send-email-verification/", {
-      email,
-    });
-    console.log("인증 코드 전송 성공:", response.data);
-    alert("인증 코드가 이메일로 전송되었습니다.");
-  } catch (error) {
-    console.error("인증 코드 전송 실패:", error.response?.data);
-    alert("인증 코드 전송에 실패했습니다.");
-  }
-};
-
-  const handleCodeVerification = () => {
-    // 인증 코드 확인 로직 추가 가능
-    console.log("입력된 코드:", code);
+    try {
+      const response = await axios.post("https://eventcafe.site/api/send-email-verification/", {
+        email,
+      });
+      console.log("인증 코드 전송 성공:", response.data);
+      alert("인증 코드가 이메일로 전송되었습니다.");
+    } catch (err) {
+      console.error("인증 코드 전송 실패:", err.response?.data);
+      setError("인증 코드 전송에 실패했습니다.");
+    }
   };
 
   return (
@@ -115,11 +116,17 @@ const SignupPage = () => {
             fontWeight: "bold",
             color: "#333333",
             marginBottom: "1.5rem",
-            
           }}
         >
           회원가입
         </Typography>
+
+        {error && (
+          <Typography color="error" textAlign="center" sx={{ marginBottom: "1rem" }}>
+            {error}
+          </Typography>
+        )}
+
         <Box
           component="form"
           sx={{
@@ -128,120 +135,66 @@ const SignupPage = () => {
             gap: 1.5,
           }}
         >
-          <CustomTextField label="이름" type="text"/>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row", // 가로로 배치
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            <CustomTextField label="이메일" type="email" value={email}
-              onChange={(e) => setEmail(e.target.value)}/>
+          <CustomTextField label="이름" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <CustomTextField label="이메일" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Button
               variant="outlined"
               onClick={handleSendVerification}
               sx={{
-                padding: "10px 16px", // 버튼의 크기 조정
                 fontWeight: "bold",
                 fontSize: "0.9rem",
                 borderRadius: "6px",
                 color: "#007BFF",
                 borderColor: "#007BFF",
-                "&:hover": {
-                  backgroundColor: "#e6f4ff",
-                },
+                "&:hover": { backgroundColor: "#e6f4ff" },
               }}
             >
               인증
             </Button>
           </Box>
 
-          {/* 이메일 인증 코드 입력 필드 */}
           {showEmailVerification && (
             <Box>
               <TextField
                 label="인증 코드"
                 type="text"
-                variant="outlined"
                 fullWidth
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 sx={{ marginBottom: "0.5rem" }}
               />
-              <Typography
-                variant="body2"
-                sx={{
-                  textAlign: "right",
-                  color: timer > 0 ? "#555555" : "#FF0000",
-                }}
-              >
-                {timer > 0
-                  ? `남은 시간: ${formatTime(timer)}`
-                  : "인증 시간이 만료되었습니다."}
+              <Typography variant="body2" textAlign="right" color={timer > 0 ? "#555555" : "#FF0000"}>
+                {timer > 0 ? `남은 시간: ${formatTime(timer)}` : "인증 시간이 만료되었습니다."}
               </Typography>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={handleCodeVerification}
-                disabled={timer <= 0}
-                sx={{
-                  marginTop: "0.5rem",
-                  backgroundColor: timer > 0 ? "#007BFF" : "#d3d3d3",
-                  color: "#ffffff",
-                  "&:hover": {
-                    backgroundColor: timer > 0 ? "#0056b3" : "#d3d3d3",
-                  },
-                }}
-              >
-                인증 확인
-              </Button>
             </Box>
           )}
-          <CustomTextField
-            label="비밀번호"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+
+          {/* 🔹 사용자 유형 선택 추가 */}
+          <FormControl fullWidth>
+            <InputLabel>사용자 유형</InputLabel>
+            <Select value={userType} onChange={(e) => setUserType(e.target.value)}>
+              <MenuItem value="regular">일반 사용자</MenuItem>
+              <MenuItem value="organizer">주최측</MenuItem>
+            </Select>
+          </FormControl>
+
+          <CustomTextField label="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <CustomTextField
             label="비밀번호 확인"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            error={error}
-            helperText={error ? "비밀번호가 일치하지 않습니다." : ""}
           />
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={handleSignup}
-            sx={buttonStyle}
-          >
+
+          <Button variant="contained" fullWidth onClick={handleSignup} sx={buttonStyle}>
             회원가입
           </Button>
-          <Typography
-            variant="body2"
-            textAlign="center"
-            sx={{
-              color: "#555555",
-              marginTop: "1rem",
-            }}
-          >
+
+          <Typography variant="body2" textAlign="center" sx={{ color: "#555555", marginTop: "1rem" }}>
             이미 계정이 있으신가요?{" "}
-            <Link
-              href="/login"
-              underline="hover"
-              sx={{
-                color: "#007BFF",
-                fontWeight: "bold",
-                "&:hover": {
-                  textDecoration: "underline",
-                  color: "#0056b3",
-                },
-              }}
-            >
+            <Link href="/login" underline="hover" sx={{ color: "#007BFF", fontWeight: "bold", "&:hover": { textDecoration: "underline" } }}>
               로그인
             </Link>
           </Typography>
