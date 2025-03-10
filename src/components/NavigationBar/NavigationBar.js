@@ -21,30 +21,38 @@ const NavigationBar = () => {
         <Toolbar>
         <img src="/images/logo.png"
              alt="Event Cafe Logo"
-            style={{ height: "53px", cursor: "pointer" }} // ✅ 클릭 가능한 포인터 스타일 적용
+            className="logo" // ✅ 클릭 가능한 포인터 스타일 적용
             onClick={() => navigate("/")} />
-          <TextField variant="outlined" placeholder="찾으시는 최애가 있으신가요?" size="small" style={{ marginLeft: "auto", backgroundColor:"white" }} />
-          <Button color="inherit" sx={{color: "#000000"}} onClick={() => navigate("/login")}>로그인</Button>
-          <Button color="inherit"  sx={{color: "#000000"}} onClick={() => navigate("/signup")}>회원가입</Button>
+          <TextField variant="outlined" placeholder="찾으시는 최애가 있으신가요?" size="small" className="search-bar" />
+          <Button color="inherit" className="auth-button" onClick={() => navigate("/login")}>로그인</Button>
+          <Button color="inherit"  className="auth-button" onClick={() => navigate("/signup")}>회원가입</Button>
         </Toolbar>
       </AppBar>
 
-          {/* ✅ 하단 메뉴 추가 */}
-          <Box className="bottom-nav">
-              {navItems.map((item, index) => (
-                  <Button
-                      key={index}
-                      onClick={() => navigate(item.path)}
-                      onMouseEnter={() => setActiveNavItem(index)}
-                      onMouseLeave={() => setActiveNavItem(null)}
-                      className={`nav-item ${activeNavItem === index ? "active" : ""}`}
-                  >
-                      {item.name}
-                  </Button>
-              ))}
-          </Box>
-      </>
-  );
+                      {/* ✅ 기본 메뉴 (항상 표시됨) */}
+                <Box className="bottom-nav">
+                <Button className="nav-item" onClick={() => navigate("/register")}>이벤트 등록</Button>
+                <Button className="nav-item" onClick={() => navigate("/search")}>카페 찾기</Button>
+                <Button className="nav-item" onClick={() => navigate("/venue")}>장소 대관</Button>
+                <Button className="nav-item" onClick={() => navigate("/collab")}>카페 찾기</Button>
+                <Button className="nav-item" onClick={() => navigate("/map")}>주변 카페 지도</Button>
+                
+                
+                {/* ✅ 마우스를 올리면 내려오는 추가 메뉴 */}
+                <Box className="menu-items">
+                    {navItems.map((item, index) => (
+                        <Button
+                            key={index}
+                            onClick={() => navigate(item.path)}
+                            className="nav-item"
+                        >
+                            {item.name}
+                        </Button>
+                    ))}
+                </Box>
+            </Box>
+        </>
+    );
 };
 
 export default NavigationBar;

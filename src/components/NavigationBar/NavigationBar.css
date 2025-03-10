@@ -8,7 +8,7 @@
 }
 
 .search-bar {
-    margin-left: auto;
+    margin-left: auto !important;
     background-color: white;
 }
 
@@ -33,51 +33,40 @@
     justify-content: flex-start;
     padding-left: 70px;
 }
-
-.nav-item {
-    margin: 0 11px;
-    color: #3f3f3f !important;
-    font-size: 1rem !important;
-    font-weight: normal;
-    transition: font-size 0.3s ease, color 0.3s ease !important;
-    cursor: pointer;
-}
-
-.nav-item:hover,
-.nav-item.active {
-    color: #0056b3 !important;
-    font-weight: bold;
-    font-size: 1.1rem !important;
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    background-color: #DCF2FF;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  }
-  
-  .dropdown-item {
-    padding: 10px;
-    text-align: center;
-    font-size: 14px;
-    color: black;
-    transition: background-color 0.3s;
-  }
-  
-   .dropdown-item:hover {
-    background-color: #DCF2FF;
-  }
-  
- /* ✅ 드롭다운이 활성화되면 자연스럽게 나타남 */
-.dropdown-menu:hover {
+/* ✅ 마우스를 올리면 아래쪽으로 내려옴 */
+.bottom-nav:hover {
+    font-size: 1.0rem !important;  /* hover 시 크기 증가 */
+    height: 80px;
     opacity: 1;
-    transform: translateY(-50px);
-  }
+    padding: 10px 0;
+    transform: translateY(0);  /* 원래 위치로 */
+    font-weight: bold;
+    opacity: 1;
+}
+
+/* ✅ 추가적인 메뉴 아이템 (숨겨진 상태) */
+.menu-items {
+    position: absolute;
+    background-color: #DCF2FF;
+    width: 100%;
+    left: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+
+/* ✅ 기본적으로 네비게이션 아이템 크기를 줄이고 숨김 */
+.nav-item {
+    margin: 0 13px;
+    color: #3f3f3f !important;
+    font-size: 1.1rem !important;  /* 기본 크기 */
+    font-weight: normal;
+    transition: font-size 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out !important;
+    cursor: pointer;
+    transform: translateY(-5px);  /* 기본적으로 위로 올려둠 */   
+}
+
+
+

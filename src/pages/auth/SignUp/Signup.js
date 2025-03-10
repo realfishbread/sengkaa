@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { buttonStyle } from "../../../components/common/Styles";
 import CustomTextField from "../../../components/common/CustomTextField";
+import axios from "axios";
 
 
 const SignupPage = () => {
@@ -38,7 +39,7 @@ const SignupPage = () => {
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (password !== confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
@@ -47,15 +48,39 @@ const SignupPage = () => {
       alert("이메일 인증을 완료해주세요.");
       return;
     }
-    // 회원가입 처리 로직
-    console.log("회원가입 요청", { email, password, code });
+    //회원가입 요청청
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/user/register/", {
+        username: email.split("@")[0],
+        email,
+        password,
+      });
+
+      console.log("회원가입 성공:", response.data);
+      alert("회원가입 성공! 로그인하세요.");
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("회원가입 실패:", error.response?.data);
+      alert("회원가입 실패. 다시 시도해주세요.");
+    }
   };
 
-  const handleSendVerification = () => {
-    setShowEmailVerification(true);
-    setTimer(180); // 타이머 3분 초기화
-    console.log("인증 코드 전송 요청");
-  };
+ // ✅ 이메일 인증 코드 전송 API 요청
+ const handleSendVerification = async () => {
+  setShowEmailVerification(true);
+  setTimer(180); // 3분 타이머 초기화
+
+  try {
+    const response = await axios.post("http://127.0.0.1:8000/api/send-email-verification/", {
+      email,
+    });
+    console.log("인증 코드 전송 성공:", response.data);
+    alert("인증 코드가 이메일로 전송되었습니다.");
+  } catch (error) {
+    console.error("인증 코드 전송 실패:", error.response?.data);
+    alert("인증 코드 전송에 실패했습니다.");
+  }
+};
 
   const handleCodeVerification = () => {
     // 인증 코드 확인 로직 추가 가능
