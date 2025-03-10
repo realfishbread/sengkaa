@@ -37,7 +37,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: 3.10  # Django 지원 버전
+        python-version: 5.2.0  # Django 지원 버전
 
     - name: Install Django dependencies
       run: |
