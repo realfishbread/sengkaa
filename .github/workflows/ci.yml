@@ -17,8 +17,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    ## --------------- React Frontend 설정 ---------------
-    # 2. Node.js 환경 설정
+    
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -44,13 +43,12 @@ jobs:
         python -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
-        pip install -r requirements.txt
+         pip install --no-cache-dir -r requirements.txt
 
     - name: Run Django migrations
       run: |
         source venv/bin/activate
-        python manage.py migrate
-
+        
     ## --------------- EC2 배포 설정 ---------------
     # 4. React 빌드 파일을 EC2로 전송
     - name: Deploy React to EC2
