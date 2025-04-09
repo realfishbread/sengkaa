@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { TextField, Button, Box, FormControl, Typography, InputLabel, Select, MenuItem } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Box, FormControl, Typography, createFilterOptions } from "@mui/material";
 import ImageUploader from "../../components/common/ImageUploader";
 import NoticeText from "../../components/common/NoticeText";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { boxStyle, buttonStyle, inputFieldStyle, titleStyle} from "../../components/common/Styles";
 import CustomTextField from "../../components/common/CustomTextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const BirthdayCafeRegister = () => {
   const [cafeName, setCafeName] = useState("");
@@ -14,6 +15,27 @@ const BirthdayCafeRegister = () => {
   const [image, setImage] = useState(null);
   const [eventDate, setEventDate] =useState("");
   const [selectedStar, setSelectedStar] = useState("");
+
+  const [idolList, setIdolList] = useState([]);
+
+
+  useEffect(() => {
+    fetch("/data/idols.json")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("✅ 아이돌 불러오기:", data);
+        setIdolList(data);
+      })
+      .catch((err) => {
+        console.error("❌ 오류 발생:", err);
+      });
+  }, []);
+
+  const filter = createFilterOptions({
+    stringify: (option) =>
+      [option.display, option.name, option.group, ...(option.keywords || [])].join(" ")
+  });
+  
 
   const handleImageUpload = (event) => {
     setImage(event.target.files[0]);
@@ -49,19 +71,17 @@ const BirthdayCafeRegister = () => {
           
 
           {/* ✅ 스타 선택란 추가 */}
-          <FormControl fullWidth margin="normal">
-            <InputLabel>스타 선택</InputLabel>
-            <Select
-              value={selectedStar}
-              onChange={(e) => setSelectedStar(e.target.value)}
-            >
-              <MenuItem value="BTS">BTS</MenuItem>
-              <MenuItem value="BLACKPINK">BLACKPINK</MenuItem>
-              <MenuItem value="EXO">EXO</MenuItem>
-              <MenuItem value="TWICE">TWICE</MenuItem>
-              <MenuItem value="기타">기타</MenuItem>
-            </Select>
-          </FormControl>
+          <Autocomplete
+              options={idolList}
+              getOptionLabel={(option) => (option && option.display) || ""}
+              filterOptions={filter}
+              onChange={(event, newValue) => {
+                setSelectedStar(newValue ? newValue.display : "");
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="스타 검색" margin="normal" fullWidth />
+              )}
+            />
           <NoticeText text="* 해당 이벤트와 관련된 스타를 선택해 주세요." />
 
         

@@ -1,13 +1,41 @@
 import React, { useEffect, useState } from "react";
+import "./KakaoMap.css";
 
 const KakaoMap = () => {
   const [userLocation, setUserLocation] = useState({
     lat: 37.5665,
     lng: 126.9780,
   });
-
   const [selectedPlace, setSelectedPlace] = useState(null);
 
+  // 카테고리별 마커 아이콘 URL 정의
+  const markerIcons = {
+    general: "https://cdn-icons-png.flaticon.com/512/684/684908.png",       // 일반 카페 (예: 파란색 핀)
+    characterGame: "https://cdn-icons-png.flaticon.com/512/2948/2948035.png", // 캐릭터/게임 콜라보 (예: 분홍색 마이크)
+    idol: "https://cdn-icons-png.flaticon.com/512/206/206663.png",            // 아이돌 콜라보 (예: 노란색 별)
+    rental: "https://cdn-icons-png.flaticon.com/512/190/190411.png",           // 대관 가능한 개인카페 (예: 초록색 건물)
+    party: "https://cdn-icons-png.flaticon.com/512/2721/2721223.png",          // 파티룸 (예: 보라색 풍선)
+  };
+
+  // 카테고리 결정 함수 (카페 이름이나 기타 정보를 기준으로 분류)
+  const getCategory = (place) => {
+    const name = place.place_name;
+    if (name.includes("캐릭터") || name.includes("게임")) {
+      return "characterGame";
+    }
+    if (name.includes("아이돌")) {
+      return "idol";
+    }
+    if (name.includes("대관") || name.includes("개인")) {
+      return "rental";
+    }
+    if (name.includes("파티룸")) {
+      return "party";
+    }
+    return "general";
+  };
+
+  // 사용자 위치 가져오기
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -36,6 +64,7 @@ const KakaoMap = () => {
       return;
     }
 
+    // 지도 초기화
     const container = document.getElementById("myMap");
     const options = {
       center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
@@ -43,110 +72,115 @@ const KakaoMap = () => {
     };
     const map = new kakao.maps.Map(container, options);
 
-    const markerImage = new kakao.maps.MarkerImage(
-      "https://cdn-icons-png.flaticon.com/512/684/684908.png", // 일반적인 위치 마커
+    // 사용자 위치 표시용 기본 마커 생성
+    const defaultMarkerImage = new kakao.maps.MarkerImage(
+      markerIcons.general,
       new kakao.maps.Size(40, 40),
       { offset: new kakao.maps.Point(20, 40) }
     );
-
-    // 사용자 위치 마커
     const userMarker = new kakao.maps.Marker({
       position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      image: markerImage,
+      image: defaultMarkerImage,
     });
     userMarker.setMap(map);
 
+    // 장소 검색 서비스 생성
     const ps = new kakao.maps.services.Places();
 
-    // 📌 **1단계: "카페" 키워드로 검색 후 필터링**
-    ps.keywordSearch("카페", (data, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        const birthdayCafes = data.filter((place) => place.place_name.includes("생일"));
-        
-        if (birthdayCafes.length > 0) {
-          birthdayCafes.forEach((place) => displayMarker(place));
+    // "카페" 키워드로 검색 (반경 5km)
+    ps.keywordSearch(
+      "카페",
+      (data, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          data.forEach((place) => {
+            const category = getCategory(place);
+            displayMarker(place, category);
+          });
         } else {
-          console.log("🔍 '생일 카페'가 없음. 일반 카페라도 표시.");
-          data.slice(0, 5).forEach((place) => displayMarker(place)); // 최대 5개 표시
+          console.error("카페 검색 실패");
         }
-      } else {
-        console.error("카페 검색 실패");
+      },
+      {
+        location: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+        radius: 5000,
       }
-    }, {
-      location: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      radius: 5000, // 🔥 반경 5km로 확대
-    });
+    );
 
-    function displayMarker(place) {
+    // 마커 생성 함수
+    function displayMarker(place, category) {
+      const markerImage = new kakao.maps.MarkerImage(
+        markerIcons[category],
+        new kakao.maps.Size(40, 40),
+        { offset: new kakao.maps.Point(20, 40) }
+      );
       const marker = new kakao.maps.Marker({
         map,
         position: new kakao.maps.LatLng(place.y, place.x),
         image: markerImage,
       });
 
+      // 마커 클릭 시 상세 정보 설정
       kakao.maps.event.addListener(marker, "click", () => {
         setSelectedPlace({
           ...place,
-          image_url: place.image_url || "https://via.placeholder.com/400x200?text=No+Image", // 기본 이미지 설정
+          image_url:
+            place.image_url ||
+            "https://via.placeholder.com/400x200?text=No+Image",
         });
       });
     }
   }, [userLocation]);
 
   return (
-    <div style={{ display: "flex", height: "700px" }}>
-      {/* 📌 왼쪽 정보 패널 */}
-      <div style={{
-        width: "30vw",
-        maxWidth: "400px",
-        padding: "15px",
-        backgroundColor: "#f8f9fa",
-        boxShadow: "2px 2px 10px rgba(0,0,0,0.2)",
-        borderRadius: "15px",
-        overflowY: "auto",
-        display: selectedPlace ? "block" : "none", // ✨ 마커 클릭 전에는 숨김
-        transition: "0.3s ease-in-out"
-      }}>
+    <div className="kakao-map-container">
+      {/* 상세 정보 패널 */}
+      <div className={`info-panel ${selectedPlace ? "" : "hidden"}`}>
         {selectedPlace && (
           <>
-            <button onClick={() => setSelectedPlace(null)} style={{
-              border: "none",
-              background: "transparent",
-              fontSize: "18px",
-              float: "right",
-              cursor: "pointer"
-            }}>❌</button>
-
-            {/* 📌 포스터 이미지 */}
-            <img src={selectedPlace.image_url} alt="포스터 이미지" style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "10px",
-              marginBottom: "10px"
-            }} />
-
-            <h2 style={{ color: "#007bff", marginBottom: "10px" }}>📍 {selectedPlace.place_name}</h2>
-            <p><strong>🏠 주소:</strong> {selectedPlace.road_address_name || selectedPlace.address_name}</p>
-            <p><strong>📞 전화번호:</strong> {selectedPlace.phone ? selectedPlace.phone : "정보 없음"}</p>
-            <a href={selectedPlace.place_url} target="_blank" rel="noopener noreferrer" style={{
-              display: "block",
-              marginTop: "10px",
-              padding: "10px",
-              backgroundColor: "#ff4081",
-              color: "white",
-              textAlign: "center",
-              textDecoration: "none",
-              borderRadius: "10px",
-              fontSize: "14px"
-            }}>
+            <button
+              className="close-button"
+              onClick={() => setSelectedPlace(null)}
+            >
+              ❌
+            </button>
+            <img
+              src={selectedPlace.image_url}
+              alt="포스터 이미지"
+              className="poster-image"
+            />
+            <h2 className="place-title">📍 {selectedPlace.place_name}</h2>
+            <p>
+              <strong>🏠 주소:</strong>{" "}
+              {selectedPlace.road_address_name || selectedPlace.address_name}
+            </p>
+            <p>
+              <strong>📞 전화번호:</strong>{" "}
+              {selectedPlace.phone ? selectedPlace.phone : "정보 없음"}
+            </p>
+            {selectedPlace.opening_hours && (
+              <p>
+                <strong>🕒 영업시간:</strong> {selectedPlace.opening_hours}
+              </p>
+            )}
+            {selectedPlace.menu && (
+              <p>
+                <strong>🍽 메뉴:</strong> {selectedPlace.menu}
+              </p>
+            )}
+            <a
+              href={selectedPlace.place_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="place-link"
+            >
               📌 카카오맵에서 보기
             </a>
           </>
         )}
       </div>
 
-      {/* 📌 오른쪽 지도 영역 */}
-      <div id="myMap" style={{ width: "70vw", height: "700px" }} />
+      {/* 지도 영역 */}
+      <div id="myMap" className="map-container" />
     </div>
   );
 };

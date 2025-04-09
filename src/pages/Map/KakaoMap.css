@@ -1,0 +1,56 @@
+/* KakaoMap.css */
+
+.kakao-map-container {
+    display: flex;
+    height: 700px;
+  }
+  
+  .info-panel {
+    width: 30vw;
+    max-width: 400px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    overflow-y: auto;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .info-panel.hidden {
+    display: none;
+  }
+  
+  .close-button {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    float: right;
+    cursor: pointer;
+  }
+  
+  .poster-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .place-title {
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  .place-link {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #ff4081;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  
+  
+  
