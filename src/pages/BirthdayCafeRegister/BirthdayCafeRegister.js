@@ -76,12 +76,25 @@ const BirthdayCafeRegister = () => {
               getOptionLabel={(option) => (option && option.display) || ""}
               filterOptions={filter}
               onChange={(event, newValue) => {
-                setSelectedStar(newValue ? newValue.display : "");
+                setSelectedStar(newValue); // ✅ 전체 객체 저장
               }}
               renderInput={(params) => (
                 <TextField {...params} label="스타 검색" margin="normal" fullWidth />
               )}
             />
+            {selectedStar && selectedStar.image && (
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <img
+                src={selectedStar.image}
+                alt={selectedStar.display}
+                style={{ width: '160px', borderRadius: '10px', objectFit: 'cover' }}
+                onError={(e) => {
+                  e.target.style.display = "none"; // 이미지 없으면 안보이게
+                }}
+              />
+              <Typography variant="body2" sx={{ mt: 1 }}>{selectedStar.display}</Typography>
+            </Box>
+          )}
           <NoticeText text="* 해당 이벤트와 관련된 스타를 선택해 주세요." />
 
         
