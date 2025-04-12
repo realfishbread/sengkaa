@@ -24,12 +24,12 @@ jobs:
         node-version: 16  # React LTS 버전
 
     - name: Install React dependencies
-      run: npm install
+      run: npm install --legacy-peer-deps
 
     - name: Build React project
       run: |
         export CI=false
-        npm run build
+        npm run build 
 
     ## --------------- Django Backend 설정 ---------------
     # 3. Python 환경 설정
