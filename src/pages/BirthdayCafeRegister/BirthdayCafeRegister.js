@@ -10,31 +10,48 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 const BirthdayCafeRegister = () => {
   const [cafeName, setCafeName] = useState("");
-  const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [eventDate, setEventDate] =useState("");
   const [selectedStar, setSelectedStar] = useState("");
 
   const [idolList, setIdolList] = useState([]);
+  const [genre, setGenre] = useState("idol"); // 유저가 선택한 장르
+  const [starList, setStarList] = useState([]); // 선택된 장르의 리스트만 담김
+
+  const [roadAddress, setRoadAddress] = useState("");  // 도로명주소
+const [detailAddress, setDetailAddress] = useState("");  // 상세주소
 
 
   useEffect(() => {
-    fetch("/data/idols.json")
+    fetch(`/data/${genre}.json`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("✅ 아이돌 불러오기:", data);
-        setIdolList(data);
+        setStarList(data);  // ⭐ Autocomplete에 들어갈 options
       })
       .catch((err) => {
-        console.error("❌ 오류 발생:", err);
+        console.error("로딩 실패 ❌", err);
+        setStarList([]);
       });
-  }, []);
+  }, [genre]);
+  
 
   const filter = createFilterOptions({
     stringify: (option) =>
       [option.display, option.name, option.group, ...(option.keywords || [])].join(" ")
   });
+
+  const openPostcode = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        const fullRoadAddr = data.roadAddress; // 도로명 주소
+        setRoadAddress(fullRoadAddr);
+      }
+    }).open();
+  };
+  
+ 
+
   
 
   const handleImageUpload = (event) => {
@@ -61,27 +78,48 @@ const BirthdayCafeRegister = () => {
         />
         <NoticeText text="* 이벤트 이름은 정확한 정보와 함께 기재해 주세요." />
 
-        {/* ✅ 날짜 선택란 추가 */}
         <DatePicker
             label="이벤트 날짜"
             value={eventDate}
             onChange={(newDate) => setEventDate(newDate)}
             renderInput={(params) => <TextField fullWidth margin="normal" {...params} />}
           />
+
+        <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
+          {["idol", "youtuber", "comic", "webtoon", "game"].map((g) => (
+            <Button
+              key={g}
+              variant={genre === g ? "contained" : "outlined"}
+              onClick={() => setGenre(g)}
+            >
+              {{
+                idol: "아이돌",
+                youtuber: "유튜버",
+                comic: "만화",
+                webtoon: "웹툰",
+                game: "게임",
+              }[g]}
+            </Button>
+          ))}
+        </Box>
+
+
+
           
 
           {/* ✅ 스타 선택란 추가 */}
           <Autocomplete
-              options={idolList}
-              getOptionLabel={(option) => (option && option.display) || ""}
-              filterOptions={filter}
-              onChange={(event, newValue) => {
-                setSelectedStar(newValue); // ✅ 전체 객체 저장
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="스타 검색" margin="normal" fullWidth />
-              )}
-            />
+            options={starList} // ⭐ 장르에 따라 바뀜
+            getOptionLabel={(option) => (option && option.display) || ""}
+            filterOptions={filter}
+            onChange={(event, newValue) => {
+              setSelectedStar(newValue); // ⭐ 유튜버든 아이돌이든 저장 가능
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label={`${genre} 검색`} margin="normal" fullWidth />
+            )}
+          />
+
             {selectedStar && selectedStar.image && (
             <Box sx={{ textAlign: 'center', mt: 2 }}>
               <img
@@ -98,10 +136,19 @@ const BirthdayCafeRegister = () => {
           <NoticeText text="* 해당 이벤트와 관련된 스타를 선택해 주세요." />
 
         
+          <FormControl fullWidth margin="normal">
+            <TextField
+              label="도로명 주소"
+              value={roadAddress}
+              onClick={openPostcode}
+              InputProps={{ readOnly: true }}
+            />
+          </FormControl>
+
           <CustomTextField
-            label="주소"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            label="상세 주소"
+            value={detailAddress}
+            onChange={(e) => setDetailAddress(e.target.value)}
             required
           />
         

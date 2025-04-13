@@ -52,5 +52,22 @@
     font-size: 14px;
   }
   
+  .custom-marker {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid; /* 테두리 색은 JS에서 style로 덮어씀 */
+    box-shadow: 0 0 0 3px black;
+    cursor: pointer;
+    background-color: white;
+  }
+  
+  .custom-marker img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
   
   

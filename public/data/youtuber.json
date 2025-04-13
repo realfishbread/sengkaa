@@ -1,0 +1,313 @@
+[
+  {
+    "name": "아이네",
+    "agency": "패러블 엔터테인먼트",
+    "group": "이세계 아이돌",
+    "display": "이세계 아이돌 - 아이네",
+    "genre": "youtuber"
+  },
+  {
+    "name": "징버거",
+    "agency": "패러블 엔터테인먼트",
+    "group": "이세계 아이돌",
+    "display": "이세계 아이돌 - 징버거",
+    "genre": "youtuber"
+  },
+  {
+    "name": "릴파",
+    "agency": "패러블 엔터테인먼트",
+    "group": "이세계 아이돌",
+    "display": "이세계 아이돌 - 릴파",
+    "genre": "youtuber"
+  },
+  {
+    "name": "주르르",
+    "agency": "패러블 엔터테인먼트",
+    "group": "이세계 아이돌",
+    "display": "이세계 아이돌 - 주르르",
+    "genre": "youtuber"
+  },
+  {
+    "name": "고세구",
+    "agency": "패러블 엔터테인먼트",
+    "group": "이세계 아이돌",
+    "display": "이세계 아이돌 - 고세구",
+    "genre": "youtuber"
+  },
+  {
+    "name": "비챤",
+    "agency": "패러블 엔터테인먼트",
+    "group": "이세계 아이돌",
+    "display": "이세계 아이돌 - 비챤",
+    "genre": "youtuber"
+  },
+  {
+    "name": "러끼",
+    "agency": "샌드박스",
+    "display": "샌드박스 - 러끼",
+    "genre": "youtuber"
+  },
+  {
+    "name": "양아지",
+    "agency": "샌드박스",
+    "display": "샌드박스 - 양아지",
+    "genre": "youtuber"
+  },
+  {
+    "name": "라디유",
+    "agency": "샌드박스",
+    "display": "샌드박스 - 라디유",
+    "genre": "youtuber"
+  },
+  {
+    "name": "꽃핀",
+    "agency": "샌드박스",
+    "display": "샌드박스 - 꽃핀",
+    "genre": "youtuber"
+  },
+  {
+    "name": "마뫄",
+    "agency": "샌드박스",
+    "display": "샌드박스 - 마뫄",
+    "genre": "youtuber"
+  },
+  {
+    "name": "마레 플로스",
+    "agency": "샌드박스",
+    "display": "샌드박스 - 마레 플로스",
+    "genre": "youtuber"
+  },
+  {
+    "name": "금휘",
+    "agency": "샌드박스",
+    "display": "샌드박스 - 금휘",
+    "genre": "youtuber"
+  },
+  {
+    "name": "금사향",
+    "agency": "픽셀 네트워크",
+    "display": "픽셀 네트워크 - 금사향",
+    "genre": "youtuber"
+  },
+  {
+    "name": "템템버린",
+    "agency": "픽셀 네트워크",
+    "display": "픽셀 네트워크 - 템템버린",
+    "genre": "youtuber"
+  },
+  {
+    "name": "설백",
+    "agency": "픽셀 네트워크",
+    "display": "픽셀 네트워크 - 설백",
+    "genre": "youtuber"
+  },
+  {
+    "name": "임나은",
+    "agency": "픽셀 네트워크",
+    "display": "픽셀 네트워크 - 임나은",
+    "genre": "youtuber"
+  },
+  {
+    "name": "윤이샘",
+    "agency": "픽셀 네트워크",
+    "display": "픽셀 네트워크 - 윤이샘",
+    "genre": "youtuber"
+  },
+  {
+    "name": "아야츠노 유니",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 아야츠노 유니",
+    "genre": "youtuber"
+  },
+  {
+    "name": "시라유키 히나",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 시라유키 히나",
+    "genre": "youtuber"
+  },
+  {
+    "name": "네네코 마시로",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 네네코 마시로",
+    "genre": "youtuber"
+  },
+  {
+    "name": "아카네 리제",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 아카네 리제",
+    "genre": "youtuber"
+  },
+  {
+    "name": "아라하시 타비",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 아라하시 타비",
+    "genre": "youtuber"
+  },
+  {
+    "name": "텐코 시부키",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 텐코 시부키",
+    "genre": "youtuber"
+  },
+  {
+    "name": "아오쿠모 린",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 아오쿠모 린",
+    "genre": "youtuber"
+  },
+  {
+    "name": "하나코 나나",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 하나코 나나",
+    "genre": "youtuber"
+  },
+  {
+    "name": "유즈하 리코",
+    "agency": "스텔라이브",
+    "display": "스텔라이브 - 유즈하 리코",
+    "genre": "youtuber"
+  },
+  {
+    "name": "류채경",
+    "agency": "스타게이저",
+    "display": "스타게이저 - 류채경",
+    "genre": "youtuber"
+  },
+  {
+    "name": "밑줄",
+    "agency": "스타게이저",
+    "display": "스타게이저 - 밑줄",
+    "genre": "youtuber"
+  },
+  {
+    "name": "모야지",
+    "agency": "스타게이저",
+    "display": "스타게이저 - 모야지",
+    "genre": "youtuber"
+  },
+  {
+    "name": "우고",
+    "agency": "스타게이저",
+    "group": "팀 에라이",
+    "display": "팀 에라이 - 우고",
+    "genre": "youtuber"
+  },
+  {
+    "name": "하야테",
+    "agency": "스타게이저",
+    "group": "팀 에라이",
+    "display": "팀 에라이 - 하야테",
+    "genre": "youtuber"
+  },
+  {
+    "name": "낭만숟가락",
+    "agency": "스타게이저",
+    "group": "팀 에라이",
+    "display": "팀 에라이 - 낭만숟가락",
+    "genre": "youtuber"
+  },
+  {
+    "name": "팔칠",
+    "agency": "스타게이저",
+    "group": "팀 에라이",
+    "display": "팀 에라이 - 팔칠",
+    "genre": "youtuber"
+  },
+  {
+    "name": "이하얀",
+    "agency": "스타게이저",
+    "group": "팀 에라이",
+    "display": "팀 에라이 - 이하얀",
+    "genre": "youtuber"
+  },
+  {
+    "name": "나츠키",
+    "agency": "오버더월",
+    "group": "스타데이즈",
+    "display": "스타데이즈 - 나츠키",
+    "genre": "youtuber"
+  },
+  {
+    "name": "반",
+    "agency": "오버더월",
+    "group": "스타데이즈",
+    "display": "스타데이즈 - 반",
+    "genre": "youtuber"
+  },
+  {
+    "name": "테리 눈나",
+    "agency": "오버더월",
+    "group": "스타데이즈",
+    "display": "스타데이즈 - 테리 눈나",
+    "genre": "youtuber"
+  },
+  {
+    "name": "빙하유",
+    "agency": "오버더월",
+    "group": "러브다이아",
+    "display": "러브다이아 - 빙하유",
+    "genre": "youtuber"
+  },
+  {
+    "name": "양메이",
+    "agency": "오버더월",
+    "group": "러브다이아",
+    "display": "러브다이아 - 양메이",
+    "genre": "youtuber"
+  },
+  {
+    "name": "박도나",
+    "agency": "오버더월",
+    "group": "러브다이아",
+    "display": "러브다이아 - 박도나",
+    "genre": "youtuber"
+  },
+  {
+    "name": "이아니",
+    "agency": "오버더월",
+    "group": "러브다이아",
+    "display": "러브다이아 - 이아니",
+    "genre": "youtuber"
+  },
+  {
+    "name": "유리리",
+    "agency": "오버더월",
+    "group": "러브다이아",
+    "display": "러브다이아 - 유리리",
+    "genre": "youtuber"
+  },
+  {
+    "name": "온하루",
+    "agency": "오버더월",
+    "group": "하이블루밍",
+    "display": "하이블루밍 - 온하루",
+    "genre": "youtuber"
+  },
+  {
+    "name": "하네",
+    "agency": "오버더월",
+    "group": "하이블루밍",
+    "display": "하이블루밍 - 하네",
+    "genre": "youtuber"
+  },
+  {
+    "name": "김아테",
+    "agency": "오버더월",
+    "group": "하이블루밍",
+    "display": "하이블루밍 - 김아테",
+    "genre": "youtuber"
+  },
+  {
+    "name": "오토노 소리",
+    "agency": "오버더월",
+    "group": "하이블루밍",
+    "display": "하이블루밍 - 오토노 소리",
+    "genre": "youtuber"
+  },
+  {
+    "name": "야코코",
+    "agency": "개인",
+    "display": "개인 - 야코코",
+    "genre": "youtuber"
+  }
+]
