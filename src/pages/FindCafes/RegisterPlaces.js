@@ -4,8 +4,7 @@ import ImageUploader from "../../components/common/ImageUploader";
 import NoticeText from "../../components/common/NoticeText";
 import CustomTextField from "../../components/common/CustomTextField";
 import { boxStyle, buttonStyle, inputFieldStyle, titleStyle, toggleButtonGroupStyle } from "../../components/common/Styles";
-import CustomToggleButton from "../../components/common/ToggleButton";
-import AddressInput from "../../components/common/AddressInput";
+
 
 const VenueRegister = () => {
   const [venueName, setVenueName] = useState("");

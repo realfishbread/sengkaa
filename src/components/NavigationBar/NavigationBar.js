@@ -5,15 +5,16 @@ import "./NavigationBar.css";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
-    const [activeNavItem, setActiveNavItem] = useState(null);
     const [openEventMenu, setOpenEventMenu] = useState(false);
 
     const navItems =[
-      { name: "이벤트 등록", path: "/register"},
-      { name: "카페 찾기", path: "/search" },
+        { name: "이벤트 등록", path: "/register"},
+        { name: "카페 찾기", path: "/search" },
         { name: "장소 대관", path: "/venue" },
         { name: "콜라보 소식", path: "/collab" },
-        { name: "주변 카페 지도", path: "/map" }
+        { name: "주변 카페 지도", path: "/map" },
+        { name: "즐겨찾기", path: "/subscribe"},
+        { name: "게시판", path: "/board"}
     ];
     return (
       <>
@@ -51,6 +52,8 @@ const NavigationBar = () => {
                 <Button className="nav-item" onClick={() => navigate("/venue")}>장소 대관</Button>
                 <Button className="nav-item" onClick={() => navigate("/collab")}>콜라보 소식</Button>
                 <Button className="nav-item" onClick={() => navigate("/map")}>주변 카페 지도</Button>
+                <Button className="nav-item" onClick={() => navigate("/subscribe")}>즐겨찾기</Button>
+                <Button className="nav-item" onClick={() => navigate("/board")}>게시판</Button>
             </Box>
         </>
     );

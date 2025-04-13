@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Box, FormControl, Typography, createFilterOptions } from "@mui/material";
+import { TextField, Button, Box, FormControl, Typography, createFilterOptions, Divider } from "@mui/material";
 import ImageUploader from "../../components/common/ImageUploader";
 import NoticeText from "../../components/common/NoticeText";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { boxStyle, buttonStyle, inputFieldStyle, titleStyle} from "../../components/common/Styles";
+import { boxStyle, buttonStyle, titleStyle} from "../../components/common/Styles";
 import CustomTextField from "../../components/common/CustomTextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
@@ -12,15 +12,24 @@ const BirthdayCafeRegister = () => {
   const [cafeName, setCafeName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const [eventDate, setEventDate] =useState("");
+  
   const [selectedStar, setSelectedStar] = useState("");
 
-  const [idolList, setIdolList] = useState([]);
+ 
   const [genre, setGenre] = useState("idol"); // 유저가 선택한 장르
   const [starList, setStarList] = useState([]); // 선택된 장르의 리스트만 담김
 
   const [roadAddress, setRoadAddress] = useState("");  // 도로명주소
 const [detailAddress, setDetailAddress] = useState("");  // 상세주소
+
+const [goodsName, setGoodsName] = useState("");
+const [goodsDescription, setGoodsDescription] = useState("");
+const [goodsImage, setGoodsImage] = useState(null);
+const [goodsPrice, setGoodsPrice] = useState("");
+
+const [startDate, setStartDate] = useState(null);
+const [endDate, setEndDate] = useState(null);
+
 
 
   useEffect(() => {
@@ -65,10 +74,14 @@ const [detailAddress, setDetailAddress] = useState("");  // 상세주소
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+      
     <Box sx={boxStyle}>
+    
       <Typography sx={titleStyle}>
         이벤트 등록
       </Typography>
+
+      <Divider sx={{ my: 4 }}>기본 정보</Divider>
       
       <form onSubmit={handleSubmit}>
         <CustomTextField
@@ -78,12 +91,22 @@ const [detailAddress, setDetailAddress] = useState("");  // 상세주소
         />
         <NoticeText text="* 이벤트 이름은 정확한 정보와 함께 기재해 주세요." />
 
-        <DatePicker
-            label="이벤트 날짜"
-            value={eventDate}
-            onChange={(newDate) => setEventDate(newDate)}
-            renderInput={(params) => <TextField fullWidth margin="normal" {...params} />}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <DatePicker
+            label="시작일"
+            value={startDate}
+            onChange={(newValue) => setStartDate(newValue)}
+            renderInput={(params) => <TextField fullWidth {...params} />}
           />
+          <DatePicker
+            label="종료일"
+            value={endDate}
+            onChange={(newValue) => setEndDate(newValue)}
+            renderInput={(params) => <TextField fullWidth {...params} />}
+          />
+        </Box>
+
+      <Divider sx={{ my: 4 }}>장르 및 대상 선택</Divider>
 
         <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
           {["idol", "youtuber", "comic", "webtoon", "game"].map((g) => (
@@ -135,23 +158,59 @@ const [detailAddress, setDetailAddress] = useState("");  // 상세주소
           )}
           <NoticeText text="* 해당 이벤트와 관련된 스타를 선택해 주세요." />
 
-        
-          <FormControl fullWidth margin="normal">
+          
+          
+          <Divider sx={{ my: 4 }}>주소 입력</Divider>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
             <TextField
               label="도로명 주소"
               value={roadAddress}
-              onClick={openPostcode}
+              fullWidth
               InputProps={{ readOnly: true }}
             />
-          </FormControl>
-
+            <Button
+              variant="outlined"
+              onClick={openPostcode}
+              sx={{ whiteSpace: "nowrap", height: "56px" }} // 버튼 높이 맞춤
+            >
+              주소 찾기
+            </Button>
+          </Box>
           <CustomTextField
             label="상세 주소"
             value={detailAddress}
             onChange={(e) => setDetailAddress(e.target.value)}
             required
           />
-        
+
+
+          <Divider sx={{ my: 4 }}>굿즈 정보</Divider>
+
+          <CustomTextField
+            label="굿즈 이름"
+            value={goodsName}
+            onChange={(e) => setGoodsName(e.target.value)}
+          />
+
+          <CustomTextField
+            label="굿즈 설명"
+            value={goodsDescription}
+            onChange={(e) => setGoodsDescription(e.target.value)}
+            multiline
+            rows={3}
+          />
+
+          <ImageUploader onUpload={(e) => setGoodsImage(e.target.files[0])} />
+          <NoticeText text="* 굿즈 이미지(jpg, png) 업로드" />
+
+          <CustomTextField
+            label="가격 (원)"
+            type="number"
+            value={goodsPrice}
+            onChange={(e) => setGoodsPrice(e.target.value)}
+          />
+
+        <Divider sx={{ my: 4 }}>카페 진행 설명</Divider>
         <CustomTextField
           label="설명"
           value={description}
