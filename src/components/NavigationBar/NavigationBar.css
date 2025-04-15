@@ -24,7 +24,7 @@
     
     padding: 10px 0;
     border-bottom: 1px solid #c7c7c7;
-    display: fixed;
+    display: flex;
     align-items: center;
     padding-left: 65px;
     transition: height 0.3s ease-in-out; /* 부드러운 변환 효과 */
@@ -33,7 +33,7 @@
 /* ✅ 마우스를 올리면 아래쪽으로 내려옴 */
 .bottom-nav:hover {
     font-size: 0.8rem !important;  /* hover 시 크기 증가 */
-    height: 130px;
+    height: 140px;
     opacity: 1;
     padding: 10px 0;
     transform: translateY(-10%);  /* 원래 위치로 */
@@ -47,24 +47,29 @@
     height: 140px; /* 확장된 높이 */
 }
 
-
+.nav-item-wrapper {
+    position: relative;
+    display: inline-block;
+  }
 
 /* ✅ 기본적으로 네비게이션 아이템 크기를 줄이고 숨김 */
 .nav-item {
     position: relative;
    
-    color: #3f3f3f !important;
+    color: #000000 !important;
     font-size: 1.1rem !important;  /* 기본 크기 */
-    font-weight: normal;
+    font-weight: 600;
     transition: font-size 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out !important;
     cursor: pointer;
     padding: 10px 15px; /* ✅ 클릭 영역 확장 */
    
 }
 
+
+
 /* ✅ 서브 메뉴 (기본적으로 숨김) */
 .submenu {
-    display: relative;
+    display: flex;
     flex-direction: column; /* ✅ 세로 정렬 */
     position: absolute;
     top: 100%; /* ✅ 부모 요소(이벤트 버튼) 바로 아래에 위치 */
@@ -82,6 +87,8 @@
     transform: translateX(0%) translateY(-100%);
 }
 
+
+
 /* ✅ 서브 메뉴 보일 때 */
 .submenu.visible {
     opacity: 1;
@@ -89,7 +96,9 @@
 }
 /* ✅ 서브 메뉴 아이템 */
 .submenu-item {
-    text-align: center;
+    text-align: left;
+    display: block !important;
+    line-height: 1.5;
     color: #333;
     background: none;
     border: none;

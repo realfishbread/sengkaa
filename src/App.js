@@ -8,9 +8,11 @@ import LoginPage from "./pages/auth/Login/Login";
 import SignupPage from "./pages/auth/SignUp/Signup";
 import BirthdayCafeRegister from "./pages/BirthdayCafeRegister/BirthdayCafeRegister";
 import { createTheme, ThemeProvider } from "@mui/material";
-import RegisterPlaces from "./pages/FindCafes/RegisterPlaces";
+import RegisterPlaces from "./pages/venue/RegisterPlaces";
 import KakaoMap from './pages/Map/KakaoMap';
 import Layout from "./Layout"; // ✅ 수정된 Layout 적용
+import Board from './pages/board/Board';
+import Post from './pages/board/Post';
 
 const theme = createTheme({
     typography: {
@@ -44,6 +46,8 @@ function App() {
             <Route path="/register" element={<BirthdayCafeRegister />} />
             <Route path="/venue" element={<RegisterPlaces/>}/> {/* ✅ 생일카페 등록 추가 */}
             <Route path="/map" element={<KakaoMap/>}/> {/* ✅ 생일카페 등록 추가 */}
+            <Route path="/post" element={<Post/>}/>
+            <Route path="/board" element={<Board/>}/>
             </Route>
         </Routes>
         </Router>

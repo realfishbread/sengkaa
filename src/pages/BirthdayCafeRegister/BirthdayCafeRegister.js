@@ -80,16 +80,34 @@ const [endDate, setEndDate] = useState(null);
       <Typography sx={titleStyle}>
         이벤트 등록
       </Typography>
+      <form
+          onSubmit={handleSubmit}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px', // 각 항목 간 여백
+          }}
+        >
 
       <Divider sx={{ my: 4 }}>기본 정보</Divider>
+      <Box
+        sx={{
+          border: '1px solid #e0e0e0',
+          borderRadius: '12px',
+          padding: '24px',
+          backgroundColor: '#fdfdfd',
+        }}
+      >
       
-      <form onSubmit={handleSubmit}>
+      
+      
         <CustomTextField
           label="이벤트 이름"
           value={cafeName}
           onChange={(e) => setCafeName(e.target.value)}
         />
         <NoticeText text="* 이벤트 이름은 정확한 정보와 함께 기재해 주세요." />
+        
 
         <Box sx={{ display: "flex", gap: 2 }}>
           <DatePicker
@@ -105,8 +123,18 @@ const [endDate, setEndDate] = useState(null);
             renderInput={(params) => <TextField fullWidth {...params} />}
           />
         </Box>
-
+      </Box>
+      
       <Divider sx={{ my: 4 }}>장르 및 대상 선택</Divider>
+
+      <Box
+        sx={{
+          border: '1px solid #e0e0e0',
+          borderRadius: '12px',
+          padding: '24px',
+          backgroundColor: '#fdfdfd',
+        }}
+      >
 
         <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
           {["idol", "youtuber", "comic", "webtoon", "game"].map((g) => (
@@ -157,10 +185,20 @@ const [endDate, setEndDate] = useState(null);
             </Box>
           )}
           <NoticeText text="* 해당 이벤트와 관련된 스타를 선택해 주세요." />
+        </Box>
 
-          
+        
           
           <Divider sx={{ my: 4 }}>주소 입력</Divider>
+
+          <Box
+            sx={{
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
+            }}
+          >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
             <TextField
               label="도로명 주소"
@@ -183,9 +221,19 @@ const [endDate, setEndDate] = useState(null);
             required
           />
 
+</Box>
+
 
           <Divider sx={{ my: 4 }}>굿즈 정보</Divider>
 
+          <Box
+            sx={{
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
+            }}
+          >
           <CustomTextField
             label="굿즈 이름"
             value={goodsName}
@@ -210,7 +258,19 @@ const [endDate, setEndDate] = useState(null);
             onChange={(e) => setGoodsPrice(e.target.value)}
           />
 
+</Box>
+
+
         <Divider sx={{ my: 4 }}>카페 진행 설명</Divider>
+
+        <Box
+            sx={{
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
+            }}
+          >
         <CustomTextField
           label="설명"
           value={description}
@@ -220,6 +280,7 @@ const [endDate, setEndDate] = useState(null);
         />
         <ImageUploader onUpload={handleImageUpload} />
         <NoticeText text="* jpg, png만 가능합니다." />
+        </Box>
         <Button
           fullWidth
           variant="contained"
@@ -230,7 +291,9 @@ const [endDate, setEndDate] = useState(null);
         </Button>
       </form>
     </Box>
+    
     </LocalizationProvider>
+    
   );
 };
 
