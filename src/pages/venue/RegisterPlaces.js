@@ -22,8 +22,6 @@ const VenueRegister = () => {
   const [snsAccount, setSnsAccount] = useState(""); // ✅ SNS 계정 입력 상태
 
   // ✅ 이미지 업로드 핸들러
-
-  // ✅ 이미지 업로드 핸들러
   const handleImageUpload = (event, setImage) => {
     setImage(URL.createObjectURL(event.target.files[0]));
   };
@@ -55,16 +53,25 @@ const VenueRegister = () => {
         </Box>
 
         {/* ✅ 장소 타입 선택 */}
-        <Typography variant="subtitle1" fontWeight="bold" marginTop={8} marginBottom={3}>장소의 타입을 선택해 주세요</Typography>
-        <ToggleButtonGroup value={venueType} exclusive onChange={(event, newValue) => setVenueType(newValue)} sx={toggleButtonGroupStyle}>
-          <ToggleButton value="카페">카페</ToggleButton>
-          <ToggleButton value="음식점">음식점</ToggleButton>
-          <ToggleButton value="전시회">전시회</ToggleButton>
-          <ToggleButton value="포토부스">포토부스</ToggleButton>
-          <ToggleButton value="파티룸">파티룸</ToggleButton>
+        <Typography variant="subtitle1" fontWeight="bold" marginTop={8} marginBottom={3}>장소의 타입을 선택해 주세요 (필수)</Typography>
+        <ToggleButtonGroup
+          value={venueType}
+          exclusive
+          onChange={(event, newValue) => setVenueType(newValue)}
+          className="venue-type-group"
+        >
+          {["카페", "음식점", "전시회", "포토부스", "파티룸"].map((type) => (
+            <ToggleButton
+              key={type}
+              value={type}
+              className="venue-type-button"
+              disableRipple
+            >
+              {type}
+            </ToggleButton>
+          ))}
         </ToggleButtonGroup>
 
-       
 
         {/* ✅ 가게 메인 이미지 업로드 */}
         <Typography variant="subtitle1" fontWeight="bold" marginTop={8} >가게 메인 이미지 (필수)</Typography>
