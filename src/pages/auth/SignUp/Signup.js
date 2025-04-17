@@ -180,7 +180,7 @@ const SignupPage = () => {
             </Select>
           </FormControl>
 
-          <CustomTextField label="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <CustomTextField label="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} /> {/* showpassword 해서 비밀번호 * 처리하고 보안성 높이는 게 좋을 듯 */}
           <CustomTextField
             label="비밀번호 확인"
             type="password"
