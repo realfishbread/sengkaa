@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react"; // ✅ 이렇게 해야 함
 import {
   Box,
-  TextField,
   Button,
   Typography,
   Link,
@@ -14,9 +13,36 @@ import {buttonStyle}from "../../../components/common/Styles";
 import CustomTextField from "../../../components/common/CustomTextField";
 
 const LoginPage = () => {
-  const handleLogin = () => {
-    console.log("로그인 요청");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("https://eventcafe.site/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("로그인 성공:", data);
+
+        // 예: 토큰 저장 후 페이지 이동 등
+        localStorage.setItem("token", data.token);
+        window.location.href = "/profile"; // 혹은 navigate("/profile") 사용
+      } else {
+        const errorData = await response.json();
+        alert("로그인 실패: " + errorData.message);
+      }
+    } catch (error) {
+      console.error("로그인 에러:", error);
+    }
   };
+
 
   const handleKakaoLogin = () => {
     console.log("카카오로 로그인 요청");
@@ -87,38 +113,44 @@ const LoginPage = () => {
             gap: 2,
           }}
         >
-          <CustomTextField
-            label="이메일"
-            type="email"
-            required
-            fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "#007BFF",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#0056b3",
-                },
+                  <CustomTextField
+          label="이메일"
+          type="email"
+          required
+          fullWidth
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "#007BFF",
               },
-            }}
-          />
-          <CustomTextField
-            label="비밀번호"
-            type="password"
-            required
-            fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "#007BFF",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#0056b3",
-                },
+              "&.Mui-focused fieldset": {
+                borderColor: "#0056b3",
               },
-            }}
-          />
+            },
+          }}
+        />
+
+        <CustomTextField
+          label="비밀번호"
+          type="password"
+          required
+          fullWidth
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "#007BFF",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#0056b3",
+              },
+            },
+          }}
+        />
+
           <Button
             variant="contained"
             fullWidth
