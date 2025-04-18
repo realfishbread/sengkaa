@@ -12,7 +12,7 @@ import Layout from "./Layout"; // ✅ 수정된 Layout 적용
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import EventCalendar from "./pages/calender/EventCalendar";
-import CollabPost from "./pages/collab/CollabPost";
+import CollabPost from "./pages/Collab/CollabPost";
 
 const theme = createTheme({
     typography: {
