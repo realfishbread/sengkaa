@@ -49,7 +49,7 @@ const VenueRegister = () => {
         {/* ✅ 주소 입력 & 검색 버튼 */}
         <Box sx={{ display: "flex", gap: "10px" }}>
           <CustomTextField label="주소" value={address} onChange={(e) => setAddress(e.target.value)} required />
-          <Button variant="outlined" onClick={() => alert("주소 검색 API 연결 예정!")}>주소 찾기</Button>
+          <Button variant="outlined" onClick={() => alert("주소 검색 API 연결 예정!")} sx={{ whiteSpace: "nowrap" }}>주소 찾기</Button>
         </Box>
 
         {/* ✅ 장소 타입 선택 */}

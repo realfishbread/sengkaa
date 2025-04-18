@@ -3,6 +3,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px; /* 버튼 간 간격 */
+    width: 100px;
+    min-width: unset !important;
     justify-content: center;
     margin-bottom: 30px;
 }
