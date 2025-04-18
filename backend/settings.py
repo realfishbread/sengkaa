@@ -33,12 +33,12 @@ ALLOWED_HOSTS = ["eventcafe.site", "www.eventcafe.site", "127.0.0.1", "localhost
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.admin', # Admin 사이트 관련 로그
+    'django.contrib.auth', # 기본 유저 및 권한 기능
+    'django.contrib.contenttypes', # 모델 타입 추적
+    'django.contrib.sessions', # 세션 저장
+    'django.contrib.messages', # 메시지 프레임워크
+    'django.contrib.staticfiles', #정적 파일 관리용
     'rest_framework',
     'corsheaders',  # React와 연결할 때 필요
     'api',          # 생성한 앱 추가
@@ -85,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eventcafe',
-        'USER': 'eventcafe',
-        'PASSWORD': 'eventcafe',
+        'USER': 'yejin',
+        'PASSWORD': 'yejin',
         'HOST': 'eventcafe.c76iaa8ycok0.ap-northeast-2.rds.amazonaws.com',
         'PORT': '3306',
         'OPTIONS': {
