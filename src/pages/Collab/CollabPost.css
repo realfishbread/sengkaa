@@ -1,0 +1,35 @@
+.post-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+  
+  .thumbnail {
+    width: 100%;
+    height: auto;
+    margin-top: 12px;
+    border-radius: 8px;
+  }
+  
+  .post-footer {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #777;
+  }
+  

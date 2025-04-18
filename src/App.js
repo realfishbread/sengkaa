@@ -13,6 +13,8 @@ import KakaoMap from './pages/Map/KakaoMap';
 import Layout from "./Layout"; // ✅ 수정된 Layout 적용
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
+import EventCalendar from "./pages/calender/EventCalendar";
+import CollabPost from './pages/Collab/CollabPost';
 
 const theme = createTheme({
     typography: {
@@ -48,11 +50,12 @@ function App() {
             <Route path="/map" element={<KakaoMap/>}/> {/* ✅ 생일카페 등록 추가 */}
             <Route path="/post" element={<Post/>}/>
             <Route path="/board" element={<Board/>}/>
+            <Route path="/subscribe"element={<EventCalendar/>}/>
+            <Route path="/collab" element={<CollabPost/>}/>
             </Route>
         </Routes>
         </Router>
     </ThemeProvider>
-    
   );
 }
 
