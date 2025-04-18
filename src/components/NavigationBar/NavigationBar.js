@@ -2,6 +2,7 @@ import { AppBar, Toolbar, Button, Box, TextField } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NavigationBar.css";
+import Logo from "../common/Logo";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
@@ -12,12 +13,7 @@ const NavigationBar = () => {
             {/* ✅ 상단 네비게이션 바 */}
             <AppBar position="static" className="navbar">
                 <Toolbar>
-                    <img
-                        src="/images/logo.png"
-                        alt="Event Cafe Logo"
-                        className="logo"
-                        onClick={() => navigate("/")}
-                    />
+                    <Logo />
                     <TextField
                         variant="outlined"
                         placeholder="찾으시는 최애가 있으신가요?"

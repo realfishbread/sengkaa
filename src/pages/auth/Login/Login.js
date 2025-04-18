@@ -11,6 +11,7 @@ import { SiKakaotalk } from "react-icons/si"; // 카카오톡 아이콘
 import { FcGoogle } from "react-icons/fc"; // 구글 아이콘
 import {buttonStyle}from "../../../components/common/Styles";
 import CustomTextField from "../../../components/common/CustomTextField";
+import Logo from "../../../components/common/Logo";
 
 const LoginPage = () => {
 
@@ -80,14 +81,7 @@ const LoginPage = () => {
             marginBottom: "1.5rem", // 제목과의 간격
           }}
         >
-          <img
-            src="/images/logo.png" // 로고 이미지 경로
-            alt="App Logo"
-            style={{
-              height: "60px", // 로고 크기
-              width: "auto", // 비율 유지
-            }}
-          />
+          <Logo />
         </Box>
 
         {/* 제목 */}

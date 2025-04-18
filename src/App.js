@@ -1,7 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
-import NavigationBar from "./components/NavigationBar/NavigationBar";
-import Footer from "./components/footer/Footer";
 import Home from './pages/Home';
 import "./styles/App.css";
 import LoginPage from "./pages/auth/Login/Login";
@@ -14,7 +12,7 @@ import Layout from "./Layout"; // ✅ 수정된 Layout 적용
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import EventCalendar from "./pages/calender/EventCalendar";
-import CollabPost from './pages/Collab/CollabPost';
+import CollabPost from "./pages/collab/CollabPost";
 
 const theme = createTheme({
     typography: {
