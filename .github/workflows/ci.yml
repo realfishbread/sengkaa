@@ -59,6 +59,19 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./build/ ${EC2_USER}@${EC2_HOST}:/var/www/html
 
+
+      - name: Deploy Backend source to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${EC2_SSH_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" . ${EC2_USER}@${EC2_HOST}:/var/www/eventcafe-backend --exclude=node_modules --exclude=build --exclude=.git
+
+
       - name: Create .env on EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
