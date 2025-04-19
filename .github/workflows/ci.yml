@@ -62,27 +62,29 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./build/ ${EC2_USER}@${EC2_HOST}:/var/www/html
 
-    # 5. Django 백엔드를 EC2로 배포
-    - name: Deploy Django Backend to EC2
-      env:
-        EC2_HOST: ${{ secrets.EC2_HOST }}
-        EC2_USER: ${{ secrets.EC2_USER }}
-        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+
+    
+    - name: Create .env on EC2
       run: |
         ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
-          cd /var/www/eventcafe-backend
-          git pull origin master
-          source venv/bin/activate
-          pip install -r requirements.txt
-          python manage.py migrate
-          python manage.py collectstatic --noinput
-          sudo systemctl restart gunicorn
-        EOF
+        echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" > /var/www/eventcafe-backend/.env
+        echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> /var/www/eventcafe-backend/.env
+      
 
-    # 6. Nginx 재시작 (EC2 내부에서)
-    - name: Restart Nginx
+     # 4. Django 백엔드 배포 및 서비스 재시작
+    - name: Deploy Django Backend to EC2
       env:
-        EC2_HOST: ${{ secrets.EC2_HOST }}
-        EC2_USER: ${{ secrets.EC2_USER }}
+       EC2_HOST: ${{ secrets.EC2_HOST }}
+       EC2_USER: ${{ secrets.EC2_USER }}
+       EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
       run: |
-        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "sudo systemctl restart nginx"
+       ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
+         cd /var/www/eventcafe-backend
+         git pull origin master
+         source venv/bin/activate
+         pip install -r requirements.txt
+         python manage.py migrate
+         python manage.py collectstatic --noinput
+         sudo systemctl restart gunicorn
+         sudo systemctl restart nginx
+       EOF

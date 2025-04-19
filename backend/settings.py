@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-     'corsheaders.middleware.CorsMiddleware',  # CORS 활성화
+    'corsheaders.middleware.CorsMiddleware',  # CORS 활성화
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -85,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eventcafe',
-        'USER': 'yejin',
-        'PASSWORD': 'yejin',
+        'USER': 'eventcafe',
+        'PASSWORD': 'eventcafe123',
         'HOST': 'eventcafe.c76iaa8ycok0.ap-northeast-2.rds.amazonaws.com',
         'PORT': '3306',
         'OPTIONS': {
@@ -134,6 +134,18 @@ USE_I18N = True
 USE_TZ = True
 
 CORS_ALLOW_ALL_ORIGINS = True  # 보안이 필요하면 특정 도메인만 허용
+
+# settings.py
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+REDIS_DB = 0
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'eventcafe649@gmail.com'         # 여기 사용하고 싶은 Gmail 주소
+EMAIL_HOST_PASSWORD = 'igxcdrfdjmylywtb'   # Gmail 앱 비밀번호
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # Static files (CSS, JavaScript, Images)

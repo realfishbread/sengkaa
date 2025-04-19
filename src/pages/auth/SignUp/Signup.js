@@ -72,12 +72,25 @@ const SignupPage = () => {
     }
   };
 
+  const handleVerifyCode = async () => {
+    try {
+      const res = await axios.post("https://eventcafe.site/user/verify-email-code/", {
+        email,
+        code
+      });
+      alert("✅ 이메일 인증이 완료되었습니다!");
+    } catch (err) {
+      console.error("인증 실패:", err.response?.data);
+      setError("❌ 인증 코드가 잘못되었거나 만료되었습니다.");
+    }
+  };
+
   const handleSendVerification = async () => {
     setShowEmailVerification(true);
     setTimer(180);
 
     try {
-      const response = await axios.post("https://eventcafe.site/api/send-email-verification/", {
+      const response = await axios.post("https://eventcafe.site/user/send-email-verification/", {
         email,
       });
       console.log("인증 코드 전송 성공:", response.data);
@@ -162,12 +175,20 @@ const SignupPage = () => {
                 type="text"
                 fullWidth
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e) => setCode(e.target.value)}  // ✅ 입력값 받기
                 sx={{ marginBottom: "0.5rem" }}
               />
               <Typography variant="body2" textAlign="right" color={timer > 0 ? "#555555" : "#FF0000"}>
                 {timer > 0 ? `남은 시간: ${formatTime(timer)}` : "인증 시간이 만료되었습니다."}
               </Typography>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={handleVerifyCode}  // 여기서 인증 검사!
+                sx={{ mt: 1, fontWeight: "bold", color: "#007BFF", borderColor: "#007BFF" }}
+              >
+                인증 확인
+              </Button>
             </Box>
           )}
 
