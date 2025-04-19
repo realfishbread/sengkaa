@@ -65,11 +65,11 @@ jobs:
 
     
     - name: Create .env on EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
-        echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" > /var/www/eventcafe-backend/.env
-        echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> /var/www/eventcafe-backend/.env
-        EOF
+  run: |
+    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
+      echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" > /var/www/eventcafe-backend/.env
+      echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> /var/www/eventcafe-backend/.env
+EOF
 
      # 4. Django 백엔드 배포 및 서비스 재시작
     - name: Deploy Django Backend to EC2
