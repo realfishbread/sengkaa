@@ -91,18 +91,15 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
             cd /var/www/eventcafe-backend
-            git pull origin master
-            python -m venv venv
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
             source venv/bin/activate
             pip install --upgrade pip
-            pip install gunicorn --break-system-packages
-            pip install -r requirements.txt --break-system-packages
-            pip freeze > requirements.txt
+            pip install -r requirements.txt
             python manage.py migrate
             python manage.py collectstatic --noinput
-            sudo systemctl daemon-reexec
-            sudo systemctl daemon-reload
             sudo systemctl restart gunicorn
-            sudo systemctl enable gunicorn
             sudo systemctl restart nginx
           EOF
+

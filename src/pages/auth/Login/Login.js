@@ -14,7 +14,7 @@ import CustomTextField from "../../../components/common/CustomTextField";
 import Logo from "../../../components/common/Logo";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
-import axiosInstance from "../../../shared/api/axiosInstance";
+import axios from "axios"; // axiosInstance 말고 기본 axio
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,8 +24,11 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-    const { data } = await axiosInstance.post("/user/login/", { email, password });
-
+      const { data } = await axios.post("https://eventcafe.site/user/login/", {
+        email,
+        password
+      });
+  
       
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);
