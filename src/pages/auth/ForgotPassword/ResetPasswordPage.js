@@ -12,7 +12,7 @@ export default function ResetPasswordPage() {
     try {
       await resetPassword(email, password);
       alert("비밀번호가 변경되었습니다!");
-      navigate("/login");
+      navigate("/login/");
     } catch (e) {
       alert("변경 실패: " + (e.response?.data?.error || "알 수 없는 에러"));
     }

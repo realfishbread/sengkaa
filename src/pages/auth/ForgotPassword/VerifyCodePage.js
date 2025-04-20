@@ -12,7 +12,7 @@ export default function VerifyCodePage() {
     try {
       await verifyResetCode(email, code);
       alert("인증 성공!");
-      navigate("/reset-password", { state: { email } });
+      navigate("/reset-password/", { state: { email } });
     } catch (e) {
       alert("인증 실패: " + (e.response?.data?.error || "알 수 없는 에러"));
     }

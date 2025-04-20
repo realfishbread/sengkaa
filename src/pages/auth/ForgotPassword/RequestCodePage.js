@@ -10,7 +10,7 @@ export default function RequestCodePage() {
     try {
       await sendResetEmail(email);
       alert("인증 코드가 전송되었습니다.");
-      navigate("/verify-code", { state: { email } });
+      navigate("/verify-code/", { state: { email } });
     } catch (e) {
       alert("오류: " + (e.response?.data?.error || "알 수 없는 에러"));
     }
