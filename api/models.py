@@ -10,5 +10,9 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def id(self):  # ✅ 이렇게 추가!
+        return self.user_id
+    
     def __str__(self):
         return self.username

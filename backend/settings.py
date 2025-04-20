@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',  # React와 연결할 때 필요
     'api',          # 생성한 앱 추가
     'django_extensions',  # ✅ django-extensions 추가
+    'redis'
 ]
 
 MIDDLEWARE = [
@@ -139,6 +140,8 @@ CORS_ALLOW_ALL_ORIGINS = True  # 보안이 필요하면 특정 도메인만 허�
 REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
 REDIS_DB = 0
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -157,3 +160,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# settings.py 가장 아래쪽에 추가하면 됨
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}

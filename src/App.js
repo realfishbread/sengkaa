@@ -13,6 +13,9 @@ import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import EventCalendar from "./pages/calender/EventCalendar";
 import CollabPost from "./pages/Collab/CollabPost";
+import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
+import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
+import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
 
 const theme = createTheme({
     typography: {
@@ -50,6 +53,9 @@ function App() {
             <Route path="/board" element={<Board/>}/>
             <Route path="/subscribe"element={<EventCalendar/>}/>
             <Route path="/collab" element={<CollabPost/>}/>
+            <Route path="/forgot-password" element={<RequestCodePage />} />
+            <Route path="/verify-code" element={<VerifyCodePage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Route>
         </Routes>
         </Router>
