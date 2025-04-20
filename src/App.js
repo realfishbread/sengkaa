@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import Home from './pages/Home';
+import { UserContext } from "./context/UserContext";
 import "./styles/App.css";
 import LoginPage from "./pages/auth/Login/Login";
 import SignupPage from "./pages/auth/SignUp/Signup";

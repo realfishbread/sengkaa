@@ -1,5 +1,6 @@
-import { AppBar, Toolbar, Button, Box, TextField } from "@mui/material";
-import { useState } from "react";
+import { AppBar, Toolbar, Button, Box, TextField, Avatar, Menu, MenuItem, IconButton } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NavigationBar.css";
 import Logo from "../common/Logo";
@@ -7,6 +8,31 @@ import Logo from "../common/Logo";
 const NavigationBar = () => {
     const navigate = useNavigate();
     const [openEventMenu, setOpenEventMenu] = useState(false);
+
+    const [user, setUser] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+        useEffect(() => {
+            const token = localStorage.getItem("accessToken");
+            if (!token) return;
+        
+            fetch("https://eventcafe.site/user/profile/", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("인증 실패");
+                return res.json();
+            })
+            .then(data => setUser(data))
+            .catch(err => {
+                console.error("유저 정보 오류", err);
+                setUser(null);
+            });
+        }, []);
+        
 
     return (
         <>
@@ -20,8 +46,36 @@ const NavigationBar = () => {
                         size="small"
                         className="search-bar"
                     />
-                    <Button color="inherit" className="auth-button" onClick={() => navigate("/login")}>로그인</Button>
-                    <Button color="inherit" className="auth-button" onClick={() => navigate("/signup")}>회원가입</Button>
+                    {user ? (
+                <>
+                    <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+                    <Avatar
+                        src={user.profile_image || ""}
+                        alt={user.username}
+                        >
+                        {user.username?.[0]}
+                        </Avatar>
+                    </IconButton>
+                    <Menu anchorEl={anchorEl} open={open} onClose={() => setAnchorEl(null)}>
+                    <MenuItem onClick={() => navigate("/profile")}>내 프로필</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            setAnchorEl(null);      // 메뉴 닫기
+                            localStorage.removeItem("accessToken");
+                            setUser(null);
+                            navigate("/");
+                        }}
+                        >
+                        로그아웃
+                        </MenuItem>
+                    </Menu>
+                </>
+                ) : (
+  <>
+    <Button color="inherit" className="auth-button" onClick={() => navigate("/login")}>로그인</Button>
+    <Button color="inherit" className="auth-button" onClick={() => navigate("/signup")}>회원가입</Button>
+  </>
+)}
                 </Toolbar>
             </AppBar>
 

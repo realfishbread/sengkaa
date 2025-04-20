@@ -4,13 +4,14 @@ import "./styles/index.css";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App"; // ✅ MainApp을 최상위로 사용
+import { UserProvider } from "./context/UserContext";   // ★경로주의
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    
+    <UserProvider>
     <App />
-    
+    </UserProvider>
   </React.StrictMode>
 );
 

@@ -12,7 +12,7 @@ from django.core.mail import EmailMultiAlternatives
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import check_password
-
+from .serializers import ProfileImageSerializer
 
 
 @api_view(["POST"])
@@ -128,10 +128,14 @@ def login_view(request):
         # ✅ 토큰 생성
         refresh = RefreshToken.for_user(user)
         return Response({
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-            "username": user.username if hasattr(user, "username") else "",  # ✅ 안전하게 처리
-            "email": user.email
+           "refresh": str(refresh),
+        "access":  str(refresh.access_token),
+        "username": user.username,
+        "email":    user.email,
+        "profile_image": (
+            request.build_absolute_uri(user.profile_image.url)
+            if user.profile_image else ""
+        )
         }, status=status.HTTP_200_OK)
     else:
         return Response({"error": "로그인 정보가 올바르지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
@@ -235,4 +239,17 @@ def user_profile(request):
         "username": user.username,
         "user_type": user.user_type,
         "created_at": user.created_at,
-    })
+        "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else ""
+    }, status=200)
+    
+    
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def upload_profile_image(request):
+    serializer = ProfileImageSerializer(
+        request.user, data=request.data, partial=True
+    )
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)

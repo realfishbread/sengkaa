@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // ✅ 이렇게 해야 함
+import React, { useState, useContext } from "react"; // ✅ 이렇게 해야 함
 import {
   Box,
   Button,
@@ -12,9 +12,12 @@ import { FcGoogle } from "react-icons/fc"; // 구글 아이콘
 import {buttonStyle}from "../../../components/common/Styles";
 import CustomTextField from "../../../components/common/CustomTextField";
 import Logo from "../../../components/common/Logo";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/UserContext";
 
 const LoginPage = () => {
-
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,9 +35,10 @@ const LoginPage = () => {
         const data = await response.json();
         console.log("로그인 성공:", data);
 
-        // 예: 토큰 저장 후 페이지 이동 등
-        localStorage.setItem("token", data.token);
-        window.location.href = "/profile"; // 혹은 navigate("/profile") 사용
+        localStorage.setItem("accessToken", data.access);
+        localStorage.setItem("refreshToken", data.refresh);
+        setUser({ username: data.username, email: data.email, profile_image: data.profile_image });
+        navigate("/"); // ✅ 홈으로 이동
       } else {
         const errorData = await response.json();
         alert("로그인 실패: " + errorData.message);

@@ -7,6 +7,11 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     user_type = models.CharField(max_length=20, choices=[('organizer', 'Organizer'), ('regular', 'Regular')])
+    # ⭐ 프로필 이미지
+    profile_image = models.ImageField(
+        upload_to="profile/",         # MEDIA_ROOT/profile/ 폴더에 저장
+        blank=True, null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
