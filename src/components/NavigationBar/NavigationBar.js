@@ -5,7 +5,7 @@ import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./NavigationBar.css";
 import Logo from "../common/Logo";
-import axios from "../../shared/api/axiosInstance";
+import axiosInstance from "../../shared/api/axiosInstance";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const NavigationBar = () => {
 
         useEffect(() => {
             // token 은 axios 인터셉터가 자동으로 붙여 줍니다
-        axios
+            axiosInstance
           .get("/user/profile/")
           .then((res) => setUser(res.data))
           .catch(() => setUser(null));

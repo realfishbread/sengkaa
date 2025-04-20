@@ -1,6 +1,6 @@
 // src/pages/auth/api/passwordApi.js
 
-import axios from "../../../shared/api/axiosInstance";
+import axios from "axios";
 
 
 

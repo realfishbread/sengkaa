@@ -14,7 +14,7 @@ import CustomTextField from "../../../components/common/CustomTextField";
 import Logo from "../../../components/common/Logo";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
-import axios from "../../../shared/api/axiosInstance";
+import axiosInstance from "../../../shared/api/axiosInstance";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-    const { data } = await axios.post("/user/login/", { email, password });
+    const { data } = await axiosInstance.post("/user/login/", { email, password });
 
       
       localStorage.setItem("accessToken", data.access);

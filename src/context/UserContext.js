@@ -1,6 +1,6 @@
 // src/context/UserContext.js
 import { createContext, useState, useEffect, useMemo } from "react";
-import api from "../shared/api/axiosInstance";   // axios 인스턴스
+import axiosInstance from "../shared/api/axiosInstance";   // axios 인스턴스
 
 export const UserContext = createContext(null);
 
@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
     }
 
     // 헤더는 인터셉터가 자동으로 추가!
-    api
+    axiosInstance
       .get("/user/profile/")
       .then((res) => setUser(res.data))
       .catch(() => setUser(null))
