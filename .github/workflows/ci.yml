@@ -13,78 +13,89 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. GitHub 저장소 클론
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # 1. GitHub 저장소 클론
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16  # React LTS 버전
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16  # React LTS 버전
 
-    - name: Install React dependencies
-      run: npm install --legacy-peer-deps
+      - name: Install React dependencies
+        run: npm install --legacy-peer-deps
 
-    - name: Build React project
-      run: |
-        export CI=false
-        npm run build 
+      - name: Build React project
+        run: |
+          export CI=false
+          npm run build 
 
-    ## --------------- Django Backend 설정 ---------------
-    # 3. Python 환경 설정
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: 3.9.21  # Django 지원 버전
+      ## --------------- Django Backend 설정 ---------------
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9.21  # Django 지원 버전
 
-    - name: Install Django dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        pip install --no-cache-dir -r requirements.txt
+      - name: Install Django dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install --no-cache-dir -r requirements.txt
 
-    - name: Run Django migrations
-      run: |
-        source venv/bin/activate
-        
-    ## --------------- EC2 배포 설정 ---------------
-    # 4. React 빌드 파일을 EC2로 전송
-    - name: Deploy React to EC2
-      env:
-        EC2_HOST: ${{ secrets.EC2_HOST }}
-        EC2_USER: ${{ secrets.EC2_USER }}
-        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "${EC2_SSH_KEY}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./build/ ${EC2_USER}@${EC2_HOST}:/var/www/html
+      - name: Run Django migrations
+        run: |
+          source venv/bin/activate
+
+      ## --------------- EC2 배포 설정 ---------------
+      - name: Deploy React to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${EC2_SSH_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./build/ ${EC2_USER}@${EC2_HOST}:/var/www/html
 
 
-    
-    - name: Create .env on EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
-        echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" > /var/www/eventcafe-backend/.env
-        echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> /var/www/eventcafe-backend/.env
-      
+      - name: Deploy Backend source to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${EC2_SSH_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" . ${EC2_USER}@${EC2_HOST}:/var/www/eventcafe-backend --exclude=node_modules --exclude=build --exclude=.git
 
-     # 4. Django 백엔드 배포 및 서비스 재시작
-    - name: Deploy Django Backend to EC2
-      env:
-       EC2_HOST: ${{ secrets.EC2_HOST }}
-       EC2_USER: ${{ secrets.EC2_USER }}
-       EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-      run: |
-       ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
-         cd /var/www/eventcafe-backend
-         git pull origin master
-         source venv/bin/activate
-         pip install -r requirements.txt
-         python manage.py migrate
-         python manage.py collectstatic --noinput
-         sudo systemctl restart gunicorn
-         sudo systemctl restart nginx
-       EOF
+
+      - name: Create .env on EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
+            echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" > /var/www/eventcafe-backend/.env
+            echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> /var/www/eventcafe-backend/.env
+          EOF
+
+      - name: Deploy Django Backend to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
+            cd /var/www/eventcafe-backend
+            git pull origin master
+            source venv/bin/activate
+            pip install -r requirements.txt
+            python manage.py migrate
+            python manage.py collectstatic --noinput
+            sudo systemctl restart gunicorn
+            sudo systemctl restart nginx
+          EOF
