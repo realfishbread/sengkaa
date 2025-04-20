@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { sendResetEmail } from "../api/passwordApi";
 import { useNavigate } from "react-router-dom";
+import { sendResetEmail } from "../api/passwordApi";
+
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 
 export default function RequestCodePage() {
   const [email, setEmail] = useState("");
-  const navigate = useNavigate();
+  const navigate          = useNavigate();
 
   const handleSend = async () => {
     try {
@@ -17,15 +25,40 @@ export default function RequestCodePage() {
   };
 
   return (
-    <div>
-      <h2>비밀번호 재설정</h2>
-      <input
-        type="email"
-        placeholder="이메일 입력"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button onClick={handleSend}>인증 코드 받기</button>
-    </div>
+    <Box
+      sx={{
+        backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 2,
+      }}
+    >
+      <Container
+        maxWidth="xs"
+        sx={{
+          p: 3,
+          borderRadius: 2,
+          bgcolor: "rgba(255,255,255,0.9)",
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" mb={3} textAlign="center">
+          비밀번호 재설정
+        </Typography>
+
+        <TextField
+          fullWidth
+          label="이메일"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <Button variant="contained" fullWidth onClick={handleSend}>
+          인증 코드 받기
+        </Button>
+      </Container>
+    </Box>
   );
 }

@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { verifyResetCode } from "../api/passwordApi";
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 
 export default function VerifyCodePage() {
-  const [code, setCode] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
-  const email = location.state?.email || "";
+  const [code, setCode]   = useState("");
+  const navigate          = useNavigate();
+  const email             = useLocation().state?.email || "";
 
   const handleVerify = async () => {
     try {
@@ -19,16 +25,44 @@ export default function VerifyCodePage() {
   };
 
   return (
-    <div>
-      <h2>인증 코드 확인</h2>
-      <p>이메일: {email}</p>
-      <input
-        type="text"
-        placeholder="인증 코드 입력"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-      />
-      <button onClick={handleVerify}>확인</button>
-    </div>
+    <Box
+      sx={{
+        backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 2,
+      }}
+    >
+      <Container
+        maxWidth="xs"
+        sx={{
+          p: 3,
+          borderRadius: 2,
+          bgcolor: "rgba(255,255,255,0.9)",
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" mb={3} textAlign="center">
+          인증 코드 확인
+        </Typography>
+
+        <Typography variant="body2" mb={1}>
+          이메일: {email}
+        </Typography>
+
+        <TextField
+          fullWidth
+          label="인증 코드"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <Button variant="contained" fullWidth onClick={handleVerify}>
+          확인
+        </Button>
+      </Container>
+    </Box>
   );
 }

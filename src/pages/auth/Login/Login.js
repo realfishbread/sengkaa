@@ -14,6 +14,7 @@ import CustomTextField from "../../../components/common/CustomTextField";
 import Logo from "../../../components/common/Logo";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
+import axios from "../../../shared/api/axiosInstance";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -23,28 +24,19 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("https://eventcafe.site/user/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+    const { data } = await axios.post("/user/login/", { email, password });
+
+      
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
+      setUser({
+        username: data.username,
+        email: data.email,
+        profile_image: data.profile_image,
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("로그인 성공:", data);
-
-        localStorage.setItem("accessToken", data.access);
-        localStorage.setItem("refreshToken", data.refresh);
-        setUser({ username: data.username, email: data.email, profile_image: data.profile_image });
-        navigate("/"); // ✅ 홈으로 이동
-      } else {
-        const errorData = await response.json();
-        alert("로그인 실패: " + errorData.message);
-      }
-    } catch (error) {
-      console.error("로그인 에러:", error);
+      navigate("/");            // 홈으로
+    } catch (err) {
+      alert("로그인 실패: " + err.message);
     }
   };
 
@@ -173,6 +165,11 @@ const LoginPage = () => {
             >
               회원가입
             </Link>
+            <Typography variant="body2" textAlign="center" sx={{ mt: 0.5 }}>
+              <Link href="/forgot-password/" underline="hover">
+                비밀번호를 잊으셨나요?
+              </Link>
+            </Typography>
           </Typography>
         </Box>
 

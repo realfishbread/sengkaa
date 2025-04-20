@@ -1,37 +1,27 @@
 import { AppBar, Toolbar, Button, Box, TextField, Avatar, Menu, MenuItem, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useState, useEffect } from "react";
+import { useEffect, useContext, useState } from "react";
+import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./NavigationBar.css";
 import Logo from "../common/Logo";
+import axios from "../../shared/api/axiosInstance";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
     const [openEventMenu, setOpenEventMenu] = useState(false);
 
-    const [user, setUser] = useState(null);
+    const { user, setUser } = useContext(UserContext);   // 전역 상태
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
         useEffect(() => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) return;
-        
-            fetch("https://eventcafe.site/user/profile/", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            })
-            .then(res => {
-                if (!res.ok) throw new Error("인증 실패");
-                return res.json();
-            })
-            .then(data => setUser(data))
-            .catch(err => {
-                console.error("유저 정보 오류", err);
-                setUser(null);
-            });
-        }, []);
+            // token 은 axios 인터셉터가 자동으로 붙여 줍니다
+        axios
+          .get("/user/profile/")
+          .then((res) => setUser(res.data))
+          .catch(() => setUser(null));
+    }, []);        // ← NavigationBar 가 리마운트될 때마다 한 번만
         
 
     return (
@@ -62,6 +52,7 @@ const NavigationBar = () => {
                         onClick={() => {
                             setAnchorEl(null);      // 메뉴 닫기
                             localStorage.removeItem("accessToken");
+                            localStorage.removeItem("refreshToken");
                             setUser(null);
                             navigate("/");
                         }}

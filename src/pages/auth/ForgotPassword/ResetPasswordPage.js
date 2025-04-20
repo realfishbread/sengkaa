@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resetPassword } from "../api/passwordApi";
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
-  const location = useLocation();
-  const navigate = useNavigate();
-  const email = location.state?.email || "";
+  const navigate                = useNavigate();
+  const email                   = useLocation().state?.email || "";
 
   const handleReset = async () => {
     try {
@@ -19,16 +25,45 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div>
-      <h2>새 비밀번호 입력</h2>
-      <p>이메일: {email}</p>
-      <input
-        type="password"
-        placeholder="새 비밀번호 입력"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleReset}>비밀번호 변경</button>
-    </div>
+    <Box
+      sx={{
+        backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 2,
+      }}
+    >
+      <Container
+        maxWidth="xs"
+        sx={{
+          p: 3,
+          borderRadius: 2,
+          bgcolor: "rgba(255,255,255,0.9)",
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" mb={3} textAlign="center">
+          새 비밀번호 입력
+        </Typography>
+
+        <Typography variant="body2" mb={1}>
+          이메일: {email}
+        </Typography>
+
+        <TextField
+          fullWidth
+          type="password"
+          label="새 비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <Button variant="contained" fullWidth onClick={handleReset}>
+          비밀번호 변경
+        </Button>
+      </Container>
+    </Box>
   );
 }
