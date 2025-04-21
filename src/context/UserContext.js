@@ -10,7 +10,9 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    const savedUser = localStorage.getItem("userInfo");
     if (!token) {
+      setUser(JSON.parse(savedUser)); // 바로 세팅
       setReady(true);
       return;
     }

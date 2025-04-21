@@ -87,7 +87,7 @@ const SignupPage = () => {
 
   const handleSendVerification = async () => {
     setShowEmailVerification(true);
-    setTimer(180);
+    setTimer(300);
 
     try {
       const response = await axios.post("https://eventcafe.site/user/send-email-verification/", {

@@ -32,6 +32,11 @@ const LoginPage = () => {
       
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);
+      localStorage.setItem("userInfo", JSON.stringify({
+        username: data.username,
+        email: data.email,
+        profile_image: data.profile_image,
+      })); // ✅ 추가
       setUser({
         username: data.username,
         email: data.email,

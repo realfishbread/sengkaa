@@ -21,6 +21,8 @@ urlpatterns = [
        path('reset-password-request/', send_reset_password_email, name="reset_password_request"),
        path('verify-reset-code/', verify_reset_code, name="verify_reset_code"),
        path('reset-password/', reset_password, name="reset_password"),
-        path('profile/', user_profile, name='user_profile'),
+       path('profile/', user_profile, name='user_profile'),
+       
+     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
