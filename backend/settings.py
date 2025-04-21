@@ -172,3 +172,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+
+SIMPLE_JWT = {
+    "USER_ID_FIELD": "user_id",  # ← 너 모델에서 실제 PK 필드명
+    "USER_ID_CLAIM": "user_id",  # ← JWT payload에 들어갈 이름
+}
