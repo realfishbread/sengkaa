@@ -175,7 +175,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    "USER_ID_FIELD": "id",  # ← 너 모델에서 실제 PK 필드명
+    "USER_ID_FIELD": "user_id",  # ← 너 모델에서 실제 PK 필드명
     "USER_ID_CLAIM": "user_id",  # ← JWT payload에 들어갈 이름
 }
 

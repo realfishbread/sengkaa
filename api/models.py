@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 
 class User(AbstractBaseUser, PermissionsMixin):
-    id = models.AutoField(primary_key=True)
+    user_id = models.AutoField(primary_key=True)  # ✅ 실제 PK 컬럼
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
@@ -27,7 +27,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
 
-   
+    @property
+    def id(self):  # ✅ Django가 기대하는 id 속성 생성
+        return self.user_id
 
     def __str__(self):
         return self.username
