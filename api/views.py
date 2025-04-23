@@ -15,7 +15,7 @@ from django.contrib.auth.hashers import check_password
 from .serializers import ProfileImageSerializer
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
-
+from django.utils import timezone
 import requests
 
 
@@ -287,11 +287,16 @@ def kakao_login_callback(request):
     nickname = user_info["properties"].get("nickname", "")
 
     # 👉 기존 유저 찾기 or 생성
-    user, created = User.objects.get_or_create(email=kakao_email, defaults={
+    user, created = User.objects.get_or_create(
+    email=kakao_email,
+    defaults={
         "username": nickname,
         "password": make_password(User.objects.make_random_password()),
-        "user_type": "regular"
-    })
+        "user_type": "regular",
+        "created_at": timezone.now(),
+        "updated_at": timezone.now(),
+    }
+)
 
     # ✅ JWT 발급
     refresh = RefreshToken.for_user(user)
