@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 
 class User(AbstractBaseUser, PermissionsMixin):
-    user_id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
@@ -27,9 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
 
-    @property
-    def id(self):
-        return self.user_id
+   
 
     def __str__(self):
         return self.username

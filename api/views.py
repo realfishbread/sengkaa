@@ -127,12 +127,11 @@ def login_view(request):
         return Response({"error": "비밀번호가 일치하지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
 
     # ✅ 토큰 발급
-    refresh = RefreshToken.for_user(user)
     if user is not None:
         # ✅ 토큰 생성
         refresh = RefreshToken.for_user(user)
         return Response({
-           "refresh": str(refresh),
+        "refresh": str(refresh),
         "access":  str(refresh.access_token),
         "username": user.username,
         "email":    user.email,
@@ -259,8 +258,6 @@ def upload_profile_image(request):
     return Response(serializer.errors, status=400)
 
 
-KAKAO_CLIENT_ID = "4083ddda8b18709f62bb857f2c52f127"
-REDIRECT_URI = "https://eventcafe.site/user/oauth/kakao/callback"
 
 @api_view(["GET"])  # 카카오에서 redirect되면 이 API 호출됨
 def kakao_login_callback(request):
