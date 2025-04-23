@@ -14,6 +14,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import check_password
 from .serializers import ProfileImageSerializer
 from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
+
 import requests
 
 

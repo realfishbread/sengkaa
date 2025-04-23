@@ -30,20 +30,7 @@ const LoginPage = () => {
 
  
 
-  // 📁 login-success.js (프론트에서 라우팅 처리)
-  useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    const access = query.get("access");
-    const refresh = query.get("refresh");
-
-    if (access && refresh) {
-      localStorage.setItem("accessToken", access);
-      localStorage.setItem("refreshToken", refresh);
-      alert("소셜 로그인 성공! 🎉");
-      window.location.href = "/"; // 홈으로 이동
-    }
-  }, []);
-
+  
 
   const handleLogin = async () => {
     try {
@@ -74,8 +61,6 @@ const LoginPage = () => {
 
   const handleKakaoLogin = () => {
     window.location.href = kakaoLoginUrl;
-
-    
   };
 
   const handleGoogleLogin = () => {
@@ -136,7 +121,7 @@ const LoginPage = () => {
             gap: 2,
           }}
         >
-                  <CustomTextField
+        <CustomTextField
           label="이메일"
           type="email"
           required

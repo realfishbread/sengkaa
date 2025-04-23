@@ -17,6 +17,7 @@ import CollabPost from "./pages/Collab/CollabPost";
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
+import LoginSuccess from "./pages/auth/Login/LoginSuccess";
 
 const theme = createTheme({
     typography: {
@@ -57,7 +58,7 @@ function App() {
             <Route path="/forgot-password" element={<RequestCodePage />} />
             <Route path="/verify-code" element={<VerifyCodePage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
-
+            <Route path="/login-success" element={<LoginSuccess />} />
 
          
             </Route>
