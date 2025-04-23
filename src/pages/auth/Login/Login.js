@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"; // ✅ 이렇게 해야 함
+import React, { useState, useContext, useEffect  } from "react"; // ✅ 이렇게 해야 함
 import {
   Box,
   Button,
@@ -16,11 +16,34 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
 import axios from "axios"; // axiosInstance 말고 기본 axio
 
+
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const KAKAO_REST_API_KEY = '4083ddda8b18709f62bb857f2c52f127';
+  const REDIRECT_URI = 'https://eventcafe.site/user/oauth/kakao/callback';
+  const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+ 
+
+  // 📁 login-success.js (프론트에서 라우팅 처리)
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const access = query.get("access");
+    const refresh = query.get("refresh");
+
+    if (access && refresh) {
+      localStorage.setItem("accessToken", access);
+      localStorage.setItem("refreshToken", refresh);
+      alert("소셜 로그인 성공! 🎉");
+      window.location.href = "/"; // 홈으로 이동
+    }
+  }, []);
+
 
   const handleLogin = async () => {
     try {
@@ -50,7 +73,9 @@ const LoginPage = () => {
 
 
   const handleKakaoLogin = () => {
-    console.log("카카오로 로그인 요청");
+    window.location.href = kakaoLoginUrl;
+
+    
   };
 
   const handleGoogleLogin = () => {

@@ -11,6 +11,7 @@ from .views import (
 )
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import kakao_login_callback
 
 urlpatterns = [
        path('register/', register_view, name="register"),
@@ -22,7 +23,7 @@ urlpatterns = [
        path('verify-reset-code/', verify_reset_code, name="verify_reset_code"),
        path('reset-password/', reset_password, name="reset_password"),
        path('profile/', user_profile, name='user_profile'),
-       
+       path("oauth/kakao/callback", kakao_login_callback),
      
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

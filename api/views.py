@@ -13,6 +13,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import check_password
 from .serializers import ProfileImageSerializer
+from django.shortcuts import redirect
+import requests
 
 
 @api_view(["POST"])
@@ -253,3 +255,47 @@ def upload_profile_image(request):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
+
+
+KAKAO_CLIENT_ID = "4083ddda8b18709f62bb857f2c52f127"
+REDIRECT_URI = "https://eventcafe.site/user/oauth/kakao/callback"
+
+@api_view(["GET"])  # 카카오에서 redirect되면 이 API 호출됨
+def kakao_login_callback(request):
+    code = request.GET.get("code")
+    if not code:
+        return Response({"error": "인가 코드가 없습니다."}, status=400)
+
+    token_response = requests.post(
+        "https://kauth.kakao.com/oauth/token",
+        data={
+            "grant_type": "authorization_code",
+            "client_id": settings.KAKAO_REST_API_KEY,
+            "redirect_uri": settings.KAKAO_REDIRECT_URI,
+            "code": code,
+        }
+    )
+    access_token = token_response.json().get("access_token")
+    if not access_token:
+        return Response({"error": "토큰 발급 실패"}, status=400)
+
+    user_response = requests.get(
+        "https://kapi.kakao.com/v2/user/me",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+    user_info = user_response.json()
+    kakao_email = user_info["kakao_account"].get("email", "")
+    nickname = user_info["properties"].get("nickname", "")
+
+    # 👉 기존 유저 찾기 or 생성
+    user, created = User.objects.get_or_create(email=kakao_email, defaults={
+        "username": nickname,
+        "password": make_password(User.objects.make_random_password()),
+        "user_type": "regular"
+    })
+
+    # ✅ JWT 발급
+    refresh = RefreshToken.for_user(user)
+    return HttpResponseRedirect(
+        f"https://eventcafe.site/login-success?access={str(refresh.access_token)}&refresh={str(refresh)}"
+    )

@@ -1,7 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.utils import timezone
 
-
-class User(models.Model):
+class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
@@ -14,6 +15,8 @@ class User(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
     @property
     def id(self):  # ✅ 이렇게 추가!
@@ -21,3 +24,7 @@ class User(models.Model):
     
     def __str__(self):
         return self.username
+
+# ✅ 아래 두 줄 추가!!
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
