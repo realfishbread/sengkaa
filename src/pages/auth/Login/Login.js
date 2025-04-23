@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect  } from "react"; // ✅ 이렇게 해야 함
+import React, { useState, useContext  } from "react"; // ✅ 이렇게 해야 함
 import {
   Box,
   Button,
