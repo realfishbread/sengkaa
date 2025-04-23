@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
+
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
@@ -8,23 +9,30 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     user_type = models.CharField(max_length=20, choices=[('organizer', 'Organizer'), ('regular', 'Regular')])
-    # ⭐ 프로필 이미지
-    profile_image = models.ImageField(
-        upload_to="profile/",         # MEDIA_ROOT/profile/ 폴더에 저장
-        blank=True, null=True
-    )
+    profile_image = models.ImageField(upload_to="profile/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
+    # 🔥 문제 해결 핵심: related_name 수정
+    groups = models.ManyToManyField(
+        Group,
+        related_name='customuser_groups',
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='customuser_permissions',
+        blank=True
+    )
+
     @property
-    def id(self):  # ✅ 이렇게 추가!
+    def id(self):
         return self.user_id
-    
+
     def __str__(self):
         return self.username
 
-# ✅ 아래 두 줄 추가!!
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
