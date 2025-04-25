@@ -99,6 +99,7 @@ DATABASES = {
             'connect_timeout': 600,
             'read_timeout': 600,
             'write_timeout': 600,
+            'charset': 'utf8mb4',  # ✅ 이거 꼭 넣어주기!
         },
     }
 }
@@ -168,9 +169,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py 가장 아래쪽에 추가하면 됨
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+        
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # 전체 기본을 로그인 필요로
+    ]
 }
 
 
@@ -181,4 +188,6 @@ SIMPLE_JWT = {
 
 KAKAO_REST_API_KEY="4083ddda8b18709f62bb857f2c52f127"
 KAKAO_REDIRECT_URI="https://eventcafe.site/user/oauth/kakao/callback"
+
+AUTH_USER_MODEL = 'api.User'
 

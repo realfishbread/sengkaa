@@ -25,6 +25,7 @@ const SignupPage = () => {
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [timer, setTimer] = useState(180); 
   const [code, setCode] = useState(""); 
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     let timerInterval;
@@ -142,6 +143,10 @@ const SignupPage = () => {
 
         <Box
           component="form"
+          onSubmit={(e) => {
+            e.preventDefault(); // 폼 제출 기본 동작 방지
+            handleSignup();
+          }}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -201,15 +206,15 @@ const SignupPage = () => {
             </Select>
           </FormControl>
 
-          <CustomTextField label="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} /> {/* showpassword 해서 비밀번호 * 처리하고 보안성 높이는 게 좋을 듯 */}
+          <CustomTextField label="비밀번호" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} /> {/* showpassword 해서 비밀번호 * 처리하고 보안성 높이는 게 좋을 듯 */}
           <CustomTextField
             label="비밀번호 확인"
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
-          <Button variant="contained" fullWidth onClick={handleSignup} sx={buttonStyle}>
+          <Button variant="contained" type="submit" fullWidth onClick={handleSignup} sx={buttonStyle}>
             회원가입
           </Button>
 

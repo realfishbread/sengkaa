@@ -88,7 +88,7 @@ const [endDate, setEndDate] = useState(null);
             gap: '20px', // 각 항목 간 여백
           }}
         >
-
+          
       <Divider sx={{ my: 4 }}>기본 정보</Divider>
       <Box
         sx={{

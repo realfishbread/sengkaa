@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
-from .models import User
+from .models import User, Post
 from .serializers import UserSerializer
 from django.contrib.auth.hashers import make_password
 import random
@@ -17,7 +17,12 @@ from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 import requests
-
+from rest_framework import generics
+from .serializers import PostSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAdminUser
 
 @api_view(["POST"])
 def register_view(request):
@@ -111,6 +116,7 @@ def verify_email_code(request):
     return Response({"message": "이메일 인증 성공!"}, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def login_view(request):
     email = request.data.get("email")
     password = request.data.get("password")
@@ -303,3 +309,35 @@ def kakao_login_callback(request):
     return HttpResponseRedirect(
         f"https://eventcafe.site/login-success?access={str(refresh.access_token)}&refresh={str(refresh)}"
     )
+    
+    
+    
+    
+# 📩 저장하기
+class PostCreateView(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]  # ✅ 로그인된 유저만 작성 가능
+
+    def perform_create(self, serializer):
+        # ✅ user 필드는 request.user로 자동 설정
+        serializer.save(user=self.request.user)
+# 📄 전체 목록 불러오기
+class PostListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return Post.objects.filter(is_approved=True).order_by('-created_at')  # ✅ 승인된 글만
+    
+    
+    
+@api_view(["PATCH"])
+@permission_classes([IsAdminUser])  # ✅ 관리자만 가능
+def approve_post(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        post.is_approved = True
+        post.save()
+        return Response({"message": "모집글이 승인되었습니다."})
+    except Post.DoesNotExist:
+        return Response({"error": "해당 모집글이 존재하지 않습니다."}, status=404)

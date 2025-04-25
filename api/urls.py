@@ -7,7 +7,9 @@ from .views import (
     send_reset_password_email,  # ✅ 새로 추가
     verify_reset_code,          # ✅ 새로 추가
     reset_password,              # ✅ 새로 추가
-    user_profile
+    user_profile,
+    PostCreateView, 
+    PostListView
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -24,6 +26,8 @@ urlpatterns = [
        path('reset-password/', reset_password, name="reset_password"),
        path('profile/', user_profile, name='user_profile'),
        path("oauth/kakao/callback", kakao_login_callback),
+       path('posts/create/', PostCreateView.as_view(), name='post-create'),
+       path('posts/', PostListView.as_view(), name='post-list'),
      
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

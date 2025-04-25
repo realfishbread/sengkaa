@@ -13,6 +13,8 @@ const ImageUploader = ({ onUpload }) => {
       margin: "1rem 0",
       display: "block",
       width: "100%",
+      maxWidth: "100%",         // ✅ 부모 박스 넘지 않도록
+      boxSizing: "border-box",  // ✅ padding 포함 계산
       padding: "10px",
       backgroundColor: "white",
       border: "1px solid #ccc",

@@ -13,7 +13,8 @@ import Layout from "./Layout"; // ✅ 수정된 Layout 적용
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import EventCalendar from "./pages/calender/EventCalendar";
-import CollabPost from "./pages/Collab/CollabPost";
+import CollabList from "./pages/Collab/CollabList";
+import RegisterCollab from "./pages/Collab/RegisterCollab";
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -54,12 +55,12 @@ function App() {
             <Route path="/post" element={<Post/>}/>
             <Route path="/board" element={<Board/>}/>
             <Route path="/subscribe"element={<EventCalendar/>}/>
-            <Route path="/collab" element={<CollabPost/>}/>
+            <Route path="/collab-register" element={<RegisterCollab/>}/>
             <Route path="/forgot-password" element={<RequestCodePage />} />
             <Route path="/verify-code" element={<VerifyCodePage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/login-success" element={<LoginSuccess />} />
-
+            <Route path="/collab-post" element={<CollabList/>}/>
          
             </Route>
         </Routes>

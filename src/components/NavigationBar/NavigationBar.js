@@ -1,5 +1,4 @@
 import { AppBar, Toolbar, Button, Box, TextField, Avatar, Menu, MenuItem, IconButton } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useEffect, useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -62,11 +61,11 @@ const NavigationBar = () => {
                     </Menu>
                 </>
                 ) : (
-  <>
-    <Button color="inherit" className="auth-button" onClick={() => navigate("/login")}>로그인</Button>
-    <Button color="inherit" className="auth-button" onClick={() => navigate("/signup")}>회원가입</Button>
-  </>
-)}
+                    <>
+                        <Button color="inherit" className="auth-button" onClick={() => navigate("/login")}>로그인</Button>
+                        <Button color="inherit" className="auth-button" onClick={() => navigate("/signup")}>회원가입</Button>
+                    </>
+                )}
                 </Toolbar>
             </AppBar>
 
@@ -96,7 +95,11 @@ const NavigationBar = () => {
 
                 {/* ✅ 메뉴 아이템: 콜라보 소식 */}
                 <Box className="nav-item-wrapper">
-                    <Button className="nav-item" onClick={() => navigate("/collab")}>콜라보 소식</Button>
+                    <Button className="nav-item">콜라보</Button>
+                    <Box className="submenu">
+                        <Button onClick={() => navigate("/collab-post")} className="submenu-item">콜라보 정보</Button>
+                        <Button onClick={() => navigate("/collab-register")} className="submenu-item">콜라보 등록</Button>
+                    </Box>
                 </Box>
 
                 {/* ✅ 메뉴 아이템: 주변 카페 지도 */}

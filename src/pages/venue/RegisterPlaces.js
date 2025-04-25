@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { TextField, Button, Box, Typography, ToggleButton, ToggleButtonGroup, toggleButtonGroupClasses } from "@mui/material";
+import { TextField, Button, Box, Typography, ToggleButton, ToggleButtonGroup, Divider } from "@mui/material";
 import ImageUploader from "../../components/common/ImageUploader";
 import NoticeText from "../../components/common/NoticeText";
 import CustomTextField from "../../components/common/CustomTextField";
-import { boxStyle, buttonStyle, inputFieldStyle, titleStyle, toggleButtonGroupStyle } from "../../components/common/Styles";
+import { boxStyle, buttonStyle, titleStyle } from "../../components/common/Styles";
+import AddressInput from "../../components/common/AddressInput";
 
 
 const VenueRegister = () => {
   const [venueName, setVenueName] = useState("");
-  const [address, setAddress] = useState("");
   const [venueType, setVenueType] = useState(""); // 장소 타입 선택
-  const [region, setRegion] = useState(""); // 지역 선택
+  const [roadAddress, setRoadAddress] = useState("");  // 도로명주소
+  const [detailAddress, setDetailAddress] = useState("");  // 상세주소
   const [mainImage, setMainImage] = useState(null); // 가게 메인 이미지
   const [rentalFee, setRentalFee] = useState("");
   const [deposit, setDeposit] = useState("");
@@ -26,6 +27,14 @@ const VenueRegister = () => {
     setImage(URL.createObjectURL(event.target.files[0]));
   };
   
+  const openPostcode = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        const fullRoadAddr = data.roadAddress; // 도로명 주소
+        setRoadAddress(fullRoadAddr);
+      }
+    }).open();
+  };
 
   // ✅ 폼 제출 핸들러
   const handleSubmit = (event) => {
@@ -35,25 +44,65 @@ const VenueRegister = () => {
 
   return (
     <Box sx={boxStyle}>
+      
       <Typography sx={titleStyle}>
         장소 등록
       </Typography>
+      <Box sx={{ marginBottom: "60px" }} /> 
 
       <form onSubmit={handleSubmit}>
+
+      
+        
+      <Box
+       sx={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '12px',
+        padding: '24px',
+        backgroundColor: '#fdfdfd',
+      }}
+      >
         {/* ✅ 장소명 입력 */}
         <CustomTextField label="장소명" value={venueName} onChange={(e) => setVenueName(e.target.value)} required />
 
-         {/* ✅ 지역 선택 */}
-         <CustomTextField label="지역" value={region} onChange={(e) => setRegion(e.target.value)} required />
-       
+     
         {/* ✅ 주소 입력 & 검색 버튼 */}
-        <Box sx={{ display: "flex", gap: "10px" }}>
-          <CustomTextField label="주소" value={address} onChange={(e) => setAddress(e.target.value)} required />
-          <Button variant="outlined" onClick={() => alert("주소 검색 API 연결 예정!")} sx={{ whiteSpace: "nowrap" }}>주소 찾기</Button>
-        </Box>
+        
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
+            <TextField
+              label="도로명 주소"
+              value={roadAddress}
+              fullWidth
+              InputProps={{ readOnly: true }}
+            />
+            <Button
+              variant="outlined"
+              onClick={openPostcode}
+              sx={{ whiteSpace: "nowrap", height: "56px" }} // 버튼 높이 맞춤
+            >
+              주소 찾기
+            </Button>
+          </Box>
 
-        {/* ✅ 장소 타입 선택 */}
-        <Typography variant="subtitle1" fontWeight="bold" marginTop={8} marginBottom={3}>장소의 타입을 선택해 주세요 (필수)</Typography>
+        <CustomTextField
+            label="상세 주소"
+            value={detailAddress}
+            onChange={(e) => setDetailAddress(e.target.value)}
+            required
+        />
+        </Box>
+        
+       
+        <Box sx={{ marginBottom: "60px" }} /> 
+      <Box
+       sx={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '12px',
+        padding: '24px',
+        backgroundColor: '#fdfdfd',
+      }}
+      >
+        <Typography variant="subtitle1" fontWeight="bold" >장소의 타입을 선택해 주세요 (필수)</Typography>
         <ToggleButtonGroup
           value={venueType}
           exclusive
@@ -71,15 +120,42 @@ const VenueRegister = () => {
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
+        </Box>
+        
+        
+       
+        <Box sx={{ marginBottom: "60px" }} /> 
+        <Box
+       sx={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '12px',
+        padding: '24px',
+        backgroundColor: '#fdfdfd',
+        
+      }}
+      >
 
-
+        
         {/* ✅ 가게 메인 이미지 업로드 */}
-        <Typography variant="subtitle1" fontWeight="bold" marginTop={8} >가게 메인 이미지 (필수)</Typography>
+        <Typography variant="subtitle1" fontWeight="bold"  >가게 메인 이미지 (필수)</Typography>
+        
         <ImageUploader onUpload={(event) => handleImageUpload(event, setMainImage)} />
         {mainImage && <img src={mainImage} alt="미리보기" style={{ width: "100px", marginTop: "10px" }} />}
         <NoticeText text="* jpg, png만 가능합니다." />
+        </Box>
+
+        <Box sx={{ marginBottom: "60px" }} /> 
+
 
         {/* ✅ 대관료 & 예약금 입력 */}
+        <Box
+        sx={{
+          border: '1px solid #e0e0e0',
+          borderRadius: '12px',
+          padding: '24px',
+          backgroundColor: '#fdfdfd',
+        }}
+      >
         <Box sx={{ display: "flex", gap: "10px" }}>
           <CustomTextField label="대관료 (₩)" value={rentalFee} onChange={(e) => setRentalFee(e.target.value)} required />
           <CustomTextField label="예약금 (₩)" value={deposit} onChange={(e) => setDeposit(e.target.value)} required />
@@ -90,38 +166,87 @@ const VenueRegister = () => {
 
         {/* ✅ 운영 시간 입력 */}
         <CustomTextField label="운영 시간" value={operatingHours} onChange={(e) => setOperatingHours(e.target.value)} required />
+        </Box>
+
+        <Box sx={{ marginBottom: "60px" }} /> 
+
 
         {/* ✅ 특전 이미지 업로드 */}
-        <Typography variant="subtitle1" fontWeight="bold" marginTop={8}>특전 배치 혹은 예시 이미지</Typography>
+        <Box
+       sx={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '12px',
+        padding: '24px',
+        backgroundColor: '#fdfdfd',
+      }}
+      >
+        <Typography variant="subtitle1" fontWeight="bold" >특전 배치 혹은 예시 이미지</Typography>
         <ImageUploader onUpload={(event) => handleImageUpload(event, setBenefitsImage)} />
         {benefitsImage && <img src={benefitsImage} alt="미리보기" style={{ width: "100px", marginTop: "10px" }} />}
         <NoticeText text="* jpg, png만 가능합니다." />
 
         {/* ✅ 소개글 입력 */}
         <CustomTextField label="소개글" value={description} onChange={(e) => setDescription(e.target.value)} multiline rows={4} />
-        
-         {/* ✅ SNS 선택 및 계정 입력 */}
-         <Typography variant="subtitle1" fontWeight="bold" marginTop={8}>SNS 아이디</Typography>
-        <ToggleButtonGroup
-          value={snsType}
-          exclusive
-          onChange={(event, newValue) => setSnsType(newValue)}
-          className="sns-button"
-        >
-          <ToggleButton value="x">x</ToggleButton>
-          <ToggleButton value="Instagram">Instagram</ToggleButton>
-          <ToggleButton value="없음">없음</ToggleButton>
-        </ToggleButtonGroup>
+        </Box>
 
-        {/* ✅ SNS 입력 필드 (X 또는 Instagram 선택 시 활성화) */}
-        {snsType !== "없음" && snsType !== "" && (
-          <CustomTextField
-            label={`${snsType} 계정`}
-            value={snsAccount}
-            onChange={(e) => setSnsAccount(e.target.value)}
-            required
-          />
-        )}
+        <Box sx={{ marginBottom: "60px" }} /> 
+         {/* ✅ SNS 선택 및 계정 입력 */}
+
+         <Box
+          sx={{
+            border: '1px solid #e0e0e0',
+            borderRadius: '12px',
+            padding: '24px',
+            backgroundColor: '#fdfdfd',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2, // 요소 간 간격
+            mt: 2 
+          }}
+        >
+          <Typography variant="subtitle1" fontWeight="bold" marginBottom={1}>
+            SNS 아이디
+          </Typography>
+
+          {/* 버튼 그룹 */}
+          {/* 🔷 파란 배경의 버튼 박스 */}
+            
+          <ToggleButtonGroup
+            value={snsType}
+            exclusive
+            onChange={(event, newValue) => setSnsType(newValue)}
+            sx={{
+              '& .MuiToggleButton-root': {
+                borderRadius: '6px',
+                border: '1px solid #2196f3',
+                color: '#2196f3',
+                gap: 2, // 요소 간 간격
+                mt: 2 
+              },
+              '& .Mui-selected': {
+                backgroundColor: '#2196f3',
+                color: '#fff',
+              },
+            }}
+          >
+            <ToggleButton value="x" sx={{ minWidth: "80px" }}>X</ToggleButton>
+            <ToggleButton value="Instagram" sx={{ minWidth: "100px" }}>Instagram</ToggleButton>
+            <ToggleButton value="없음" sx={{ minWidth: "80px" }}>없음</ToggleButton>
+          </ToggleButtonGroup>
+          
+
+          {/* 입력 필드 조건부 렌더링 */}
+          {snsType !== "없음" && snsType !== "" && (
+            <CustomTextField
+              label={`${snsType} 계정`}
+              value={snsAccount}
+              onChange={(e) => setSnsAccount(e.target.value)}
+              fullWidth
+              required
+            />
+          )}
+        </Box>
+        <Box sx={{ marginBottom: "60px" }} /> 
 
         <Button fullWidth variant="contained" type="submit" sx={{ ...buttonStyle, marginTop:"20px",marginBottom: "20px" }}>
           등록하기

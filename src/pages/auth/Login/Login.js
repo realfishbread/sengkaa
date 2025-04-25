@@ -15,6 +15,9 @@ import Logo from "../../../components/common/Logo";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
 import axios from "axios"; // axiosInstance 말고 기본 axio
+import { IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 
 
 
@@ -23,6 +26,9 @@ const LoginPage = () => {
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  
 
   const KAKAO_REST_API_KEY = '4083ddda8b18709f62bb857f2c52f127';
   const REDIRECT_URI = 'https://eventcafe.site/user/oauth/kakao/callback';
@@ -115,6 +121,10 @@ const LoginPage = () => {
 
         <Box
           component="form"
+          onSubmit={(e) => {
+            e.preventDefault(); // 폼 제출 기본 동작 방지
+            handleLogin(); // 로그인 함수 호출
+          }}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -142,11 +152,20 @@ const LoginPage = () => {
 
         <CustomTextField
           label="비밀번호"
-          type="password"
+          type={showPassword ? "text" : "password"}
           required
           fullWidth
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
           sx={{
             "& .MuiOutlinedInput-root": {
               "&:hover fieldset": {
@@ -159,14 +178,15 @@ const LoginPage = () => {
           }}
         />
 
-          <Button
+        <Button
+            type="submit"  // ✅ 여기!!
             variant="contained"
             fullWidth
-            onClick={handleLogin}
-            sx= {buttonStyle}
+            sx={buttonStyle}
           >
-            로그인
-          </Button>
+          로그인
+        </Button>
+
           <Typography variant="body2" textAlign="center" sx={{ color: "#555555" }}>
             계정이 없으신가요?{" "}
             <Link

@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import User
+# api/serializers.py 상단에 추가해줘
+from .models import User, Post  # ✅ Post도 함께 import!
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,3 +33,13 @@ class ProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model  = User
         fields = ["profile_image"]
+        
+
+class PostSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    profile_image = serializers.ImageField(source='user.profile_image', read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ['id', 'user', 'username', 'profile_image', 'title', 'content', 'image', 'created_at']
+        read_only_fields = ['user']
