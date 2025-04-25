@@ -317,27 +317,14 @@ def kakao_login_callback(request):
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]  # ✅ 로그인된 유저만 작성 가능
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        # ✅ user 필드는 request.user로 자동 설정
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, is_approved=True)
 # 📄 전체 목록 불러오기
 class PostListView(generics.ListAPIView):
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]  # 🔐 로그인한 유저만 가능
 
     def get_queryset(self):
-        return Post.objects.filter(is_approved=True).order_by('-created_at')  # ✅ 승인된 글만
-    
-    
-    
-@api_view(["PATCH"])
-@permission_classes([IsAdminUser])  # ✅ 관리자만 가능
-def approve_post(request, post_id):
-    try:
-        post = Post.objects.get(id=post_id)
-        post.is_approved = True
-        post.save()
-        return Response({"message": "모집글이 승인되었습니다."})
-    except Post.DoesNotExist:
-        return Response({"error": "해당 모집글이 존재하지 않습니다."}, status=404)
+        return Post.objects.all().order_by('-created_at')  # 🔍 모든 글 조회

@@ -1,34 +1,74 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Box, Typography, Avatar, Divider, Chip } from "@mui/material";
+import React, { useEffect, useState, useContext } from "react";
+import axiosInstance from "../../shared/api/axiosInstance";
+import {
+  Box,
+  Typography,
+  Avatar,
+  Divider,
+  Chip,
+  Button,
+  Stack,
+  Paper,
+} from "@mui/material";
+import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Board = () => {
   const [posts, setPosts] = useState([]);
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://eventcafe.site/user/posts/")
+    if (!user) {
+      const savedUser = JSON.parse(localStorage.getItem("userInfo"));
+      if (savedUser) setUser(savedUser);
+    }
+
+    axiosInstance
+      .get("/user/posts/")
       .then((res) => setPosts(res.data))
       .catch((err) => console.error(err));
   }, []);
 
-  return (
-    <Box sx={{ maxWidth: 900, mx: "auto", my: 4, px: 2 }}>
-      <Typography variant="h5" fontWeight="bold" mb={3}>
-        🎂 생일카페 공동주최자 모집 게시판
-      </Typography>
+  const handleNewPost = (newPost) => {
+    setPosts((prev) => [newPost, ...prev]);
+  };
 
+  return (
+    <Box sx={{ maxWidth: 1000, mx: "auto", my: 6, px: 2 }}>
+      {/* 헤더 */}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={4}
+      >
+        <Typography variant="h5" fontWeight="bold">
+          🎂 생일카페 공동주최자 모집 게시판
+        </Typography>
+        <Button variant="contained" onClick={() => navigate("/post")}>
+          글 작성
+        </Button>
+      </Stack>
+
+      {/* 글 목록 */}
       {posts.map((post) => (
-        <Box
+        <Paper
           key={post.id}
+          elevation={1}
           sx={{
-            p: 2,
-            mb: 2,
+            p: 3,
+            mb: 3,
             border: "1px solid #e0e0e0",
             borderRadius: 2,
             backgroundColor: "#fff",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+            "&:hover": {
+              borderColor: "#1e88e5",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
+            },
           }}
         >
+          {/* 작성자 */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Avatar src={post.profile_image} alt={post.username} />
             <Box>
@@ -41,23 +81,28 @@ const Board = () => {
             </Box>
           </Box>
 
+          {/* 구분선 */}
           <Divider sx={{ my: 2 }} />
 
-          <Typography variant="h6" gutterBottom>
+          {/* 제목 + 내용 */}
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
             {post.title}
           </Typography>
           <Typography
             variant="body2"
             sx={{
               whiteSpace: "pre-line",
+              color: "#444",
+              lineHeight: 1.6,
+              maxHeight: "120px",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              maxHeight: "100px",
             }}
           >
             {post.content}
           </Typography>
 
+          {/* 이미지 */}
           {post.image && (
             <Box mt={2}>
               <img
@@ -68,11 +113,11 @@ const Board = () => {
             </Box>
           )}
 
-          {/* 모집중/완료 태그도 여기에 조건부 렌더링 가능 */}
+          {/* 모집중 태그 */}
           <Box mt={2}>
             <Chip label="모집중" color="success" size="small" />
           </Box>
-        </Box>
+        </Paper>
       ))}
     </Box>
   );

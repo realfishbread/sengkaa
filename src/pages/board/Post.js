@@ -69,15 +69,26 @@ const Post = ({ onSubmitPost }) => {
     formData.append("email", user?.email);
     formData.append("profileImage", user?.profileImage);
     if (imageFile) {
-      formData.append("image", imageFile); // ✅ 실제 파일 추가
+      formData.append("image", imageFile);
     }
   
     try {
-      await axiosInstance.post("/posts/create/", formData, {
+      await axiosInstance.post("/user/posts/create/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+  
+      const createdPost = {
+        title,
+        content: text,
+        image: image ? URL.createObjectURL(imageFile) : null,
+        username: user?.username,
+        profile_image: user?.profileImage,
+        created_at: new Date().toISOString(),
+      };
+  
+      onSubmitPost(createdPost); // ✅ 리스트에 추가되게 호출
       alert("게시글이 등록되었습니다!");
       setTitle("");
       setText(defaultTemplate);
