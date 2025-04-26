@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status, generics
 from .models import User, Post, Reply, SocialAccount
 from .serializers import UserSerializer, ReplySerializer
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User as DjangoUser
 import random
 import string
 from django.conf import settings
@@ -11,7 +11,7 @@ from .utils import get_redis_connection  # 방금 만든 함수
 from django.core.mail import EmailMultiAlternatives
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from .serializers import ProfileImageSerializer
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
@@ -301,7 +301,7 @@ def kakao_login_callback(request):
         email=kakao_email,
         defaults={
             "username": nickname,
-            "password": make_password(User.objects.make_random_password()),
+            "password": make_password(DjangoUser.objects.make_random_password()),
             "user_type": "regular",
             "created_at": timezone.now(),
             "updated_at": timezone.now(),
@@ -366,6 +366,8 @@ class ReplyCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
         
+
+
         
 
 @api_view(["GET"])
@@ -374,3 +376,63 @@ def reply_list_view(request, post_id):
     replies = Reply.objects.filter(post_id=post_id).order_by("created_at")
     serializer = ReplySerializer(replies, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def user_profile_detail(request, username):
+    try:
+        user = User.objects.get(username=username)
+        return Response({
+            "email": user.email,
+            "username": user.username,
+            "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
+            "created_at": user.created_at,
+        })
+    except User.DoesNotExist:
+        return Response({"error": "사용자가 없습니다."}, status=404)
+
+# ✨ 추가: 프로필 수정 API
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    user = request.user
+    username = request.data.get("username", user.username)
+    email = request.data.get("email", user.email)
+    profile_image = request.FILES.get("profile_image", user.profile_image)
+
+    user.username = username
+    user.email = email
+    user.profile_image = profile_image
+    user.save()
+
+    return Response({
+        "message": "프로필이 수정되었습니다!",
+        "username": user.username,
+        "email": user.email,
+        "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
+    })
+    
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def follow_toggle(request, username):
+    try:
+        target_user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({"error": "사용자가 존재하지 않습니다."}, status=404)
+
+    user = request.user
+
+    if user == target_user:
+        return Response({"error": "자기 자신을 팔로우할 수 없습니다."}, status=400)
+
+    follow_relation = Follow.objects.filter(follower=user, following=target_user).first()
+
+    if follow_relation:
+        # 이미 팔로우 중이면 언팔로우
+        follow_relation.delete()
+        return Response({"message": "언팔로우 완료"})
+    else:
+        # 팔로우
+        Follow.objects.create(follower=user, following=target_user)
+        return Response({"message": "팔로우 완료"})

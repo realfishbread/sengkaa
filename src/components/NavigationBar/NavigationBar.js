@@ -47,6 +47,7 @@ const NavigationBar = () => {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={open} onClose={() => setAnchorEl(null)}>
                     <MenuItem onClick={() => navigate("/profile")}>내 프로필</MenuItem>
+                    <MenuItem onClick={() => navigate("/settings")}>설정</MenuItem>  {/* ✅ 추가 */}
                     <MenuItem
                         onClick={() => {
                             setAnchorEl(null);      // 메뉴 닫기

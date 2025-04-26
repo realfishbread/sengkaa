@@ -19,6 +19,8 @@ import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
 import LoginSuccess from "./pages/auth/Login/LoginSuccess";
+import Settings from "./pages/settings/Settings";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 const theme = createTheme({
     typography: {
@@ -61,7 +63,10 @@ function App() {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/login-success" element={<LoginSuccess />} />
             <Route path="/collab-post" element={<CollabList/>}/>
-         
+            
+            <Route path="/profile/:username" element={<ProfilePage />} />
+
+            <Route path="/settings" element={<Settings />} />
             </Route>
         </Routes>
         </Router>

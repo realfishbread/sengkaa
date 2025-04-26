@@ -167,53 +167,30 @@ const Board = () => {
           },
         }}
       >
-        {openPostId === post.id && (
-           <>
-           {/* 댓글 목록 */}
-           {replies[post.id]?.map((reply) => (
-             <Typography key={reply.id} variant="body2" sx={{ mt: 1, pl: 2 }}>
-               💬 {reply.user.username}: {reply.content}
-             </Typography>
-           ))}
-        <Box mt={2}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <input
-              type="text"
-              placeholder="댓글을 입력하세요"
-              value={replyContent[post.id] || ""}
-              onChange={(e) =>
-                setReplyContent((prev) => ({ ...prev, [post.id]: e.target.value }))
-              }
-              style={{
-                flexGrow: 1,
-                padding: "8px",
-                border: "1px solid #ccc",
-                borderRadius: "6px",
-              }}
-            />
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => handleReplySubmit(post.id)}
-            >
-              등록
-            </Button>
-          </Stack>
-        </Box>
-        </>
-      )}
+        
           {/* 작성자 */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Avatar src={post.profile_image} alt={post.username} />
-            <Box>
-              <Typography variant="subtitle2" fontWeight="bold">
-                {post.username}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {new Date(post.created_at).toLocaleString()}
-              </Typography>
-            </Box>
-          </Box>
+                <Avatar
+                  src={post.profile_image}
+                  alt={post.username}
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/profile/${post.username}`)}  // ✅ 이동
+                />
+                <Box>
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => navigate(`/profile/${post.username}`)}  // ✅ 이동
+                  >
+                    {post.username}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {new Date(post.created_at).toLocaleString()}
+                  </Typography>
+                </Box>
+              </Box>
+
 
           {/* 구분선 */}
           <Divider sx={{ my: 2 }} />
@@ -251,6 +228,54 @@ const Board = () => {
           <Box mt={2}>
             <Chip label="모집중" color="success" size="small" />
           </Box>
+
+          <Button
+            variant="text"
+            color="error"
+            size="small"
+            sx={{
+              fontSize: "0.75rem",
+              ml: 1,
+              "&:hover": { backgroundColor: "rgba(255,0,0,0.08)" }
+            }}
+          >
+            🚨 신고
+          </Button>
+          {openPostId === post.id && (
+           <>
+           {/* 댓글 목록 */}
+           {replies[post.id]?.map((reply) => (
+             <Typography key={reply.id} variant="body2" sx={{ mt: 1, pl: 2 }}>
+               💬 {reply.user.username}: {reply.content}
+             </Typography>
+           ))}
+        <Box mt={2}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <input
+              type="text"
+              placeholder="댓글을 입력하세요"
+              value={replyContent[post.id] || ""}
+              onChange={(e) =>
+                setReplyContent((prev) => ({ ...prev, [post.id]: e.target.value }))
+              }
+              style={{
+                flexGrow: 1,
+                padding: "8px",
+                border: "1px solid #ccc",
+                borderRadius: "6px",
+              }}
+            />
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleReplySubmit(post.id)}
+            >
+              등록
+            </Button>
+          </Stack>
+        </Box>
+        </>
+      )}
         </Paper>
       ))}
     </Box>

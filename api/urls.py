@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views  # ✅ 이 줄 추가해줘야 해!
 from .views import (
     register_view,
     send_email_verification,
@@ -13,7 +14,10 @@ from .views import (
     OpenPostListView, 
     ClosedPostListView, 
     ReplyCreateView,
-    reply_list_view
+    reply_list_view,
+    user_profile_detail,
+    update_profile,
+    follow_toggle
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -35,7 +39,10 @@ urlpatterns = [
        path('posts/open/', OpenPostListView.as_view(), name='open-posts'),
        path('posts/closed/', ClosedPostListView.as_view(), name='closed-posts'),
        path('replies/', ReplyCreateView.as_view(), name='create-reply'),
-        path("posts/<int:post_id>/replies/", reply_list_view, name="reply-list"),
-     
+       path("posts/<int:post_id>/replies/", reply_list_view, name="reply-list"),
+       
+       path('profile/<str:username>/', views.user_profile_detail),
+       path('profile/update/', views.update_profile),
+       path('follow/<str:username>/', views.follow_toggle),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import { UserContext } from "../../context/UserContext"; // ✅ 경로는 실제 프로젝트 구조에 맞게 조정
-import axiosInstance from "../../shared/api/axiosInstance";
+import { CreatePost } from "./api/CreatePost"; 
+
 
 const defaultTemplate =`[팬이벤트 공동 주최자 모집 내용 예시]
 
@@ -73,7 +74,7 @@ const Post = ({ onSubmitPost }) => {
     }
   
     try {
-      await axiosInstance.post("/user/posts/create/", formData, {
+      await CreatePost.post("/user/posts/create/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -164,13 +165,18 @@ const Post = ({ onSubmitPost }) => {
       />
 
       {image && (
-        <Box mt={2}>
-          <img
-            src={image}
-            alt="preview"
-            style={{ width: "100%", borderRadius: 8 }}
-          />
-        </Box>
+         <Box mt={2} sx={{ textAlign: "center" }}>
+         <img
+           src={image}
+           alt="preview"
+           style={{
+             maxWidth: "300px",  // 💡 너무 크지 않게 조절
+             maxHeight: "300px",
+             borderRadius: 8,
+             objectFit: "cover", // ✨ 이미지가 비율 유지하면서 잘려도 예쁘게
+           }}
+         />
+       </Box>
       )}
 
       <Box
