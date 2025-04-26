@@ -40,6 +40,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     
 class Post(models.Model):
+    status = models.CharField(
+        max_length=10,
+        choices=[('open', '모집중'), ('closed', '모집완료')],
+        default='open'
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts")
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -50,3 +55,24 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.title}"
+    
+class Reply(models.Model):
+    post = models.ForeignKey(Post, related_name='replies', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class SocialAccount(models.Model):
+    SOCIAL_CHOICES = [
+        ('kakao', '카카오'),
+        ('naver', '네이버'),
+        ('google', '구글'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='social_accounts')
+    provider = models.CharField(max_length=20, choices=SOCIAL_CHOICES)
+    uid = models.CharField(max_length=255)  # 카카오 id 등
+    connected_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'provider')  # 중복 연동 방지

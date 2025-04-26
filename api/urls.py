@@ -9,7 +9,11 @@ from .views import (
     reset_password,              # ✅ 새로 추가
     user_profile,
     PostCreateView, 
-    PostListView
+    PostListView,
+    OpenPostListView, 
+    ClosedPostListView, 
+    ReplyCreateView,
+    reply_list_view
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -28,6 +32,10 @@ urlpatterns = [
        path("oauth/kakao/callback", kakao_login_callback),
        path('posts/create/', PostCreateView.as_view(), name='post-create'),
        path('posts/', PostListView.as_view(), name='post-list'),
+       path('posts/open/', OpenPostListView.as_view(), name='open-posts'),
+       path('posts/closed/', ClosedPostListView.as_view(), name='closed-posts'),
+       path('replies/', ReplyCreateView.as_view(), name='create-reply'),
+        path("posts/<int:post_id>/replies/", reply_list_view, name="reply-list"),
      
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

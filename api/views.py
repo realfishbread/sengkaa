@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework import status
-from .models import User, Post
-from .serializers import UserSerializer
+from rest_framework import status, generics
+from .models import User, Post, Reply, SocialAccount
+from .serializers import UserSerializer, ReplySerializer
 from django.contrib.auth.hashers import make_password
 import random
 import string
@@ -265,12 +265,14 @@ def upload_profile_image(request):
 
 
 
-@api_view(["GET"])  # 카카오에서 redirect되면 이 API 호출됨
+@api_view(["GET"])
+@permission_classes([AllowAny])
 def kakao_login_callback(request):
     code = request.GET.get("code")
     if not code:
         return Response({"error": "인가 코드가 없습니다."}, status=400)
 
+    # 1. 카카오에서 토큰 발급
     token_response = requests.post(
         "https://kauth.kakao.com/oauth/token",
         data={
@@ -284,6 +286,7 @@ def kakao_login_callback(request):
     if not access_token:
         return Response({"error": "토큰 발급 실패"}, status=400)
 
+    # 2. 사용자 정보 요청
     user_response = requests.get(
         "https://kapi.kakao.com/v2/user/me",
         headers={"Authorization": f"Bearer {access_token}"}
@@ -291,25 +294,32 @@ def kakao_login_callback(request):
     user_info = user_response.json()
     kakao_email = user_info["kakao_account"].get("email", "")
     nickname = user_info["properties"].get("nickname", "")
+    profile_image = user_info["properties"].get("profile_image", "")  # ✅ 이거 추가!
 
-    # 👉 기존 유저 찾기 or 생성
+    # 3. 유저 찾기 or 생성
     user, created = User.objects.get_or_create(
-    email=kakao_email,
-    defaults={
-        "username": nickname,
-        "password": make_password(User.objects.make_random_password()),
-        "user_type": "regular",
-        "created_at": timezone.now(),
-        "updated_at": timezone.now(),
-    }
-)
-
-    # ✅ JWT 발급
-    refresh = RefreshToken.for_user(user)
-    return HttpResponseRedirect(
-        f"https://eventcafe.site/login-success?access={str(refresh.access_token)}&refresh={str(refresh)}"
+        email=kakao_email,
+        defaults={
+            "username": nickname,
+            "password": make_password(User.objects.make_random_password()),
+            "user_type": "regular",
+            "created_at": timezone.now(),
+            "updated_at": timezone.now(),
+            "profile_image": profile_image,  # ✅ 여기도 저장!
+        }
     )
-    
+
+    # 4. JWT 발급
+    refresh = RefreshToken.for_user(user)
+
+    return Response({
+        "access": str(refresh.access_token),
+        "refresh": str(refresh),
+        "username": user.username,
+        "email": user.email,
+        "profile_image": user.profile_image,
+    })
+
     
     
     
@@ -324,7 +334,43 @@ class PostCreateView(generics.CreateAPIView):
 # 📄 전체 목록 불러오기
 class PostListView(generics.ListAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]  # 🔐 로그인한 유저만 가능
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Post.objects.all().order_by('-created_at')  # 🔍 모든 글 조회
+        status = self.request.query_params.get('status')  # ?status=open
+        queryset = Post.objects.all().order_by('-created_at')
+        if status:
+            queryset = queryset.filter(status=status)
+        return queryset
+# 모집중인 것만 불러오기
+class OpenPostListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Post.objects.filter(status='open').order_by('-created_at')
+
+# 📄 모집완료 글 목록
+class ClosedPostListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Post.objects.filter(status='closed').order_by('-created_at')
+
+# 게시글에 답글 기능
+class ReplyCreateView(generics.CreateAPIView):
+    serializer_class = ReplySerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
+        
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def reply_list_view(request, post_id):
+    replies = Reply.objects.filter(post_id=post_id).order_by("created_at")
+    serializer = ReplySerializer(replies, many=True)
+    return Response(serializer.data)
