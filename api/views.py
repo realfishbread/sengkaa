@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status, generics
 from .models import User, Post, Reply, SocialAccount
 from .serializers import UserSerializer, ReplySerializer
-from django.contrib.auth.models import User as DjangoUser
 import random
 import string
 from django.conf import settings
@@ -11,6 +10,7 @@ from .utils import get_redis_connection  # 방금 만든 함수
 from django.core.mail import EmailMultiAlternatives
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import check_password, make_password
 from .serializers import ProfileImageSerializer
 from django.shortcuts import redirect
@@ -301,7 +301,7 @@ def kakao_login_callback(request):
         email=kakao_email,
         defaults={
             "username": nickname,
-            "password": make_password(DjangoUser.objects.make_random_password()),
+            "password": make_password(get_random_string(10)),
             "user_type": "regular",
             "created_at": timezone.now(),
             "updated_at": timezone.now(),

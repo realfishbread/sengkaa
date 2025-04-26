@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import ReportIcon from '@mui/icons-material/Report'; // ✅ 맨 위에 추가
+
 
 const Board = () => {
   const [posts, setPosts] = useState([]);
@@ -75,6 +77,9 @@ const Board = () => {
       .get(`/user/posts/${postId}/replies/`)
       .then((res) => {
         setReplies((prev) => ({ ...prev, [postId]: res.data }));
+      })
+      .catch((err) => {
+        console.error("댓글 가져오기 실패:", err);
       });
   };
 
@@ -152,7 +157,10 @@ const Board = () => {
       {posts.map((post) => (
         <Paper
         key={post.id}
-        onClick={() => setOpenPostId(post.id)}   // ✅ 클릭하면 열리게
+        onClick={() => {
+          setOpenPostId(post.id);
+          fetchReplies(post.id);    // 🔥 댓글 가져오기
+        }}   // ✅ 클릭하면 열리게
         elevation={1}
         sx={{
           p: 3,
@@ -230,17 +238,24 @@ const Board = () => {
           </Box>
 
           <Button
-            variant="text"
-            color="error"
-            size="small"
-            sx={{
-              fontSize: "0.75rem",
-              ml: 1,
-              "&:hover": { backgroundColor: "rgba(255,0,0,0.08)" }
-            }}
-          >
-            🚨 신고
-          </Button>
+          variant="text"
+          color="error"
+          size="small"
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            minWidth: 0,         // 🔥 버튼 최소 너비 없애기 (동그랗게)
+            width: 36,           // 🔥 버튼 사이즈 작게
+            height: 36,
+            borderRadius: "50%", // 🔥 완전 동그랗게
+            '&:hover': {
+              backgroundColor: 'rgba(255,0,0,0.1)',
+            },
+          }}
+        >
+          <ReportIcon fontSize="small" />
+        </Button>
           {openPostId === post.id && (
            <>
            {/* 댓글 목록 */}
