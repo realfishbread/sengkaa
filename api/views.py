@@ -294,7 +294,10 @@ def kakao_login_callback(request):
     user_info = user_response.json()
     kakao_email = user_info["kakao_account"].get("email", "")
     nickname = user_info["properties"].get("nickname", "")
-    profile_image = user_info["properties"].get("profile_image", "")  # ✅ 이거 추가!
+    profile_image_url = user_info["properties"].get("profile_image", "")
+
+    if not kakao_email:
+        return Response({"error": "카카오 계정에 이메일이 없습니다."}, status=400)
 
     # 3. 유저 찾기 or 생성
     user, created = User.objects.get_or_create(
@@ -305,22 +308,25 @@ def kakao_login_callback(request):
             "user_type": "regular",
             "created_at": timezone.now(),
             "updated_at": timezone.now(),
-            "profile_image": profile_image,  # ✅ 여기도 저장!
+            "profile_image_url": profile_image_url,  # ✅ 여기에 URL 저장
         }
     )
 
     # 4. JWT 발급
     refresh = RefreshToken.for_user(user)
 
+    # 5. 프로필 이미지 응답에 넣기 (URL 우선, 없으면 로컬 이미지)
+    profile_image = user.profile_image_url or (
+        request.build_absolute_uri(user.profile_image.url) if user.profile_image else ""
+    )
+
     return Response({
         "access": str(refresh.access_token),
         "refresh": str(refresh),
         "username": user.username,
         "email": user.email,
-        "profile_image": user.profile_image,
+        "profile_image": profile_image,
     })
-
-    
     
     
 # 📩 저장하기

@@ -64,13 +64,15 @@ const Board = () => {
       .then((res) => {
         alert("댓글이 등록되었습니다!");
         setReplyContent((prev) => ({ ...prev, [postId]: "" }));
-        // ✅ 댓글 등록 성공 후 댓글 목록 새로고침할 수 있으면 좋아
+  
+        fetchReplies(postId);  // 🔥 댓글 등록 성공 후 목록 새로고침
       })
       .catch((err) => {
         console.error(err);
         alert("댓글 등록에 실패했습니다.");
       });
   };
+  
   
   const fetchReplies = (postId) => {
     axiosInstance
@@ -203,24 +205,38 @@ const Board = () => {
           {/* 구분선 */}
           <Divider sx={{ my: 2 }} />
 
-          {/* 제목 + 내용 */}
-          <Typography variant="h6" fontWeight="bold" gutterBottom>
-            {post.title}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              whiteSpace: "pre-line",
-              color: "#444",
-              lineHeight: 1.6,
-              maxHeight: "120px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {post.content}
-          </Typography>
+         {/* 제목 */}
+      <Typography variant="h6" fontWeight="bold" gutterBottom>
+        {post.title}
+      </Typography>
 
+      {/* 내용 - 펼쳤을 때는 전체, 안 펼쳤으면 요약 */}
+      {openPostId === post.id ? (
+        <Typography
+          variant="body2"
+          sx={{
+            whiteSpace: "pre-line",
+            color: "#444",
+            lineHeight: 1.6,
+          }}
+        >
+          {post.content}
+        </Typography>
+      ) : (
+        <Typography
+          variant="body2"
+          sx={{
+            whiteSpace: "pre-line",
+            color: "#444",
+            lineHeight: 1.6,
+            maxHeight: "120px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {post.content}
+        </Typography>
+      )}
           {/* 이미지 */}
           {post.image && (
             <Box mt={2}>
@@ -260,10 +276,10 @@ const Board = () => {
            <>
            {/* 댓글 목록 */}
            {replies[post.id]?.map((reply) => (
-             <Typography key={reply.id} variant="body2" sx={{ mt: 1, pl: 2 }}>
-               💬 {reply.user.username}: {reply.content}
-             </Typography>
-           ))}
+            <Typography key={reply.id} variant="body2" sx={{ mt: 1, pl: 2 }}>
+              💬 {reply.user.username} ({new Date(reply.created_at).toLocaleString()}): {reply.content}
+            </Typography>
+          ))}
         <Box mt={2}>
           <Stack direction="row" spacing={1} alignItems="center">
             <input

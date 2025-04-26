@@ -46,7 +46,15 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class ReplySerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
     class Meta:
         model = Reply
-        fields = ['id', 'post', 'user', 'content', 'created_at']
+        fields = ['id', 'content', 'user', 'created_at']  # ✅ 깔끔하게
         read_only_fields = ['id', 'user', 'created_at']
+
+    def get_user(self, obj):
+        return {
+            "id": obj.user.id,
+            "username": obj.user.username
+        }

@@ -10,6 +10,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=255)
     user_type = models.CharField(max_length=20, choices=[('organizer', 'Organizer'), ('regular', 'Regular')])
     profile_image = models.ImageField(upload_to="profile/", blank=True, null=True)
+    profile_image_url = models.TextField(blank=True, null=True)  # 🔥 추가
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
