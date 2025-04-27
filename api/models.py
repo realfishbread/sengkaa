@@ -15,6 +15,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    bio = models.TextField(blank=True, null=True)  # 🌟✨ bio 필드 추가!
 
     # 🔥 문제 해결 핵심: related_name 수정
     groups = models.ManyToManyField(

@@ -74,7 +74,7 @@ const Post = ({ onSubmitPost }) => {
     }
   
     try {
-      await CreatePost.post("/user/posts/create/", formData, {
+      await CreatePost.post("/posts/create/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

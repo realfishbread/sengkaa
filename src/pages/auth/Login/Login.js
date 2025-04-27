@@ -31,7 +31,7 @@ const LoginPage = () => {
   
 
   const KAKAO_REST_API_KEY = '4083ddda8b18709f62bb857f2c52f127';
-  const REDIRECT_URI = 'https://eventcafe.site/user/oauth/kakao/callback';
+  const REDIRECT_URI = 'https://eventcafe.site/user/social/oauth/kakao/callback';
   const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
  
@@ -40,7 +40,7 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const { data } = await axios.post("https://eventcafe.site/user/login/", {
+      const { data } = await axios.post("https://eventcafe.site/user/auth/login/", {
         email,
         password
       });

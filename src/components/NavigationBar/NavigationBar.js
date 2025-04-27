@@ -46,7 +46,7 @@ const NavigationBar = () => {
                         </Avatar>
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={open} onClose={() => setAnchorEl(null)}>
-                    <MenuItem onClick={() => navigate(`/profile/${user.username}`)}>내 프로필</MenuItem>
+                    <MenuItem onClick={() => navigate(`/user/profile/${user.username}`)}>내 프로필</MenuItem>
                     <MenuItem onClick={() => navigate("/settings")}>설정</MenuItem>  {/* ✅ 추가 */}
                     <MenuItem
                         onClick={() => {
@@ -91,15 +91,6 @@ const NavigationBar = () => {
                     <Box className="submenu">
                         <Button onClick={() => navigate("/venue")} className="submenu-item">장소 등록</Button>
                         <Button onClick={() => navigate("/venue-search")} className="submenu-item">대관 찾기</Button>
-                    </Box>
-                </Box>
-
-                {/* ✅ 메뉴 아이템: 콜라보 소식 */}
-                <Box className="nav-item-wrapper">
-                    <Button className="nav-item">콜라보</Button>
-                    <Box className="submenu">
-                        <Button onClick={() => navigate("/collab-post")} className="submenu-item">콜라보 정보</Button>
-                        <Button onClick={() => navigate("/collab-register")} className="submenu-item">콜라보 등록</Button>
                     </Box>
                 </Box>
 

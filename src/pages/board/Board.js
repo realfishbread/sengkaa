@@ -49,15 +49,13 @@ const Board = () => {
       .catch((err) => console.error(err));
   };
 
-  const handleNewPost = (newPost) => {
-    setPosts((prev) => [newPost, ...prev]);
-  };
+
 
   const handleReplySubmit = (postId) => {
     if (!replyContent[postId]) return; // 빈 댓글 방지
   
     axiosInstance
-      .post("/user/replies/", {
+      .post("/user/posts/replies/", {
         post: postId,
         content: replyContent[postId],
       })
@@ -184,14 +182,14 @@ const Board = () => {
                   src={post.profile_image}
                   alt={post.username}
                   sx={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/profile/${post.username}`)}  // ✅ 이동
+                  onClick={() => navigate(`/user/profile/${post.username}`)}  // ✅ 이동
                 />
                 <Box>
                   <Typography
                     variant="subtitle2"
                     fontWeight="bold"
                     sx={{ cursor: "pointer" }}
-                    onClick={() => navigate(`/profile/${post.username}`)}  // ✅ 이동
+                    onClick={() => navigate(`/user/profile/${post.username}`)}  // ✅ 이동
                   >
                     {post.username}
                   </Typography>

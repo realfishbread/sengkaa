@@ -1,48 +1,89 @@
+/* EventCalendar.css */
+
 .calendar-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-  }
-  
-  .custom-calendar {
-    width: 100%;
-    max-width: 700px;        /* 💡 최대 700px */
-    font-size: 1.2rem;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    background: white;
-  }
-  
-  /* 날짜 셀 크기 늘리기 */
-  .react-calendar__tile {
-    padding: 18px 0 !important;
-    font-size: 1.1rem;
-  }
-  
-  /* 일정 박스도 반응형으로 */
-  .schedule-box {
-    width: 100%;
-    max-width: 700px;
-    margin-top: 30px;
-    font-size: 1.05rem;
-    text-align: left;
-  }
-  
-  /* 🔽 모바일 대응 */
-  @media (max-width: 600px) {
-    .custom-calendar {
-      font-size: 0.9rem;
-    }
-  
-    .react-calendar__tile {
-      padding: 12px 0 !important;
-      font-size: 1rem;
-    }
-  
-    .schedule-box {
-      font-size: 0.95rem;
-    }
-  }
-  
+  max-width: 520px;
+  margin: 60px auto;
+  padding: 35px 30px;
+  background: linear-gradient(135deg, #f9f9f9, #ffffff);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.calendar-wrapper h2 {
+  margin-bottom: 25px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #6C63FF;
+}
+
+.custom-calendar {
+  width: 100%;
+  background: none;
+  border: none;
+}
+
+.react-calendar {
+  background: none;
+  border: none;
+}
+
+.react-calendar__tile {
+  padding: 12px 6px;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.react-calendar__tile--now {
+  background: #ffe0f0 !important;
+  border-radius: 12px;
+  color: #6C63FF;
+  font-weight: bold;
+}
+
+.react-calendar__tile--active {
+  background: #6C63FF !important;
+  color: white !important;
+  border-radius: 12px;
+}
+
+.react-calendar__tile:hover {
+  background: #e0e0ff;
+  border-radius: 12px;
+}
+
+.schedule-box {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  text-align: left;
+}
+
+.schedule-box h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.schedule-box ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.schedule-box li {
+  background-color: #f3f4f6;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #555;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.schedule-box li:hover {
+  transform: translateY(-2px);
+  background-color: #eaeaff;
+}

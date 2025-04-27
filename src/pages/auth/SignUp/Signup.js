@@ -57,7 +57,7 @@ const SignupPage = () => {
     setError(""); // 🔹 에러 초기화
 
     try {
-      const response = await axios.post("https://eventcafe.site/user/register/", {
+      const response = await axios.post("https://eventcafe.site/auth/register/", {
         username,
         email,
         password,
@@ -75,7 +75,7 @@ const SignupPage = () => {
 
   const handleVerifyCode = async () => {
     try {
-      const res = await axios.post("https://eventcafe.site/user/verify-email-code/", {
+      const res = await axios.post("https://eventcafe.site/auth/verify-email-code/", {
         email,
         code
       });
@@ -91,7 +91,7 @@ const SignupPage = () => {
     setTimer(300);
 
     try {
-      const response = await axios.post("https://eventcafe.site/user/send-email-verification/", {
+      const response = await axios.post("https://eventcafe.site/auth/send-email-verification/", {
         email,
       });
       console.log("인증 코드 전송 성공:", response.data);

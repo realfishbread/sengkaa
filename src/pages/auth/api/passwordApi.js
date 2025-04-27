@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 
-const BASE_URL = "https://eventcafe.site/user";
+const BASE_URL = "https://eventcafe.site/user/auth";
 
 export const sendResetEmail = (email) => {
   return axios.post(`${BASE_URL}/reset-password-request/`, { email });
