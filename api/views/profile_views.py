@@ -54,6 +54,7 @@ def update_profile(request):
         "username": user.username,
         "email": user.email,
         "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
+        "bio": user.bio,  # 🌟 bio 추가!
     })
     
 @api_view(["GET"])

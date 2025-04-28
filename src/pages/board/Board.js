@@ -178,7 +178,7 @@ const Board = () => {
                 variant="subtitle2"
                 fontWeight="bold"
                 sx={{ cursor: 'pointer' }}
-                onClick={() => navigate(`/user/profile/${post.username}`)} // ✅ 이동
+                onClick={() => navigate(`/user/profile/${post.username}/`)} // ✅ 이동
               >
                 {post.username}
               </Typography>

@@ -19,7 +19,7 @@ export default function EditProfile() {
       formData.append('email', email);
       formData.append('bio', bio);
       if (profileImage) {
-        formData.append('profileImage', profileImage); // ✅ 파일도 추가!
+        formData.append('profile_image', profileImage); // ✅ 파일도 추가!
       }
 
       const response = await axiosInstance.patch('/user/profile/update/', formData, {
@@ -34,7 +34,7 @@ export default function EditProfile() {
       alert('변경사항이 저장되었습니다');
     } catch (error) {
       console.error(error);
-      alert('저장 실패');
+      alert('저장 실패, 다시 시도해주세요.');
     }
   };
 

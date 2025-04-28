@@ -3,8 +3,12 @@ import { Settings, Lock, Notifications, Delete } from "@mui/icons-material";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
+import { useNavigate } from "react-router-dom";
+
 const SettingsPage = () => {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
 
   return (
     <Box sx={{ maxWidth: 600, mx: "auto", my: 6, px: 2 }}>
@@ -39,16 +43,16 @@ const SettingsPage = () => {
       {/* 설정 항목 리스트 */}
       <Paper elevation={2} sx={{ p: 2, borderRadius: 3 }}>
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <Settings />
-            </ListItemIcon>
-            <ListItemText primary="계정 설정" />
-          </ListItem>
+        <ListItem button onClick={() => navigate(`/profile/${user?.username}/`)}>
+          <ListItemIcon>
+            <Settings />
+          </ListItemIcon>
+          <ListItemText primary="계정 설정" />
+        </ListItem>
 
           <Divider />
 
-          <ListItem button>
+          <ListItem button onClick={() => navigate('/forgot-password/')}>
             <ListItemIcon>
               <Lock />
             </ListItemIcon>

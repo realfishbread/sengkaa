@@ -1,18 +1,27 @@
-import { Avatar, Box, Button, CircularProgress, Divider, Paper, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
-import axiosInstance from "../../shared/api/axiosInstance";
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Paper,
+  Typography,
+} from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
+import axiosInstance from '../../shared/api/axiosInstance';
 
 const ProfilePage = () => {
   const { username } = useParams();
-  const { user } = useContext(UserContext);  // ✅ 로그인된 유저
+  const { user } = useContext(UserContext); // ✅ 로그인된 유저
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axiosInstance.get(`/user/profile/${username}/`)
+    axiosInstance
+      .get(`/user/profile/${username}/`)
       .then((res) => {
         setProfile(res.data);
         setLoading(false);
@@ -23,30 +32,47 @@ const ProfilePage = () => {
       });
   }, [username]);
 
-  if (loading) return (
-    <Box sx={{ textAlign: "center", mt: 10 }}>
-      <CircularProgress />
-    </Box>
-  );
+  if (loading)
+    return (
+      <Box sx={{ textAlign: 'center', mt: 10 }}>
+        <CircularProgress />
+      </Box>
+    );
 
-  if (!profile) return (
-    <Typography sx={{ textAlign: "center", mt: 10 }}>
-      사용자 정보를 불러올 수 없습니다.
-    </Typography>
-  );
+  if (!profile)
+    return (
+      <Box sx={{ textAlign: 'center', mt: 10, px: 2 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            borderRadius: '16px',
+            background: 'linear-gradient(135deg, #ffe6e6, #ffffff)',
+            boxShadow: '0px 5px 15px rgba(255, 100, 100, 0.2)',
+          }}
+        >
+          <Typography variant="h6" fontWeight="bold" color="error" mb={2}>
+            😢 사용자 정보를 불러올 수 없습니다
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            존재하지 않는 사용자이거나, 서버에 문제가 있을 수 있어요.
+          </Typography>
+        </Paper>
+      </Box>
+    );
 
   const isMyProfile = user?.username === profile.username; // ✅ 비교!
 
   return (
-    <Box sx={{ maxWidth: 600, mx: "auto", mt: 8, px: 2 }}>
+    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 8, px: 2 }}>
       <Paper
         elevation={4}
         sx={{
           p: 5,
-          borderRadius: "20px",
-          background: "linear-gradient(135deg, #f9f9f9, #ffffff)",
-          boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.08)",
-          transition: "all 0.3s ease",
+          borderRadius: '20px',
+          background: 'linear-gradient(135deg, #f9f9f9, #ffffff)',
+          boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.08)',
+          transition: 'all 0.3s ease',
         }}
       >
         <Avatar
@@ -55,20 +81,30 @@ const ProfilePage = () => {
           sx={{
             width: 110,
             height: 110,
-            mx: "auto",
+            mx: 'auto',
             mb: 2,
-            border: "3px solid #6C63FF",
-            backgroundColor: "#e0e0e0",
+            border: '3px solid #6C63FF',
+            backgroundColor: '#e0e0e0',
           }}
         />
-        <Typography variant="h5" fontWeight="bold" textAlign="center" color="#333">
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          textAlign="center"
+          color="#333"
+        >
           {profile.username}
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary" textAlign="center" mt={1}>
+        <Typography
+          variant="subtitle1"
+          color="text.secondary"
+          textAlign="center"
+          mt={1}
+        >
           {profile.email}
         </Typography>
 
-        <Divider sx={{ my: 4, borderColor: "#eee" }} />
+        <Divider sx={{ my: 4, borderColor: '#eee' }} />
 
         <Typography
           variant="body2"
@@ -86,23 +122,22 @@ const ProfilePage = () => {
             sx={{
               mt: 4,
               py: 1.5,
-              backgroundColor: "#6C63FF",
-              color: "#fff",
-              fontWeight: "bold",
-              borderRadius: "12px",
-              textTransform: "none",
+              backgroundColor: '#6C63FF',
+              color: '#fff',
+              fontWeight: 'bold',
+              borderRadius: '12px',
+              textTransform: 'none',
               '&:hover': {
-                backgroundColor: "#5a55d3",
+                backgroundColor: '#5a55d3',
               },
             }}
-            onClick={() => navigate("/edit-profile")}
+            onClick={() => navigate('/edit-profile')}
           >
             ✏️ 프로필 수정
           </Button>
         )}
       </Paper>
     </Box>
-
   );
 };
 

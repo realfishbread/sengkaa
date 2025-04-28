@@ -46,7 +46,7 @@ const NavigationBar = () => {
                         </Avatar>
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={open} onClose={() => setAnchorEl(null)}>
-                    <MenuItem onClick={() => navigate(`/user/profile/${user.username}`)}>내 프로필</MenuItem>
+                    <MenuItem onClick={() => navigate(`/user/profile/${user.username}/`)}>내 프로필</MenuItem>
                     <MenuItem onClick={() => navigate("/settings")}>설정</MenuItem>  {/* ✅ 추가 */}
                     <MenuItem
                         onClick={() => {

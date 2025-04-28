@@ -67,13 +67,13 @@ const Post = ({ onSubmitPost }) => {
     formData.append('content', text);
     formData.append('username', user?.username);
     formData.append('email', user?.email);
-    formData.append('profileImage', user?.profileImage);
+    formData.append('profile_image', user?.profileImage);
     if (imageFile) {
       formData.append('image', imageFile);
     }
 
     try {
-      await CreatePost.post('/user/posts/create/', formData, {
+      await CreatePost.post('', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

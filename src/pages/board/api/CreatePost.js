@@ -5,3 +5,4 @@ export const CreatePost = async (formData) => {
   const response = await axiosInstance.post('/user/posts/create/', formData);
   return response.data;
 };
+
