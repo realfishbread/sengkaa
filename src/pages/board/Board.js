@@ -171,14 +171,14 @@ const Board = () => {
               src={post.profile_image}
               alt={post.nickname}
               sx={{ cursor: 'pointer' }}
-              onClick={() => navigate(`/user/profile/${post.nickname}`)} // ✅ 이동
+              onClick={() => navigate(`/profile/${post.nickname}`)} // ✅ 이동
             />
             <Box>
               <Typography
                 variant="subtitle2"
                 fontWeight="bold"
                 sx={{ cursor: 'pointer' }}
-                onClick={() => navigate(`/user/profile/${post.nickname}/`)} // ✅ 이동
+                onClick={() => navigate(`/profile/${post.nickname}`)} // ✅ 이동
               >
                 {post.nickname}
               </Typography>
@@ -275,7 +275,7 @@ const Board = () => {
                       cursor: 'pointer',
                     }}
                     onClick={() =>
-                      navigate(`/user/profile/${reply.user.nickname}`)
+                      navigate(`/profile/${post.nickname}`)
                     }
                   >
                     {reply.user.nickname}

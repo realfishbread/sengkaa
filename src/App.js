@@ -56,7 +56,8 @@ function App() {
             <Route path="/verify-code" element={<VerifyCodePage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/login-success" element={<LoginSuccess />} />
-            <Route path="/profile/:nickname/" element={<ProfilePage />} />
+            <Route path="/profile/:nickname" element={<ProfilePage />} />
+
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/settings" element={<Settings />} />
           </Route>

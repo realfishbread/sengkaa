@@ -4,7 +4,7 @@ from api.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'username', 'email', 'password', 'user_type', 'created_at', 'updated_at', 'profile_image']
+        fields = ['user_id', 'username', 'nickname', 'email', 'password', 'user_type', 'created_at', 'updated_at', 'profile_image']
         extra_kwargs = {
             'password': {'write_only': True, 'required': False}
         }
@@ -12,6 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data['username'],
+            nickname=validated_data['nickname'],
             email=validated_data['email'],
             user_type=validated_data.get('user_type', 'regular')
         )

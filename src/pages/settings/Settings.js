@@ -43,7 +43,7 @@ const SettingsPage = () => {
       {/* 설정 항목 리스트 */}
       <Paper elevation={2} sx={{ p: 2, borderRadius: 3 }}>
         <List>
-        <ListItem button onClick={() => navigate(`/profile/${user?.nickname}/`)}>
+        <ListItem button onClick={() => navigate('/edit-profile')}>
           <ListItemIcon>
             <Settings />
           </ListItemIcon>

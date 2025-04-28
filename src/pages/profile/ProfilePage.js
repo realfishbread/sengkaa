@@ -115,26 +115,70 @@ const ProfilePage = () => {
           가입일: {new Date(profile.created_at).toLocaleDateString()}
         </Typography>
 
-        {isMyProfile && (
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              mt: 4,
-              py: 1.5,
-              backgroundColor: '#6C63FF',
-              color: '#fff',
-              fontWeight: 'bold',
-              borderRadius: '12px',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#5a55d3',
-              },
-            }}
-            onClick={() => navigate('/edit-profile')}
-          >
-            ✏️ 프로필 수정
-          </Button>
+        {/* 프로필 주인 여부 체크 */}
+        {isMyProfile ? (
+          <>
+            <Typography
+              variant="subtitle1"
+              color="text.secondary"
+              textAlign="center"
+              mt={1}
+            >
+              {profile.email}
+            </Typography>
+
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{
+                mt: 4,
+                py: 1.5,
+                backgroundColor: '#6C63FF',
+                color: '#fff',
+                fontWeight: 'bold',
+                borderRadius: '12px',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#5a55d3',
+                },
+              }}
+              onClick={() => navigate('/edit-profile')}
+            >
+              ✏️ 프로필 수정
+            </Button>
+          </>
+        ) : (
+          <>
+            {/* 남 프로필이면 이메일 숨기고 */}
+            <Typography
+              variant="subtitle2"
+              color="text.secondary"
+              textAlign="center"
+              mt={1}
+            >
+              이 사용자가 작성한 게시글을 확인할 수 있어요
+            </Typography>
+
+            <Button
+              variant="outlined"
+              fullWidth
+              sx={{
+                mt: 4,
+                py: 1.5,
+                borderColor: '#6C63FF',
+                color: '#6C63FF',
+                fontWeight: 'bold',
+                borderRadius: '12px',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#f4f4ff',
+                },
+              }}
+              onClick={() => navigate(`/user/posts/${profile.nickname}`)}
+            >
+              📃 이 사용자 글 보기
+            </Button>
+          </>
         )}
       </Paper>
     </Box>

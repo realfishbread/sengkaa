@@ -75,6 +75,7 @@ def kakao_login_callback(request):
         "access": str(refresh.access_token),
         "refresh": str(refresh),
         "username": user.username,
+        "nickname": user.nickname,
         "profile_image": profile_image,
     })
    

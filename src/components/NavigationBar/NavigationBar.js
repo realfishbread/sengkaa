@@ -57,7 +57,7 @@ const NavigationBar = () => {
                 onClose={() => setAnchorEl(null)}
               >
                 <MenuItem
-                  onClick={() => navigate(`/user/profile/${user.nickname}/`)}
+                  onClick={() => navigate(`/profile/${user.nickname}`)}
                 >
                   내 프로필
                 </MenuItem>
