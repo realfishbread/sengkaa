@@ -5,37 +5,38 @@ import {
   Divider,
   TextField,
   Typography,
-} from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import React, { useEffect, useState } from "react";
-import CustomTextField from "../../components/common/CustomTextField";
-import ImageUploader from "../../components/common/ImageUploader";
-import NoticeText from "../../components/common/NoticeText";
+} from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import React, { useEffect, useState } from 'react';
+import CustomTextField from '../../components/common/CustomTextField';
+import FlexInputButton from '../../components/common/FlexInputButton';
+import ImageUploader from '../../components/common/ImageUploader';
+import NoticeText from '../../components/common/NoticeText';
 import {
   boxStyle,
   buttonStyle,
   titleStyle,
-} from "../../components/common/Styles";
+} from '../../components/common/Styles';
 
 const BirthdayCafeRegister = () => {
-  const [cafeName, setCafeName] = useState("");
-  const [description, setDescription] = useState("");
+  const [cafeName, setCafeName] = useState('');
+  const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
 
-  const [selectedStar, setSelectedStar] = useState("");
+  const [selectedStar, setSelectedStar] = useState('');
 
-  const [genre, setGenre] = useState("idol"); // 유저가 선택한 장르
+  const [genre, setGenre] = useState('idol'); // 유저가 선택한 장르
   const [starList, setStarList] = useState([]); // 선택된 장르의 리스트만 담김
 
-  const [roadAddress, setRoadAddress] = useState(""); // 도로명주소
-  const [detailAddress, setDetailAddress] = useState(""); // 상세주소
+  const [roadAddress, setRoadAddress] = useState(''); // 도로명주소
+  const [detailAddress, setDetailAddress] = useState(''); // 상세주소
 
-  const [goodsName, setGoodsName] = useState("");
-  const [goodsDescription, setGoodsDescription] = useState("");
+  const [goodsName, setGoodsName] = useState('');
+  const [goodsDescription, setGoodsDescription] = useState('');
   const [goodsImage, setGoodsImage] = useState(null);
-  const [goodsPrice, setGoodsPrice] = useState("");
+  const [goodsPrice, setGoodsPrice] = useState('');
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -47,7 +48,7 @@ const BirthdayCafeRegister = () => {
         setStarList(data); // ⭐ Autocomplete에 들어갈 options
       })
       .catch((err) => {
-        console.error("로딩 실패 ❌", err);
+        console.error('로딩 실패 ❌', err);
         setStarList([]);
       });
   }, [genre]);
@@ -59,7 +60,7 @@ const BirthdayCafeRegister = () => {
         option.name,
         option.group,
         ...(option.keywords || []),
-      ].join(" "),
+      ].join(' '),
   });
 
   const openPostcode = () => {
@@ -77,7 +78,7 @@ const BirthdayCafeRegister = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert("이벤트가 등록되었습니다!");
+    alert('이벤트가 등록되었습니다!');
   };
 
   return (
@@ -87,18 +88,18 @@ const BirthdayCafeRegister = () => {
         <form
           onSubmit={handleSubmit}
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px", // 각 항목 간 여백
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px', // 각 항목 간 여백
           }}
         >
           <Divider sx={{ my: 4 }}>기본 정보</Divider>
           <Box
             sx={{
-              border: "1px solid #e0e0e0",
-              borderRadius: "12px",
-              padding: "24px",
-              backgroundColor: "#fdfdfd",
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
             }}
           >
             <CustomTextField
@@ -108,7 +109,7 @@ const BirthdayCafeRegister = () => {
             />
             <NoticeText text="* 이벤트 이름은 정확한 정보와 함께 기재해 주세요." />
 
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2 }}>
               <DatePicker
                 label="시작일"
                 value={startDate}
@@ -128,26 +129,26 @@ const BirthdayCafeRegister = () => {
 
           <Box
             sx={{
-              border: "1px solid #e0e0e0",
-              borderRadius: "12px",
-              padding: "24px",
-              backgroundColor: "#fdfdfd",
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
             }}
           >
-            <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-              {["idol", "youtuber", "comic", "webtoon", "game"].map((g) => (
+            <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
+              {['idol', 'youtuber', 'comic', 'webtoon', 'game'].map((g) => (
                 <Button
                   key={g}
-                  variant={genre === g ? "contained" : "outlined"}
+                  variant={genre === g ? 'contained' : 'outlined'}
                   onClick={() => setGenre(g)}
                 >
                   {
                     {
-                      idol: "아이돌",
-                      youtuber: "유튜버",
-                      comic: "만화",
-                      webtoon: "웹툰",
-                      game: "게임",
+                      idol: '아이돌',
+                      youtuber: '유튜버',
+                      comic: '만화',
+                      webtoon: '웹툰',
+                      game: '게임',
                     }[g]
                   }
                 </Button>
@@ -157,7 +158,7 @@ const BirthdayCafeRegister = () => {
             {/* ✅ 스타 선택란 추가 */}
             <Autocomplete
               options={starList} // ⭐ 장르에 따라 바뀜
-              getOptionLabel={(option) => (option && option.display) || ""}
+              getOptionLabel={(option) => (option && option.display) || ''}
               filterOptions={filter}
               onChange={(event, newValue) => {
                 setSelectedStar(newValue); // ⭐ 유튜버든 아이돌이든 저장 가능
@@ -173,17 +174,17 @@ const BirthdayCafeRegister = () => {
             />
 
             {selectedStar && selectedStar.image && (
-              <Box sx={{ textAlign: "center", mt: 2 }}>
+              <Box sx={{ textAlign: 'center', mt: 2 }}>
                 <img
                   src={selectedStar.image}
                   alt={selectedStar.display}
                   style={{
-                    width: "160px",
-                    borderRadius: "10px",
-                    objectFit: "cover",
+                    width: '160px',
+                    borderRadius: '10px',
+                    objectFit: 'cover',
                   }}
                   onError={(e) => {
-                    e.target.style.display = "none"; // 이미지 없으면 안보이게
+                    e.target.style.display = 'none'; // 이미지 없으면 안보이게
                   }}
                 />
                 <Typography variant="body2" sx={{ mt: 1 }}>
@@ -198,27 +199,20 @@ const BirthdayCafeRegister = () => {
 
           <Box
             sx={{
-              border: "1px solid #e0e0e0",
-              borderRadius: "12px",
-              padding: "24px",
-              backgroundColor: "#fdfdfd",
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
-              <TextField
-                label="도로명 주소"
-                value={roadAddress}
-                fullWidth
-                InputProps={{ readOnly: true }}
-              />
-              <Button
-                variant="outlined"
-                onClick={openPostcode}
-                sx={{ whiteSpace: "nowrap", height: "56px" }} // 버튼 높이 맞춤
-              >
-                주소 찾기
-              </Button>
-            </Box>
+            <FlexInputButton
+              label="도로명 주소"
+              value={roadAddress}
+              buttonText="주소 찾기"
+              onButtonClick={openPostcode}
+              readOnly={true}
+            />
+
             <CustomTextField
               label="상세 주소"
               value={detailAddress}
@@ -231,10 +225,10 @@ const BirthdayCafeRegister = () => {
 
           <Box
             sx={{
-              border: "1px solid #e0e0e0",
-              borderRadius: "12px",
-              padding: "24px",
-              backgroundColor: "#fdfdfd",
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
             }}
           >
             <CustomTextField
@@ -266,10 +260,10 @@ const BirthdayCafeRegister = () => {
 
           <Box
             sx={{
-              border: "1px solid #e0e0e0",
-              borderRadius: "12px",
-              padding: "24px",
-              backgroundColor: "#fdfdfd",
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '24px',
+              backgroundColor: '#fdfdfd',
             }}
           >
             <CustomTextField

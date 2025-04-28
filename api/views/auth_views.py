@@ -21,15 +21,17 @@ def register_view(request):
     email = request.data.get("email")
     password = request.data.get("password")
     user_type = request.data.get("user_type", "regular")  # 기본값: 일반 사용자
+    nickname = request.data.get("nickname")
 
-    if User.objects.filter(username=username).exists():
-        return Response({"error": "이미 존재하는 사용자입니다."}, status=status.HTTP_400_BAD_REQUEST)
-
+    if not nickname:
+        return Response({"error": "닉네임을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+    
     if User.objects.filter(email=email).exists():
         return Response({"error": "이미 사용 중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
 
     user = User.objects.create(
         username=username,
+        nickname=nickname,   # ✅ 추가!
         email=email,
         password=make_password(password),  # 비밀번호 암호화
         user_type=user_type
@@ -86,7 +88,8 @@ def send_email_verification(request):
 
     except Exception as e:
         return Response({"error": f"메일 전송 실패: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
+
 @api_view(["POST"])
 def verify_email_code(request):
     email = request.data.get("email")
@@ -131,6 +134,7 @@ def login_view(request):
         "refresh": str(refresh),
         "access":  str(refresh.access_token),
         "username": user.username,
+        "nickname": user.nickname,
         "email":    user.email,
         "profile_image": (
             request.build_absolute_uri(user.profile_image.url)
@@ -139,7 +143,8 @@ def login_view(request):
         }, status=status.HTTP_200_OK)
     else:
         return Response({"error": "로그인 정보가 올바르지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
-    
+
+
 @api_view(["POST"]) #비밀번호 리셋
 def send_reset_password_email(request):
     email = request.data.get("email")
@@ -185,6 +190,7 @@ def send_reset_password_email(request):
     except Exception as e:
         return Response({"error": f"메일 전송 실패: {str(e)}"}, status=500)
 
+
 @api_view(["POST"])
 def verify_reset_code(request):
     email = request.data.get("email")
@@ -210,7 +216,7 @@ def verify_reset_code(request):
         return Response({"error": f"서버 에러: {str(e)}"}, status=500)
 
 
-
+#passwd reset
 @api_view(["POST"])
 def reset_password(request):
     email = request.data.get("email")
@@ -227,3 +233,16 @@ def reset_password(request):
 
     except User.DoesNotExist:
         return Response({"error": "해당 이메일로 등록된 사용자가 없습니다."}, status=404)
+
+
+#nickname checker
+@api_view(["POST"])
+def check_nickname(request):
+    nickname = request.data.get("nickname")
+    if not nickname:
+        return Response({"error": "닉네임을 입력하세요."}, status=400)
+
+    if User.objects.filter(nickname=nickname).exists():
+        return Response({"available": False, "message": "이미 사용 중인 닉네임입니다."})
+    else:
+        return Response({"available": True, "message": "사용 가능한 닉네임입니다."})

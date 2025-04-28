@@ -55,12 +55,9 @@ class ReplyCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)        
         
-
-
-        
-
+#답글 전체 보기 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def reply_list_view(request, post_id):

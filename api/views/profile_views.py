@@ -14,7 +14,7 @@ def user_profile(request):
 
     return Response({
         "email": user.email,
-        "username": user.username,
+        "nickname": user.nickname,
         "user_type": user.user_type,
         "created_at": user.created_at,
         "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else ""
@@ -38,12 +38,12 @@ def upload_profile_image(request):
 @permission_classes([IsAuthenticated])
 def update_profile(request):
     user = request.user
-    username = request.data.get("username", user.username)
+    nickname = request.data.get("nickname", user.nickname)
     email = request.data.get("email", user.email)
     profile_image = request.FILES.get("profile_image", user.profile_image)
     bio = request.data.get("bio", user.bio)  # 🌟✨ bio 받기 추가
 
-    user.username = username
+    user.nickname = nickname
     user.email = email
     user.bio = bio  # 🌟 bio 저장 추가
     user.profile_image = profile_image
@@ -51,7 +51,7 @@ def update_profile(request):
 
     return Response({
         "message": "프로필이 수정되었습니다!",
-        "username": user.username,
+        "nickname": user.nickname,
         "email": user.email,
         "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
         "bio": user.bio,  # 🌟 bio 추가!
@@ -59,12 +59,12 @@ def update_profile(request):
     
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def user_profile_detail(request, username):
+def user_profile_detail(request, nickname):
     try:
-        user = User.objects.get(username=username)
+        user = User.objects.get(nickname=nickname)
         return Response({
             "email": user.email,
-            "username": user.username,
+            "nickname": user.nickname,
             "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
             "created_at": user.created_at,
             "bio": user.bio,

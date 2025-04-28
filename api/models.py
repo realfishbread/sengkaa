@@ -2,12 +2,16 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
+import random
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)  # ✅ 실제 PK 컬럼
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
+    nickname = models.CharField(max_length=150, unique=True, null=True, blank=True)
+  # 사람들에게 보여지는 이름 (⭐필수⭐)
     user_type = models.CharField(max_length=20, choices=[('organizer', 'Organizer'), ('regular', 'Regular')])
     profile_image = models.ImageField(upload_to="profile/", blank=True, null=True)
     profile_image_url = models.TextField(blank=True, null=True)  # 🔥 추가
@@ -35,9 +39,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+    
+    def save(self, *args, **kwargs):
+        if not self.nickname:
+            while True:
+                random_number = random.randint(100000, 9999999)  # 6~7자리 랜덤 숫자
+                temp_nickname = f"user{random_number}"
+                if not User.objects.filter(nickname=temp_nickname).exists():
+                    self.nickname = temp_nickname
+                    break
+        super().save(*args, **kwargs)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username', 'nickname']  # ⭐ nickname도 필수 필드에 넣기
     
     
     

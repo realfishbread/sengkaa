@@ -15,6 +15,7 @@ import requests
 
 
 
+
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def kakao_login_callback(request):
@@ -42,40 +43,41 @@ def kakao_login_callback(request):
         headers={"Authorization": f"Bearer {access_token}"}
     )
     user_info = user_response.json()
-    kakao_email = user_info["kakao_account"].get("email", "")
+
+    kakao_id = user_info.get("id")  # ✅ 카카오 고유 ID
     nickname = user_info["properties"].get("nickname", "")
-    profile_image_url = user_info["properties"].get("profile_image", "")
-
-    if not kakao_email:
-        return Response({"error": "카카오 계정에 이메일이 없습니다."}, status=400)
-
-    # 3. 유저 찾기 or 생성
-    user, created = User.objects.get_or_create(
-        email=kakao_email,
-        defaults={
-            "username": nickname,
-            "password": make_password(get_random_string(10)),
-            "user_type": "regular",
-            "created_at": timezone.now(),
-            "updated_at": timezone.now(),
-            "profile_image_url": profile_image_url,  # ✅ 여기에 URL 저장
-        }
-    )
-
-    # 4. JWT 발급
-    refresh = RefreshToken.for_user(user)
-
-    # 5. 프로필 이미지 응답에 넣기 (URL 우선, 없으면 로컬 이미지)
     profile_image = user.profile_image_url or (
         request.build_absolute_uri(user.profile_image.url) if user.profile_image else ""
     )
+
+    if not kakao_id or not nickname:
+        return Response({"error": "카카오 정보가 부족합니다."}, status=400)
+
+    # 3. 고유한 username 생성 (중복 방지)
+    username = f"kakao_{kakao_id}"
+
+    # 4. 유저 찾기 or 생성
+    user, created = User.objects.get_or_create(
+        username=username,
+        defaults={
+            "nickname": nickname,  # 🔥 여기에 nickname 저장
+            "email": f"{username}@kakao.com",  # 이메일 없지만 대체용
+            "password": make_password(get_random_string(10)),
+            "user_type": "regular",
+            "profile_image_url": profile_image_url,
+            "created_at": timezone.now(),
+            "updated_at": timezone.now(),
+        }
+    )
+
+    # 5. JWT 발급
+    refresh = RefreshToken.for_user(user)
 
     return Response({
         "access": str(refresh.access_token),
         "refresh": str(refresh),
         "username": user.username,
-        "email": user.email,
-        "profile_image": profile_image,
+        "profile_image": profile_image_url,
     })
-    
+   
     

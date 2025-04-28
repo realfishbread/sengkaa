@@ -267,8 +267,20 @@ const Board = () => {
                   variant="body2"
                   sx={{ mt: 1, pl: 2 }}
                 >
-                  💬 {reply.user.username} (
-                  {new Date(reply.created_at).toLocaleString()}):{' '}
+                  💬{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#1976d2',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() =>
+                      navigate(`/user/profile/${reply.user.username}`)
+                    }
+                  >
+                    {reply.user.username}
+                  </span>{' '}
+                  ({new Date(reply.created_at).toLocaleString()}):{' '}
                   {reply.content}
                 </Typography>
               ))}

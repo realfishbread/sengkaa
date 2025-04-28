@@ -3,7 +3,7 @@ import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 
 export default function EditProfile() {
-  const [username, setUsername] = useState('');
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
   const [profileImage, setProfileImage] = useState(null);
@@ -15,18 +15,22 @@ export default function EditProfile() {
 
     try {
       const formData = new FormData();
-      formData.append('username', username);
+      formData.append('nickname', nickname);
       formData.append('email', email);
       formData.append('bio', bio);
       if (profileImage) {
         formData.append('profile_image', profileImage); // ✅ 파일도 추가!
       }
 
-      const response = await axiosInstance.patch('/user/profile/update/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // ✅ FormData 보낼 때는 무조건 이거 필요해
-        },
-      });
+      const response = await axiosInstance.patch(
+        '/user/profile/update/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // ✅ FormData 보낼 때는 무조건 이거 필요해
+          },
+        }
+      );
 
       // 수정 성공하면 UserContext 업데이트
       setUser(response.data);
@@ -66,8 +70,8 @@ export default function EditProfile() {
         <form onSubmit={handleSubmit} style={styles.form}>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
             placeholder="닉네임"
             style={styles.input}
           />
