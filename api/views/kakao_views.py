@@ -46,9 +46,7 @@ def kakao_login_callback(request):
 
     kakao_id = user_info.get("id")  # ✅ 카카오 고유 ID
     nickname = user_info["properties"].get("nickname", "")
-    profile_image = user.profile_image_url or (
-        request.build_absolute_uri(user.profile_image.url) if user.profile_image else ""
-    )
+    profile_image = user_info["properties"].get("profile_image", "")
 
     if not kakao_id or not nickname:
         return Response({"error": "카카오 정보가 부족합니다."}, status=400)
@@ -64,7 +62,7 @@ def kakao_login_callback(request):
             "email": f"{username}@kakao.com",  # 이메일 없지만 대체용
             "password": make_password(get_random_string(10)),
             "user_type": "regular",
-            "profile_image_url": profile_image_url,
+            "profile_image_url": profile_image,
             "created_at": timezone.now(),
             "updated_at": timezone.now(),
         }
@@ -77,7 +75,7 @@ def kakao_login_callback(request):
         "access": str(refresh.access_token),
         "refresh": str(refresh),
         "username": user.username,
-        "profile_image": profile_image_url,
+        "profile_image": profile_image,
     })
    
     

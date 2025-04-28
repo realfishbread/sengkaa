@@ -169,18 +169,18 @@ const Board = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Avatar
               src={post.profile_image}
-              alt={post.username}
+              alt={post.nickname}
               sx={{ cursor: 'pointer' }}
-              onClick={() => navigate(`/user/profile/${post.username}`)} // ✅ 이동
+              onClick={() => navigate(`/user/profile/${post.nickname}`)} // ✅ 이동
             />
             <Box>
               <Typography
                 variant="subtitle2"
                 fontWeight="bold"
                 sx={{ cursor: 'pointer' }}
-                onClick={() => navigate(`/user/profile/${post.username}/`)} // ✅ 이동
+                onClick={() => navigate(`/user/profile/${post.nickname}/`)} // ✅ 이동
               >
-                {post.username}
+                {post.nickname}
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {new Date(post.created_at).toLocaleString()}
@@ -275,10 +275,10 @@ const Board = () => {
                       cursor: 'pointer',
                     }}
                     onClick={() =>
-                      navigate(`/user/profile/${reply.user.username}`)
+                      navigate(`/user/profile/${reply.user.nickname}`)
                     }
                   >
-                    {reply.user.username}
+                    {reply.user.nickname}
                   </span>{' '}
                   ({new Date(reply.created_at).toLocaleString()}):{' '}
                   {reply.content}

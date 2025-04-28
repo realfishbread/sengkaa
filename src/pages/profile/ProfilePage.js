@@ -13,7 +13,7 @@ import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 
 const ProfilePage = () => {
-  const { username } = useParams();
+  const { nickname } = useParams();
   const { user } = useContext(UserContext); // ✅ 로그인된 유저
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`/user/profile/${username}/`)
+      .get(`/user/profile/${nickname}/`)
       .then((res) => {
         setProfile(res.data);
         setLoading(false);
@@ -30,7 +30,7 @@ const ProfilePage = () => {
         console.error(err);
         setLoading(false);
       });
-  }, [username]);
+  }, [nickname]);
 
   if (loading)
     return (
@@ -61,7 +61,7 @@ const ProfilePage = () => {
       </Box>
     );
 
-  const isMyProfile = user?.username === profile.username; // ✅ 비교!
+  const isMyProfile = user?.nickname === profile.nickname; // ✅ 비교!
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 8, px: 2 }}>
@@ -77,7 +77,7 @@ const ProfilePage = () => {
       >
         <Avatar
           src={profile.profile_image}
-          alt={profile.username}
+          alt={profile.nickname}
           sx={{
             width: 110,
             height: 110,
@@ -93,7 +93,7 @@ const ProfilePage = () => {
           textAlign="center"
           color="#333"
         >
-          {profile.username}
+          {profile.nickname}
         </Typography>
         <Typography
           variant="subtitle1"

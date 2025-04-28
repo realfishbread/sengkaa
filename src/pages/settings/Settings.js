@@ -27,12 +27,12 @@ const SettingsPage = () => {
       >
         <Avatar
           src={user?.profile_image || ""}
-          alt={user?.username}
+          alt={user?.nickname}
           sx={{ width: 80, height: 80 }}
         />
         <Box>
           <Typography variant="h6" fontWeight="bold">
-            {user?.username}
+            {user?.nickname}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {user?.email}
@@ -43,7 +43,7 @@ const SettingsPage = () => {
       {/* 설정 항목 리스트 */}
       <Paper elevation={2} sx={{ p: 2, borderRadius: 3 }}>
         <List>
-        <ListItem button onClick={() => navigate(`/profile/${user?.username}/`)}>
+        <ListItem button onClick={() => navigate(`/profile/${user?.nickname}/`)}>
           <ListItemIcon>
             <Settings />
           </ListItemIcon>

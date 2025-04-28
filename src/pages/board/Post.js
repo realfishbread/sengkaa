@@ -65,7 +65,7 @@ const Post = ({ onSubmitPost }) => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', text);
-    formData.append('username', user?.username);
+    formData.append('nickname', user?.nickname);
     formData.append('email', user?.email);
     formData.append('profile_image', user?.profileImage);
     if (imageFile) {
@@ -83,7 +83,7 @@ const Post = ({ onSubmitPost }) => {
         title,
         content: text,
         image: image ? URL.createObjectURL(imageFile) : null,
-        username: user?.username,
+        nickname: user?.nickname,
         profile_image: user?.profileImage,
         created_at: new Date().toISOString(),
       };
@@ -113,9 +113,9 @@ const Post = ({ onSubmitPost }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-        <Avatar alt={user?.username} src={user?.profileImage || ''} />
+        <Avatar alt={user?.nickname} src={user?.profileImage || ''} />
         <Typography variant="subtitle2" fontWeight="bold">
-          {user?.realname || user?.username || 'user'} 님
+          {user?.nickname || user?.username || 'user'} 님
         </Typography>
       </Box>
 

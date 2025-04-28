@@ -47,8 +47,8 @@ const NavigationBar = () => {
           {user ? (
             <>
               <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-                <Avatar src={user.profile_image || ''} alt={user.username}>
-                  {user.username?.[0]}
+                <Avatar src={user.profile_image || ''} alt={user.nickname}>
+                  {user.nickname?.[0]}
                 </Avatar>
               </IconButton>
               <Menu
@@ -57,7 +57,7 @@ const NavigationBar = () => {
                 onClose={() => setAnchorEl(null)}
               >
                 <MenuItem
-                  onClick={() => navigate(`/user/profile/${user.username}/`)}
+                  onClick={() => navigate(`/user/profile/${user.nickname}/`)}
                 >
                   내 프로필
                 </MenuItem>
