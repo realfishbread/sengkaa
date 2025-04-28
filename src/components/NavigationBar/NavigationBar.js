@@ -3,11 +3,15 @@ import {
   Avatar,
   Box,
   Button,
+  Divider,
+  Drawer,
   IconButton,
-  Menu,
-  MenuItem,
+  List,
+  ListItem,
+  ListItemText,
   TextField,
   Toolbar,
+  Typography,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +27,17 @@ const NavigationBar = () => {
   const { user, setUser } = useContext(UserContext); // 전역 상태
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+    setOpenDrawer(open);
+  };
 
   useEffect(() => {
     // token 은 axios 인터셉터가 자동으로 붙여 줍니다
@@ -46,35 +61,62 @@ const NavigationBar = () => {
           />
           {user ? (
             <>
-              <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+              <IconButton onClick={toggleDrawer(true)}>
                 <Avatar src={user.profile_image || ''} alt={user.nickname}>
                   {user.nickname?.[0]}
                 </Avatar>
               </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={() => setAnchorEl(null)}
+              <Drawer
+                anchor="right"
+                open={openDrawer}
+                onClose={toggleDrawer(false)}
               >
-                <MenuItem
-                  onClick={() => navigate(`/profile/${user.nickname}`)}
+                <Box
+                  sx={{ width: 250, p: 2 }}
+                  role="presentation"
+                  onClick={toggleDrawer(false)}
+                  onKeyDown={toggleDrawer(false)}
                 >
-                  내 프로필
-                </MenuItem>
-                <MenuItem onClick={() => navigate('/settings')}>설정</MenuItem>{' '}
-                {/* ✅ 추가 */}
-                <MenuItem
-                  onClick={() => {
-                    setAnchorEl(null); // 메뉴 닫기
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
-                    setUser(null);
-                    navigate('/');
-                  }}
-                >
-                  로그아웃
-                </MenuItem>
-              </Menu>
+                  <Box sx={{ textAlign: 'center', mb: 2 }}>
+                    <Avatar
+                      src={user.profile_image || ''}
+                      alt={user.nickname}
+                      sx={{ width: 80, height: 80, margin: 'auto' }}
+                    />
+                    <Typography variant="h6" sx={{ mt: 1 }}>
+                      {user.nickname}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {user.email}
+                    </Typography>
+                  </Box>
+
+                  <Divider sx={{ my: 2 }} />
+
+                  <List>
+                    <ListItem
+                      button
+                      onClick={() => navigate(`/profile/${user.nickname}`)}
+                    >
+                      <ListItemText primary="내 프로필" />
+                    </ListItem>
+                    <ListItem button onClick={() => navigate('/settings')}>
+                      <ListItemText primary="설정" />
+                    </ListItem>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('refreshToken');
+                        setUser(null);
+                        navigate('/');
+                      }}
+                    >
+                      <ListItemText primary="로그아웃" />
+                    </ListItem>
+                  </List>
+                </Box>
+              </Drawer>
             </>
           ) : (
             <>

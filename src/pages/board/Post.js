@@ -73,11 +73,7 @@ const Post = ({ onSubmitPost }) => {
     }
 
     try {
-      await CreatePost.post('', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await CreatePost(formData);
 
       const createdPost = {
         title,
