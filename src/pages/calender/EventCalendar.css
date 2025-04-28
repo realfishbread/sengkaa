@@ -15,7 +15,7 @@
   margin-bottom: 25px;
   font-size: 26px;
   font-weight: bold;
-  color: #6C63FF;
+  color: #6c63ff;
 }
 
 .custom-calendar {
@@ -39,12 +39,12 @@
 .react-calendar__tile--now {
   background: #ffe0f0 !important;
   border-radius: 12px;
-  color: #6C63FF;
+  color: #6c63ff;
   font-weight: bold;
 }
 
 .react-calendar__tile--active {
-  background: #6C63FF !important;
+  background: #6c63ff !important;
   color: white !important;
   border-radius: 12px;
 }

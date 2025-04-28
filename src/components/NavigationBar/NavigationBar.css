@@ -1,100 +1,100 @@
 .navbar {
-    background-color: #DCF2FF !important;
+  background-color: #dcf2ff !important;
 }
 
 .logo {
-    height: 53px;
-    cursor: pointer;
+  height: 53px;
+  cursor: pointer;
 }
 
 .search-bar {
-    margin-left: auto !important;
-    background-color: white;
+  margin-left: auto !important;
+  background-color: white;
 }
 
 .auth-button {
-    color: #000000 !important;
+  color: #000000 !important;
 }
 
 /* ✅ 하단 네비게이션 메뉴 */
 .bottom-nav {
-    background-color: #DCF2FF !important;
-    margin-top: -5px;
-    padding: 10px 65px;
-    border-bottom: 1px solid #c7c7c7;
-    display: flex;
-    align-items: flex-start; /* 메뉴 상단에 정렬 */
-    gap: 30px; /* 버튼 간 동일한 간격 */
-    height: auto;
-    overflow: visible;
+  background-color: #dcf2ff !important;
+  margin-top: -5px;
+  padding: 10px 65px;
+  border-bottom: 1px solid #c7c7c7;
+  display: flex;
+  align-items: flex-start; /* 메뉴 상단에 정렬 */
+  gap: 30px; /* 버튼 간 동일한 간격 */
+  height: auto;
+  overflow: visible;
 }
 
 /* ✅ 하단 네비게이션 각 버튼 감쌈 */
 .nav-item-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 /* ✅ 네비게이션 아이템 */
 .nav-item {
-    color: #000000 !important;
-    font-size: 1.1rem !important;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 10px 15px;
-    transition: font-size 0.3s ease, color 0.3s ease;
+  color: #000000 !important;
+  font-size: 1.1rem !important;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 15px;
+  transition: font-size 0.3s ease, color 0.3s ease;
 }
 
 /* ✅ 서브 메뉴 */
 .submenu {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 130px;
-    background-color: #fff;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
-    padding: 8px 12px;
-    z-index: 1000;
-    border-radius: 6px;
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 130px;
+  background-color: #fff;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  padding: 8px 12px;
+  z-index: 1000;
+  border-radius: 6px;
 }
 
 /* ✅ 마우스를 올렸을 때 하위 메뉴 보이기 */
 .nav-item-wrapper:hover .submenu {
-    display: flex;
-    animation: fadeIn 0.3s ease-in-out;
+  display: flex;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 /* ✅ 서브 메뉴 아이템 */
 .submenu-item {
-    text-align: left;
-    display: block !important;
-    line-height: 1.5;
-    color: #333;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px 0;
-    font-size: 14px;
-    transition: color 0.2s ease-in-out;
+  text-align: left;
+  display: block !important;
+  line-height: 1.5;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  font-size: 14px;
+  transition: color 0.2s ease-in-out;
 }
 
 /* ✅ 서브 메뉴 호버 효과 */
 .submenu-item:hover {
-    color: #000000;
+  color: #000000;
 }
 
 /* ✅ 애니메이션 효과 */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

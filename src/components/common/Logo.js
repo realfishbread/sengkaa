@@ -1,8 +1,12 @@
 // components/Logo.js
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Logo = ({ src = "/images/logo.png", alt = "Event Cafe Logo", onClickPath = "/" }) => {
+const Logo = ({
+  src = '/images/logo.png',
+  alt = 'Event Cafe Logo',
+  onClickPath = '/',
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -11,7 +15,7 @@ const Logo = ({ src = "/images/logo.png", alt = "Event Cafe Logo", onClickPath =
       alt={alt}
       className="logo"
       onClick={() => navigate(onClickPath)}
-      style={{ cursor: "pointer" }}
+      style={{ cursor: 'pointer' }}
     />
   );
 };

@@ -1,37 +1,31 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { sendResetEmail } from "../api/passwordApi";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { sendResetEmail } from '../api/passwordApi';
 
-import {
-  Box,
-  Container,
-  Typography,
-  TextField,
-  Button,
-} from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 
 export default function RequestCodePage() {
-  const [email, setEmail] = useState("");
-  const navigate          = useNavigate();
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
   const handleSend = async () => {
     try {
       await sendResetEmail(email);
-      alert("인증 코드가 전송되었습니다.");
-      navigate("/verify-code/", { state: { email } });
+      alert('인증 코드가 전송되었습니다.');
+      navigate('/verify-code/', { state: { email } });
     } catch (e) {
-      alert("오류: " + (e.response?.data?.error || "알 수 없는 에러"));
+      alert('오류: ' + (e.response?.data?.error || '알 수 없는 에러'));
     }
   };
 
   return (
     <Box
       sx={{
-        backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        backgroundImage: 'linear-gradient(to bottom, #cfeffd, #a3d9ff)',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         p: 2,
       }}
     >
@@ -40,7 +34,7 @@ export default function RequestCodePage() {
         sx={{
           p: 3,
           borderRadius: 2,
-          bgcolor: "rgba(255,255,255,0.9)",
+          bgcolor: 'rgba(255,255,255,0.9)',
           boxShadow: 3,
         }}
       >

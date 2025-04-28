@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
-import { UserContext } from "../../context/UserContext";
-import axiosInstance from "../../shared/api/axiosInstance";
+import { useContext, useState } from 'react';
+import { UserContext } from '../../context/UserContext';
+import axiosInstance from '../../shared/api/axiosInstance';
 
 export default function EditProfile() {
   const [username, setUsername] = useState('');
@@ -8,11 +8,11 @@ export default function EditProfile() {
   const [bio, setBio] = useState('');
   const [profileImage, setProfileImage] = useState(null);
 
-  const { user, setUser } = useContext(UserContext);  // ✅ 로그인된 유저
+  const { user, setUser } = useContext(UserContext); // ✅ 로그인된 유저
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const formData = new FormData();
       formData.append('username', username);
@@ -21,20 +21,20 @@ export default function EditProfile() {
       if (profileImage) {
         formData.append('profileImage', profileImage); // ✅ 파일도 추가!
       }
-  
-      const response = await axiosInstance.patch('/profile/update/', formData, {
+
+      const response = await axiosInstance.patch('/user/profile/update/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // ✅ FormData 보낼 때는 무조건 이거 필요해
         },
       });
-  
+
       // 수정 성공하면 UserContext 업데이트
       setUser(response.data);
-  
-      alert("변경사항이 저장되었습니다");
+
+      alert('변경사항이 저장되었습니다');
     } catch (error) {
       console.error(error);
-      alert("저장 실패");
+      alert('저장 실패');
     }
   };
 
@@ -85,7 +85,9 @@ export default function EditProfile() {
             style={styles.textarea}
           />
           <div style={styles.buttonContainer}>
-            <button type="submit" style={styles.saveButton}>저장하기</button>
+            <button type="submit" style={styles.saveButton}>
+              저장하기
+            </button>
           </div>
         </form>
       </div>

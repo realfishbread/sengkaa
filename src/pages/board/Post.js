@@ -1,20 +1,19 @@
-import React, { useState, useEffect,useContext } from "react";
+import ImageIcon from '@mui/icons-material/Image';
 import {
-  Box,
-  TextField,
-  Button,
   Avatar,
-  IconButton,
-  Typography,
+  Box,
+  Button,
   Divider,
+  IconButton,
   Paper,
-} from "@mui/material";
-import ImageIcon from "@mui/icons-material/Image";
-import { UserContext } from "../../context/UserContext"; // ✅ 경로는 실제 프로젝트 구조에 맞게 조정
-import { CreatePost } from "./api/CreatePost"; 
+  TextField,
+  Typography,
+} from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../../context/UserContext'; // ✅ 경로는 실제 프로젝트 구조에 맞게 조정
+import { CreatePost } from './api/CreatePost';
 
-
-const defaultTemplate =`[팬이벤트 공동 주최자 모집 내용 예시]
+const defaultTemplate = `[팬이벤트 공동 주최자 모집 내용 예시]
 
           이벤트 대상 :
           
@@ -42,10 +41,10 @@ const defaultTemplate =`[팬이벤트 공동 주최자 모집 내용 예시]
 
 const Post = ({ onSubmitPost }) => {
   const { user } = useContext(UserContext); // ✅ 로그인 유저 정보 접근
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [image, setImage] = useState(null); // 미리보기 URL
   const [imageFile, setImageFile] = useState(null); // 서버에 보낼 실제 파일
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
 
   // ✅ 처음 로드될 때 기본 템플릿 세팅
   useEffect(() => {
@@ -62,24 +61,24 @@ const Post = ({ onSubmitPost }) => {
 
   const handlePost = async () => {
     if (!title.trim() || !text.trim()) return;
-  
+
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("content", text);
-    formData.append("username", user?.username);
-    formData.append("email", user?.email);
-    formData.append("profileImage", user?.profileImage);
+    formData.append('title', title);
+    formData.append('content', text);
+    formData.append('username', user?.username);
+    formData.append('email', user?.email);
+    formData.append('profileImage', user?.profileImage);
     if (imageFile) {
-      formData.append("image", imageFile);
+      formData.append('image', imageFile);
     }
-  
+
     try {
-      await CreatePost.post("/posts/create/", formData, {
+      await CreatePost.post('/user/posts/create/', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
-  
+
       const createdPost = {
         title,
         content: text,
@@ -88,16 +87,16 @@ const Post = ({ onSubmitPost }) => {
         profile_image: user?.profileImage,
         created_at: new Date().toISOString(),
       };
-  
+
       onSubmitPost(createdPost); // ✅ 리스트에 추가되게 호출
-      alert("게시글이 등록되었습니다!");
-      setTitle("");
+      alert('게시글이 등록되었습니다!');
+      setTitle('');
       setText(defaultTemplate);
       setImage(null);
       setImageFile(null);
     } catch (error) {
-      console.error("업로드 실패:", error);
-      alert("업로드에 실패했습니다 😢");
+      console.error('업로드 실패:', error);
+      alert('업로드에 실패했습니다 😢');
     }
   };
   return (
@@ -105,32 +104,32 @@ const Post = ({ onSubmitPost }) => {
       elevation={3}
       sx={{
         maxWidth: 700,
-        mx: "auto",
+        mx: 'auto',
         my: 4,
         p: 3,
         borderRadius: 3,
-        backgroundColor: "#fefefe",
-        border: "1px solid #e0e0e0",
+        backgroundColor: '#fefefe',
+        border: '1px solid #e0e0e0',
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-      <Avatar alt={user?.username} src={user?.profileImage || ""} />
-      <Typography variant="subtitle2" fontWeight="bold">
-        {user?.realname || user?.username || "user"} 님
-      </Typography>
-    </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+        <Avatar alt={user?.username} src={user?.profileImage || ''} />
+        <Typography variant="subtitle2" fontWeight="bold">
+          {user?.realname || user?.username || 'user'} 님
+        </Typography>
+      </Box>
 
-    <TextField
-      fullWidth
-      variant="outlined"
-      label="제목"
-      InputLabelProps={{ shrink: true }}
-      placeholder="예시: OOO 생일카페 같이 준비하실 분!"
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
-      size="small"
-      sx={{ mb: 0.5 }}
-    />
+      <TextField
+        fullWidth
+        variant="outlined"
+        label="제목"
+        InputLabelProps={{ shrink: true }}
+        placeholder="예시: OOO 생일카페 같이 준비하실 분!"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        size="small"
+        sx={{ mb: 0.5 }}
+      />
 
       <Divider sx={{ my: 2 }} />
 
@@ -165,27 +164,36 @@ const Post = ({ onSubmitPost }) => {
       />
 
       {image && (
-         <Box mt={2} sx={{ textAlign: "center" }}>
-         <img
-           src={image}
-           alt="preview"
-           style={{
-             maxWidth: "300px",  // 💡 너무 크지 않게 조절
-             maxHeight: "300px",
-             borderRadius: 8,
-             objectFit: "cover", // ✨ 이미지가 비율 유지하면서 잘려도 예쁘게
-           }}
-         />
-       </Box>
+        <Box mt={2} sx={{ textAlign: 'center' }}>
+          <img
+            src={image}
+            alt="preview"
+            style={{
+              maxWidth: '300px', // 💡 너무 크지 않게 조절
+              maxHeight: '300px',
+              borderRadius: 8,
+              objectFit: 'cover', // ✨ 이미지가 비율 유지하면서 잘려도 예쁘게
+            }}
+          />
+        </Box>
       )}
 
       <Box
         mt={2}
-        sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
       >
         <IconButton component="label">
           <ImageIcon />
-          <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
         </IconButton>
         <Button variant="contained" onClick={handlePost}>
           모집글 등록

@@ -187,7 +187,7 @@ SIMPLE_JWT = {
 }
 
 KAKAO_REST_API_KEY="4083ddda8b18709f62bb857f2c52f127"
-KAKAO_REDIRECT_URI="https://eventcafe.site/social/oauth/kakao/callback"
+KAKAO_REDIRECT_URI="https://eventcafe.site/user/social/oauth/kakao/callback"
 
 AUTH_USER_MODEL = 'api.User'
 

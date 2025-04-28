@@ -12,7 +12,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axiosInstance.get(`/profile/${username}/`)
+    axiosInstance.get(`/user/profile/${username}/`)
       .then((res) => {
         setProfile(res.data);
         setLoading(false);

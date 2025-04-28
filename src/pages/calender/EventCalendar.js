@@ -12,7 +12,7 @@ const EventCalendar = () => {
     '2025-04-22': ['세븐틴 팬 이벤트 🧡'],
   };
 
-  const formatDate = date => date.toISOString().split('T')[0];
+  const formatDate = (date) => date.toISOString().split('T')[0];
 
   return (
     <div className="calendar-wrapper">
@@ -21,8 +21,7 @@ const EventCalendar = () => {
         onChange={setSelectedDate}
         value={selectedDate}
         className="custom-calendar"
-        />
-
+      />
 
       <div className="schedule-box">
         <h3>{formatDate(selectedDate)} 일정</h3>

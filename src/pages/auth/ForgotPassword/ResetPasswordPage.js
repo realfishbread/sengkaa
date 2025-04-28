@@ -1,18 +1,12 @@
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resetPassword } from "../api/passwordApi";
-import {
-  Box,
-  Container,
-  Typography,
-  TextField,
-  Button,
-} from "@mui/material";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
-  const navigate                = useNavigate();
-  const email                   = useLocation().state?.email || "";
+  const navigate = useNavigate();
+  const email = useLocation().state?.email || "";
 
   const handleReset = async () => {
     try {
