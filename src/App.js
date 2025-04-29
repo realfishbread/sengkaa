@@ -46,7 +46,6 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/register" element={<BirthdayCafeRegister />} />
             <Route path="/venue" element={<RegisterPlaces />} />{' '}
-            {/* ✅ 생일카페 등록 추가 */}
             <Route path="/map" element={<KakaoMap />} />{' '}
             {/* ✅ 생일카페 등록 추가 */}
             <Route path="/post" element={<Post />} />

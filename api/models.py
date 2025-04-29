@@ -70,7 +70,7 @@ class Post(models.Model):
     is_approved = models.BooleanField(default=False)  # ✅ 기본은 미승인 상태!
 
     def __str__(self):
-        return f"{self.user.username} - {self.title}"
+        return f"{self.user.nickname} - {self.title}"
     
 class Reply(models.Model):
     post = models.ForeignKey(Post, related_name='replies', on_delete=models.CASCADE)
@@ -104,4 +104,4 @@ class Follow(models.Model):
         unique_together = ('follower', 'following')  # 중복 팔로우 방지!
 
     def __str__(self):
-        return f"{self.follower.username} → {self.following.username}"
+        return f"{self.follower.nickname} → {self.following.nickname}"

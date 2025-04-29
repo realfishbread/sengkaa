@@ -25,7 +25,6 @@ class PostCreateView(generics.CreateAPIView):
 # 📄 전체 목록 불러오기
 class PostListView(generics.ListAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         status = self.request.query_params.get('status')  # ?status=open
@@ -33,6 +32,8 @@ class PostListView(generics.ListAPIView):
         if status:
             queryset = queryset.filter(status=status)
         return queryset
+    
+    
 # 모집중인 것만 불러오기
 class OpenPostListView(generics.ListAPIView):
     serializer_class = PostSerializer
