@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import Logo from '../common/Logo';
@@ -22,6 +22,7 @@ import './NavigationBar.css';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [openEventMenu, setOpenEventMenu] = useState(false);
 
   const { user, setUser } = useContext(UserContext); // 전역 상태
@@ -123,7 +124,7 @@ const NavigationBar = () => {
               <Button
                 color="inherit"
                 className="auth-button"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/login', { state: { backgroundLocation: location } })}
               >
                 로그인
               </Button>
