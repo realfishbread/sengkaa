@@ -1,4 +1,5 @@
 import ReportIcon from '@mui/icons-material/Report'; // ✅ 맨 위에 추가
+import ReportModal from '../../components/common/ReportModal'; // 신고 모달 컴포넌트 추가
 import {
   Avatar,
   Box,
@@ -21,6 +22,8 @@ const Board = () => {
   const [replyContent, setReplyContent] = useState({});
   const [replies, setReplies] = useState({});
   const [filter, setFilter] = useState('all');
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportPostId, setReportPostId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -75,6 +78,16 @@ const Board = () => {
       .catch((err) => {
         console.error('댓글 가져오기 실패:', err);
       });
+  };
+
+  const handleReportClick = (postId) => {
+    setReportPostId(postId);
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+    setReportPostId(null);
   };
 
   return (
@@ -255,6 +268,7 @@ const Board = () => {
                 backgroundColor: 'rgba(255,0,0,0.1)',
               },
             }}
+            onClick={() => handleReportClick(post.id)}
           >
             <ReportIcon fontSize="small" />
           </Button>
@@ -316,6 +330,14 @@ const Board = () => {
           )}
         </Paper>
       ))}
+
+      {/* 신고 모달 */}
+      {isReportModalOpen && (
+        <ReportModal
+          postId={reportPostId}
+          onClose={closeReportModal}
+        />
+      )}
     </Box>
   );
 };

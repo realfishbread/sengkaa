@@ -14,6 +14,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import CustomTextField from '../../../components/common/CustomTextField';
 import { buttonStyle } from '../../../components/common/Styles';
+// 추가 import
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { IconButton } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
   const [username, setUsername] = useState(''); // 🔹 추가 (이름 필드)
@@ -30,6 +34,7 @@ const SignupPage = () => {
   const [nicknameMessage, setNicknameMessage] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let timerInterval;
@@ -178,6 +183,19 @@ const SignupPage = () => {
           boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)',
         }}
       >
+
+        {/* 로고 섹션 - 로고 대신 '<' 아이콘 버튼만 추가 */}
+<Box
+  sx={{
+    display: "flex",
+    justifyContent: "flex-start",  // 왼쪽 정렬
+    marginBottom: "1.5rem",
+  }}
+>
+  <IconButton onClick={() => navigate(-1)} size="large">
+    <ArrowBackIcon />
+  </IconButton>
+</Box>
         <Typography
           variant="h5"
           gutterBottom
@@ -342,24 +360,6 @@ const SignupPage = () => {
           >
             회원가입
           </Button>
-          <Typography
-            variant="body2"
-            textAlign="center"
-            sx={{ color: '#555555', marginTop: '1rem' }}
-          >
-            이미 계정이 있으신가요?{' '}
-            <Link
-              href="/login"
-              underline="hover"
-              sx={{
-                color: '#007BFF',
-                fontWeight: 'bold',
-                '&:hover': { textDecoration: 'underline' },
-              }}
-            >
-              로그인
-            </Link>
-          </Typography>
         </Box>
       </Container>
     </Box>

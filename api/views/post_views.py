@@ -2,10 +2,9 @@ from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-# 모델
+from rest_framework.exceptions import NotFound
 from api.models import Post, Reply
 
-# 시리얼라이저
 from api.serializers.board_serializers import PostSerializer, ReplySerializer
 
 
@@ -56,7 +55,12 @@ class ReplyCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)        
+        post_id = self.request.data.get("post")
+        try:
+            post = Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            raise NotFound("해당 게시글이 존재하지 않습니다.")
+        serializer.save(user=self.request.user, post=post)   
         
 #답글 전체 보기 
 @api_view(["GET"])

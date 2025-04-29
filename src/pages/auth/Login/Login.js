@@ -11,17 +11,18 @@ import { SiKakaotalk } from "react-icons/si"; // 카카오톡 아이콘
 import { FcGoogle } from "react-icons/fc"; // 구글 아이콘
 import {buttonStyle}from "../../../components/common/Styles";
 import CustomTextField from "../../../components/common/CustomTextField";
-import Logo from "../../../components/common/Logo";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
 import axios from "axios"; // axiosInstance 말고 기본 axio
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 
 
-const LoginPage = () => {
+
+const LoginPage = ({ isModal = false }) => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
@@ -78,12 +79,16 @@ const LoginPage = () => {
   return (
     <Box
       sx={{
-        backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "1rem",
+        ...(isModal
+          ? {} // 모달일 땐 배경, 정렬 제거
+          : {
+              backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
+              minHeight: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "1rem",
+            }),
       }}
     >
       <Container
@@ -92,19 +97,22 @@ const LoginPage = () => {
           padding: "1.5rem",
           borderRadius: "12px",
           backgroundColor: "rgba(255, 255, 255, 0.9)",
-          boxShadow: "0 6px 18px rgba(0, 0, 0, 0.1)",
+          boxShadow: isModal ? "none" : "0 6px 18px rgba(0, 0, 0, 0.1)",
         }}
       >
-        {/* 로고 섹션 */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "1.5rem", // 제목과의 간격
-          }}
-        >
-          <Logo />
-        </Box>
+        
+        {/* 로고 섹션 - 로고 대신 '<' 아이콘 버튼만 추가 */}
+<Box
+  sx={{
+    display: "flex",
+    justifyContent: "flex-start",  // 왼쪽 정렬
+    marginBottom: "1.5rem",
+  }}
+>
+  <IconButton onClick={() => navigate(-1)} size="large">
+    <ArrowBackIcon />
+  </IconButton>
+</Box>
 
         {/* 제목 */}
         <Typography
