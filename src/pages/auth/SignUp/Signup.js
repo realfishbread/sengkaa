@@ -1,10 +1,10 @@
 import {
   Box,
   Button,
-  Container, // 🔹 추가
+  Container,
+  Divider, // 🔹 추가
   FormControl,
   InputLabel,
-  Link,
   MenuItem,
   Select,
   TextField,
@@ -15,9 +15,10 @@ import React, { useEffect, useState } from 'react';
 import CustomTextField from '../../../components/common/CustomTextField';
 import { buttonStyle } from '../../../components/common/Styles';
 // 추가 import
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { IconButton } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
+import AgePolicyModal from './policy/AgePoilcyModal';
+import PrivacyPolicyModal from './policy/PrivacyPolicyModal';
+import TermsModal from './policy/TermsModal';
 
 const SignupPage = () => {
   const [username, setUsername] = useState(''); // 🔹 추가 (이름 필드)
@@ -34,6 +35,17 @@ const SignupPage = () => {
   const [nicknameMessage, setNicknameMessage] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const [agreeAll, setAgreeAll] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [agreePrivacy, setAgreePrivacy] = useState(false);
+  const [agreeMarketing, setAgreeMarketing] = useState(false);
+  const [agree14, setAgree14] = useState(false); // 🔹 14세 이상 동의 추가
+
+  const [openTermsModal, setOpenTermsModal] = useState(false);
+  const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
+  const [openAgeModal, setOpenAgeModal] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +59,14 @@ const SignupPage = () => {
     }
     return () => clearInterval(timerInterval);
   }, [showEmailVerification, timer]);
+
+  useEffect(() => {
+    if (agreeTerms && agreePrivacy && agreeMarketing) {
+      setAgreeAll(true);
+    } else {
+      setAgreeAll(false);
+    }
+  }, [agreeTerms, agreePrivacy, agreeMarketing]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -135,8 +155,8 @@ const SignupPage = () => {
     }
 
     // ✅ 2. 길이 제한 체크
-    if (nickname.length < 2 || nickname.length > 10) {
-      alert('❌ 닉네임은 2자 이상 10자 이하로 입력해주세요.');
+    if (nickname.length < 2 || nickname.length > 12) {
+      alert('❌ 닉네임은 2자 이상 12자 이하로 입력해주세요.');
       setNicknameChecked(false);
       setNicknameMessage('닉네임 길이를 확인해주세요.');
       return;
@@ -163,10 +183,18 @@ const SignupPage = () => {
     }
   };
 
+  const handleAllAgreeChange = (e) => {
+    const checked = e.target.checked;
+    setAgreeAll(checked);
+    setAgreeTerms(checked);
+    setAgreePrivacy(checked);
+    setAgreeMarketing(checked);
+  };
+
   return (
     <Box
       sx={{
-        backgroundImage: 'linear-gradient(to bottom, #cfeffd, #a3d9ff)',
+        backgroundColor: '#ffffff', // ✅ 배경을 흰색으로 고정
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
@@ -175,36 +203,22 @@ const SignupPage = () => {
       }}
     >
       <Container
-        maxWidth="xs"
+        maxWidth="sm" // ✅ xs → sm으로 살짝 넓게
         sx={{
-          padding: '2rem',
-          borderRadius: '12px',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)',
+          borderRadius: '16px',
+          backgroundColor: '#fff',
+          padding: '3rem',
+          maxWidth: '480px',
+          margin: 'auto',
         }}
       >
-
         {/* 로고 섹션 - 로고 대신 '<' 아이콘 버튼만 추가 */}
-<Box
-  sx={{
-    display: "flex",
-    justifyContent: "flex-start",  // 왼쪽 정렬
-    marginBottom: "1.5rem",
-  }}
->
-  <IconButton onClick={() => navigate(-1)} size="large">
-    <ArrowBackIcon />
-  </IconButton>
-</Box>
+
         <Typography
           variant="h5"
-          gutterBottom
+          fontWeight="bold"
           textAlign="center"
-          sx={{
-            fontWeight: 'bold',
-            color: '#333333',
-            marginBottom: '1.5rem',
-          }}
+          sx={{ mb: 3, color: '#222' }}
         >
           회원가입
         </Typography>
@@ -231,33 +245,60 @@ const SignupPage = () => {
             gap: 1.5,
           }}
         >
-          <CustomTextField
-            label="이름"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography
+              sx={{ minWidth: '70px', fontWeight: 'bold', textAlign: 'center' }}
+            >
+              이름
+            </Typography>
             <CustomTextField
-              label="닉네임"
+              label="실명을 적어주세요."
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                },
+              }}
+              fullWidth
+            />
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              textAlign: 'center',
+            }}
+          >
+            <Typography sx={{ minWidth: '70px', fontWeight: 'bold' }}>
+              닉네임
+            </Typography>
+            <CustomTextField
+              label="닉네임은 2글자 이상, 특수문자 불가합니다."
               type="text"
               value={nickname}
               onChange={(e) => {
                 setNickname(e.target.value);
                 setNicknameChecked(false); // 닉네임 수정하면 다시 확인 필요
               }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                },
+              }}
               fullWidth
             />
             <Button
-              variant="outlined"
+              variant="contained"
               onClick={handleCheckNickname}
               sx={{
                 whiteSpace: 'nowrap', // ✅ 버튼 안 텍스트 줄바꿈 방지
-                fontWeight: 'bold',
-                color: '#007BFF',
-                fontSize: '0.9rem',
+                fontSize: '0.8rem',
                 borderRadius: '6px',
-                borderColor: '#007BFF',
+                boxShadow: 'none',
+                backgroundColor: '#007AFF',
               }}
             >
               중복 확인
@@ -271,23 +312,46 @@ const SignupPage = () => {
               {nicknameMessage}
             </Typography>
           )}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mt: -1, ml: 1 }}
+          >
+            * 특수문자는 사용할 수 없으며, 2자 이상 12자 이하로 입력해주세요.
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              textAlign: 'center',
+            }}
+          >
+            <Typography sx={{ minWidth: '70px', fontWeight: 'bold' }}>
+              이메일
+            </Typography>
             <CustomTextField
-              label="이메일"
+              label="example@example.com"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                },
+              }}
             />
             <Button
-              variant="outlined"
+              variant="contained"
               onClick={handleSendVerification}
               sx={{
-                fontWeight: 'bold',
-                fontSize: '0.9rem',
+                fontSize: '0.8rem',
                 borderRadius: '6px',
-                color: '#007BFF',
-                borderColor: '#007BFF',
-                '&:hover': { backgroundColor: '#e6f4ff' },
+                boxShadow: 'none',
+                backgroundColor: '#007AFF',
+                '&:hover': {
+                  backgroundColor: '#0066CC',
+                },
               }}
             >
               인증
@@ -313,14 +377,14 @@ const SignupPage = () => {
                   : '인증 시간이 만료되었습니다.'}
               </Typography>
               <Button
-                variant="outlined"
+                variant="contained"
                 fullWidth
                 onClick={handleVerifyCode} // 여기서 인증 검사!
                 sx={{
-                  mt: 1,
-                  fontWeight: 'bold',
-                  color: '#007BFF',
-                  borderColor: '#007BFF',
+                  fontSize: '0.8rem',
+                  borderRadius: '6px',
+                  boxShadow: 'none',
+                  backgroundColor: '#007AFF',
                 }}
               >
                 인증 확인
@@ -328,7 +392,14 @@ const SignupPage = () => {
             </Box>
           )}
           {/* 🔹 사용자 유형 선택 추가 */}
-          <FormControl fullWidth>
+          <FormControl
+            fullWidth
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+              },
+            }}
+          >
             <InputLabel>사용자 유형</InputLabel>
             <Select
               value={userType}
@@ -338,19 +409,158 @@ const SignupPage = () => {
               <MenuItem value="organizer">주최측</MenuItem>
             </Select>
           </FormControl>
-          <CustomTextField
-            label="비밀번호"
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />{' '}
-          {/* showpassword 해서 비밀번호 * 처리하고 보안성 높이는 게 좋을 듯 */}
-          <CustomTextField
-            label="비밀번호 확인"
-            type={showPassword ? 'text' : 'password'}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography
+              sx={{ minWidth: '70px', fontWeight: 'bold', textAlign: 'center' }}
+            >
+              비밀번호
+            </Typography>
+            <CustomTextField
+              label="특수문자, 숫자, 영문 대소문자를 포함하여 8자 이상이어야 합니다."
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                },
+              }}
+            />{' '}
+          </Box>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography
+              sx={{
+                minWidth: '70px',
+                fontWeight: 'bold',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
+              }}
+            >
+              비밀번호 확인
+            </Typography>
+            <CustomTextField
+              label="비밀번호를 한번 더 입력해주세요."
+              type={showPassword ? 'text' : 'password'}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                },
+              }}
+            />
+          </Box>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mt: -1, ml: 1 }}
+          >
+            * 비밀번호는 특수문자, 숫자, 영문 대소문자를 포함하여 8자 이상이어야
+            합니다.
+          </Typography>
+          <Box sx={{ mt: 5 }}>
+            <Divider sx={{ my: 2 }} />
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              sx={{ ml: 1, lineHeight: 1.6, mb: 2 }}
+              gutterBottom
+            >
+              이용약관 동의
+            </Typography>
+
+            <Box
+              sx={{
+          
+                display: 'flex',
+                flexDirection: 'column',
+                ml: 3,
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  checked={agreeAll}
+                  onChange={handleAllAgreeChange}
+                />{' '}
+                <strong>[전체 동의]</strong> 모든 항목에 동의합니다.
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  required
+                />{' '}
+                [필수] 이용약관 동의
+                <Button variant="text" onClick={() => setOpenTermsModal(true)}>
+                  약관 보기
+                </Button>
+                <TermsModal
+                  open={openTermsModal}
+                  onClose={() => setOpenTermsModal(false)}
+                />{' '}
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={agreePrivacy}
+                  onChange={(e) => setAgreePrivacy(e.target.checked)}
+                  required
+                />{' '}
+                [필수] 개인정보 수집 및 이용 동의
+                <Button onClick={() => setOpenPrivacyModal(true)}>
+                  약관 보기
+                </Button>
+                <PrivacyPolicyModal
+                  open={openPrivacyModal}
+                  onClose={() => setOpenPrivacyModal(false)}
+                />
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={agree14}
+                  onChange={(e) => setAgree14(e.target.checked)}
+                  required
+                />{' '}
+                [필수] 14세 이상 동의
+                <Button onClick={() => setOpenAgeModal(true)}>약관 보기</Button>
+                <AgePolicyModal
+                  open={openAgeModal}
+                  onClose={() => setOpenAgeModal(false)}
+                />
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={agreeMarketing}
+                  onChange={(e) => setAgreeMarketing(e.target.checked)}
+                />{' '}
+                [선택] 마케팅 정보 수신 동의
+              </label>
+            </Box>
+          </Box>
+
+          <Box sx={{ mt: 4 }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ ml: 3, lineHeight: 1.6, mb: 2 }}
+            >
+              * 이름, 닉네임, 이메일, 비밀번호는 모두 필수 항목입니다.
+              <br />* 닉네임은 2자 이상 12자 이하, 특수문자 불가입니다.
+              <br />* 이메일 인증을 완료해야 회원가입이 가능합니다.
+            </Typography>
+          </Box>
+
           <Button
             variant="contained"
             type="submit"

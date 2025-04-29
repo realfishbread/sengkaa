@@ -1,16 +1,24 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
 import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
+import LoginModalWrapper from './pages/auth/Login/LoginModalWrapper';
 import LoginSuccess from './pages/auth/Login/LoginSuccess';
 import SignupPage from './pages/auth/SignUp/Signup';
 import BirthdayCafeRegister from './pages/BirthdayCafeRegister/BirthdayCafeRegister';
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import EventCalendar from './pages/calender/EventCalendar';
+import FaqPage from './pages/Faq/FaqPage';
 import Home from './pages/Home';
 import KakaoMap from './pages/Map/KakaoMap';
 import EditProfile from './pages/profile/EditProfile';
@@ -18,7 +26,6 @@ import ProfilePage from './pages/profile/ProfilePage';
 import Settings from './pages/settings/Settings';
 import RegisterPlaces from './pages/venue/RegisterPlaces';
 import './styles/App.css';
-import LoginModalWrapper from "./pages/auth/Login/LoginModalWrapper";
 
 const theme = createTheme({
   typography: {
@@ -59,17 +66,20 @@ function AppRoutes() {
           <Route path="login-success" element={<LoginSuccess />} />
           <Route path="edit-profile" element={<EditProfile />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="faq" element={<FaqPage />} />
         </Route>
       </Routes>
 
       {/* ✅ 로그인 모달은 백그라운드 location 있을 때만 렌더링 */}
       {state?.backgroundLocation && (
         <Routes>
-        <Route
-        path="/login"
-        element={<LoginModalWrapper open={true} onClose={() => navigate(-1)} />}
-      />
-      </Routes>
+          <Route
+            path="/login"
+            element={
+              <LoginModalWrapper open={true} onClose={() => navigate(-1)} />
+            }
+          />
+        </Routes>
       )}
     </>
   );

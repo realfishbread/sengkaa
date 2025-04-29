@@ -37,6 +37,9 @@ CustomTextField.propTypes = {
   multiline: PropTypes.bool,
   rows: PropTypes.number,
   required: PropTypes.bool,
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '8px',
+  },
 };
 
 export default CustomTextField;

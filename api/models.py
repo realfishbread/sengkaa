@@ -10,7 +10,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
-    nickname = models.CharField(max_length=150, unique=True, null=True, blank=True)
+    nickname = models.CharField(max_length=12, unique=True, null=True, blank=True)
   # 사람들에게 보여지는 이름 (⭐필수⭐)
     user_type = models.CharField(max_length=20, choices=[('organizer', 'Organizer'), ('regular', 'Regular')])
     profile_image = models.ImageField(upload_to="profile/", blank=True, null=True)
