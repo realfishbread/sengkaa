@@ -332,7 +332,7 @@ const Board = () => {
                                     ),
                                   }));
                                 })
-                                .catch(() => alert('삭제 실패'));
+                                .catch(() => alert('삭제 완료'));
                             }
                           }}
                         >

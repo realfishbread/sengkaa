@@ -22,6 +22,8 @@ class PostCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, is_approved=True)
+        return Response(serializer.data, status=201)
+    
 # 📄 전체 목록 불러오기
 class PostListView(generics.ListAPIView):
     serializer_class = PostSerializer

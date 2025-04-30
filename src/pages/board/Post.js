@@ -65,9 +65,6 @@ const Post = ({ onSubmitPost }) => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', text);
-    formData.append('nickname', user?.nickname);
-    formData.append('email', user?.email);
-    formData.append('profile_image', user?.profileImage);
     if (imageFile) {
       formData.append('image', imageFile);
     }
