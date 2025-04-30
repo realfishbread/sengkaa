@@ -39,27 +39,56 @@ const ProfilePage = () => {
       </Box>
     );
 
-  if (!profile)
-    return (
-      <Box sx={{ textAlign: 'center', mt: 10, px: 2 }}>
-        <Paper
-          elevation={3}
+    if (!profile)
+      return (
+        <Box
           sx={{
-            p: 4,
-            borderRadius: '16px',
-            background: 'linear-gradient(135deg, #ffe6e6, #ffffff)',
-            boxShadow: '0px 5px 15px rgba(255, 100, 100, 0.2)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '70vh', // 너무 바닥 붙지 않게 조절
+            px: 2,
+            textAlign: 'center',
           }}
         >
-          <Typography variant="h6" fontWeight="bold" color="error" mb={2}>
-            😢 사용자 정보를 불러올 수 없습니다
+          {/* 🐱 귀여운 일러스트 이미지 삽입 */}
+          <Box
+            component="img"
+            src="/images/error-cat.png" // 👉 public/images 폴더에 넣어두면 됨
+            alt="에러 이미지"
+            sx={{ maxWidth: 300, mb: 4 }}
+          />
+    
+          <Typography variant="h6" fontWeight="bold" color="error" mb={1}>
+            😢 사용자 정보를 찾을 수 없어요!
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            존재하지 않는 사용자이거나, 서버에 문제가 있을 수 있어요.
+          <Typography variant="body2" color="text.secondary" mb={3}>
+            입력한 닉네임이 잘못되었거나, 서버에서 정보를 불러오지 못했어요.
           </Typography>
-        </Paper>
-      </Box>
-    );
+    
+          <Button
+            variant="contained"
+            onClick={() => navigate(-1)} // 👉 뒤로 가기
+            sx={{
+              mt: 2,
+              backgroundColor: '#6C63FF',
+              color: '#fff',
+              fontWeight: 'bold',
+              borderRadius: '12px',
+              px: 4,
+              py: 1.2,
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: '#5a55d3',
+              },
+            }}
+          >
+            🔙 돌아가기
+          </Button>
+        </Box>
+      );
+    
 
   const isMyProfile = user?.nickname === profile.nickname; // ✅ 비교!
 

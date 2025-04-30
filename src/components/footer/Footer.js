@@ -41,7 +41,7 @@ const Footer = () => {
             <Box mt={2}>
               <IconButton
                 component="a"
-                href="https://instagram.com/yourbrand"
+                href="https://instagram.com/yunissi_o.o"
                 target="_blank"
                 rel="noopener"
                 aria-label="Instagram"
