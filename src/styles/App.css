@@ -135,3 +135,9 @@ body {
   flex: 1; /* 남은 공간을 모두 차지하여 Footer를 아래로 밀어냄 */
   overflow: visible; /* ✅ 추가 스크롤 방지 */
 }
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

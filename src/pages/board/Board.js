@@ -1,5 +1,4 @@
 import ReportIcon from '@mui/icons-material/Report'; // ✅ 맨 위에 추가
-import ReportModal from '../../components/common/ReportModal'; // 신고 모달 컴포넌트 추가
 import {
   Avatar,
   Box,
@@ -12,8 +11,11 @@ import {
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import ReportModal from '../../components/common/ReportModal'; // 신고 모달 컴포넌트 추가
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
+import '../../styles/fade.css'; // ✅ 만든 fade.css 경로에 맞게 import
 
 const Board = () => {
   const [posts, setPosts] = useState([]);
@@ -157,189 +159,224 @@ const Board = () => {
       </Box>
 
       {/* 글 목록 */}
-      {posts.map((post) => (
-        <Paper
-          key={post.id}
-          onClick={() => {
-            setOpenPostId(post.id);
-            fetchReplies(post.id); // 🔥 댓글 가져오기
-          }} // ✅ 클릭하면 열리게
-          elevation={1}
-          sx={{
-            p: 3,
-            mb: 3,
-            border: '1px solid #e0e0e0',
-            borderRadius: 2,
-            backgroundColor: '#fff',
-            cursor: 'pointer',
-            '&:hover': {
-              borderColor: '#1e88e5',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
-            },
-          }}
-        >
-          {/* 작성자 */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Avatar
-              src={post.profile_image}
-              alt={post.nickname}
-              sx={{ cursor: 'pointer' }}
-              onClick={() => navigate(`/profile/${post.nickname}`)} // ✅ 이동
-            />
-            <Box>
-              <Typography
-                variant="subtitle2"
-                fontWeight="bold"
-                sx={{ cursor: 'pointer' }}
-                onClick={() => navigate(`/profile/${post.nickname}`)} // ✅ 이동
-              >
-                {post.nickname}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {new Date(post.created_at).toLocaleString()}
-              </Typography>
-            </Box>
-          </Box>
-
-          {/* 구분선 */}
-          <Divider sx={{ my: 2 }} />
-
-          {/* 제목 */}
-          <Typography variant="h6" fontWeight="bold" gutterBottom>
-            {post.title}
-          </Typography>
-
-          {/* 내용 - 펼쳤을 때는 전체, 안 펼쳤으면 요약 */}
-          {openPostId === post.id ? (
-            <Typography
-              variant="body2"
+      <TransitionGroup>
+        {posts.map((post) => (
+          <CSSTransition key={post.id} timeout={300} classNames="fade">
+            <Paper
+              onClick={() => {
+                setOpenPostId(post.id);
+                fetchReplies(post.id);
+              }}
+              elevation={1}
               sx={{
-                whiteSpace: 'pre-line',
-                color: '#444',
-                lineHeight: 1.6,
+                p: 3,
+                mb: 3,
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                backgroundColor: '#fff',
+                position: 'relative', // ✅ 신고버튼 위치 유지!
+                cursor: 'pointer',
+                '&:hover': {
+                  borderColor: '#1e88e5',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+                },
               }}
             >
-              {post.content}
-            </Typography>
-          ) : (
-            <Typography
-              variant="body2"
-              sx={{
-                whiteSpace: 'pre-line',
-                color: '#444',
-                lineHeight: 1.6,
-                maxHeight: '120px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              {post.content}
-            </Typography>
-          )}
-          {/* 이미지 */}
-          {post.image && (
-            <Box mt={2}>
-              <img
-                src={post.image}
-                alt="썸네일"
-                style={{ width: '100%', borderRadius: 8 }}
-              />
-            </Box>
-          )}
-
-          {/* 모집중 태그 */}
-          <Box mt={2}>
-            <Chip label="모집중" color="success" size="small" />
-          </Box>
-
-          <Button
-            variant="text"
-            color="error"
-            size="small"
-            sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              minWidth: 0, // 🔥 버튼 최소 너비 없애기 (동그랗게)
-              width: 36, // 🔥 버튼 사이즈 작게
-              height: 36,
-              borderRadius: '50%', // 🔥 완전 동그랗게
-              '&:hover': {
-                backgroundColor: 'rgba(255,0,0,0.1)',
-              },
-            }}
-            onClick={() => handleReportClick(post.id)}
-          >
-            <ReportIcon fontSize="small" />
-          </Button>
-          {openPostId === post.id && (
-            <>
-              {/* 댓글 목록 */}
-              {replies[post.id]?.map((reply) => (
-                <Typography
-                  key={reply.id}
-                  variant="body2"
-                  sx={{ mt: 1, pl: 2 }}
-                >
-                  💬{' '}
-                  <span
-                    style={{
-                      fontWeight: 'bold',
-                      color: '#1976d2',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() =>
-                      navigate(`/profile/${post.nickname}`)
-                    }
+              {/* 작성자 정보 */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Avatar
+                  src={post.profile_image}
+                  alt={post.nickname}
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/profile/${post.nickname}`)}
+                />
+                <Box>
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => navigate(`/profile/${post.nickname}`)}
                   >
-                    {reply.user.nickname}
-                  </span>{' '}
-                  ({new Date(reply.created_at).toLocaleString()}):{' '}
-                  {reply.content}
-                </Typography>
-              ))}
-              <Box mt={2}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <input
-                    type="text"
-                    placeholder="댓글을 입력하세요"
-                    value={replyContent[post.id] || ''}
-                    onChange={(e) =>
-                      setReplyContent((prev) => ({
-                        ...prev,
-                        [post.id]: e.target.value,
-                      }))
-                    }
-                    style={{
-                      flexGrow: 1,
-                      padding: '8px',
-                      border: '1px solid #ccc',
-                      borderRadius: '6px',
-                    }}
-                  />
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleReplySubmit(post.id)}
-                  >
-                    등록
-                  </Button>
-                </Stack>
+                    {post.nickname}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {new Date(post.created_at).toLocaleString()}
+                  </Typography>
+                </Box>
               </Box>
-            </>
-          )}
-        </Paper>
-      ))}
 
-      {/* 신고 모달 */}
-      {isReportModalOpen && (
-        <ReportModal
-          postId={reportPostId}
-          onClose={closeReportModal}
-        />
-      )}
+              <Divider sx={{ my: 2 }} />
+
+              <Typography variant="h6" fontWeight="bold" gutterBottom>
+                {post.title}
+              </Typography>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  whiteSpace: 'pre-line',
+                  color: '#444',
+                  lineHeight: 1.6,
+                  ...(openPostId !== post.id && {
+                    maxHeight: '120px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }),
+                }}
+              >
+                {post.content}
+              </Typography>
+
+              {post.image && (
+                <Box mt={2}>
+                  <img
+                    src={post.image}
+                    alt="썸네일"
+                    style={{ width: '100%', borderRadius: 8 }}
+                  />
+                </Box>
+              )}
+
+              <Box mt={2}>
+                <Chip label="모집중" color="success" size="small" />
+              </Box>
+
+              {user?.nickname === post.nickname && (
+                <Box sx={{ textAlign: 'right', mt: 2 }}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (window.confirm('정말 게시글을 삭제하시겠습니까?')) {
+                        axiosInstance
+                          .delete(`/user/posts/${post.id}/`)
+                          .then(() => {
+                            alert('삭제되었습니다!');
+                            setPosts((prev) =>
+                              prev.filter((p) => p.id !== post.id)
+                            );
+                          })
+                          .catch(() => alert('삭제 실패'));
+                      }
+                    }}
+                  >
+                    게시글 삭제
+                  </Button>
+                </Box>
+              )}
+
+              <Button
+                variant="text"
+                color="error"
+                size="small"
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  minWidth: 0,
+                  width: 36,
+                  height: 36,
+                  borderRadius: '50%',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,0,0,0.1)',
+                  },
+                }}
+                onClick={() => handleReportClick(post.id)}
+              >
+                <ReportIcon fontSize="small" />
+              </Button>
+
+              {isReportModalOpen && (
+                <ReportModal postId={reportPostId} onClose={closeReportModal} />
+              )}
+
+              {openPostId === post.id && (
+                <>
+                  {replies[post.id]?.map((reply) => (
+                    <Typography
+                      key={reply.id}
+                      variant="body2"
+                      sx={{ mt: 1, pl: 2 }}
+                    >
+                      💬{' '}
+                      <span
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#1976d2',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() =>
+                          navigate(`/profile/${reply.user.nickname}`)
+                        }
+                      >
+                        {reply.user.nickname}
+                      </span>{' '}
+                      ({new Date(reply.created_at).toLocaleString()}):{' '}
+                      {reply.content}
+                      {reply.user.nickname === user?.nickname && (
+                        <Button
+                          size="small"
+                          color="error"
+                          sx={{ ml: 1 }}
+                          onClick={() => {
+                            if (window.confirm('댓글을 삭제하시겠습니까?')) {
+                              axiosInstance
+                                .delete(`/user/posts/replies/${reply.id}/`)
+                                .then(() => {
+                                  setReplies((prev) => ({
+                                    ...prev,
+                                    [post.id]: prev[post.id].filter(
+                                      (r) => r.id !== reply.id
+                                    ),
+                                  }));
+                                })
+                                .catch(() => alert('삭제 실패'));
+                            }
+                          }}
+                        >
+                          삭제
+                        </Button>
+                      )}
+                    </Typography>
+                  ))}
+
+                  <Box mt={2}>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <input
+                        type="text"
+                        placeholder="댓글을 입력하세요"
+                        value={replyContent[post.id] || ''}
+                        onChange={(e) =>
+                          setReplyContent((prev) => ({
+                            ...prev,
+                            [post.id]: e.target.value,
+                          }))
+                        }
+                        style={{
+                          flexGrow: 1,
+                          padding: '8px',
+                          border: '1px solid #ccc',
+                          borderRadius: '6px',
+                        }}
+                      />
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() => handleReplySubmit(post.id)}
+                      >
+                        등록
+                      </Button>
+                    </Stack>
+                  </Box>
+                </>
+              )}
+            </Paper>
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
     </Box>
   );
 };
-
 export default Board;

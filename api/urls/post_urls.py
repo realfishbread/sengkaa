@@ -8,6 +8,7 @@ from api.views.post_views import (
     ClosedPostListView,
     ReplyCreateView,
     reply_list_view,
+    ReplyDeleteView,
 )
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
        path('closed/', ClosedPostListView.as_view(), name='closed-posts'),
        path('replies/', ReplyCreateView.as_view(), name='create-reply'),
        path("<int:post_id>/replies/", reply_list_view, name="reply-list"),
+       path('replies/<int:pk>/', ReplyDeleteView.as_view(), name='reply-delete'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

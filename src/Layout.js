@@ -5,7 +5,7 @@ import './styles/App.css';
 
 const Layout = () => {
   const location = useLocation();
-  const hideNavbarRoutes = [ '/login']; // 네비게이션 바를 숨길 페이지
+  const hideNavbarRoutes = ['/login']; // 네비게이션 바를 숨길 페이지
 
   return (
     <div className="layout-container">

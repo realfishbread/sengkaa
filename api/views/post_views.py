@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 from api.models import Post, Reply
+from rest_framework.views import APIView
 
 from api.serializers.board_serializers import PostSerializer, ReplySerializer
 
@@ -70,3 +71,19 @@ def reply_list_view(request, post_id):
     serializer = ReplySerializer(replies, many=True)
     return Response(serializer.data)
 
+#댓글 삭제
+class ReplyDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            reply = Reply.objects.get(pk=pk)
+
+            # 본인 댓글만 삭제 가능하게 체크
+            if reply.user != request.user:
+                return Response({'detail': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+
+            reply.delete()
+            return Response({'detail': '댓글 삭제 완료'}, status=status.HTTP_204_NO_CONTENT)
+        except Reply.DoesNotExist:
+            return Response({'detail': '댓글이 존재하지 않습니다.'}, status=status.HTTP_404_NOT_FOUND)
