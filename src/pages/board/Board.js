@@ -294,7 +294,12 @@ const Board = () => {
 
               {openPostId === post.id && (
                 <>
-                  {replies[post.id]?.map((reply) => (
+                {(!replies[post.id] || replies[post.id].length === 0) ? (
+      <Typography variant="body2" color="text.secondary" sx={{ pl: 2, mt: 2 }}>
+        아직 댓글이 없어요! 🥲
+      </Typography>
+    ) : (
+                  replies[post.id]?.map((reply) => (
                     <Typography
                       key={reply.id}
                       variant="body2"
@@ -323,15 +328,10 @@ const Board = () => {
                           onClick={() => {
                             if (window.confirm('댓글을 삭제하시겠습니까?')) {
                               axiosInstance
-                                .delete(`/user/posts/replies/${reply.id}/`)
-                                .then(() => {
-                                  setReplies((prev) => ({
-                                    ...prev,
-                                    [post.id]: prev[post.id].filter(
-                                      (r) => r.id !== reply.id
-                                    ),
-                                  }));
-                                })
+                              .delete(`/user/posts/replies/${reply.id}/`)
+                              .then(() => {
+                                fetchReplies(post.id); // 🔁 댓글 목록을 다시 불러오기!
+                              })
                                 .catch(() => alert('삭제 완료'));
                             }
                           }}
@@ -340,7 +340,8 @@ const Board = () => {
                         </Button>
                       )}
                     </Typography>
-                  ))}
+                  ))
+                )}
 
                   <Box mt={2}>
                     <Stack direction="row" spacing={1} alignItems="center">

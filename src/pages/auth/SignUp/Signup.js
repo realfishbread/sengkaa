@@ -87,7 +87,7 @@ const SignupPage = () => {
 
     try {
       const response = await axios.post(
-        'https://eventcafe.site/auth/register/',
+        'https://eventcafe.site/user/auth/register/',
         {
           username,
           nickname,
@@ -111,7 +111,7 @@ const SignupPage = () => {
   const handleVerifyCode = async () => {
     try {
       const res = await axios.post(
-        'https://eventcafe.site/auth/verify-email-code/',
+        'https://eventcafe.site/user/auth/verify-email-code/',
         {
           email,
           code,
@@ -130,7 +130,7 @@ const SignupPage = () => {
 
     try {
       const response = await axios.post(
-        'https://eventcafe.site/auth/send-email-verification/',
+        'https://eventcafe.site/user/auth/send-email-verification/',
         {
           email,
         }
@@ -165,7 +165,7 @@ const SignupPage = () => {
     // ✅ 3. 서버에 중복 확인 요청
     try {
       const response = await axios.post(
-        'https://eventcafe.site/auth/check-nickname/',
+        'https://eventcafe.site/user/auth/check-nickname/',
         { nickname }
       );
 
