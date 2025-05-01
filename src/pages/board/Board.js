@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ReportModal from '../../components/common/ReportModal'; // 신고 모달 컴포넌트 추가
 import { UserContext } from '../../context/UserContext';
@@ -28,6 +28,7 @@ const Board = () => {
   const [reportPostId, setReportPostId] = useState(null);
 
   const navigate = useNavigate();
+  const location = useLocation(); // ✅ 추가
 
   useEffect(() => {
     if (!user) {
@@ -36,7 +37,11 @@ const Board = () => {
     }
 
     fetchPosts('all'); // ✅ 최초 로딩
-  }, []);
+     // ✅ 등록 후 돌아왔을 때 새로고침
+     if (location.state?.refresh) {
+      fetchPosts('all');
+    }
+  }, [location.state]); // ← 여기를 감시
 
   const fetchPosts = (type) => {
     setFilter(type);
@@ -336,28 +341,59 @@ const Board = () => {
                             </span>{' '}
                             ({new Date(reply.created_at).toLocaleString()}):{' '}
                             {reply.content}
-                            {reply.user.nickname === user?.nickname && (
-                              <Button
-                                size="small"
-                                color="error"
-                                sx={{ ml: 1 }}
-                                onClick={() => {
-                                  if (
-                                    window.confirm('댓글을 삭제하시겠습니까?')
-                                  ) {
-                                    axiosInstance
-                                      .delete(
-                                        `/user/posts/replies/${reply.id}/`
+                            {user?.nickname === post.nickname && (
+                              <Box sx={{ textAlign: 'right', mt: 2 }}>
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  sx={{ mr: 1 }}
+                                  onClick={async (e) => {
+                                    // ← async 붙여줘야 await 사용 가능
+                                    e.stopPropagation();
+                                    try {
+                                      await axiosInstance.patch(
+                                        `/user/posts/${post.id}/`,
+                                        {
+                                          title: '수정한제목',
+                                          content: '수정한내용',
+                                        }
+                                      );
+                                      alert('수정 완료!');
+                                      fetchPosts(filter); // ✅ 다시 목록 갱신
+                                    } catch (err) {
+                                      console.error('수정 실패', err);
+                                      alert('수정에 실패했습니다.');
+                                    }
+                                  }}
+                                >
+                                  수정
+                                </Button>
+                                <Button
+                                  variant="outlined"
+                                  color="error"
+                                  size="small"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (
+                                      window.confirm(
+                                        '정말 게시글을 삭제하시겠습니까?'
                                       )
-                                      .then(() => {
-                                        fetchReplies(post.id);
-                                      })
-                                      .catch(() => alert('삭제 실패'));
-                                  }
-                                }}
-                              >
-                                삭제
-                              </Button>
+                                    ) {
+                                      axiosInstance
+                                        .delete(`/user/posts/${post.id}/`)
+                                        .then(() => {
+                                          alert('삭제되었습니다!');
+                                          setPosts((prev) =>
+                                            prev.filter((p) => p.id !== post.id)
+                                          );
+                                        })
+                                        .catch(() => alert('삭제 실패'));
+                                    }
+                                  }}
+                                >
+                                  삭제
+                                </Button>
+                              </Box>
                             )}
                           </Typography>
                         </Box>

@@ -73,7 +73,7 @@ const FaqPage = () => {
 
         <Grid item xs={12} md={8}>
           <Typography variant="h3" fontWeight="bold" gutterBottom>
-            무엇을 도와드릴까요?
+            "무엇을 도와드릴까요?"
           </Typography>
           <Typography color="text.secondary">
             자주 묻는 질문들을 확인해보세요. 더 궁금한 점은 언제든지

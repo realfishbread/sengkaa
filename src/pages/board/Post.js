@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext'; // ✅ 경로는 실제 프로젝트 구조에 맞게 조정
 import { CreatePost } from './api/CreatePost';
 
@@ -39,12 +40,13 @@ const defaultTemplate = `[팬이벤트 공동 주최자 모집 내용 예시]
           모든 활동은 비영리 팬 활동이어야 하며, 수익 목적이 있을 시 관리자 제재대상이 될 수 있습니다.
           `;
 
-const Post = ({ onSubmitPost }) => {
+const Post = ({ onSubmitPost, onRefresh }) => {
   const { user } = useContext(UserContext); // ✅ 로그인 유저 정보 접근
   const [text, setText] = useState('');
   const [image, setImage] = useState(null); // 미리보기 URL
   const [imageFile, setImageFile] = useState(null); // 서버에 보낼 실제 파일
   const [title, setTitle] = useState('');
+  const navigate = useNavigate();
 
   // ✅ 처음 로드될 때 기본 템플릿 세팅
   useEffect(() => {
@@ -81,8 +83,10 @@ const Post = ({ onSubmitPost }) => {
         created_at: new Date().toISOString(),
       };
 
-      onSubmitPost(createdPost); // ✅ 리스트에 추가되게 호출
+      onSubmitPost && onSubmitPost(createdPost); // ✅ 리스트에 추가
+      onRefresh && onRefresh('all'); // ✅ 게시글 목록 갱신
       alert('게시글이 등록되었습니다!');
+      navigate('/board'); // ✅ 게시판으로 이동
       setTitle('');
       setText(defaultTemplate);
       setImage(null);

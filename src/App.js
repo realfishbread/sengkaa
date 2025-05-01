@@ -11,13 +11,14 @@ import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
 import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
+import KakaoRedirectPage from './pages/auth/Login/KakaoRedirectPage';
 import LoginModalWrapper from './pages/auth/Login/LoginModalWrapper';
-import LoginSuccess from './pages/auth/Login/LoginSuccess';
 import SignupPage from './pages/auth/SignUp/Signup';
 import BirthdayCafeRegister from './pages/BirthdayCafeRegister/BirthdayCafeRegister';
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import EventCalendar from './pages/calender/EventCalendar';
+import DictionaryList from './pages/dictionary/DictionaryList';
 import FaqPage from './pages/Faq/FaqPage';
 import Home from './pages/Home';
 import KakaoMap from './pages/Map/KakaoMap';
@@ -25,7 +26,6 @@ import EditProfile from './pages/profile/EditProfile';
 import ProfilePage from './pages/profile/ProfilePage';
 import Settings from './pages/settings/Settings';
 import RegisterPlaces from './pages/venue/RegisterPlaces';
-import DictionaryList from './pages/dictionary/DictionaryList';
 import './styles/App.css';
 
 const theme = createTheme({
@@ -64,11 +64,15 @@ function AppRoutes() {
           <Route path="forgot-password" element={<RequestCodePage />} />
           <Route path="verify-code" element={<VerifyCodePage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
-          <Route path="login-success" element={<LoginSuccess />} />
           <Route path="edit-profile" element={<EditProfile />} />
           <Route path="settings" element={<Settings />} />
           <Route path="faq" element={<FaqPage />} />
           <Route path="dictionary" element={<DictionaryList />} />
+
+          <Route
+            path="/user/social/oauth/kakao/callback"
+            element={<KakaoRedirectPage />}
+          />
         </Route>
       </Routes>
 

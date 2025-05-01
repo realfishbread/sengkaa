@@ -35,6 +35,10 @@ class PostListView(generics.ListAPIView):
             queryset = queryset.filter(status=status)
         return queryset
     
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})  # ✅ 이거 꼭 넣어야 build_absolute_uri 동작함
+        return context
     
 # 모집중인 것만 불러오기
 class OpenPostListView(generics.ListAPIView):
