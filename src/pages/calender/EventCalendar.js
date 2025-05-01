@@ -20,7 +20,7 @@ const EventCalendar = () => {
     const fetchWeather = async (lat, lon) => {
       try {
         const res = await axios.get(
-          `https://api.weatherapi.com/v1/current.json?key=9c026a429e95428e9a473521253004&q=${lat},${lon}`
+          `https://api.weatherapi.com/v1/current.json?key=9c026a429e95428e9a473521253004&q=${lat},${lon}&lang=ko`
         );
         console.log('✅ 날씨 데이터:', res.data);
         setWeather({
@@ -95,7 +95,7 @@ const EventCalendar = () => {
       </div>
 
       <div className="right-panel">
-        <h2 style={{ marginBottom: 20 }}>📍 생일카페 일정</h2>
+        <h2 style={{ marginBottom: 20 }}>나의 덕질 일정</h2>
         <Calendar
           onChange={setSelectedDate}
           value={selectedDate}

@@ -67,7 +67,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to="post_images/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    is_approved = models.BooleanField(default=False)  # ✅ 기본은 미승인 상태!
+    is_approved = models.BooleanField(default=True)  
 
     def __str__(self):
         return f"{self.user.nickname} - {self.title}"
@@ -105,3 +105,51 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.follower.nickname} → {self.following.nickname}"
+    
+    
+
+class Star(models.Model):
+    name = models.CharField(max_length=100)
+    genre = models.CharField(max_length=50)
+    display = models.CharField(max_length=100)  # 예: "뷔 (BTS)"
+    image = models.ImageField(upload_to='stars/', null=True, blank=True)
+
+    def __str__(self):
+        return self.display
+
+
+class BirthdayCafe(models.Model):
+    cafe_name = models.CharField(max_length=200)
+    description = models.TextField()
+    genre = models.CharField(max_length=50)
+    star = models.ForeignKey(Star, on_delete=models.SET_NULL, null=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    road_address = models.CharField(max_length=200)
+    detail_address = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')  # ✅ 추가!
+
+    def __str__(self):
+        return self.cafe_name
+    
+class Goods(models.Model):
+    event = models.ForeignKey('BirthdayCafe', on_delete=models.CASCADE, related_name='goods')
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    price = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='goods/', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+    
+    
+class Report(models.Model):
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_made')  # 신고한 사람
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='reports')  # 신고 대상 게시글
+    reason = models.TextField()  # 신고 사유
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.reporter} → {self.post} ({self.created_at.date()})"

@@ -294,55 +294,76 @@ const Board = () => {
 
               {openPostId === post.id && (
                 <>
-                {(!replies[post.id] || replies[post.id].length === 0) ? (
-      <Typography variant="body2" color="text.secondary" sx={{ pl: 2, mt: 2 }}>
-        아직 댓글이 없어요! 🥲
-      </Typography>
-    ) : (
-                  replies[post.id]?.map((reply) => (
+                  {!replies[post.id] || replies[post.id].length === 0 ? (
                     <Typography
-                      key={reply.id}
                       variant="body2"
-                      sx={{ mt: 1, pl: 2 }}
+                      color="text.secondary"
+                      sx={{ pl: 2, mt: 2 }}
                     >
-                      💬{' '}
-                      <span
-                        style={{
-                          fontWeight: 'bold',
-                          color: '#1976d2',
-                          cursor: 'pointer',
-                        }}
-                        onClick={() =>
-                          navigate(`/profile/${reply.user.nickname}`)
-                        }
-                      >
-                        {reply.user.nickname}
-                      </span>{' '}
-                      ({new Date(reply.created_at).toLocaleString()}):{' '}
-                      {reply.content}
-                      {reply.user.nickname === user?.nickname && (
-                        <Button
-                          size="small"
-                          color="error"
-                          sx={{ ml: 1 }}
-                          onClick={() => {
-                            if (window.confirm('댓글을 삭제하시겠습니까?')) {
-                              axiosInstance
-                              .delete(`/user/posts/replies/${reply.id}/`)
-                              .then(() => {
-                                fetchReplies(post.id); // 🔁 댓글 목록을 다시 불러오기!
-                              })
-                                .catch(() => alert('삭제 완료'));
-                            }
+                      아직 댓글이 없어요! 🥲
+                    </Typography>
+                  ) : (
+                    replies[post.id]?.map((reply) => {
+                      const isReply = reply.parent_id !== null;
+
+                      return (
+                        <Box
+                          key={reply.id}
+                          sx={{
+                            mt: 1,
+                            pl: isReply ? 4 : 2,
+                            py: 1,
+                            px: 2,
+                            borderRadius: 1,
+                            backgroundColor: isReply
+                              ? '#f5f5f5'
+                              : 'transparent',
                           }}
                         >
-                          삭제
-                        </Button>
-                      )}
-                    </Typography>
-                  ))
-                )}
-
+                          <Typography variant="body2">
+                            💬{' '}
+                            <span
+                              style={{
+                                fontWeight: 'bold',
+                                color: '#1976d2',
+                                cursor: 'pointer',
+                              }}
+                              onClick={() =>
+                                navigate(`/profile/${reply.user.nickname}`)
+                              }
+                            >
+                              {reply.user.nickname}
+                            </span>{' '}
+                            ({new Date(reply.created_at).toLocaleString()}):{' '}
+                            {reply.content}
+                            {reply.user.nickname === user?.nickname && (
+                              <Button
+                                size="small"
+                                color="error"
+                                sx={{ ml: 1 }}
+                                onClick={() => {
+                                  if (
+                                    window.confirm('댓글을 삭제하시겠습니까?')
+                                  ) {
+                                    axiosInstance
+                                      .delete(
+                                        `/user/posts/replies/${reply.id}/`
+                                      )
+                                      .then(() => {
+                                        fetchReplies(post.id);
+                                      })
+                                      .catch(() => alert('삭제 실패'));
+                                  }
+                                }}
+                              >
+                                삭제
+                              </Button>
+                            )}
+                          </Typography>
+                        </Box>
+                      );
+                    })
+                  )}
                   <Box mt={2}>
                     <Stack direction="row" spacing={1} alignItems="center">
                       <input

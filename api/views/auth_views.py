@@ -16,6 +16,7 @@ import random
 import string
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def register_view(request):
     username = request.data.get("username")
     email = request.data.get("email")
@@ -28,6 +29,16 @@ def register_view(request):
     
     if User.objects.filter(email=email).exists():
         return Response({"error": "이미 사용 중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # ✅ 이메일 인증 여부 확인
+    r = get_redis_connection()
+    email_verified = r.get(f"email_verified:{email}")
+    if email_verified is None:
+        return Response({"error": "이메일 인증이 완료되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+     # ✅ 닉네임 중복 여부 확인
+    if User.objects.filter(nickname=nickname).exists():
+        return Response({"error": "새로운 닉네임으로 중복 검사를 시도한 후 다시 시도해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
     user = User.objects.create(
         username=username,
@@ -42,6 +53,7 @@ def register_view(request):
 
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def send_email_verification(request):
     email = request.data.get("email")
 
@@ -106,6 +118,9 @@ def verify_email_code(request):
 
     if saved_code != code:
         return Response({"error": "인증 코드가 일치하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # ✅ 인증 성공 시, 이메일 인증 여부를 Redis에 저장
+    r.setex(f"email_verified:{email}", 3600, "true")  # 1시간 유효, 회원가입때 검증할거임.
 
     return Response({"message": "이메일 인증 성공!"}, status=status.HTTP_200_OK)
 
@@ -237,6 +252,7 @@ def reset_password(request):
 
 #nickname checker
 @api_view(["POST"])
+@permission_classes([AllowAny])  # ✅ 인증 없이 접근 허용!
 def check_nickname(request):
     nickname = request.data.get("nickname")
     if not nickname:

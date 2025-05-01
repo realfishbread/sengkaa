@@ -104,6 +104,9 @@ const NavigationBar = () => {
                     <ListItem button onClick={() => navigate('/settings')}>
                       <ListItemText primary="설정" />
                     </ListItem>
+                    <ListItem button onClick={() => navigate('/dictionary')}>
+                      <ListItemText primary="덕질 사전" />
+                    </ListItem>
                     <ListItem
                       button
                       onClick={() => {

@@ -25,6 +25,7 @@ import EditProfile from './pages/profile/EditProfile';
 import ProfilePage from './pages/profile/ProfilePage';
 import Settings from './pages/settings/Settings';
 import RegisterPlaces from './pages/venue/RegisterPlaces';
+import DictionaryList from './pages/dictionary/DictionaryList';
 import './styles/App.css';
 
 const theme = createTheme({
@@ -67,6 +68,7 @@ function AppRoutes() {
           <Route path="edit-profile" element={<EditProfile />} />
           <Route path="settings" element={<Settings />} />
           <Route path="faq" element={<FaqPage />} />
+          <Route path="dictionary" element={<DictionaryList />} />
         </Route>
       </Routes>
 

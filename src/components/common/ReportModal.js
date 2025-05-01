@@ -14,7 +14,7 @@ const ReportModal = ({ postId, onClose }) => {
 
     setIsSubmitting(true);
     try {
-      await axiosInstance.post('/user/reports/', {
+      await axiosInstance.post('/user/reports/report-post/', {
         post: postId,
         content: reportContent,
       });
