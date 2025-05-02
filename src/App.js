@@ -1,12 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
-import {
-  Route,
-  BrowserRouter as Router,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -94,7 +88,7 @@ function AppRoutes() {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-        <AppRoutes />
+      <AppRoutes />
     </ThemeProvider>
   );
 }
