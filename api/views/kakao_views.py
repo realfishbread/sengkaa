@@ -82,4 +82,4 @@ def kakao_login_callback(request):
             "profile_image": profile_image,
         })
 
-    return redirect(f"https://eventcafe.site/user/social/oauth/kakao/redirect?{query_params}")
+    return redirect(f"https://eventcafe.site/user/social/oauth/kakao/callback?{query_params}")
