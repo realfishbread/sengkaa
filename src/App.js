@@ -94,9 +94,7 @@ function AppRoutes() {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
         <AppRoutes />
-      </Router>
     </ThemeProvider>
   );
 }
