@@ -5,17 +5,20 @@ from rest_framework.fields import ImageField
 class PostSerializer(serializers.ModelSerializer):
     nickname = serializers.CharField(source='user.nickname', read_only=True)
     profile_image = serializers.ImageField(source='user.profile_image', read_only=True)
-    image = serializers.SerializerMethodField()  # ✅ 추가
+    image = serializers.ImageField(required=False)  # 저장용
+    image_url = serializers.SerializerMethodField()  # 보여줄 용
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'nickname', 'profile_image', 'title', 'content', 'image', 'created_at']
+        fields = ['id', 'user', 'nickname', 'profile_image', 'title', 'content', 'image', 'image_url', 'created_at']
         read_only_fields = ['user']
         
-    def get_image(self, obj):
+    def get_image_url(self, obj):
         request = self.context.get('request')
-        if obj.image and hasattr(obj.image, 'url'):
+        if obj.image and request:
             return request.build_absolute_uri(obj.image.url)
+        elif obj.image:
+            return obj.image.url
         return None
 
 

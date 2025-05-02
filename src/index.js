@@ -9,9 +9,11 @@ import { UserProvider } from "./context/UserContext";   // ★경로주의
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    <BrowserRouter> {/* 🔥 이게 반드시 있어야 함 */}
     <UserProvider>
     <App />
     </UserProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
