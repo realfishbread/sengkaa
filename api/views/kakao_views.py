@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import redirect
+from urllib.parse import urlencode
 
 from api.models import User
 
@@ -71,12 +73,13 @@ def kakao_login_callback(request):
     # 5. JWT 발급
     refresh = RefreshToken.for_user(user)
 
-    return Response({
-        "access": str(refresh.access_token),
-        "refresh": str(refresh),
-        "username": user.username,
-        "nickname": user.nickname,
-        "profile_image": profile_image,
-    })
-   
-    
+        # 6. 쿼리 스트링 생성 후 프론트로 리디렉션
+    query_params = urlencode({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "username": user.username,
+            "nickname": user.nickname,
+            "profile_image": profile_image,
+        })
+
+    return redirect(f"https://eventcafe.site/user/social/oauth/kakao/redirect?{query_params}")
