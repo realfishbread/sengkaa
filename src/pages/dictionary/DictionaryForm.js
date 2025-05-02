@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchDictionaryList } from '../api/dictionaryApi'; // ✅ API 분리된 파일에서 import
 import './DictionaryForm.css';
-
-const dummyWords = [
-  { id: 1, title: '뷔', summary: 'BTS의 멤버, 팬들 사이에서 독보적인 존재감으로 알려짐.' },
-  { id: 2, title: '슬로건', summary: '이벤트에서 배포되는 응원 슬로건 용품.' },
-];
 
 const DictionaryList = () => {
   const navigate = useNavigate();
+  const [words, setWords] = useState([]);
+
+  useEffect(() => {
+    const loadWords = async () => {
+      try {
+        const data = await fetchDictionaryList();
+        setWords(data);
+      } catch (error) {
+        console.error('사전 목록 불러오기 실패:', error);
+      }
+    };
+
+    loadWords();
+  }, []);
 
   return (
     <div className="dict-container">
@@ -17,7 +27,7 @@ const DictionaryList = () => {
         ➕ 새 항목 추가
       </button>
       <ul className="dict-list">
-        {dummyWords.map((word) => (
+        {words.map((word) => (
           <li key={word.id} onClick={() => navigate(`/dictionary/${word.id}`)}>
             <h3>{word.title}</h3>
             <p>{word.summary}</p>

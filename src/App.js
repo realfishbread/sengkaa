@@ -64,7 +64,7 @@ function AppRoutes() {
           <Route path="dictionary" element={<DictionaryList />} />
 
           <Route
-            path="/user/social/oauth/kakao/callback"
+            path="/oauth/kakao/redirect"
             element={<KakaoRedirectPage />}
           />
         </Route>
