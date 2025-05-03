@@ -18,6 +18,12 @@ const FlexInputButton = ({
         value={value}
         fullWidth
         InputProps={{ readOnly }}
+        sx={{
+          backgroundColor: '#fff',
+          '& .MuiOutlinedInput-root': {
+            backgroundColor: '#fff',
+          },
+        }}
       />
       <Button
         variant="outlined"
@@ -26,6 +32,14 @@ const FlexInputButton = ({
           whiteSpace: 'nowrap',
           height: '56px',
           minWidth: '80px',
+          backgroundColor: '#007aff',
+          color: '#fff', // ✅ 텍스트 색상 확실하게
+          boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)', // ✅ 그림자 추가!
+          '&:hover': {
+            backgroundColor: '#005fcc', // ✅ hover 시 색상
+            color: '#fff', // ✅ 글자색 유지
+            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)', // ✅ hover 시 더 강한 그림자
+          },
         }}
       >
         {buttonText}

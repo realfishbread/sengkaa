@@ -15,7 +15,6 @@ import TermsModal from '../../pages/auth/SignUp/policy/TermsModal';
 const Footer = () => {
   const [openTermsModal, setOpenTermsModal] = useState(false);
   const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
-  const [openFaqModal, setOpenFaqModal] = useState(false);
 
   return (
     <Box

@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ReportModal from '../../components/common/ReportModal'; // 신고 모달 컴포넌트 추가
 import { UserContext } from '../../context/UserContext';
@@ -27,10 +27,7 @@ const Board = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportPostId, setReportPostId] = useState(null);
 
-  const [editingReplyId, setEditingReplyId] = useState(null);
-  const [editedContent, setEditedContent] = useState('');
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ 추가
 
   useEffect(() => {
     if (!user) {
@@ -39,11 +36,7 @@ const Board = () => {
     }
 
     fetchPosts('all'); // ✅ 최초 로딩
-    // ✅ 등록 후 돌아왔을 때 새로고침
-    if (location.state?.refresh) {
-      fetchPosts('all');
-    }
-  }, [location.state]); // ← 여기를 감시
+  }, []);
 
   const fetchPosts = (type) => {
     setFilter(type);
@@ -321,164 +314,66 @@ const Board = () => {
                             pl: isReply ? 4 : 2,
                             py: 1,
                             px: 2,
-                            justifyContent: 'center', // ✅ 가운데 정렬
                             borderRadius: 1,
                             backgroundColor: isReply
                               ? '#f5f5f5'
                               : 'transparent',
                           }}
                         >
-                          <Box
-                            sx={{
-                              width: '100%',
-                              maxWidth: 700, // ✅ 댓글 최대 너비 제한 (선택)
-                              pl: isReply ? 4 : 2,
-                              py: 1,
-                              px: 2,
-                              borderRadius: 1,
-                              backgroundColor: isReply
-                                ? '#f5f5f5'
-                                : 'transparent',
-                            }}
-                          >
-                            <Typography variant="body2">
-                              💬{' '}
-                              <span
-                                style={{
-                                  fontWeight: 'bold',
-                                  color: '#1976d2',
-                                  cursor: 'pointer',
+                          <Typography variant="body2">
+                            💬{' '}
+                            <span
+                              style={{
+                                fontWeight: 'bold',
+                                color: '#1976d2',
+                                cursor: 'pointer',
+                              }}
+                              onClick={() =>
+                                navigate(`/profile/${reply.user.nickname}`)
+                              }
+                            >
+                              {reply.user.nickname}
+                            </span>{' '}
+                            ({new Date(reply.created_at).toLocaleString()}):{' '}
+                            {reply.content}
+                            {reply.user.nickname === user?.nickname && (
+                              
+                              <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                onClick={() => {
+                                  const newContent = prompt('댓글을 수정하세요', reply.content);
+                                  if (!newContent || newContent.trim() === '') return;
+                                  axiosInstance
+                                    .patch(`/user/posts/replies/${reply.id}/`, { content: newContent })
+                                    .then(() => {
+                                      alert('수정 완료!');
+                                      fetchReplies(post.id);
+                                    })
+                                    .catch(() => alert('수정 실패'));
                                 }}
-                                onClick={() =>
-                                  navigate(`/profile/${reply.user.nickname}`)
-                                }
                               >
-                                {reply.user.nickname}
-                              </span>{' '}
-                              ({new Date(reply.created_at).toLocaleString()}):{' '}
-                              {reply.content}
-                              {replies[post.id]?.map((reply) => {
-                                const isOwner =
-                                  user?.nickname === reply.user.nickname;
-                                const isEditing = editingReplyId === reply.id;
-
-                                return (
-                                  <Box key={reply.id} sx={{ mt: 1, pl: 2 }}>
-                                    <Typography variant="body2">
-                                      <strong>{reply.user.nickname}</strong> (
-                                      {new Date(
-                                        reply.created_at
-                                      ).toLocaleString()}
-                                      ):
-                                    </Typography>
-
-                                    {isEditing ? (
-                                      <>
-                                        <input
-                                          value={editedContent}
-                                          onChange={(e) =>
-                                            setEditedContent(e.target.value)
-                                          }
-                                          style={{
-                                            width: '100%',
-                                            padding: '8px',
-                                            marginTop: '4px',
-                                            border: '1px solid #ccc',
-                                            borderRadius: '6px',
-                                          }}
-                                        />
-                                        <Stack
-                                          direction="row"
-                                          spacing={1}
-                                          sx={{ mt: 1 }}
-                                        >
-                                          <Button
-                                            variant="contained"
-                                            size="small"
-                                            onClick={async () => {
-                                              try {
-                                                await axiosInstance.patch(
-                                                  `/user/posts/replies/${reply.id}/`,
-                                                  {
-                                                    content: editedContent,
-                                                  }
-                                                );
-                                                alert('수정 완료!');
-                                                setEditingReplyId(null);
-                                                setEditedContent('');
-                                                fetchReplies(post.id);
-                                              } catch (err) {
-                                                alert('수정 실패');
-                                                console.error(err);
-                                              }
-                                            }}
-                                          >
-                                            저장
-                                          </Button>
-                                          <Button
-                                            variant="outlined"
-                                            size="small"
-                                            onClick={() => {
-                                              setEditingReplyId(null);
-                                              setEditedContent('');
-                                            }}
-                                          >
-                                            취소
-                                          </Button>
-                                        </Stack>
-                                      </>
-                                    ) : (
-                                      <Typography
-                                        variant="body2"
-                                        sx={{ mt: 1, whiteSpace: 'pre-wrap' }}
-                                      >
-                                        {reply.content}
-                                      </Typography>
-                                    )}
-
-                                    {isOwner && !isEditing && (
-                                      <Box sx={{ textAlign: 'right', mt: 1 }}>
-                                        <Button
-                                          size="small"
-                                          variant="outlined"
-                                          onClick={() => {
-                                            setEditingReplyId(reply.id);
-                                            setEditedContent(reply.content);
-                                          }}
-                                          sx={{ mr: 1 }}
-                                        >
-                                          수정
-                                        </Button>
-                                        <Button
-                                          size="small"
-                                          variant="outlined"
-                                          color="error"
-                                          onClick={async () => {
-                                            if (
-                                              window.confirm('정말 삭제할까요?')
-                                            ) {
-                                              try {
-                                                await axiosInstance.delete(
-                                                  `/user/posts/replies/${reply.id}/`
-                                                );
-                                                alert('삭제 완료!');
-                                                fetchReplies(post.id);
-                                              } catch (err) {
-                                                alert('삭제 실패');
-                                                console.error(err);
-                                              }
-                                            }
-                                          }}
-                                        >
-                                          삭제
-                                        </Button>
-                                      </Box>
-                                    )}
-                                  </Box>
-                                );
-                              })}
-                            </Typography>
-                          </Box>
+                                수정
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                color="error"
+                                onClick={() => {
+                                  if (window.confirm('댓글을 삭제하시겠습니까?')) {
+                                    axiosInstance
+                                      .delete(`/user/posts/replies/${reply.id}/`)
+                                      .then(() => fetchReplies(post.id))
+                                      .catch(() => alert('삭제 실패'));
+                                  }
+                                }}
+                              >
+                                삭제
+                              </Button>
+                              </Box>
+                            )}
+                          </Typography>
                         </Box>
                       );
                     })

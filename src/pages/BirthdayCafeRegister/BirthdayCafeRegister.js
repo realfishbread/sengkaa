@@ -41,6 +41,15 @@ const BirthdayCafeRegister = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  const [goodsList, setGoodsList] = useState([
+    {
+      name: '',
+      description: '',
+      price: '',
+      image: null,
+    },
+  ]);
+
   useEffect(() => {
     fetch(`/data/${genre}.json`)
       .then((res) => res.json())
@@ -81,6 +90,19 @@ const BirthdayCafeRegister = () => {
     alert('이벤트가 등록되었습니다!');
   };
 
+  const addGoods = () => {
+    setGoodsList([
+      ...goodsList,
+      { name: '', description: '', price: '', image: null },
+    ]);
+  };
+
+  const removeGoods = (index) => {
+    const updated = [...goodsList];
+    updated.splice(index, 1);
+    setGoodsList(updated);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={boxStyle}>
@@ -96,10 +118,9 @@ const BirthdayCafeRegister = () => {
           <Divider sx={{ my: 4 }}>기본 정보</Divider>
           <Box
             sx={{
-              border: '1px solid #e0e0e0',
               borderRadius: '12px',
               padding: '24px',
-              backgroundColor: '#fdfdfd',
+              backgroundColor: '#e9ecef',
             }}
           >
             <CustomTextField
@@ -115,12 +136,24 @@ const BirthdayCafeRegister = () => {
                 value={startDate}
                 onChange={(newValue) => setStartDate(newValue)}
                 renderInput={(params) => <TextField fullWidth {...params} />}
+                sx={{
+                  backgroundColor: '#fff',
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff',
+                  },
+                }}
               />
               <DatePicker
                 label="종료일"
                 value={endDate}
                 onChange={(newValue) => setEndDate(newValue)}
                 renderInput={(params) => <TextField fullWidth {...params} />}
+                sx={{
+                  backgroundColor: '#fff',
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff',
+                  },
+                }}
               />
             </Box>
           </Box>
@@ -129,10 +162,9 @@ const BirthdayCafeRegister = () => {
 
           <Box
             sx={{
-              border: '1px solid #e0e0e0',
               borderRadius: '12px',
               padding: '24px',
-              backgroundColor: '#fdfdfd',
+              backgroundColor: '#e9ecef',
             }}
           >
             <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
@@ -169,6 +201,12 @@ const BirthdayCafeRegister = () => {
                   label={`${genre} 검색`}
                   margin="normal"
                   fullWidth
+                  sx={{
+                    backgroundColor: '#fff',
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#fff',
+                    },
+                  }}
                 />
               )}
             />
@@ -199,10 +237,10 @@ const BirthdayCafeRegister = () => {
 
           <Box
             sx={{
-              border: '1px solid #e0e0e0',
               borderRadius: '12px',
               padding: '24px',
-              backgroundColor: '#fdfdfd',
+              backgroundColor: '#e9ecef',
+              
             }}
           >
             <FlexInputButton
@@ -211,6 +249,7 @@ const BirthdayCafeRegister = () => {
               buttonText="주소 찾기"
               onButtonClick={openPostcode}
               readOnly={true}
+              
             />
 
             <CustomTextField
@@ -223,47 +262,93 @@ const BirthdayCafeRegister = () => {
 
           <Divider sx={{ my: 4 }}>굿즈 정보</Divider>
 
-          <Box
-            sx={{
-              border: '1px solid #e0e0e0',
-              borderRadius: '12px',
-              padding: '24px',
-              backgroundColor: '#fdfdfd',
-            }}
-          >
-            <CustomTextField
-              label="굿즈 이름"
-              value={goodsName}
-              onChange={(e) => setGoodsName(e.target.value)}
-            />
+          {goodsList.map((goods, index) => (
+            <Box
+              key={index}
+              sx={{
+                borderRadius: '12px',
+                padding: '24px',
+                backgroundColor: '#e9ecef',
+              }}
+            >
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                굿즈 {index + 1}
+              </Typography>
 
-            <CustomTextField
-              label="굿즈 설명"
-              value={goodsDescription}
-              onChange={(e) => setGoodsDescription(e.target.value)}
-              multiline
-              rows={3}
-            />
+              <CustomTextField
+                label="굿즈 이름"
+                value={goods.name}
+                onChange={(e) => {
+                  const updated = [...goodsList];
+                  updated[index].name = e.target.value;
+                  setGoodsList(updated);
+                }}
+              />
 
-            <ImageUploader onUpload={(e) => setGoodsImage(e.target.files[0])} />
-            <NoticeText text="* 굿즈 이미지(jpg, png) 업로드" />
+              <CustomTextField
+                label="굿즈 설명"
+                value={goods.description}
+                onChange={(e) => {
+                  const updated = [...goodsList];
+                  updated[index].description = e.target.value;
+                  setGoodsList(updated);
+                }}
+                multiline
+                rows={3}
+              />
 
-            <CustomTextField
-              label="가격 (원)"
-              type="number"
-              value={goodsPrice}
-              onChange={(e) => setGoodsPrice(e.target.value)}
-            />
+              <ImageUploader
+                onUpload={(e) => {
+                  const updated = [...goodsList];
+                  updated[index].image = e.target.files[0];
+                  setGoodsList(updated);
+                }}
+              />
+              <NoticeText text="* 굿즈 이미지(jpg, png) 업로드" />
+
+              <CustomTextField
+                label="가격 (원)"
+                type="number"
+                value={goods.price}
+                onChange={(e) => {
+                  const updated = [...goodsList];
+                  updated[index].price = e.target.value;
+                  setGoodsList(updated);
+                }}
+              />
+
+              <Box sx={{ textAlign: 'right', mt: 2 }}>
+                <Button
+                  onClick={() => removeGoods(index)}
+                  color="error"
+                  variant="text"
+                  size="small"
+                >
+                  삭제
+                </Button>
+              </Box>
+            </Box>
+          ))}
+          <Box sx={{ textAlign: 'center', mt: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={addGoods}
+              sx={{
+                borderRadius: '8px',
+                padding: '10px 24px',
+                fontWeight: 600,
+              }}
+            >
+              + 굿즈 추가하기
+            </Button>
           </Box>
-
           <Divider sx={{ my: 4 }}>카페 진행 설명</Divider>
 
           <Box
             sx={{
-              border: '1px solid #e0e0e0',
               borderRadius: '12px',
               padding: '24px',
-              backgroundColor: '#fdfdfd',
+              backgroundColor: '#e9ecef',
             }}
           >
             <CustomTextField

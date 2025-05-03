@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import AgePolicyModal from './policy/AgePoilcyModal';
 import PrivacyPolicyModal from './policy/PrivacyPolicyModal';
 import TermsModal from './policy/TermsModal';
+import './Signup.css';
 
 const SignupPage = () => {
   const [username, setUsername] = useState(''); // 🔹 추가 (이름 필드)
@@ -189,6 +190,7 @@ const SignupPage = () => {
     setAgreeTerms(checked);
     setAgreePrivacy(checked);
     setAgreeMarketing(checked);
+    setAgree14(checked);
   };
 
   return (
@@ -245,12 +247,16 @@ const SignupPage = () => {
             gap: 1.5,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography
-              sx={{ minWidth: '70px', fontWeight: 'bold', textAlign: 'center' }}
-            >
-              이름
-            </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              textAlign: 'center',
+            }}
+          >
+            <Typography className="signup-label">이름</Typography>
+
             <CustomTextField
               label="실명을 적어주세요."
               type="text"
@@ -272,9 +278,8 @@ const SignupPage = () => {
               textAlign: 'center',
             }}
           >
-            <Typography sx={{ minWidth: '70px', fontWeight: 'bold' }}>
-              닉네임
-            </Typography>
+            <Typography className="signup-label">닉네임</Typography>
+
             <CustomTextField
               label="닉네임은 2글자 이상, 특수문자 불가합니다."
               type="text"
@@ -293,13 +298,7 @@ const SignupPage = () => {
             <Button
               variant="contained"
               onClick={handleCheckNickname}
-              sx={{
-                whiteSpace: 'nowrap', // ✅ 버튼 안 텍스트 줄바꿈 방지
-                fontSize: '0.8rem',
-                borderRadius: '6px',
-                boxShadow: 'none',
-                backgroundColor: '#007AFF',
-              }}
+              className="signup-button"
             >
               중복 확인
             </Button>
@@ -327,9 +326,7 @@ const SignupPage = () => {
               textAlign: 'center',
             }}
           >
-            <Typography sx={{ minWidth: '70px', fontWeight: 'bold' }}>
-              이메일
-            </Typography>
+            <Typography className="signup-label">이메일</Typography>
             <CustomTextField
               label="example@example.com"
               type="email"
@@ -409,12 +406,15 @@ const SignupPage = () => {
               <MenuItem value="organizer">주최측</MenuItem>
             </Select>
           </FormControl>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography
-              sx={{ minWidth: '70px', fontWeight: 'bold', textAlign: 'center' }}
-            >
-              비밀번호
-            </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              textAlign: 'center',
+            }}
+          >
+            <Typography className="signup-label">비밀번호</Typography>
             <CustomTextField
               label="특수문자, 숫자, 영문 대소문자를 포함하여 8자 이상이어야 합니다."
               type={showPassword ? 'text' : 'password'}
@@ -429,16 +429,7 @@ const SignupPage = () => {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography
-              sx={{
-                minWidth: '70px',
-                fontWeight: 'bold',
-                whiteSpace: 'nowrap',
-                textAlign: 'center',
-              }}
-            >
-              비밀번호 확인
-            </Typography>
+            <Typography className="signup-label">비밀번호 확인</Typography>
             <CustomTextField
               label="비밀번호를 한번 더 입력해주세요."
               type={showPassword ? 'text' : 'password'}
@@ -472,7 +463,6 @@ const SignupPage = () => {
 
             <Box
               sx={{
-          
                 display: 'flex',
                 flexDirection: 'column',
                 ml: 3,
@@ -480,72 +470,81 @@ const SignupPage = () => {
                 mb: 2,
               }}
             >
-              <label>
-                <input
-                  type="checkbox"
-                  checked={agreeAll}
-                  onChange={handleAllAgreeChange}
-                />{' '}
-                <strong>[전체 동의]</strong> 모든 항목에 동의합니다.
+              <label className="checkbox-main">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={agreeAll}
+                    onChange={handleAllAgreeChange}
+                  />{' '}
+                  <strong>[전체 동의]</strong> 모든 항목에 동의합니다.
+                </label>
               </label>
 
-              <label>
-                <input
-                  type="checkbox"
-                  checked={agreeTerms}
-                  onChange={(e) => setAgreeTerms(e.target.checked)}
-                  required
-                />{' '}
-                [필수] 이용약관 동의
-                <Button variant="text" onClick={() => setOpenTermsModal(true)}>
-                  약관 보기
-                </Button>
-                <TermsModal
-                  open={openTermsModal}
-                  onClose={() => setOpenTermsModal(false)}
-                />{' '}
-              </label>
+              <div className="checkbox-sub-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={agreeTerms}
+                    onChange={(e) => setAgreeTerms(e.target.checked)}
+                    required
+                  />{' '}
+                  [필수] 이용약관 동의
+                  <Button
+                    variant="text"
+                    onClick={() => setOpenTermsModal(true)}
+                  >
+                    약관 보기
+                  </Button>
+                  <TermsModal
+                    open={openTermsModal}
+                    onClose={() => setOpenTermsModal(false)}
+                  />{' '}
+                </label>
 
-              <label>
-                <input
-                  type="checkbox"
-                  checked={agreePrivacy}
-                  onChange={(e) => setAgreePrivacy(e.target.checked)}
-                  required
-                />{' '}
-                [필수] 개인정보 수집 및 이용 동의
-                <Button onClick={() => setOpenPrivacyModal(true)}>
-                  약관 보기
-                </Button>
-                <PrivacyPolicyModal
-                  open={openPrivacyModal}
-                  onClose={() => setOpenPrivacyModal(false)}
-                />
-              </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={agreePrivacy}
+                    onChange={(e) => setAgreePrivacy(e.target.checked)}
+                    required
+                  />{' '}
+                  [필수] 개인정보 수집 및 이용 동의
+                  <Button onClick={() => setOpenPrivacyModal(true)}>
+                    약관 보기
+                  </Button>
+                  <PrivacyPolicyModal
+                    open={openPrivacyModal}
+                    onClose={() => setOpenPrivacyModal(false)}
+                  />
+                </label>
 
-              <label>
-                <input
-                  type="checkbox"
-                  checked={agree14}
-                  onChange={(e) => setAgree14(e.target.checked)}
-                  required
-                />{' '}
-                [필수] 14세 이상 동의
-                <Button onClick={() => setOpenAgeModal(true)}>약관 보기</Button>
-                <AgePolicyModal
-                  open={openAgeModal}
-                  onClose={() => setOpenAgeModal(false)}
-                />
-              </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={agree14}
+                    onChange={(e) => setAgree14(e.target.checked)}
+                    required
+                  />{' '}
+                  [필수] 14세 이상 동의
+                  <Button onClick={() => setOpenAgeModal(true)}>
+                    약관 보기
+                  </Button>
+                  <AgePolicyModal
+                    open={openAgeModal}
+                    onClose={() => setOpenAgeModal(false)}
+                  />
+                </label>
 
-              <label>
-                <input
-                  type="checkbox"
-                  checked={agreeMarketing}
-                  onChange={(e) => setAgreeMarketing(e.target.checked)}
-                />{' '}
-                [선택] 마케팅 정보 수신 동의
-              </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={agreeMarketing}
+                    onChange={(e) => setAgreeMarketing(e.target.checked)}
+                  />{' '}
+                  [선택] 마케팅 정보 수신 동의
+                </label>
+              </div>
             </Box>
           </Box>
 
