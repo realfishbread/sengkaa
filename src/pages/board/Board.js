@@ -230,7 +230,7 @@ const Board = () => {
               {post.image && (
                 <Box mt={2}>
                   <img
-                    src={`https://eventcafe.site/media/post_images/${post.image}`}
+                    src={`${post.image}`}
                     alt="썸네일"
                     style={{
                       width: '100%',
