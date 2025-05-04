@@ -19,6 +19,8 @@ import {
   buttonStyle,
   titleStyle,
 } from '../../components/common/Styles';
+import axiosInstance from '../../shared/api/axiosInstance';
+import { Navigate } from 'react-router-dom';
 
 const BirthdayCafeRegister = () => {
   const [cafeName, setCafeName] = useState('');
@@ -32,11 +34,6 @@ const BirthdayCafeRegister = () => {
 
   const [roadAddress, setRoadAddress] = useState(''); // 도로명주소
   const [detailAddress, setDetailAddress] = useState(''); // 상세주소
-
-  const [goodsName, setGoodsName] = useState('');
-  const [goodsDescription, setGoodsDescription] = useState('');
-  const [goodsImage, setGoodsImage] = useState(null);
-  const [goodsPrice, setGoodsPrice] = useState('');
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -62,6 +59,9 @@ const BirthdayCafeRegister = () => {
       });
   }, [genre]);
 
+
+  
+
   const filter = createFilterOptions({
     stringify: (option) =>
       [
@@ -85,10 +85,51 @@ const BirthdayCafeRegister = () => {
     setImage(event.target.files[0]);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert('이벤트가 등록되었습니다!');
+  
+    const formData = new FormData();
+    formData.append('cafe_name', cafeName);
+    formData.append('description', description);
+    formData.append('road_address', roadAddress);
+    formData.append('detail_address', detailAddress);
+    formData.append('start_date', startDate?.toISOString().slice(0, 10));
+    formData.append('end_date', endDate?.toISOString().slice(0, 10));
+    formData.append('genre', genre);
+    formData.append('star', selectedStar?.name || '');
+  
+    if (image) {
+      formData.append('main_image', image); // 너가 쓰는 키에 맞게 수정
+    }
+  
+    goodsList.forEach((goods, index) => {
+      formData.append(`goods[${index}][name]`, goods.name);
+      formData.append(`goods[${index}][description]`, goods.description);
+      formData.append(`goods[${index}][price]`, goods.price);
+      if (goods.image) {
+        formData.append(`goods[${index}][image]`, goods.image);
+      }
+    });
+  
+    try {
+      const response = await axiosInstance.post(
+        '/user/events/create/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+  
+      alert('이벤트가 등록되었습니다!');
+      Navigate('/'); // 등록 후 홈으로 이동
+    } catch (err) {
+      console.error('등록 실패 ❌', err);
+      alert('등록에 실패했습니다.');
+    }
   };
+  
 
   const addGoods = () => {
     setGoodsList([

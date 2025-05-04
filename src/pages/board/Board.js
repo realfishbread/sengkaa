@@ -230,9 +230,16 @@ const Board = () => {
               {post.image && (
                 <Box mt={2}>
                   <img
-                    src={post.image}
+                    src={`https://eventcafe.site/media/post_images/${post.image}`}
                     alt="썸네일"
-                    style={{ width: '100%', borderRadius: 8 }}
+                    style={{
+                      width: '100%',
+                      borderRadius: 8,
+                      maxWidth: '500px', // 💡 너무 크지 않게 조절
+                      maxHeight: '700px',
+                      objectPosition: 'center',
+                      objectFit: 'cover', // ✨ 이미지가 비율 유지하면서 잘려도 예쁘게
+                    }}
                   />
                 </Box>
               )}
@@ -337,40 +344,50 @@ const Board = () => {
                             ({new Date(reply.created_at).toLocaleString()}):{' '}
                             {reply.content}
                             {reply.user.nickname === user?.nickname && (
-                              
                               <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
-                              <Button
-                                variant="outlined"
-                                size="small"
-                                onClick={() => {
-                                  const newContent = prompt('댓글을 수정하세요', reply.content);
-                                  if (!newContent || newContent.trim() === '') return;
-                                  axiosInstance
-                                    .patch(`/user/posts/replies/${reply.id}/`, { content: newContent })
-                                    .then(() => {
-                                      alert('수정 완료!');
-                                      fetchReplies(post.id);
-                                    })
-                                    .catch(() => alert('수정 실패'));
-                                }}
-                              >
-                                수정
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                size="small"
-                                color="error"
-                                onClick={() => {
-                                  if (window.confirm('댓글을 삭제하시겠습니까?')) {
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() => {
+                                    const newContent = prompt(
+                                      '댓글을 수정하세요',
+                                      reply.content
+                                    );
+                                    if (!newContent || newContent.trim() === '')
+                                      return;
                                     axiosInstance
-                                      .delete(`/user/posts/replies/${reply.id}/`)
-                                      .then(() => fetchReplies(post.id))
-                                      .catch(() => alert('삭제 실패'));
-                                  }
-                                }}
-                              >
-                                삭제
-                              </Button>
+                                      .patch(
+                                        `/user/posts/replies/${reply.id}/`,
+                                        { content: newContent }
+                                      )
+                                      .then(() => {
+                                        alert('수정 완료!');
+                                        fetchReplies(post.id);
+                                      })
+                                      .catch(() => alert('수정 실패'));
+                                  }}
+                                >
+                                  수정
+                                </Button>
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  color="error"
+                                  onClick={() => {
+                                    if (
+                                      window.confirm('댓글을 삭제하시겠습니까?')
+                                    ) {
+                                      axiosInstance
+                                        .delete(
+                                          `/user/posts/replies/${reply.id}/`
+                                        )
+                                        .then(() => fetchReplies(post.id))
+                                        .catch(() => alert('삭제 실패'));
+                                    }
+                                  }}
+                                >
+                                  삭제
+                                </Button>
                               </Box>
                             )}
                           </Typography>
@@ -407,7 +424,7 @@ const Board = () => {
                     </Stack>
                   </Box>
                 </>
-              )}
+              )} 
             </Paper>
           </CSSTransition>
         ))}
