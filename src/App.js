@@ -14,12 +14,14 @@ import Post from './pages/board/Post';
 import EventCalendar from './pages/calender/EventCalendar';
 import DictionaryList from './pages/dictionary/DictionaryList';
 import FaqPage from './pages/Faq/FaqPage';
+import VenueSearch from './pages/FindCafes/VenueSearch';
 import Home from './pages/Home';
 import KakaoMap from './pages/Map/KakaoMap';
 import EditProfile from './pages/profile/EditProfile';
 import ProfilePage from './pages/profile/ProfilePage';
 import Settings from './pages/settings/Settings';
-import RegisterPlaces from './pages/venue/RegisterPlaces';
+import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
+import SearchPlaces from './pages/venue/SearchPlaces';
 import './styles/App.css';
 
 const theme = createTheme({
@@ -62,11 +64,10 @@ function AppRoutes() {
           <Route path="settings" element={<Settings />} />
           <Route path="faq" element={<FaqPage />} />
           <Route path="dictionary" element={<DictionaryList />} />
+          <Route path="search" element={<SearchPlaces />} />
+          <Route path="venue-search" element={<VenueSearch />} />
 
-          <Route
-            path="/oauth/kakao/redirect"
-            element={<KakaoRedirectPage />}
-          />
+          <Route path="/oauth/kakao/redirect" element={<KakaoRedirectPage />} />
         </Route>
       </Routes>
 

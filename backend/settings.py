@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,6 +35,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["eventcafe.site", "www.eventcafe.site", "127.0.0.1", "localhost"]
 
+
+STATIC_URL = '/static/'
+
+# 프로젝트 루트 기준 경로
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 
 # Application definition
@@ -129,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
 STATIC_ROOT = "/var/www/eventcafe-backend/static/"
 

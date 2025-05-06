@@ -341,15 +341,7 @@ const SignupPage = () => {
             <Button
               variant="contained"
               onClick={handleSendVerification}
-              sx={{
-                fontSize: '0.8rem',
-                borderRadius: '6px',
-                boxShadow: 'none',
-                backgroundColor: '#007AFF',
-                '&:hover': {
-                  backgroundColor: '#0066CC',
-                },
-              }}
+              className="signup-button"
             >
               인증
             </Button>

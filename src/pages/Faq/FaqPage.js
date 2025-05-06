@@ -57,7 +57,7 @@ const FaqPage = () => {
           {['전체', '예약', '굿즈 등록', '결제', '기타'].map((cat) => (
             <Typography
               key={cat}
-              variant="body2"
+              variant={cat === '전체' ? 'h6' : 'body2'}
               onClick={() => setSelectedCategory(cat)}
               sx={{
                 cursor: 'pointer',

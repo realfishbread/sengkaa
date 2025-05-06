@@ -108,14 +108,19 @@ class Follow(models.Model):
     
     
 
+
+
 class Star(models.Model):
     name = models.CharField(max_length=100)
-    genre = models.CharField(max_length=50)
-    display = models.CharField(max_length=100)  # 예: "뷔 (BTS)"
-    image = models.ImageField(upload_to='stars/', null=True, blank=True)
+    group = models.CharField(max_length=100, blank=True)
+    display = models.CharField(max_length=200)
+    keywords = models.JSONField(default=list)  # Django 3.1 이상
+    image = models.URLField(blank=True, null=True)
+    birthday = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.display
+
 
 
 class BirthdayCafe(models.Model):
@@ -153,3 +158,5 @@ class Report(models.Model):
 
     def __str__(self):
         return f"{self.reporter} → {self.post} ({self.created_at.date()})"
+    
+    

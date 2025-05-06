@@ -10,6 +10,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import CustomTextField from '../../components/common/CustomTextField';
 import FlexInputButton from '../../components/common/FlexInputButton';
 import ImageUploader from '../../components/common/ImageUploader';
@@ -17,10 +18,10 @@ import NoticeText from '../../components/common/NoticeText';
 import {
   boxStyle,
   buttonStyle,
+  registerBox,
   titleStyle,
 } from '../../components/common/Styles';
 import axiosInstance from '../../shared/api/axiosInstance';
-import { Navigate } from 'react-router-dom';
 
 const BirthdayCafeRegister = () => {
   const [cafeName, setCafeName] = useState('');
@@ -59,9 +60,6 @@ const BirthdayCafeRegister = () => {
       });
   }, [genre]);
 
-
-  
-
   const filter = createFilterOptions({
     stringify: (option) =>
       [
@@ -87,7 +85,7 @@ const BirthdayCafeRegister = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const formData = new FormData();
     formData.append('cafe_name', cafeName);
     formData.append('description', description);
@@ -97,11 +95,11 @@ const BirthdayCafeRegister = () => {
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
     formData.append('genre', genre);
     formData.append('star', selectedStar?.name || '');
-  
+
     if (image) {
       formData.append('main_image', image); // 너가 쓰는 키에 맞게 수정
     }
-  
+
     goodsList.forEach((goods, index) => {
       formData.append(`goods[${index}][name]`, goods.name);
       formData.append(`goods[${index}][description]`, goods.description);
@@ -110,7 +108,7 @@ const BirthdayCafeRegister = () => {
         formData.append(`goods[${index}][image]`, goods.image);
       }
     });
-  
+
     try {
       const response = await axiosInstance.post(
         '/user/events/create/',
@@ -121,7 +119,7 @@ const BirthdayCafeRegister = () => {
           },
         }
       );
-  
+
       alert('이벤트가 등록되었습니다!');
       Navigate('/'); // 등록 후 홈으로 이동
     } catch (err) {
@@ -129,7 +127,6 @@ const BirthdayCafeRegister = () => {
       alert('등록에 실패했습니다.');
     }
   };
-  
 
   const addGoods = () => {
     setGoodsList([
@@ -157,13 +154,7 @@ const BirthdayCafeRegister = () => {
           }}
         >
           <Divider sx={{ my: 4 }}>기본 정보</Divider>
-          <Box
-            sx={{
-              borderRadius: '12px',
-              padding: '24px',
-              backgroundColor: '#e9ecef',
-            }}
-          >
+          <Box sx={registerBox}>
             <CustomTextField
               label="이벤트 이름"
               value={cafeName}
@@ -201,13 +192,7 @@ const BirthdayCafeRegister = () => {
 
           <Divider sx={{ my: 4 }}>장르 및 대상 선택</Divider>
 
-          <Box
-            sx={{
-              borderRadius: '12px',
-              padding: '24px',
-              backgroundColor: '#e9ecef',
-            }}
-          >
+          <Box sx={registerBox}>
             <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
               {['idol', 'youtuber', 'comic', 'webtoon', 'game'].map((g) => (
                 <Button
@@ -276,21 +261,14 @@ const BirthdayCafeRegister = () => {
 
           <Divider sx={{ my: 4 }}>주소 입력</Divider>
 
-          <Box
-            sx={{
-              borderRadius: '12px',
-              padding: '24px',
-              backgroundColor: '#e9ecef',
-              
-            }}
-          >
+          <Box sx={registerBox}>
             <FlexInputButton
               label="도로명 주소"
               value={roadAddress}
               buttonText="주소 찾기"
               onButtonClick={openPostcode}
-              readOnly={true}
               
+              readOnly={true}
             />
 
             <CustomTextField
@@ -304,14 +282,7 @@ const BirthdayCafeRegister = () => {
           <Divider sx={{ my: 4 }}>굿즈 정보</Divider>
 
           {goodsList.map((goods, index) => (
-            <Box
-              key={index}
-              sx={{
-                borderRadius: '12px',
-                padding: '24px',
-                backgroundColor: '#e9ecef',
-              }}
-            >
+            <Box key={index} sx={registerBox}>
               <Typography variant="h6" sx={{ mb: 2 }}>
                 굿즈 {index + 1}
               </Typography>
@@ -385,13 +356,7 @@ const BirthdayCafeRegister = () => {
           </Box>
           <Divider sx={{ my: 4 }}>카페 진행 설명</Divider>
 
-          <Box
-            sx={{
-              borderRadius: '12px',
-              padding: '24px',
-              backgroundColor: '#e9ecef',
-            }}
-          >
+          <Box sx={registerBox}>
             <CustomTextField
               label="설명"
               value={description}

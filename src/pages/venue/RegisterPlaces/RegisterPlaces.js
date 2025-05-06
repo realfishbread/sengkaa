@@ -1,20 +1,21 @@
 import {
   Box,
   Button,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import CustomTextField from '../../components/common/CustomTextField';
-import ImageUploader from '../../components/common/ImageUploader';
-import NoticeText from '../../components/common/NoticeText';
+import CustomTextField from '../../../components/common/CustomTextField';
+import ImageUploader from '../../../components/common/ImageUploader';
+import NoticeText from '../../../components/common/NoticeText';
 import {
   boxStyle,
   buttonStyle,
+  registerBox,
   titleStyle,
-} from '../../components/common/Styles';
+} from '../../../components/common/Styles';
+import FlexInputButton from '../../../components/common/FlexInputButton';
 
 const VenueRegister = () => {
   const [venueName, setVenueName] = useState('');
@@ -57,14 +58,7 @@ const VenueRegister = () => {
       <Box sx={{ marginBottom: '60px' }} />
 
       <form onSubmit={handleSubmit}>
-        <Box
-          sx={{
-            border: '1px solid #e0e0e0',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fdfdfd',
-          }}
-        >
+        <Box sx={registerBox}>
           {/* ✅ 장소명 입력 */}
           <CustomTextField
             label="장소명"
@@ -75,39 +69,26 @@ const VenueRegister = () => {
 
           {/* ✅ 주소 입력 & 검색 버튼 */}
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
-            <TextField
+          
+            <FlexInputButton
               label="도로명 주소"
               value={roadAddress}
-              fullWidth
-              InputProps={{ readOnly: true }}
+              buttonText="주소 찾기"
+              onButtonClick={openPostcode}
+              readOnly={true}
             />
-            <Button
-              variant="outlined"
-              onClick={openPostcode}
-              sx={{ whiteSpace: 'nowrap', height: '56px' }} // 버튼 높이 맞춤
-            >
-              주소 찾기
-            </Button>
-          </Box>
 
-          <CustomTextField
-            label="상세 주소"
-            value={detailAddress}
-            onChange={(e) => setDetailAddress(e.target.value)}
-            required
-          />
-        </Box>
+            <CustomTextField
+              label="상세 주소"
+              value={detailAddress}
+              onChange={(e) => setDetailAddress(e.target.value)}
+              required
+            />
+          </Box>
+       
 
         <Box sx={{ marginBottom: '60px' }} />
-        <Box
-          sx={{
-            border: '1px solid #e0e0e0',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fdfdfd',
-          }}
-        >
+        <Box sx={registerBox}>
           <Typography variant="subtitle1" fontWeight="bold">
             장소의 타입을 선택해 주세요 (필수)
           </Typography>
@@ -131,14 +112,7 @@ const VenueRegister = () => {
         </Box>
 
         <Box sx={{ marginBottom: '60px' }} />
-        <Box
-          sx={{
-            border: '1px solid #e0e0e0',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fdfdfd',
-          }}
-        >
+        <Box sx={registerBox}>
           {/* ✅ 가게 메인 이미지 업로드 */}
           <Typography variant="subtitle1" fontWeight="bold">
             가게 메인 이미지 (필수)
@@ -160,14 +134,7 @@ const VenueRegister = () => {
         <Box sx={{ marginBottom: '60px' }} />
 
         {/* ✅ 대관료 & 예약금 입력 */}
-        <Box
-          sx={{
-            border: '1px solid #e0e0e0',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fdfdfd',
-          }}
-        >
+        <Box sx={registerBox}>
           <Box sx={{ display: 'flex', gap: '10px' }}>
             <CustomTextField
               label="대관료 (₩)"
@@ -204,14 +171,7 @@ const VenueRegister = () => {
         <Box sx={{ marginBottom: '60px' }} />
 
         {/* ✅ 특전 이미지 업로드 */}
-        <Box
-          sx={{
-            border: '1px solid #e0e0e0',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fdfdfd',
-          }}
-        >
+        <Box sx={registerBox}>
           <Typography variant="subtitle1" fontWeight="bold">
             특전 배치 혹은 예시 이미지
           </Typography>
@@ -242,10 +202,7 @@ const VenueRegister = () => {
 
         <Box
           sx={{
-            border: '1px solid #e0e0e0',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fdfdfd',
+            registerBox,
             display: 'flex',
             flexDirection: 'column',
             gap: 2, // 요소 간 간격

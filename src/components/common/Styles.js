@@ -38,3 +38,9 @@ export const toggleButtonGroupStyle = {
   gap: '10px',
   marginBottom: '10px',
 };
+
+export const registerBox = {
+  borderRadius: '12px',
+  padding: '24px',
+  backgroundColor: '#e9ecef',
+};
