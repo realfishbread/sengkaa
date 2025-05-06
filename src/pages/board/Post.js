@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import WarningBox from '../../components/common/WarningBox';
 import { UserContext } from '../../context/UserContext'; // ✅ 경로는 실제 프로젝트 구조에 맞게 조정
 import { CreatePost } from './api/CreatePost';
 
@@ -34,10 +35,6 @@ const defaultTemplate = `[팬이벤트 공동 주최자 모집 내용 예시]
           : (이메일, 카카오 오픈채팅방, 구글폼 등)
 
 
-
-          **[주의사항]**
-          운영비는 장소 대관, 장식, 굿즈 제작 등 실비로만 분담해야 합니다.
-          모든 활동은 비영리 팬 활동이어야 하며, 수익 목적이 있을 시 관리자 제재대상이 될 수 있습니다.
           `;
 
 const Post = ({ onSubmitPost, onRefresh }) => {
@@ -152,13 +149,12 @@ const Post = ({ onSubmitPost, onRefresh }) => {
           
           공동주최에 지원할 수 있는 방법을 남겨주세요. (이메일, 카카오 오픈채팅방, 구글폼 등) :
 
-          [주의사항]
-          참가비는 장소 대관, 장식, 굿즈 제작 등 실비로만 분담해야 합니다.
-          모든 활동은 비영리 팬 활동이어야 하며, 수익 목적이 있을시 관리자 제재대상이 될 수 있습니다.
           `}
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
+
+      <WarningBox />
 
       {image && (
         <Box mt={2} sx={{ textAlign: 'center' }}>

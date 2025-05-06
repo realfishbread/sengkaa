@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 
@@ -6,9 +6,22 @@ export default function EditProfile() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
+  const [previewImage, setPreviewImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
   const { user, setUser } = useContext(UserContext); // ✅ 로그인된 유저
+
+  // ✅ 유저 정보가 들어오면 state에 반영
+  useEffect(() => {
+    if (user) {
+      if (user?.profile_image) {
+        setPreviewImage(user.profile_image); // URL로 설정
+      }
+      setNickname(user.nickname || '');
+      setEmail(user.email || '');
+      setBio(user.bio || '');
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +48,7 @@ export default function EditProfile() {
       // 수정 성공하면 UserContext 업데이트
       setUser(response.data);
 
-      alert('변경사항이 저장되었습니다');
+      alert('변경사항이 저장되었습니다!');
     } catch (error) {
       console.error(error);
       alert('저장 실패, 다시 시도해주세요.');
@@ -49,9 +62,9 @@ export default function EditProfile() {
 
         {/* 프로필 사진 */}
         <div style={styles.imageContainer}>
-          {profileImage ? (
+          {previewImage ? (
             <img
-              src={URL.createObjectURL(profileImage)}
+              src={previewImage}
               alt="Profile Preview"
               style={styles.profileImage}
             />
@@ -61,7 +74,11 @@ export default function EditProfile() {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setProfileImage(e.target.files[0])}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              setProfileImage(file);
+              setPreviewImage(URL.createObjectURL(file));
+            }}
             style={{ marginTop: '10px' }}
           />
         </div>

@@ -13,6 +13,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ReportModal from '../../components/common/ReportModal'; // 신고 모달 컴포넌트 추가
+import WarningBox from '../../components/common/WarningBox';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import '../../styles/fade.css'; // ✅ 만든 fade.css 경로에 맞게 import
@@ -27,6 +28,9 @@ const Board = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportPostId, setReportPostId] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,16 +42,21 @@ const Board = () => {
     fetchPosts('all'); // ✅ 최초 로딩
   }, []);
 
-  const fetchPosts = (type) => {
+  const fetchPosts = (type, page = 1) => {
     setFilter(type);
+    setCurrentPage(page);
 
     let url = '/user/posts/';
     if (type === 'open') url = '/user/posts/open/';
     else if (type === 'closed') url = '/user/posts/closed/';
 
     axiosInstance
-      .get(url)
-      .then((res) => setPosts(res.data))
+      .get(url, { params: { page } }) // ✅ 쿼리로 페이지 넘기기
+      .then((res) => {
+        setPosts(res.data.results); // ✅ 페이지네이션 응답일 때는 .results
+        const total = Math.ceil(res.data.count / 5);
+        setTotalPages(total);
+      })
       .catch((err) => console.error(err));
   };
 
@@ -130,7 +139,9 @@ const Board = () => {
         </Typography>
       </Box>
 
-      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+      <WarningBox />
+
+      <Stack direction="row" spacing={2} sx={{ mb: 4, mt: 4 }}>
         <Button
           variant={filter === 'all' ? 'contained' : 'outlined'}
           onClick={() => fetchPosts('all')}
@@ -424,11 +435,82 @@ const Board = () => {
                     </Stack>
                   </Box>
                 </>
-              )} 
+              )}
             </Paper>
           </CSSTransition>
         ))}
       </TransitionGroup>
+      {/* 페이지네이션 버튼 */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          mt: 6,
+          flexWrap: 'wrap',
+          gap: 1,
+        }}
+      >
+        {/* 이전 버튼 */}
+        <Button
+          variant="outlined"
+          size="small"
+          disabled={currentPage === 1}
+          onClick={() => fetchPosts(filter, currentPage - 1)}
+          sx={{
+            borderRadius: '20px',
+            minWidth: '40px',
+            '&.Mui-disabled': {
+              backgroundColor: '#f0f0f0',
+              color: '#aaa',
+            },
+          }}
+        >
+          ◀
+        </Button>
+
+        {/* 숫자 버튼 */}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+          <Button
+            key={pageNum}
+            variant={currentPage === pageNum ? 'contained' : 'outlined'}
+            size="small"
+            onClick={() => fetchPosts(filter, pageNum)}
+            sx={{
+              borderRadius: '50%',
+              minWidth: '36px',
+              height: '36px',
+              backgroundColor:
+                currentPage === pageNum ? '#6C63FF' : 'transparent',
+              color: currentPage === pageNum ? '#fff' : '#444',
+              borderColor: '#ccc',
+              '&:hover': {
+                backgroundColor:
+                  currentPage === pageNum ? '#5a55d3' : '#f5f5f5',
+              },
+            }}
+          >
+            {pageNum}
+          </Button>
+        ))}
+
+        {/* 다음 버튼 */}
+        <Button
+          variant="outlined"
+          size="small"
+          disabled={currentPage === totalPages}
+          onClick={() => fetchPosts(filter, currentPage + 1)}
+          sx={{
+            borderRadius: '20px',
+            minWidth: '40px',
+            '&.Mui-disabled': {
+              backgroundColor: '#f0f0f0',
+              color: '#aaa',
+            },
+          }}
+        >
+          ▶
+        </Button>
+      </Box>
     </Box>
   );
 };

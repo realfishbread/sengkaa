@@ -24,6 +24,20 @@ class PostCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, is_approved=True)
         return Response(serializer.data, status=201)
+
+#게시글 삭제
+class PostDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+
+        if post.user != request.user:
+            return Response({"error": "권한이 없습니다."}, status=status.HTTP_403_FORBIDDEN)
+
+        post.delete()
+        return Response({"message": "게시글 삭제 완료!"}, status=status.HTTP_204_NO_CONTENT)    
+    
     
 # 📄 전체 목록 불러오기
 class PostListView(generics.ListAPIView):
@@ -56,6 +70,10 @@ class ClosedPostListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Post.objects.filter(status='closed').order_by('-created_at')
+    
+    
+    
+
 
 # 게시글에 답글 기능
 class ReplyCreateView(generics.CreateAPIView):
@@ -69,6 +87,8 @@ class ReplyCreateView(generics.CreateAPIView):
         except Post.DoesNotExist:
             raise NotFound("해당 게시글이 존재하지 않습니다.")
         serializer.save(user=self.request.user, post=post)   
+
+
         
 #답글 전체 보기 
 @api_view(["GET"])

@@ -1,79 +1,80 @@
-import React, { useState, useContext  } from "react"; // ✅ 이렇게 해야 함
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
   Box,
   Button,
-  Typography,
-  Link,
   Container,
   Divider,
-} from "@mui/material";
-import { SiKakaotalk } from "react-icons/si"; // 카카오톡 아이콘
-import { FcGoogle } from "react-icons/fc"; // 구글 아이콘
-import {buttonStyle}from "../../../components/common/Styles";
-import CustomTextField from "../../../components/common/CustomTextField";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../../context/UserContext";
-import axios from "axios"; // axiosInstance 말고 기본 axio
-import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
-
-
-
+  IconButton,
+  InputAdornment,
+  Link,
+  Typography,
+} from '@mui/material';
+import axios from 'axios'; // axiosInstance 말고 기본 axio
+import React, { useContext, useState } from 'react'; // ✅ 이렇게 해야 함
+import { FcGoogle } from 'react-icons/fc'; // 구글 아이콘
+import { SiKakaotalk } from 'react-icons/si'; // 카카오톡 아이콘
+import { useNavigate } from 'react-router-dom';
+import CustomTextField from '../../../components/common/CustomTextField';
+import { buttonStyle } from '../../../components/common/Styles';
+import { UserContext } from '../../../context/UserContext';
 
 const LoginPage = ({ isModal = false }) => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  
-
   const KAKAO_REST_API_KEY = '4083ddda8b18709f62bb857f2c52f127';
-  const REDIRECT_URI = 'https://eventcafe.site/user/social/oauth/kakao/callback';
+  const REDIRECT_URI =
+    'https://eventcafe.site/user/social/oauth/kakao/callback';
   const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
- 
-
-  
 
   const handleLogin = async () => {
     try {
-      const { data } = await axios.post("https://eventcafe.site/user/auth/login/", {
-        email,
-        password
-      });
-  
-      
-      localStorage.setItem("accessToken", data.access);
-      localStorage.setItem("refreshToken", data.refresh);
-      localStorage.setItem("userInfo", JSON.stringify({
-        nickname: data.nickname,
-        username: data.username,
-        email: data.email,
-        profile_image: data.profile_image,
-      })); // ✅ 추가
+      const { data } = await axios.post(
+        'https://eventcafe.site/user/auth/login/',
+        {
+          email,
+          password,
+        }
+      );
+
+      localStorage.setItem('accessToken', data.access);
+      localStorage.setItem('refreshToken', data.refresh);
+      localStorage.setItem(
+        'userInfo',
+        JSON.stringify({
+          nickname: data.nickname,
+          username: data.username,
+          email: data.email,
+          profile_image: data.profile_image,
+        })
+      ); // ✅ 추가
       setUser({
         nickname: data.nickname,
         username: data.username,
         email: data.email,
         profile_image: data.profile_image,
       });
-      navigate("/");            // 홈으로
+      navigate('/'); // 홈으로
     } catch (err) {
-      alert("로그인 실패: " + err.message);
+      const serverMessage =
+        err.response?.data?.error || // ✅ 너가 백에서 보내주는 키
+        err.response?.data?.detail || // DRF 기본 키
+        '알 수 없는 오류가 발생했습니다.';
+
+      alert('로그인 실패: ' + serverMessage);
     }
   };
-
 
   const handleKakaoLogin = () => {
     window.location.href = kakaoLoginUrl;
   };
 
   const handleGoogleLogin = () => {
-    console.log("구글로 로그인 요청");
+    console.log('구글로 로그인 요청');
   };
 
   return (
@@ -82,37 +83,36 @@ const LoginPage = ({ isModal = false }) => {
         ...(isModal
           ? {} // 모달일 땐 배경, 정렬 제거
           : {
-              backgroundImage: "linear-gradient(to bottom, #cfeffd, #a3d9ff)",
-              minHeight: "100vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "1rem",
+              backgroundImage: 'linear-gradient(to bottom, #cfeffd, #a3d9ff)',
+              minHeight: '100vh',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem',
             }),
       }}
     >
       <Container
         maxWidth="xs"
         sx={{
-          padding: "1.5rem",
-          borderRadius: "12px",
-          backgroundColor: "#ffffff", // ✅ 진짜 흰색으로 고정
-          boxShadow: isModal ? "none" : "0 6px 18px rgba(255, 255, 255, 0.1)",
+          padding: '1.5rem',
+          borderRadius: '12px',
+          backgroundColor: '#ffffff', // ✅ 진짜 흰색으로 고정
+          boxShadow: isModal ? 'none' : '0 6px 18px rgba(255, 255, 255, 0.1)',
         }}
       >
-        
         {/* 로고 섹션 - 로고 대신 '<' 아이콘 버튼만 추가 */}
-<Box
-  sx={{
-    display: "flex",
-    justifyContent: "flex-start",  // 왼쪽 정렬
-    marginBottom: "1.5rem",
-  }}
->
-  <IconButton onClick={() => navigate(-1)} size="large">
-    <ArrowBackIcon />
-  </IconButton>
-</Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-start', // 왼쪽 정렬
+            marginBottom: '1.5rem',
+          }}
+        >
+          <IconButton onClick={() => navigate(-1)} size="large">
+            <ArrowBackIcon />
+          </IconButton>
+        </Box>
 
         {/* 제목 */}
         <Typography
@@ -120,10 +120,10 @@ const LoginPage = ({ isModal = false }) => {
           gutterBottom
           textAlign="center"
           sx={{
-            fontWeight: "bold",
-            color: "#333333",
-            marginBottom: "1.5rem",
-            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+            fontWeight: 'bold',
+            color: '#333333',
+            marginBottom: '1.5rem',
+            textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)',
           }}
         >
           로그인
@@ -136,78 +136,85 @@ const LoginPage = ({ isModal = false }) => {
             handleLogin(); // 로그인 함수 호출
           }}
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             gap: 2,
           }}
         >
-        <CustomTextField
-          label="이메일"
-          type="email"
-          required
-          fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "&:hover fieldset": {
-                borderColor: "#007BFF",
+          <CustomTextField
+            label="이메일"
+            type="email"
+            required
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#007BFF',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#0056b3',
+                },
               },
-              "&.Mui-focused fieldset": {
-                borderColor: "#0056b3",
-              },
-            },
-          }}
-        />
+            }}
+          />
 
-        <CustomTextField
-          label="비밀번호"
-          type={showPassword ? "text" : "password"}
-          required
-          fullWidth
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "&:hover fieldset": {
-                borderColor: "#007BFF",
+          <CustomTextField
+            label="비밀번호"
+            type={showPassword ? 'text' : 'password'}
+            required
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#007BFF',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#0056b3',
+                },
               },
-              "&.Mui-focused fieldset": {
-                borderColor: "#0056b3",
-              },
-            },
-          }}
-        />
+            }}
+          />
 
-        <Button
-            type="submit"  // ✅ 여기!!
+          <Button
+            type="submit" // ✅ 여기!!
             variant="contained"
             fullWidth
             sx={buttonStyle}
           >
-          로그인
-        </Button>
+            로그인
+          </Button>
 
-          <Typography variant="body2" textAlign="center" sx={{ color: "#555555" }}>
-            계정이 없으신가요?{" "}
+          <Typography
+            variant="body2"
+            textAlign="center"
+            sx={{ color: '#555555' }}
+          >
+            계정이 없으신가요?{' '}
             <Link
               href="/signup"
               underline="none"
               sx={{
-                color: "#007BFF",
-                fontWeight: "bold",
-                "&:hover": {
-                  textDecoration: "underline",
-                  color: "#0056b3",
+                color: '#007BFF',
+                fontWeight: 'bold',
+                '&:hover': {
+                  textDecoration: 'underline',
+                  color: '#0056b3',
                 },
               }}
             >
@@ -224,7 +231,7 @@ const LoginPage = ({ isModal = false }) => {
         <Divider
           sx={{
             marginY: 2,
-            borderColor: "#E0E0E0",
+            borderColor: '#E0E0E0',
           }}
         >
           <Typography variant="body2" color="textSecondary">
@@ -234,8 +241,8 @@ const LoginPage = ({ isModal = false }) => {
 
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             gap: 1.5,
           }}
         >
@@ -243,43 +250,43 @@ const LoginPage = ({ isModal = false }) => {
             fullWidth
             onClick={handleKakaoLogin}
             sx={{
-              backgroundColor: "#FEE500",
-              color: "#3C1E1E",
-              padding: "10px",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-              borderRadius: "6px",
-              boxShadow: "0 3px 9px rgba(0, 0, 0, 0.1)",
-              "&:hover": {
-                backgroundColor: "#e3d100",
-                transform: "scale(1.02)",
+              backgroundColor: '#FEE500',
+              color: '#3C1E1E',
+              padding: '10px',
+              fontWeight: 'bold',
+              fontSize: '0.9rem',
+              borderRadius: '6px',
+              boxShadow: '0 3px 9px rgba(0, 0, 0, 0.1)',
+              '&:hover': {
+                backgroundColor: '#e3d100',
+                transform: 'scale(1.02)',
               },
-              transition: "all 0.3s ease-in-out",
+              transition: 'all 0.3s ease-in-out',
             }}
           >
-            <SiKakaotalk size={18} style={{ marginRight: "8px" }} />
+            <SiKakaotalk size={18} style={{ marginRight: '8px' }} />
             카카오로 로그인
           </Button>
           <Button
             fullWidth
             onClick={handleGoogleLogin}
             sx={{
-              backgroundColor: "#ffffff",
-              color: "#757575",
-              padding: "10px",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-              borderRadius: "6px",
-              border: "1px solid #E0E0E0",
-              boxShadow: "0 3px 9px rgba(0, 0, 0, 0.1)",
-              "&:hover": {
-                backgroundColor: "#f7f7f7",
-                transform: "scale(1.02)",
+              backgroundColor: '#ffffff',
+              color: '#757575',
+              padding: '10px',
+              fontWeight: 'bold',
+              fontSize: '0.9rem',
+              borderRadius: '6px',
+              border: '1px solid #E0E0E0',
+              boxShadow: '0 3px 9px rgba(0, 0, 0, 0.1)',
+              '&:hover': {
+                backgroundColor: '#f7f7f7',
+                transform: 'scale(1.02)',
               },
-              transition: "all 0.3s ease-in-out",
+              transition: 'all 0.3s ease-in-out',
             }}
           >
-            <FcGoogle size={18} style={{ marginRight: "8px" }} />
+            <FcGoogle size={18} style={{ marginRight: '8px' }} />
             구글로 로그인
           </Button>
         </Box>

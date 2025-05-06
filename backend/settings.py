@@ -184,16 +184,30 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',  # 전체 기본을 로그인 필요로
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
 }
 
+from datetime import timedelta
 
 SIMPLE_JWT = {
     "USER_ID_FIELD": "user_id",  # ← 너 모델에서 실제 PK 필드명
     "USER_ID_CLAIM": "user_id",  # ← JWT payload에 들어갈 이름
+    
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),     # ✅ access token: 7일
+    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=60),   # ✅ refresh token: 30일
+
+    "ROTATE_REFRESH_TOKENS": True,                 # ✅ refresh 요청시 새로운 refresh 토큰 발급
+    "BLACKLIST_AFTER_ROTATION": True,              # ✅ 이전 refresh 토큰은 무효화
+
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "USER_ID_FIELD": "user_id",
+    "USER_ID_CLAIM": "user_id",
 }
 
 KAKAO_REST_API_KEY="4083ddda8b18709f62bb857f2c52f127"

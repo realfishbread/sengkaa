@@ -13,6 +13,7 @@ from api.views.auth_views import (
 )
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenRefreshView
 
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path('verify-reset-code/', verify_reset_code, name="verify_reset_code"),
     path('reset-password/', reset_password, name="reset_password"),
     path('check-nickname/', check_nickname, name="check_nickname"),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

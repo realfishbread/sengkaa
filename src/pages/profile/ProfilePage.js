@@ -39,56 +39,55 @@ const ProfilePage = () => {
       </Box>
     );
 
-    if (!profile)
-      return (
+  if (!profile)
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '70vh', // 너무 바닥 붙지 않게 조절
+          px: 2,
+          textAlign: 'center',
+        }}
+      >
+        {/* 🐱 귀여운 일러스트 이미지 삽입 */}
         <Box
+          component="img"
+          src="/images/error-cat.png" // 👉 public/images 폴더에 넣어두면 됨
+          alt="에러 이미지"
+          sx={{ maxWidth: 300, mb: 4 }}
+        />
+
+        <Typography variant="h6" fontWeight="bold" color="error" mb={1}>
+          😢 사용자 정보를 찾을 수 없어요!
+        </Typography>
+        <Typography variant="body2" color="text.secondary" mb={3}>
+          입력한 닉네임이 잘못되었거나, 서버에서 정보를 불러오지 못했어요.
+        </Typography>
+
+        <Button
+          variant="contained"
+          onClick={() => navigate(-1)} // 👉 뒤로 가기
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '70vh', // 너무 바닥 붙지 않게 조절
-            px: 2,
-            textAlign: 'center',
+            mt: 2,
+            backgroundColor: '#6C63FF',
+            color: '#fff',
+            fontWeight: 'bold',
+            borderRadius: '12px',
+            px: 4,
+            py: 1.2,
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: '#5a55d3',
+            },
           }}
         >
-          {/* 🐱 귀여운 일러스트 이미지 삽입 */}
-          <Box
-            component="img"
-            src="/images/error-cat.png" // 👉 public/images 폴더에 넣어두면 됨
-            alt="에러 이미지"
-            sx={{ maxWidth: 300, mb: 4 }}
-          />
-    
-          <Typography variant="h6" fontWeight="bold" color="error" mb={1}>
-            😢 사용자 정보를 찾을 수 없어요!
-          </Typography>
-          <Typography variant="body2" color="text.secondary" mb={3}>
-            입력한 닉네임이 잘못되었거나, 서버에서 정보를 불러오지 못했어요.
-          </Typography>
-    
-          <Button
-            variant="contained"
-            onClick={() => navigate(-1)} // 👉 뒤로 가기
-            sx={{
-              mt: 2,
-              backgroundColor: '#6C63FF',
-              color: '#fff',
-              fontWeight: 'bold',
-              borderRadius: '12px',
-              px: 4,
-              py: 1.2,
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#5a55d3',
-              },
-            }}
-          >
-            🔙 돌아가기
-          </Button>
-        </Box>
-      );
-    
+          🔙 돌아가기
+        </Button>
+      </Box>
+    );
 
   const isMyProfile = user?.nickname === profile.nickname; // ✅ 비교!
 
@@ -144,17 +143,30 @@ const ProfilePage = () => {
           가입일: {new Date(profile.created_at).toLocaleDateString()}
         </Typography>
 
+        {/* 자기소개(bio)가 있을 때만 보여주기 */}
+        {profile.bio && (
+          <>
+            <Divider sx={{ my: 4, borderColor: '#eee' }} />
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              sx={{ textAlign: 'center', color: '#6C63FF', mb: 1 }}
+            >
+              📝 자기소개
+            </Typography>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ whiteSpace: 'pre-line', textAlign: 'center' }}
+            >
+              {profile.bio}
+            </Typography>
+          </>
+        )}
+
         {/* 프로필 주인 여부 체크 */}
         {isMyProfile ? (
           <>
-            <Typography
-              variant="subtitle1"
-              color="text.secondary"
-              textAlign="center"
-              mt={1}
-            >
-              {profile.email}
-            </Typography>
 
             <Button
               variant="contained"
@@ -193,6 +205,7 @@ const ProfilePage = () => {
               fullWidth
               sx={{
                 mt: 4,
+                mb: 4,
                 py: 1.5,
                 borderColor: '#6C63FF',
                 color: '#6C63FF',
