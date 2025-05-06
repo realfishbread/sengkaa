@@ -59,6 +59,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./build/ ${EC2_USER}@${EC2_HOST}:/var/www/html
 
+        
+
+      - name: Rsync files to EC2
+        run: |
+          rsync -avz --exclude='.venv' --exclude='__pycache__' --exclude='.git' \
+            ./ ubuntu@${{ secrets.EC2_HOST }}:/var/www/eventcafe-backend/
 
       - name: Deploy Backend source to EC2
         env:
