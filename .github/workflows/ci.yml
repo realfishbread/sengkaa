@@ -61,11 +61,7 @@ jobs:
 
         
 
-      - name: Rsync files to EC2
-        run: |
-          rsync -avz --exclude='.venv' --exclude='__pycache__' --exclude='.git' \
-            ./ ubuntu@${{ secrets.EC2_HOST }}:/var/www/eventcafe-backend/
-
+      
       - name: Deploy Backend source to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
