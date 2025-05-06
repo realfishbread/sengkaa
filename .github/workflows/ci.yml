@@ -59,7 +59,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./build/ ${EC2_USER}@${EC2_HOST}:/var/www/html
 
-        
+      - name: Clean Python Cache
+        run: |
+          find . -type d -name "__pycache__" -exec rm -r {} +
+          find . -type f -name "*.pyc" -delete
 
       
       - name: Deploy Backend source to EC2
