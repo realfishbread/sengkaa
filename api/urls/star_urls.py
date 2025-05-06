@@ -6,6 +6,6 @@ from api.views.star_view import get_star_list
 import os
 
 urlpatterns = [
-    path('stars/', get_star_list),  # /api/stars/
+    path('stars/', get_star_list), 
 ]+ static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'static'))
 

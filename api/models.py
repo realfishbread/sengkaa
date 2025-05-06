@@ -110,17 +110,21 @@ class Follow(models.Model):
 
 
 
+class Genre(models.Model):
+    name = models.CharField(max_length=50, unique=True)  # 'idol', 'youtuber', ...
+
+    def __str__(self):
+        return self.name
+
 class Star(models.Model):
     name = models.CharField(max_length=100)
     group = models.CharField(max_length=100, blank=True)
     display = models.CharField(max_length=200)
-    keywords = models.JSONField(default=list)  # Django 3.1 이상
-    image = models.URLField(blank=True, null=True)
+    image = models.URLField(blank=True)
     birthday = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return self.display
-
+    keywords = models.JSONField(default=list, blank=True)
+    
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)  # 🔥 외래키 연결
 
 
 class BirthdayCafe(models.Model):

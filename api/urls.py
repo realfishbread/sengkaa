@@ -10,7 +10,7 @@ urlpatterns = [
     path('social/', include('api.urls.social_urls')),  # 소셜 로그인
     path('events/', include('api.urls.event_urls')),
     path('reports/', include('api.urls.report_urls')),
-    path('api/', include('api.star_urls')),
+    path('star/', include('api.urls.star_urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

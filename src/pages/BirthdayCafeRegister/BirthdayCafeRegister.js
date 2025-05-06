@@ -49,13 +49,13 @@ const BirthdayCafeRegister = () => {
   ]);
 
   useEffect(() => {
-    fetch(`/data/${genre}.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setStarList(data); // ⭐ Autocomplete에 들어갈 options
+    axiosInstance
+      .get(`/user/star/stars/?genre=${genre}`)
+      .then((res) => {
+        setStarList(res.data);
       })
       .catch((err) => {
-        console.error('로딩 실패 ❌', err);
+        console.error('API 실패 ❌', err);
         setStarList([]);
       });
   }, [genre]);
@@ -267,7 +267,6 @@ const BirthdayCafeRegister = () => {
               value={roadAddress}
               buttonText="주소 찾기"
               onButtonClick={openPostcode}
-              
               readOnly={true}
             />
 

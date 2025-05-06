@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from api.serializers.auth_serializers import ProfileImageSerializer
+from api.serializers.auth_serializers import UserSerializer
 from api.models import User
 
 
@@ -21,41 +21,16 @@ def user_profile(request):
     }, status=200)
     
     
-@api_view(["PATCH"])
-@permission_classes([IsAuthenticated])
-def upload_profile_image(request):
-    serializer = ProfileImageSerializer(
-        request.user, data=request.data, partial=True
-    )
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=400)
-
-
 # ✨ 추가: 프로필 수정 API
 @api_view(["PATCH"])
 @permission_classes([IsAuthenticated])
 def update_profile(request):
     user = request.user
-    nickname = request.data.get("nickname", user.nickname)
-    email = request.data.get("email", user.email)
-    profile_image = request.FILES.get("profile_image", user.profile_image)
-    bio = request.data.get("bio", user.bio)  # 🌟✨ bio 받기 추가
-
-    user.nickname = nickname
-    user.email = email
-    user.bio = bio  # 🌟 bio 저장 추가
-    user.profile_image = profile_image
-    user.save()
-
-    return Response({
-        "message": "프로필이 수정되었습니다!",
-        "nickname": user.nickname,
-        "email": user.email,
-        "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
-        "bio": user.bio,  # 🌟 bio 추가!
-    })
+    serializer = UserSerializer(user, data=request.data, partial=True, context={"request": request})
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)  # 🔥 profile_image_url 자동 생성 포함
+    return Response(serializer.errors, status=400)
     
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
