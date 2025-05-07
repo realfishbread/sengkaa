@@ -103,6 +103,7 @@ def send_email_verification(request):
 
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def verify_email_code(request):
     email = request.data.get("email")
     code = request.data.get("code")
@@ -161,6 +162,7 @@ def login_view(request):
 
 
 @api_view(["POST"]) #비밀번호 리셋
+@permission_classes([AllowAny])
 def send_reset_password_email(request):
     email = request.data.get("email")
     try:
@@ -207,6 +209,7 @@ def send_reset_password_email(request):
 
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def verify_reset_code(request):
     email = request.data.get("email")
     code = request.data.get("code")
@@ -233,6 +236,7 @@ def verify_reset_code(request):
 
 #passwd reset
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def reset_password(request):
     email = request.data.get("email")
     new_password = request.data.get("password")
