@@ -2354,6 +2354,14 @@
     "birthday": "1990-6-19"
   },
   {
+    "name": "고몽",
+    "agency":" DIA TV",
+    "display": "DIA TV - 고몽",
+    "genre": "youtuber",
+    "image":"https://eventcafe.site/GOMONG.jpg",
+    "birthday": "불명"
+  },
+  {
     "name": "곽토리",
     "agency":" DIA TV",
     "display": "DIA TV - 곽토리",
@@ -2626,9 +2634,37 @@
     "birthday": "1989-11-20"
   },
   {
+    "name": "탱이",
+    "agency":" DIA TV",
+    "group": "시바견 곰이탱이여우",
+    "display": "시바견 곰이탱이여우 - 탱이",
+    "genre": "youtuber",
+    "image":"https://eventcafe.site/tang.webp",
+    "birthday": "2015-3-13"
+  },
+  {
+    "name": "여우",
+    "agency":" DIA TV",
+    "group": "시바견 곰이탱이여우",
+    "display": "시바견 곰이탱이여우 - 여우",
+    "genre": "youtuber",
+    "image":"https://eventcafe.site/fox.webp",
+    "birthday": "2018-10-4"
+  },
+  {
+    "name": "곰이",
+    "agency":" DIA TV",
+    "group": "시바견 곰이탱이여우",
+    "display": "시바견 곰이탱이여우 - 곰이",
+    "genre": "youtuber",
+    "image":"https://eventcafe.site/gom.webp",
+    "birthday": "1995-12-28"
+  },
+  {
     "name": "잠뜰",
     "agency":" DIA TV",
-    "display": "DIA TV - 잠뜰",
+    "group": "픽셀리",
+    "display": "픽셀리 - 잠뜰",
     "genre": "youtuber",
     "image":"https://eventcafe.site/sleepground.jpg",
     "birthday": "1995-12-28"
@@ -4360,6 +4396,221 @@
     "birthday": "12-12"
   },
   {
+    "name": "장삐쭈",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 장삐쭈",
+    "genre": "youtuber",
+    "image":"https://eventcafe/jbbj.jpg",
+    "birthday": "1991-2-9"
+  },
+  {
+    "name": "과나",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 과나",
+    "genre": "youtuber",
+    "image":"https://eventcafe/gwana9102.jpg",
+    "birthday": "1990-3-15"
+  },
+  {
+    "name": "김해준",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 김해준",
+    "genre": "youtuber",
+    "image":"https://eventcafe/kimhaejun.jpg",
+    "birthday": "1987-2-8"
+  },
+  {
+    "name": "코미꼬",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 코미꼬",
+    "genre": "youtuber",
+    "image":"https://eventcafe/comicoreano.jpg",
+    "birthday": "1987-12-4"
+  },
+  {
+    "name": "안녕하세미",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 안녕하세미",
+    "genre": "youtuber",
+    "image":"https://eventcafe/hissemi.jpg",
+    "birthday": "1990-3-7"
+  },
+  {
+    "name": "대니초",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 대니초",
+    "genre": "youtuber",
+    "image":"https://eventcafe/dannychocomedy.jpg",
+    "birthday": "불명"
+  },
+  {
+    "name": "제규리",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 제규리",
+    "genre": "youtuber",
+    "image":"https://eventcafe/GyuriGyurl.jpg",
+    "birthday": "1995-6-2"
+  },
+  {
+    "name": "동하하",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 동하하",
+    "genre": "youtuber",
+    "image":"https://eventcafe/donghahahaha.jpg",
+    "birthday": "1986-4-2"
+  },
+  {
+    "name": "송하빈",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 송하빈",
+    "genre": "youtuber",
+    "image":"https://eventcafe/habinsssss.jpg",
+    "birthday": "1993-12-22"
+  },
+  {
+    "name": "박철현",
+    "agency": "메타코미디",
+    "display": "메타코미디 - 박철현",
+    "genre": "youtuber",
+    "image":"https://eventcafe/cheol.9.jpg",
+    "birthday": "1992-10-30"
+  },
+  {
+    "name": "이용주",
+    "agency": "메타코미디",
+    "group": "피식대학",
+    "display": "피식대학 - 이용주",
+    "genre": "youtuber",
+    "image":"https://eventcafe/LeeYongju.webd",
+    "birthday": "1986-12-31"
+  },
+  {
+    "name": "정재형",
+    "agency": "메타코미디",
+    "group": "피식대학",
+    "display": "피식대학 - 정재형",
+    "genre": "youtuber",
+    "image":"https://eventcafe/JeongJaehyung.webd",
+    "birthday": "1988-10-18"
+  },
+  {
+    "name": "김민수",
+    "agency": "메타코미디",
+    "group": "피식대학",
+    "display": "피식대학 - 김민수",
+    "genre": "youtuber",
+    "image":"https://eventcafe/KimMinsoo.webd",
+    "birthday": "1991-10-8"
+  },
+  {
+    "name": "이선민",
+    "agency": "메타코미디",
+    "group": "면상들",
+    "display": "면상들 - 이선민",
+    "genre": "youtuber",
+    "image":"https://eventcafe/LeeSeonMin.webd",
+    "birthday": "1988-3-19"
+  },
+  {
+    "name": "조훈",
+    "agency": "메타코미디",
+    "group": "면상들",
+    "display": "면상들 - 조훈",
+    "genre": "youtuber",
+    "image":"https://eventcafe/JoHoon.webd",
+    "birthday": "1993-2-4"
+  },
+  {
+    "name": "김원훈",
+    "agency": "메타코미디",
+    "group": "숏박스",
+    "display": "숏박스 - 김원훈",
+    "genre": "youtuber",
+    "image":"https://eventcafe/KimWonhun.webd",
+    "birthday": "1989-1-30"
+  },
+  {
+    "name": "조진세",
+    "agency": "메타코미디",
+    "group": "숏박스",
+    "display": "숏박스 - 조진세",
+    "genre": "youtuber",
+    "image":"https://eventcafe/ChoJinse.webdg",
+    "birthday": "1990-12-10"
+  },
+  {
+    "name": "엄지렐라",
+    "agency": "메타코미디",
+    "group": "숏박스",
+    "display": "숏박스 - 엄지렐라",
+    "genre": "youtuber",
+    "image":"https://eventcafe/umjirella.jpg",
+    "birthday": "1996-5-2"
+  },
+  {
+    "name": "이재율",
+    "agency": "메타코미디",
+    "group": "스낵타운",
+    "display": "스낵타운 - 이재율",
+    "genre": "youtuber",
+    "image": "https://eventcafe/LeeJaeyoul.jpg",
+    "birthday": "1994-4-22"
+  },
+  {
+    "name": "강현석",
+    "agency": "메타코미디",
+    "group": "스낵타운",
+    "display": "스낵타운 - 강현석",
+    "genre": "youtuber",
+    "image":"https://eventcafe/KangHyeunseok.jpg",
+    "birthday": "1992-2-1"
+  },
+  {
+    "name": "곽범",
+    "agency": "메타코미디",
+    "group": "빵송국",
+    "display": "빵송국 - 곽범",
+    "genre": "youtuber",
+    "image":"https://eventcafe/KwakBeom.jpg",
+    "birthday": "1986-11-1"
+  },
+  {
+    "name": "이창호",
+    "agency": "메타코미디",
+    "group": "빵송국",
+    "display": "빵송국 - 이창호",
+    "genre": "youtuber",
+    "image":"https://eventcafe/LeeChangho.jpg",
+    "birthday": "1988-4-29"
+  },
+  {
+    "name": "이창호",
+    "agency": "메타코미디",
+    "group": "빵송국",
+    "display": "빵송국 - 이창호",
+    "genre": "youtuber",
+    "image":"https://eventcafe/LeeChangho.jpg",
+    "birthday": "1988-4-29"
+  },
+  {
+    "name": "박춘봉",
+    "agency": "메타코미디",
+    "group": "언더월드",
+    "display": "언더월드 - 박춘봉",
+    "genre": "youtuber",
+    "image":"https://eventcafe/Choonbong.webp",
+    "birthday": "불명"
+  },  {
+  "name": "김첨지",
+  "agency": "메타코미디",
+  "group": "언더월드",
+  "display": "언더월드 - 김첨지",
+  "genre": "youtuber",
+  "image":"https://eventcafe/Cheomj.webp",
+  "birthday": "불명"
+},
+
+  {
     "name": "평학",
     "agency": "개인",
     "group": "고고 프렌즈",
@@ -5088,5 +5339,96 @@
     "genre": "youtuber",
     "image":"https://eventcafe/hongsnow.jpg",
     "birthday": "2016-1-19"
+  },
+  {
+    "name": "1분요리 뚝딱이형",
+    "agency": "개인",
+    "display": "개인 - 1분요리 뚝딱이형",
+    "genre": "youtuber",
+    "image":"https://eventcafe/1mincook.jpg",
+    "birthday": "불명"
+  },
+  {
+    "name": "배카인",
+    "agency": "개인",
+    "display": "개인 - 배카인",
+    "genre": "youtuber",
+    "image":"https://eventcafe/BEKAIN.jpg",
+    "birthday": "불명"
+  },
+  {
+    "name": "다즈비",
+    "agency": "개인",
+    "display": "개인 - 다즈비",
+    "genre": "youtuber",
+    "image":"https://eventcafe/Dazbeeee.jpg",
+    "birthday": "1996-1-17"
+  },
+  {
+    "name": "GCL 지씨엘",
+    "agency": "빅픽처인터렉티브",
+    "display": "빅픽처인터렉티브- GCL 지씨엘",
+    "genre": "youtuber",
+    "image":"https://eventcafe/Dazbeeee.jpg",
+    "birthday": "불명"
+  },
+  {
+    "name": "공돌이 용달",
+    "agency": "개인",
+    "display": "개인- 공돌이 용달",
+    "genre": "youtuber",
+    "image":"https://eventcafe/Dazbeeee.jpg",
+    "birthday": "1996-8-4"
+  },
+  {
+    "name": "향아치",
+    "agency": "개인",
+    "display": "개인- 향아치",
+    "genre": "youtuber",
+    "image":"https://eventcafe/HyangAhChi.jpg",
+    "birthday": "1871-8-6"
+  },
+  {
+    "name": "모카",
+    "agency": "개인",
+    "group": "MochaMilk",
+    "display": "MochaMilk- 모카",
+    "genre": "youtuber",
+    "image":"https://eventcafe/Mocha.webp",
+    "birthday": "1871-8-6"
+  },
+
+  {
+    "name": "밀크",
+    "agency": "개인",
+    "group": "MochaMilk",
+    "display": "MochaMilk- 밀크",
+    "genre": "youtuber",
+    "image":"https://eventcafe/Milk.webp",
+    "birthday": "1871-8-6"
+  },
+  {
+    "name": "간다효",
+    "agency": "개인",
+    "display": "개인- 간다효",
+    "genre": "youtuber",
+    "image":"https://eventcafe/HyangAhChi.jpg",
+    "birthday": "1991-8-11"
+  },
+  {
+    "name": "걸뽀",
+    "agency": "개인",
+    "display": "개인- 걸뽀",
+    "genre": "youtuber",
+    "image":"https://eventcafe/girlbbo.jpg",
+    "birthday": "1988-3-22"
+  },
+  {
+    "name": "건곤",
+    "agency": "개인",
+    "display": "개인- 건곤",
+    "genre": "youtuber",
+    "image":"https://eventcafe/Gungon.jpg",
+    "birthday": "1998-11-11"
   }
 ]   
