@@ -10,7 +10,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import CustomTextField from '../../components/common/CustomTextField';
 import FlexInputButton from '../../components/common/FlexInputButton';
 import ImageUploader from '../../components/common/ImageUploader';
@@ -24,6 +24,7 @@ import {
 import axiosInstance from '../../shared/api/axiosInstance';
 
 const BirthdayCafeRegister = () => {
+  const navigate = useNavigate(); // ✅ 훅 사용
   const [cafeName, setCafeName] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
@@ -50,7 +51,7 @@ const BirthdayCafeRegister = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`/user/star/stars/?genre=${genre}`)
+      .get(`/user/star/stars/?genre=${genreMap[genre]}`)
       .then((res) => {
         setStarList(res.data);
       })
@@ -69,6 +70,14 @@ const BirthdayCafeRegister = () => {
         ...(option.keywords || []),
       ].join(' '),
   });
+
+  const genreMap = {
+    idol: 1,
+    youtuber: 2,
+    comic: 3,
+    webtoon: 4,
+    game: 5,
+  };
 
   const openPostcode = () => {
     new window.daum.Postcode({
@@ -93,17 +102,18 @@ const BirthdayCafeRegister = () => {
     formData.append('detail_address', detailAddress);
     formData.append('start_date', startDate?.toISOString().slice(0, 10));
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
-    formData.append('genre', genre);
-    formData.append('star', selectedStar?.name || '');
+    formData.append('genre', genre); // 🔥 여기 수정
+    formData.append('star', selectedStar?.id ?? null); // null이면 NULL로 전송됨
 
     if (image) {
-      formData.append('main_image', image); // 너가 쓰는 키에 맞게 수정
+      formData.append('image', image); // ✅ 모델 필드랑 맞춤
     }
 
     goodsList.forEach((goods, index) => {
       formData.append(`goods[${index}][name]`, goods.name);
       formData.append(`goods[${index}][description]`, goods.description);
-      formData.append(`goods[${index}][price]`, goods.price);
+      formData.append(`goods[${index}][price]`, parseInt(goods.price, 10));
+
       if (goods.image) {
         formData.append(`goods[${index}][image]`, goods.image);
       }
@@ -121,8 +131,11 @@ const BirthdayCafeRegister = () => {
       );
 
       alert('이벤트가 등록되었습니다!');
-      Navigate('/'); // 등록 후 홈으로 이동
+      navigate('/'); // 등록 후 홈으로 이동
     } catch (err) {
+      if (err.response?.data) {
+        console.error('서버 응답:', err.response.data);
+      }
       console.error('등록 실패 ❌', err);
       alert('등록에 실패했습니다.');
     }

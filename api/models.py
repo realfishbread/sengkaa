@@ -7,7 +7,7 @@ import random
 
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)  # ✅ 실제 PK 컬럼
-    username = models.CharField(max_length=100, unique=True)
+    username = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     nickname = models.CharField(max_length=12, unique=True, null=True, blank=True)
