@@ -1,35 +1,53 @@
+/* 네비게이션 바 상단 */
 .navbar {
-  background-color: #dcf2ff !important;
+  background-color: #fff !important;
+  box-shadow: none !important;
+  min-height: 40px !important;
+  border-bottom: 1px solid #eee;
 }
 
-.logo {
-  height: 53px;
-  cursor: pointer;
+/* 상단 내비게이션 바 컨테이너 스타일 */
+.upper-navbar-container {
+  max-width: 1300px; /* 원하는 최대 너비 값으로 변경 */
+  margin: 0auto;
 }
 
-.search-bar {
-  margin-left: auto !important;
-  background-color: white;
+/* 하단 내비게이션 바 컨테이너 스타일 */
+.bottom-navbar-container {
+  max-width: 1200px; /* 원하는 최대 너비 값으로 변경 */
+  margin: 0 auto; /* 가운데 정렬 */
 }
 
-.auth-button {
-  color: #000000 !important;
-}
-
-/* ✅ 하단 네비게이션 메뉴 */
-.bottom-nav {
-  background-color: #dcf2ff !important;
-  margin-top: -5px;
-  padding: 10px 65px;
-  border-bottom: 1px solid #c7c7c7;
+/* 하단 내비게이션 바 툴바 스타일 (선택 사항) */
+.bottom-navbar-toolbar {
   display: flex;
-  align-items: flex-start; /* 메뉴 상단에 정렬 */
-  gap: 30px; /* 버튼 간 동일한 간격 */
-  height: auto;
-  overflow: visible;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* ✅ 하단 네비게이션 각 버튼 감쌈 */
+/* 로고 */
+.logo {
+  max-width: 1000px;
+  height: 80px;
+  cursor: pointer;
+  margin-left: 130px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: right;
+}
+
+/* 메뉴 그룹 */
+.nav-menu {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+/* 메뉴 아이템 래퍼 */
 .nav-item-wrapper {
   position: relative;
   display: flex;
@@ -37,61 +55,119 @@
   align-items: flex-start;
 }
 
-/* ✅ 네비게이션 아이템 */
+/* 메뉴 버튼 */
 .nav-item {
-  color: #000000 !important;
-  font-size: 1.1rem !important;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 10px 15px;
-  transition: font-size 0.3s ease, color 0.3s ease;
+  color: #333 !important;
+  font-size: 1.2rem !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  padding: 6px 0 !important;
+  min-width: auto !important;
+  position: relative;
 }
 
-/* ✅ 서브 메뉴 */
+.nav-item:hover {
+  color: #000 !important;
+}
+
+/* 서브메뉴 */
 .submenu {
   display: none;
   flex-direction: column;
   position: absolute;
   top: 100%;
   left: 0;
-  width: 130px;
+  width: 150px;
   background-color: #fff;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
-  padding: 8px 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
   z-index: 1000;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
-/* ✅ 마우스를 올렸을 때 하위 메뉴 보이기 */
+/* 마우스 오버 시 서브메뉴 표시 */
 .nav-item-wrapper:hover .submenu {
   display: flex;
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.2s ease-in-out;
 }
 
-/* ✅ 서브 메뉴 아이템 */
+/* 서브메뉴 아이템 */
 .submenu-item {
-  text-align: left;
+  text-align: center;
   display: block !important;
-  line-height: 1.5;
-  color: #333;
+  color: #555;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 0;
+  padding: 16px 8px;
   font-size: 14px;
-  transition: color 0.2s ease-in-out;
+  text-transform: none;
+  min-width: 100%;
+  justify-content: flex-start;
 }
 
-/* ✅ 서브 메뉴 호버 효과 */
 .submenu-item:hover {
-  color: #000000;
+  background-color: #f5f5f5;
+  color: #000;
+  justify-content: flex-start;
 }
 
-/* ✅ 애니메이션 효과 */
+/* 검색 바 */
+.search-bar {
+  background-color: white;
+  border-radius: 4px;
+  width: 250px;
+}
+
+.search-bar .MuiOutlinedInput-root {
+  border-radius: 20px;
+}
+
+/* 로그인/회원가입 버튼 */
+.auth-button {
+  display: inline-block;
+  padding: 8px 20px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  margin: 0 8px;
+  text-transform: none !important;
+  min-width: 100px !important;
+}
+
+/* 밝은 스타일 버튼 (로그인) */
+.auth-button.light {
+  background-color: #fff !important;
+  color: #333 !important;
+  border: 1px solid #ddd;
+}
+
+/* 어두운 스타일 버튼 (회원가입) */
+.auth-button.dark {
+  background-color: #dcf2ff !important;
+  color: #000000 !important;
+  border: 1px solid #ddd;
+}
+
+/* 버튼 호버 효과 */
+.auth-button.light:hover {
+  background-color: #f8f8f8 !important;
+  border-color: #ccc;
+}
+
+.auth-button.dark:hover {
+  background-color: #333 !important;
+}
+
+/* 애니메이션 */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
