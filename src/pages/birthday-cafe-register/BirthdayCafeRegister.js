@@ -40,15 +40,6 @@ const BirthdayCafeRegister = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  const [goodsList, setGoodsList] = useState([
-    {
-      name: '',
-      description: '',
-      price: '',
-      image: null,
-    },
-  ]);
-
   useEffect(() => {
     axiosInstance
       .get(`/user/star/stars/?genre=${genreMap[genre]}`)
@@ -79,6 +70,15 @@ const BirthdayCafeRegister = () => {
     game: 5,
   };
 
+  const [goodsList, setGoodsList] = useState([
+    {
+      name: '',
+      description: '',
+      price: '',
+      image: null,
+    },
+  ]);
+
   const openPostcode = () => {
     new window.daum.Postcode({
       oncomplete: function (data) {
@@ -98,7 +98,7 @@ const BirthdayCafeRegister = () => {
     const formData = new FormData();
     formData.append('cafe_name', cafeName);
     formData.append('description', description);
-    formData.append('road_address', roadAddress);
+    formData.append('road_address', roadAddress + ' ' + detailAddress);
     formData.append('detail_address', detailAddress);
     formData.append('start_date', startDate?.toISOString().slice(0, 10));
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
@@ -109,7 +109,12 @@ const BirthdayCafeRegister = () => {
       formData.append('image', image); // ✅ 모델 필드랑 맞춤
     }
 
-    goodsList.forEach((goods, index) => {
+    const validGoodsList = goodsList.filter(
+      (g) => g.name?.trim() && g.price !== '' && !isNaN(Number(g.price))
+    );
+
+    // 2. FormData에 append
+    validGoodsList.forEach((goods, index) => {
       formData.append(`goods[${index}][name]`, goods.name);
       formData.append(`goods[${index}][description]`, goods.description);
       formData.append(`goods[${index}][price]`, parseInt(goods.price, 10));

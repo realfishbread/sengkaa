@@ -6,7 +6,7 @@ class GoodsSerializer(serializers.ModelSerializer):
         fields = ['name', 'description', 'price', 'image']
 
 class BirthdayCafeSerializer(serializers.ModelSerializer):
-    goods = GoodsSerializer(many=True)
+    goods = GoodsSerializer(many=True, required=False)
 
     class Meta:
         model = BirthdayCafe
@@ -14,7 +14,7 @@ class BirthdayCafeSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']  # ✅ 유저는 요청에서 따로 안 받아도 되게끔
 
     def create(self, validated_data):
-        goods_data = validated_data.pop('goods')
+        goods_data = validated_data.pop('goods', [])
         event = BirthdayCafe.objects.create(**validated_data)
         for g in goods_data:
             Goods.objects.create(event=event, **g)
