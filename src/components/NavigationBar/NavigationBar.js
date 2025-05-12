@@ -110,7 +110,7 @@ const NavigationBar = () => {
               </Box>
 
               <Button className="nav-item" onClick={() => navigate('/map')}>주변 카페</Button>
-              <Button className="nav-item" onClick={() => navigate('/subscribe')}>즐겨찾기</Button>
+              <Button className="nav-item" onClick={() => navigate('/calendar')}>캘린더</Button>
               <Button className="nav-item" onClick={() => navigate('/board')}>게시판</Button>
             </Box>
           </Box>

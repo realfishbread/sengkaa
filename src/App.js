@@ -51,7 +51,7 @@ function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="board" element={<Board />} />
           <Route path="post" element={<Post />} />
-          <Route path="subscribe" element={<EventCalendar />} />
+          <Route path="calendar" element={<EventCalendar />} />
           <Route path="register" element={<BirthdayCafeRegister />} />
           <Route path="profile/:nickname" element={<ProfilePage />} />
           <Route path="venue" element={<RegisterPlaces />} />

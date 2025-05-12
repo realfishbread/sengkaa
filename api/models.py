@@ -163,4 +163,32 @@ class Report(models.Model):
     def __str__(self):
         return f"{self.reporter} → {self.post} ({self.created_at.date()})"
     
-    
+
+
+class Venue(models.Model):
+    VENUE_TYPE_CHOICES = [
+        ('카페', '카페'),
+        ('음식점', '음식점'),
+        ('전시회', '전시회'),
+        ('포토부스', '포토부스'),
+        ('파티룸', '파티룸'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='venues')
+    name = models.CharField(max_length=255)
+    venue_type = models.CharField(max_length=20, choices=VENUE_TYPE_CHOICES)
+    road_address = models.CharField(max_length=255)
+    detail_address = models.CharField(max_length=255)
+    main_image = models.ImageField(upload_to='venue_images/')
+    rental_fee = models.PositiveIntegerField()
+    deposit = models.PositiveIntegerField()
+    operating_info = models.TextField(blank=True)
+    operating_hours = models.CharField(max_length=255)
+    benefits_image = models.ImageField(upload_to='benefit_images/', null=True, blank=True)
+    description = models.TextField(blank=True)
+    sns_type = models.CharField(max_length=50, blank=True)
+    sns_account = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
