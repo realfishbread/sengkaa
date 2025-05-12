@@ -1,57 +1,67 @@
-.dict-container {
-  max-width: 800px;
-  margin: 40px auto;
+/* DictionaryForm.css */
+.new-term-form {
+  width: 80%;
   padding: 20px;
-  background-color: #fffefc;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.dict-title {
-  font-size: 28px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
   margin-bottom: 20px;
-  color: #333;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.dict-add-button {
-  background-color: #1e88e5;
-  color: white;
+.new-term-form h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.new-term-form label {
+  font-weight: bold;
+}
+
+.new-term-form input[type="text"],
+.new-term-form textarea,
+.new-term-form select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.new-term-form textarea {
+  resize: vertical;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.form-buttons button {
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 20px;
 }
 
-.dict-add-button:hover {
-  background-color: #1565c0;
+.form-buttons button:first-child {
+  background-color: #28a745;
+  color: white;
 }
 
-.dict-list {
-  list-style: none;
-  padding: 0;
+.form-buttons button:first-child:hover {
+  background-color: #1e7e34;
 }
 
-.dict-list li {
-  border-bottom: 1px solid #ddd;
-  padding: 16px 0;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.form-buttons button:last-child {
+  background-color: #dc3545;
+  color: white;
 }
 
-.dict-list li:hover {
-  background-color: #f4f8ff;
-}
-
-.dict-list h3 {
-  margin: 0;
-  font-size: 20px;
-  color: #1e88e5;
-}
-
-.dict-list p {
-  margin: 6px 0 0;
-  color: #666;
-  font-size: 14px;
+.form-buttons button:last-child:hover {
+  background-color: #c82333;
 }

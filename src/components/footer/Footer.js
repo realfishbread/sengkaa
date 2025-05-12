@@ -27,35 +27,41 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4}>
+        <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={4}>
-            <Logo width="100%" height="auto" sx={{ mb: 2 }} />
-            <Typography variant="body2" color="text.secondary">
-              당신의 덕질 인생, 이벤트카페에서 함께하세요.
-              <br />
-              파티 예약부터 굿즈 관리까지 한 번에!
-            </Typography>
-
-            {/* SNS 아이콘 */}
-            <Box mt={2}>
-              <IconButton
-                component="a"
-                href="https://instagram.com/yunissi_o.o"
-                target="_blank"
-                rel="noopener"
-                aria-label="Instagram"
-              >
-                <Instagram />
-              </IconButton>
-              <IconButton
-                component="a"
-                href="https://twitter.com/yourbrand"
-                target="_blank"
-                rel="noopener"
-                aria-label="Twitter"
-              >
-                <Twitter />
-              </IconButton>
+            <Box display="flex" flexDirection="column" alignItems="flex-start">
+              <Box display="flex" justifyContent="flex-end" width="55%"> {/* flex-end 고정, width 크기 줄여야 로고가 움직임 */}
+                <Logo 
+                  width="150px" 
+                  height="auto" 
+                  sx={{ mb: 2, maxWidth: '150px', textAlign: 'left' }} 
+                />
+              </Box>
+              <Typography variant="body2" color="text.secondary" textAlign="left">
+                당신의 덕질 인생, 이벤트카페에서 함께하세요.
+                <br />
+                파티 예약부터 굿즈 관리까지 한 번에!
+              </Typography>
+              <Box mt={2} display="flex" gap={1}>
+                <IconButton
+                  component="a"
+                  href="https://instagram.com/yunissi_o.o"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Instagram"
+                >
+                  <Instagram />
+                </IconButton>
+                <IconButton
+                  component="a"
+                  href="https://twitter.com/yourbrand"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Twitter"
+                >
+                  <Twitter />
+                </IconButton>
+              </Box>
             </Box>
           </Grid>
 

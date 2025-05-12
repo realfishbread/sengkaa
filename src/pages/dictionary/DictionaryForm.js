@@ -1,41 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchDictionaryList } from '../api/dictionaryApi'; // ✅ API 분리된 파일에서 import
+import React, { useState } from 'react';
+// API 호출 import 필요
 import './DictionaryForm.css';
 
-const DictionaryList = () => {
-  const navigate = useNavigate();
-  const [words, setWords] = useState([]);
+function DictionaryForm({ onSave, onCancel }) {
+  const [category, setCategory] = useState('idol');
+  const [term, setTerm] = useState('');
+  const [definition, setDefinition] = useState('');
 
-  useEffect(() => {
-    const loadWords = async () => {
-      try {
-        const data = await fetchDictionaryList();
-        setWords(data);
-      } catch (error) {
-        console.error('사전 목록 불러오기 실패:', error);
-      }
-    };
-
-    loadWords();
-  }, []);
+  const handleSave = () => {
+    if (term && definition) {
+      onSave({ category, term, definition });
+      setCategory('idol');
+      setTerm('');
+      setDefinition('');
+    } else {
+      alert('용어와 설명을 모두 입력해주세요.');
+    }
+  };
 
   return (
-    <div className="dict-container">
-      <h1 className="dict-title">📚 팬들이 만드는 덕질 사전</h1>
-      <button className="dict-add-button" onClick={() => navigate('/dictionary/new')}>
-        ➕ 새 항목 추가
-      </button>
-      <ul className="dict-list">
-        {words.map((word) => (
-          <li key={word.id} onClick={() => navigate(`/dictionary/${word.id}`)}>
-            <h3>{word.title}</h3>
-            <p>{word.summary}</p>
-          </li>
-        ))}
-      </ul>
+    <div className="new-term-form">
+      <h2>새 용어 작성</h2>
+      <label htmlFor="category">분야:</label>
+      <select
+        id="category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      >
+        <option value="idol">아이돌</option>
+        <option value="streamer">스트리머</option>
+        <option value="game">게임</option>
+      </select>
+      <label htmlFor="term">용어:</label>
+      <input
+        type="text"
+        id="term"
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
+      />
+      <label htmlFor="definition">설명:</label>
+      <textarea
+        id="definition"
+        value={definition}
+        onChange={(e) => setDefinition(e.target.value)}
+      />
+      <div className="form-buttons">
+        <button onClick={handleSave}>저장</button>
+        <button onClick={onCancel}>취소</button>
+      </div>
     </div>
   );
-};
+}
 
-export default DictionaryList;
+export default DictionaryForm;

@@ -1,0 +1,96 @@
+/* DictionaryList.css */
+.dictionary-list {
+  font-family: sans-serif;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-container {
+  width: 80%;
+  display: flex;
+  justify-content: space-between; /* 제목과 버튼을 양 끝으로 배치 */
+  align-items: center; /* 세로축 중앙 정렬 */
+  margin-bottom: 20px;
+}
+
+h1 {
+  text-align: left; /* 제목은 왼쪽 정렬 */
+  margin-bottom: 0; /* title-container에서 간격 관리 */
+}
+
+.add-term-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 20px; /* 제목과의 간격 */
+}
+
+.add-term-button:hover {
+  background-color: #0056b3;
+}
+
+.search-input {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.category {
+  margin-bottom: 20px; /* 카테고리 간 간격 증가 */
+  width: 80%;
+  display: flex; /* 내부 요소 중앙 정렬 (버튼) */
+  flex-direction: column; /* 버튼과 리스트를 세로로 배치 */
+  align-items: center; /* 가로축 중앙 정렬 (버튼) */
+}
+
+.category-button {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; /* 부모(.category) 너비에 맞춰 */
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; /* 카테고리 버튼과 리스트 간 간격 */
+}
+
+.category-button:hover {
+  background-color: #e0e0e0;
+}
+
+.term-list {
+  list-style: none;
+  padding: 0; /* ul의 기본 padding 제거 */
+  margin: 0;
+  display: grid; /* 그리드 레이아웃 사용 */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 용어 카드 크기 조정 */
+  gap: 10px; /* 블록 간 간격 */
+  width: 100%; /* 부모(.category) 너비에 맞춰 */
+}
+
+.term-list li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* 은은한 그림자 효과 */
+  word-break: break-word; /* 긴 단어 줄바꿈 */
+}
+
+.term-list li:last-child {
+  border-bottom: 1px solid #ddd; /* 마지막 항목에도 border-bottom 유지 (그리드 레이아웃) */
+}
