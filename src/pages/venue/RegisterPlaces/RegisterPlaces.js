@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import CustomTextField from '../../../components/common/CustomTextField';
+import FlexInputButton from '../../../components/common/FlexInputButton';
 import ImageUploader from '../../../components/common/ImageUploader';
 import NoticeText from '../../../components/common/NoticeText';
 import {
@@ -15,7 +16,7 @@ import {
   registerBox,
   titleStyle,
 } from '../../../components/common/Styles';
-import FlexInputButton from '../../../components/common/FlexInputButton';
+import axiosInstance from '../../../shared/api/axiosInstance';
 
 const VenueRegister = () => {
   const [venueName, setVenueName] = useState('');
@@ -34,7 +35,8 @@ const VenueRegister = () => {
 
   // ✅ 이미지 업로드 핸들러
   const handleImageUpload = (event, setImage) => {
-    setImage(URL.createObjectURL(event.target.files[0]));
+    const file = event.target.files[0];
+    setImage(file); // 👉 원본 file 저장
   };
 
   const openPostcode = () => {
@@ -47,9 +49,51 @@ const VenueRegister = () => {
   };
 
   // ✅ 폼 제출 핸들러
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert('장소가 등록되었습니다!');
+
+    // 유효성 검사는 알아서 조정!
+    if (!venueName || !venueType || !roadAddress || !mainImage) {
+      alert('필수 항목을 모두 입력해주세요.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', venueName);
+    formData.append('venue_type', venueType);
+    formData.append('road_address', roadAddress);
+    formData.append('detail_address', detailAddress);
+    formData.append('main_image', mainImage); // 원본 file
+    formData.append('rental_fee', rentalFee);
+    formData.append('deposit', deposit);
+    formData.append('operating_info', operatingInfo);
+    formData.append('operating_hours', operatingHours);
+    if (benefitsImage) {
+      formData.append('benefits_image', benefitsImage);
+    }
+    formData.append('description', description);
+    formData.append('sns_type', snsType);
+    formData.append('sns_account', snsAccount);
+
+    try {
+      const token = localStorage.getItem('accessToken'); // 필요 시 토큰 사용
+      const response = await axiosInstance.post(
+        'https://eventcafe.site/user/venues/create/', // ✅ 실제 엔드포인트 주소로 바꿔
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`, // 로그인이 필요한 경우에만
+          },
+        }
+      );
+
+      alert('장소가 등록되었습니다!');
+      console.log('✅ 등록 성공:', response.data);
+    } catch (error) {
+      console.error('❌ 등록 실패:', error);
+      alert('등록 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -69,23 +113,21 @@ const VenueRegister = () => {
 
           {/* ✅ 주소 입력 & 검색 버튼 */}
 
-          
-            <FlexInputButton
-              label="도로명 주소"
-              value={roadAddress}
-              buttonText="주소 찾기"
-              onButtonClick={openPostcode}
-              readOnly={true}
-            />
+          <FlexInputButton
+            label="도로명 주소"
+            value={roadAddress}
+            buttonText="주소 찾기"
+            onButtonClick={openPostcode}
+            readOnly={true}
+          />
 
-            <CustomTextField
-              label="상세 주소"
-              value={detailAddress}
-              onChange={(e) => setDetailAddress(e.target.value)}
-              required
-            />
-          </Box>
-       
+          <CustomTextField
+            label="상세 주소"
+            value={detailAddress}
+            onChange={(e) => setDetailAddress(e.target.value)}
+            required
+          />
+        </Box>
 
         <Box sx={{ marginBottom: '60px' }} />
         <Box sx={registerBox}>
