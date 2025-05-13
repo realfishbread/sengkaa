@@ -27,9 +27,9 @@ const Home = () => {
 
   const cafeSliderSettings = {
     dots: false,
-    infinite: true,
+    infinite: false, // 끝까지 스크롤 가능하도록 infinite를 false로 설정
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 3, // 초기 보여지는 슬라이드 수 (반응형 설정은 유지)
     slidesToScroll: 1,
     arrows: true,
     responsive: [
@@ -68,6 +68,19 @@ const Home = () => {
     },
   ];
 
+  const reservableVenues = [
+    {
+      name: '카페 1',
+      description: '대관 가능한 카페',
+      image: '/media/venue_images/venue1.jpg', // 사진 안 보임 확인 필요
+    },
+    {
+      name: '카페 2',
+      description: '대관 가능한 카페',
+      image: '/media/venue_images/venue2.jpg',
+    },
+  ];
+
   const navItems = [
     { name: '생일카페 등록', path: '/register' },
     { name: '카페 찾기', path: '/search' },
@@ -78,6 +91,7 @@ const Home = () => {
 
   return (
     <div className="Home">
+      {/* 배너 슬라이드 */}
       <main className="map-container">
         <div className="slider-wrapper">
           <Slider {...adSliderSettings}>
@@ -91,9 +105,10 @@ const Home = () => {
         </div>
       </main>
 
+      {/* 인기 카페 이벤트 */}
       <section className="popular-cafes">
-        <Typography variant="h5">인기 생일 카페</Typography>
-        <Slider {...cafeSliderSettings}>
+        <Typography variant="h5">인기 카페 이벤트</Typography>
+        <div className="slick-slider">
           {popularCafes.map((cafe, index) => (
             <div key={index} className="cafe-slide">
               <Box className="cafe-card">
@@ -103,7 +118,23 @@ const Home = () => {
               </Box>
             </div>
           ))}
-        </Slider>
+        </div>
+      </section>
+
+      {/* 대관 가능한 장소 */}
+      <section className="reservable-venues">
+        <Typography variant="h5">대관 가능한 카페</Typography>
+        <div className="slick-slider">
+          {reservableVenues.map((venue, index) => (
+            <div key={index} className="cafe-slide">
+              <Box className="cafe-card">
+                <img src={venue.image} alt={venue.name} />
+                <Typography variant="h6">{venue.name}</Typography>
+                <Typography variant="body2">{venue.description}</Typography>
+              </Box>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );

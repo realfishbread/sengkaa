@@ -1,64 +1,22 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 
-.Home {
-  overflow: visible !important; /* ✅ 가로 스크롤 제한 해제 */
-  scroll-behavior: smooth;
-}
-
-.map-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-}
-
-.slider-wrapper {
-  width: 100%;
-  max-width: 800px;
-  margin: auto;
-  padding: 10px 0;
-}
-
-.slide img,
-.cafe-slide img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.popular-cafes {
-  padding: 2rem 1rem;
-}
-
-.cafe-slide {
-  padding: 1rem;
-}
-
-.cafe-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-}
-
+/* 기본 레이아웃 설정 */
 html,
 body {
   margin: 0;
   font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
   flex-direction: column;
-  padding: 12;
-  overflow-x: hidden; /* ✅ 가로 스크롤 방지 */
-  overflow-y: auto; /* ✅ 세로 스크롤 허용 */
-  display: flex; /* ✅ `flex` 대신 `block` 사용 */
-  min-height: 100vh; /* ✅ 전체 화면 채우도록 설정 */
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  min-height: 100vh;
 }
 
 #root {
   display: flex;
   flex-direction: column;
-
   overflow-x: hidden;
 }
 
@@ -72,38 +30,198 @@ body {
   font-family: 'Pretendard Variable', sans-serif !important;
 }
 
+/* 메인 슬라이더 스타일 */
+.Home {
+  overflow: visible !important;
+  scroll-behavior: smooth;
+}
+
+.map-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.slider-wrapper {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 10px 0;
+}
+
+.slide {
+  width: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.slide p {
+  text-align: center;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* 인기 카페 이벤트 스타일 */
+.popular-cafes {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popular-cafes h5 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.popular-cafes .slick-slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 2rem;
+  max-width: 1200px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.popular-cafes .slick-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.popular-cafes .cafe-slide {
+  margin: 0;
+  width: auto !important;
+  flex-shrink: 0;
+}
+
+.popular-cafes .cafe-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  width: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.popular-cafes .cafe-card img {
+  width: 100%;
+  height: 250px;
+  display: block;
+  border-radius: 8px 8px 0 0;
+  object-fit: cover;
+}
+
+.popular-cafes .cafe-card h6 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.popular-cafes .cafe-card p {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* 대관 가능한 카페 스타일 (reservable-venues) */
+.reservable-venues {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reservable-venues h5 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.reservable-venues .slick-slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 2rem;
+  max-width: 1200px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.reservable-venues .slick-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.reservable-venues .cafe-slide {
+  margin: 0;
+  width: auto !important;
+  flex-shrink: 0;
+}
+
+.reservable-venues .cafe-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  width: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reservable-venues .cafe-card img {
+  width: 100%;
+  height: 250px;
+  display: block;
+  border-radius: 8px 8px 0 0;
+  object-fit: cover;
+}
+
+.reservable-venues .cafe-card h6 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.reservable-venues .cafe-card p {
+  font-size: 0.8rem;
+  color: #555;
+}
+
 /* 레이아웃 스타일 */
 .grid-container {
   display: grid;
-  gap: 16px; /* 카드 간격 */
+  gap: 16px;
   padding: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 반응형 */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 /* 카드 스타일 */
 .card {
   position: relative;
-
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
 .card:hover {
-  transform: scale(1.05); /* 마우스 올릴 때 확대 */
+  transform: scale(1.05);
 }
 
 /* 이미지 스타일 */
 .card img {
   width: 100%;
-
   height: auto;
-  object-fit: cover; /* 이미지 비율 유지 */
+  object-fit: cover;
   transition: opacity 0.3s ease-in-out;
 }
 
 .card:hover img {
-  opacity: 0.8; /* 마우스 올릴 때 투명도 변경 */
+  opacity: 0.8;
 }
 
 /* 텍스트 오버레이 */
@@ -120,9 +238,10 @@ body {
 }
 
 .card:hover .card-content {
-  transform: translateY(-10px); /* 마우스 올릴 때 텍스트 이동 */
+  transform: translateY(-10px);
 }
 
+/* 지도 스타일 */
 .map {
   width: 90%;
   height: 60vh;
@@ -130,10 +249,10 @@ body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Layout 안에서 페이지 내용을 차지할 영역을 설정 */
+/* Layout */
 .layout-content {
-  flex: 1; /* 남은 공간을 모두 차지하여 Footer를 아래로 밀어냄 */
-  overflow: visible; /* ✅ 추가 스크롤 방지 */
+  flex: 1;
+  overflow: visible;
 }
 
 .layout-container {
