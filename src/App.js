@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import AuthRedirectNotice from './components/common/LoginRequiredModal';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -46,9 +47,11 @@ function AppRoutes() {
 
   return (
     <>
+      <AuthRedirectNotice />
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+
           <Route path="board" element={<Board />} />
           <Route path="post" element={<Post />} />
           <Route path="calendar" element={<EventCalendar />} />

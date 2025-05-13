@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import axios from 'axios'; // axiosInstance 말고 기본 axio
 import React, { useContext, useState } from 'react'; // ✅ 이렇게 해야 함
-import { FcGoogle } from 'react-icons/fc'; // 구글 아이콘
 import { SiKakaotalk } from 'react-icons/si'; // 카카오톡 아이콘
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from '../../../components/common/CustomTextField';
