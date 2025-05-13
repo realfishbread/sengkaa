@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import axios from 'axios'; // axiosInstance 말고 기본 axio
 import React, { useContext, useState } from 'react'; // ✅ 이렇게 해야 함
-import { FcGoogle } from 'react-icons/fc'; // 구글 아이콘
 import { SiKakaotalk } from 'react-icons/si'; // 카카오톡 아이콘
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from '../../../components/common/CustomTextField';
@@ -73,9 +72,7 @@ const LoginPage = ({ isModal = false }) => {
     window.location.href = kakaoLoginUrl;
   };
 
-  const handleGoogleLogin = () => {
-    console.log('구글로 로그인 요청');
-  };
+  
 
   return (
     <Box
@@ -267,28 +264,7 @@ const LoginPage = ({ isModal = false }) => {
             <SiKakaotalk size={18} style={{ marginRight: '8px' }} />
             카카오로 로그인
           </Button>
-          <Button
-            fullWidth
-            onClick={handleGoogleLogin}
-            sx={{
-              backgroundColor: '#ffffff',
-              color: '#757575',
-              padding: '10px',
-              fontWeight: 'bold',
-              fontSize: '0.9rem',
-              borderRadius: '6px',
-              border: '1px solid #E0E0E0',
-              boxShadow: '0 3px 9px rgba(0, 0, 0, 0.1)',
-              '&:hover': {
-                backgroundColor: '#f7f7f7',
-                transform: 'scale(1.02)',
-              },
-              transition: 'all 0.3s ease-in-out',
-            }}
-          >
-            <FcGoogle size={18} style={{ marginRight: '8px' }} />
-            구글로 로그인
-          </Button>
+          
         </Box>
       </Container>
     </Box>

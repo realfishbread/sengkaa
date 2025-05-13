@@ -95,6 +95,12 @@ const BirthdayCafeRegister = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      navigate('/login'); // 홈에 감성 로그인 알림 띄우기
+      return;
+    }
+
     const formData = new FormData();
     formData.append('cafe_name', cafeName);
     formData.append('description', description);

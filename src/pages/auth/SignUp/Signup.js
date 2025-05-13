@@ -7,7 +7,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField,
   Typography,
 } from '@mui/material';
 import axios from 'axios';
@@ -347,15 +346,37 @@ const SignupPage = () => {
             </Button>
           </Box>
           {showEmailVerification && (
-            <Box>
-              <TextField
-                label="인증 코드"
-                type="text"
-                fullWidth
-                value={code}
-                onChange={(e) => setCode(e.target.value)} // ✅ 입력값 받기
-                sx={{ marginBottom: '0.5rem' }}
-              />
+            <>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  textAlign: 'center',
+                }}
+              >
+                <CustomTextField
+                  label="인증 코드"
+                  type="text"
+                  fullWidth
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '8px',
+                    },
+                  }}
+                />
+
+                <Button
+                  variant="contained"
+                  onClick={handleVerifyCode}
+                  className="signup-button"
+                >
+                  인증 확인
+                </Button>
+              </Box>
+
               <Typography
                 variant="body2"
                 textAlign="right"
@@ -365,21 +386,9 @@ const SignupPage = () => {
                   ? `남은 시간: ${formatTime(timer)}`
                   : '인증 시간이 만료되었습니다.'}
               </Typography>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={handleVerifyCode} // 여기서 인증 검사!
-                sx={{
-                  fontSize: '0.8rem',
-                  borderRadius: '6px',
-                  boxShadow: 'none',
-                  backgroundColor: '#007AFF',
-                }}
-              >
-                인증 확인
-              </Button>
-            </Box>
+            </>
           )}
+
           {/* 🔹 사용자 유형 선택 추가 */}
           <FormControl
             fullWidth

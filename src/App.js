@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import AuthRedirectNotice from './components/common/LoginRequiredModal';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -13,10 +14,10 @@ import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import EventCalendar from './pages/calender/EventCalendar';
 import DictionaryList from './pages/dictionary/DictionaryList';
-import FaqPage from './pages/Faq/FaqPage';
+import FaqPage from './pages/faq/FaqPage';
 import VenueSearch from './pages/find-cafes/VenueSearch';
 import Home from './pages/Home';
-import KakaoMap from './pages/Map/KakaoMap';
+import KakaoMap from './pages/map/KakaoMap';
 import EditProfile from './pages/profile/EditProfile';
 import ProfilePage from './pages/profile/ProfilePage';
 import Settings from './pages/settings/Settings';
@@ -46,9 +47,11 @@ function AppRoutes() {
 
   return (
     <>
+      <AuthRedirectNotice />
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+
           <Route path="board" element={<Board />} />
           <Route path="post" element={<Post />} />
           <Route path="calendar" element={<EventCalendar />} />

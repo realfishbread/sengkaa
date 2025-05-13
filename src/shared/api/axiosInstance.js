@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // ① 인스턴스 만들기
 const axiosInstance = axios.create({
@@ -56,5 +57,7 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// shared/api/axiosInstance.js
 
 export default axiosInstance;
