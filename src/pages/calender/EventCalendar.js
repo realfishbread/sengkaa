@@ -14,7 +14,10 @@ const EventCalendar = () => {
     '2025-04-22': ['세븐틴 팬 이벤트 🧡'],
   };
 
-  const formatDate = (date) => date.toISOString().split('T')[0];
+  const formatDate = (date) => {
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return localDate.toISOString().split('T')[0];
+  }; //UTC 기준에서 한국 시간으로 변환
 
   useEffect(() => {
     const fetchWeather = async (lat, lon) => {
