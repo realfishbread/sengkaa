@@ -10,7 +10,7 @@ from api.views.profile_views import (
 
 urlpatterns = [
     path('', user_profile, name='user_profile'),  # 기본 프로필
-    path('<str:nickname>/', user_profile_detail, name='user_profile_detail'),  # 특정 유저 프로필
     path('update/', update_profile, name='update_profile'),  # 프로필 수정
+    path('<str:nickname>/', user_profile_detail, name='user_profile_detail'),  # 특정 유저 프로필
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
