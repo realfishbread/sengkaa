@@ -29,7 +29,7 @@ const Footer = () => {
       <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center' }}>
         {/* 왼쪽: 로고 */}
         <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-          <Logo width="100px" height="auto" sx={{ maxWidth: '150px' }} />
+          <Logo width="500px" height="auto" sx={{ maxWidth: '150px' }} />
         </Box>
 
         {/* 가운데: 서비스 링크 */}

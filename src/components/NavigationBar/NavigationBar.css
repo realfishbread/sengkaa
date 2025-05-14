@@ -8,7 +8,7 @@
 
 /* 상단 내비게이션 바 컨테이너 스타일 */
 .upper-navbar-container {
-  max-width: 1300px; /* 원하는 최대 너비 값으로 변경 */
+  max-width: 1500px; /* 원하는 최대 너비 값으로 변경 */
   margin: 0auto;
 }
 
@@ -30,7 +30,7 @@
   max-width: 1000px;
   height: 80px;
   cursor: pointer;
-  margin-left: 130px;
+  margin-left: 320px; /*상단 내비게이션 바 로고 위치 이동*/
 }
 
 .logo-container {
