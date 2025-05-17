@@ -192,3 +192,8 @@ class Venue(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+class Booking(models.Model):
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='bookings')
+    available_date = models.DateField()
