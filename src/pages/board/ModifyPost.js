@@ -29,16 +29,20 @@ const EditPost = () => {
   const [image, setImage] = useState(null); // 미리보기
   const [imageFile, setImageFile] = useState(null); // 업로드용
   const [isOpen, setIsOpen] = useState(true); // 모집 상태 추가
+  const [prevIsOpen, setPrevIsOpen] = useState(true);
 
   useEffect(() => {
     // 🔁 기존 글 데이터 불러오기
     axiosInstance
-      .get(`/user/posts/${postId}/`)
+      .get(`/user/posts/${postId}/edit/`)
       .then((res) => {
         setTitle(res.data.title);
         setText(res.data.content);
-        if (res.data.image) {
-          setImage(res.data.image); // 기본 이미지 미리보기
+        if (res.data.image) setImage(res.data.image);
+
+        if (typeof res.data.is_open !== 'undefined') {
+          setIsOpen(res.data.is_open);
+          setPrevIsOpen(res.data.is_open); // ✅ 초기 상태 저장
         }
       })
       .catch((err) => {
@@ -58,15 +62,23 @@ const EditPost = () => {
   const handleUpdate = () => {
     if (!title.trim() || !text.trim()) return;
 
+    // ✅ "모집 중 → 모집 완료" 로 바뀐 경우 확인창 띄우기
+    if (prevIsOpen === true && isOpen === false) {
+      const confirmClose = window.confirm('모집 완료로 바꾸시겠습니까?');
+      if (!confirmClose) return;
+    }
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', text);
+    formData.append('status', isOpen ? 'open' : 'closed');
+
     if (imageFile) {
-      formData.append('image', imageFile); // 새 이미지 있을 경우만
+      formData.append('image', imageFile);
     }
 
     axiosInstance
-      .patch(`/user/posts/${postId}/`, formData)
+      .patch(`/user/posts/${postId}/edit/`, formData)
       .then(() => {
         alert('게시글이 수정되었습니다!');
         navigate('/board');
@@ -110,7 +122,7 @@ const EditPost = () => {
 
       <Divider sx={{ my: 2 }} />
 
-      <FormControl fullWidth sx={{ mt: 2 }}>
+      <FormControl fullWidth sx={{ mt: 2, mb: 2 }}>
         <InputLabel id="recruit-status-label">모집 상태</InputLabel>
         <Select
           labelId="recruit-status-label"

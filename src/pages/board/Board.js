@@ -356,7 +356,15 @@ const Board = () => {
                               ? '#f5f5f5'
                               : 'transparent',
                           }}
-                        >
+                        >{/*프사 */}
+                          <Avatar
+                            alt={reply.user.nickname}
+                            src={reply.user.profile_image}
+                            sx={{ width: 28, height: 28, cursor: 'pointer' }}
+                            onClick={() =>
+                              navigate(`/profile/${reply.user.nickname}`)
+                            }
+                          />  
                           <Typography variant="body2">
                             💬{' '}
                             <span

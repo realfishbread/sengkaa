@@ -132,16 +132,7 @@ const ProfilePage = () => {
           {profile.email}
         </Typography>
 
-        <Divider sx={{ my: 4, borderColor: '#eee' }} />
-
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          textAlign="center"
-          sx={{ fontSize: 15 }}
-        >
-          가입일: {new Date(profile.created_at).toLocaleDateString()}
-        </Typography>
+        
 
         {/* 자기소개(bio)가 있을 때만 보여주기 */}
         {profile.bio && (
@@ -163,11 +154,19 @@ const ProfilePage = () => {
             </Typography>
           </>
         )}
+        <Divider sx={{ my: 4, borderColor: '#eee' }} />
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          textAlign="center"
+          sx={{ fontSize: 15 }}
+        >
+          가입일: {new Date(profile.created_at).toLocaleDateString()}
+        </Typography>
 
         {/* 프로필 주인 여부 체크 */}
         {isMyProfile ? (
           <>
-
             <Button
               variant="contained"
               fullWidth

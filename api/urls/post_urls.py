@@ -9,7 +9,8 @@ from api.views.post_views import (
     ReplyCreateView,
     reply_list_view,
     PostDeleteView,
-    ReplyUpdateView
+    ReplyUpdateView,
+    PostUpdateView,
 )
 
 urlpatterns = [
@@ -21,4 +22,5 @@ urlpatterns = [
        path("<int:post_id>/replies/", reply_list_view, name="reply-list"),
        path('replies/<int:pk>/', ReplyUpdateView.as_view(), name='reply-update-or-delete'),
        path('<int:post_id>/', PostDeleteView.as_view(), name='post-delete'),
+       path('<int:id>/edit/', PostUpdateView.as_view(), name='post-update'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

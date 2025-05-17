@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 from api.models import Post, Reply
 from rest_framework.views import APIView
-
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from api.serializers.board_serializers import PostSerializer, ReplySerializer
 
 from django.shortcuts import get_object_or_404
@@ -123,3 +124,10 @@ class ReplyUpdateView(APIView):
 
         reply.delete()
         return Response({"message": "댓글 삭제 완료!"}, status=204)
+
+
+class PostUpdateView(RetrieveUpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]  # 또는 커스텀 권한
+    lookup_field = 'id'  # 기본은 pk지만 명확히 지정해도 좋아
