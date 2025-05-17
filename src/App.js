@@ -24,6 +24,7 @@ import Settings from './pages/settings/Settings';
 import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
 import SearchPlaces from './pages/venue/SearchPlaces';
 import './styles/App.css';
+import ModifyPost from './pages/board/ModifyPost';
 
 const theme = createTheme({
   typography: {
@@ -69,6 +70,8 @@ function AppRoutes() {
           <Route path="dictionary" element={<DictionaryList />} />
           <Route path="search" element={<SearchPlaces />} />
           <Route path="venue-search" element={<VenueSearch />} />
+          <Route path="/post/edit/:postId" element={<ModifyPost />} />
+
 
           <Route path="/oauth/kakao/redirect" element={<KakaoRedirectPage />} />
         </Route>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import axiosInstance from '../../shared/api/axiosInstance';
+import React, { useState } from 'react';
+import axiosInstance from '../../../shared/api/axiosInstance';
 
 const ReportModal = ({ postId, onClose }) => {
   const [reportContent, setReportContent] = useState('');
@@ -16,7 +16,7 @@ const ReportModal = ({ postId, onClose }) => {
     try {
       await axiosInstance.post('/user/reports/report-post/', {
         post: postId,
-        content: reportContent,
+        reason: reportContent,
       });
       alert('신고가 접수되었습니다.');
       onClose();
@@ -45,6 +45,15 @@ const ReportModal = ({ postId, onClose }) => {
       >
         <Typography variant="h6" component="h2" gutterBottom>
           게시글 신고
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mb: 2, fontSize: '0.85rem' }}
+        >
+          🚨 신고는 운영팀에 전달되며, 허위 신고 시 제재를 받을 수 있습니다.
+          <br />
+          명확하고 구체적인 사유를 작성해주세요.
         </Typography>
         <TextField
           fullWidth

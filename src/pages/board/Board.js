@@ -12,11 +12,11 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import ReportModal from '../../components/common/ReportModal'; // 신고 모달 컴포넌트 추가
 import WarningBox from '../../components/common/WarningBox';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import '../../styles/fade.css'; // ✅ 만든 fade.css 경로에 맞게 import
+import ReportModal from './api/ReportModal'; // 신고 모달 컴포넌트 추가
 
 const Board = () => {
   const [posts, setPosts] = useState([]);
@@ -260,7 +260,26 @@ const Board = () => {
               </Box>
 
               {user?.nickname === post.nickname && (
-                <Box sx={{ textAlign: 'right', mt: 2 }}>
+                <Box
+                  sx={{
+                    textAlign: 'right',
+                    mt: 2,
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/post/edit/${post.id}`); // 수정 페이지로 이동
+                    }}
+                  >
+                    게시글 수정
+                  </Button>
                   <Button
                     variant="outlined"
                     color="error"
