@@ -11,45 +11,35 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-
-const dummyEvents = [
-  {
-    id: 1,
-    name: '뉴진스 팬카페 이벤트',
-    date: '2025-06-15',
-    location: '서울 홍대',
-    genre: '아이돌',
-    image: 'https://via.placeholder.com/400x200',
-  },
-  {
-    id: 2,
-    name: '침착맨 팬미팅',
-    date: '2025-06-20',
-    location: '부산 서면',
-    genre: '유튜버',
-    image: 'https://via.placeholder.com/400x200',
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { EventSearchApi } from './api/EventSearchApi';
 
 const SearchPlaces = () => {
   const [keyword, setKeyword] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [genre, setGenre] = useState('');
+  const [events, setEvents] = useState([]); // ✅ 바뀐 데이터 저장용
 
-  const handleGenreChange = (event, newGenre) => {
-    setGenre(newGenre);
-  };
+  const handleGenreChange = (event, newGenre) => setGenre(newGenre);
 
-  const filteredEvents = dummyEvents.filter((event) => {
-    const matchKeyword = keyword === '' || event.name.includes(keyword);
-    const matchGenre = genre === '' || event.genre === genre;
-    const matchStart = startDate === '' || event.date >= startDate;
-    const matchEnd = endDate === '' || event.date <= endDate;
-    return matchKeyword && matchGenre && matchStart && matchEnd;
-  });
-
+  // 🔥 필터 변경될 때마다 API 호출
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await EventSearchApi({
+          keyword,
+          startDate,
+          endDate,
+          genre,
+        });
+        setEvents(data);
+      } catch (err) {
+        console.error('이벤트 불러오기 실패:', err);
+      }
+    };
+    fetchEvents();
+  }, [keyword, startDate, endDate, genre]);
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
@@ -105,24 +95,24 @@ const SearchPlaces = () => {
 
       {/* 이벤트 카드 리스트 */}
       <Grid container spacing={3}>
-        {filteredEvents.map((event) => (
+        {events.map((event) => (
           <Grid item xs={12} sm={6} md={4} key={event.id}>
             <Card>
               <CardMedia
                 component="img"
                 height="180"
-                image={event.image}
-                alt={event.name}
+                image={event.image} // image 필드로 맞춰줘야 해
+                alt={event.cafe_name}
               />
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  {event.name}
+                  {event.cafe_name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   📍 {event.location}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  📅 {event.date}
+                  📅 {event.start_date} ~ {event.end_date}
                 </Typography>
               </CardContent>
             </Card>

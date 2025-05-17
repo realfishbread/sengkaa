@@ -3,8 +3,10 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
 from api.models import BirthdayCafe
-from api.serializers.birthday_cafe_serializer import BirthdayCafeSerializer
+from api.serializers.birthday_cafe_serializer import BirthdayCafeDetailSerializer, BirthdayCafeListSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.permissions import AllowAny
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
@@ -37,8 +39,40 @@ def create_birthday_event(request):
         'goods': goods,
     }
 
-    serializer = BirthdayCafeSerializer(data=payload, context={'request': request})
+    serializer = BirthdayCafeDetailSerializer(data=payload, context={'request': request})
     if serializer.is_valid():
         serializer.save(user=request.user)  # ✅ 핵심!
         return Response({"message": "이벤트 등록 성공", "data": serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class BirthdayCafeSearchAPIView(ListAPIView):
+    serializer_class = BirthdayCafeListSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        queryset = BirthdayCafe.objects.all()
+        keyword = self.request.query_params.get('keyword')
+        genre = self.request.query_params.get('genre')
+        start_date = self.request.query_params.get('startDate')
+        end_date = self.request.query_params.get('endDate')
+
+        if keyword:
+            queryset = queryset.filter(cafe_name__icontains=keyword)
+
+        if genre:
+            queryset = queryset.filter(genre=genre)
+
+        if start_date:
+            queryset = queryset.filter(start_date__gte=start_date)
+
+        if end_date:
+            queryset = queryset.filter(end_date__lte=end_date)
+
+        return queryset
+    
+class BirthdayCafeDetailAPIView(RetrieveAPIView):
+    queryset = BirthdayCafe.objects.all()
+    serializer_class = BirthdayCafeDetailSerializer
+    lookup_field = 'id'

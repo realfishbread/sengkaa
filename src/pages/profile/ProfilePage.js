@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import NotFoundBox from '../../components/common/NotFoundBox';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 
@@ -53,19 +54,7 @@ const ProfilePage = () => {
         }}
       >
         {/* 🐱 귀여운 일러스트 이미지 삽입 */}
-        <Box
-          component="img"
-          src="/images/error-cat.png" // 👉 public/images 폴더에 넣어두면 됨
-          alt="에러 이미지"
-          sx={{ maxWidth: 300, mb: 4 }}
-        />
-
-        <Typography variant="h6" fontWeight="bold" color="error" mb={1}>
-          😢 사용자 정보를 찾을 수 없어요!
-        </Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          입력한 닉네임이 잘못되었거나, 서버에서 정보를 불러오지 못했어요.
-        </Typography>
+        <NotFoundBox />
 
         <Button
           variant="contained"
@@ -84,7 +73,7 @@ const ProfilePage = () => {
             },
           }}
         >
-          🔙 돌아가기
+          뒤로 돌아가기
         </Button>
       </Box>
     );
@@ -131,8 +120,6 @@ const ProfilePage = () => {
         >
           {profile.email}
         </Typography>
-
-        
 
         {/* 자기소개(bio)가 있을 때만 보여주기 */}
         {profile.bio && (

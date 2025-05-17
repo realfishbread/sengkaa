@@ -7,7 +7,7 @@ export const VenueSearchApi = async ({
   startDate,
   endDate,
 }) => {
-  const response = await axios.get('/user/venue/search/', {
+  const response = await axios.get('https://eventcafe.site/user/venue/search/', {
     params: {
       keyword,
       type: venueType,

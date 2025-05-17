@@ -40,6 +40,14 @@ const BirthdayCafeRegister = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  const genreMap = {
+    idol: 1,
+    youtuber: 2,
+    comic: 3,
+    webtoon: 4,
+    game: 5,
+  };
+
   useEffect(() => {
     axiosInstance
       .get(`/user/star/stars/?genre=${genreMap[genre]}`)
@@ -62,14 +70,7 @@ const BirthdayCafeRegister = () => {
       ].join(' '),
   });
 
-  const genreMap = {
-    idol: 1,
-    youtuber: 2,
-    comic: 3,
-    webtoon: 4,
-    game: 5,
-  };
-
+ 
   const [goodsList, setGoodsList] = useState([
     {
       name: '',

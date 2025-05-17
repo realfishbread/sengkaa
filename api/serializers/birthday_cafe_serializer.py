@@ -1,21 +1,58 @@
 from rest_framework import serializers
 from api.models import BirthdayCafe, Goods
 class GoodsSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Goods
-        fields = ['name', 'description', 'price', 'image']
+        fields = ['id', 'name', 'description', 'price', 'image']
 
-class BirthdayCafeSerializer(serializers.ModelSerializer):
-    goods = GoodsSerializer(many=True, required=False)
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        elif obj.image:
+            return obj.image.url
+        return None
+
+class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
+    goods = GoodsSerializer(many=True, read_only=True)  # related_name='goods'
+    image = serializers.SerializerMethodField()
+    location = serializers.SerializerMethodField()
 
     class Meta:
         model = BirthdayCafe
-        fields = '__all__'
-        read_only_fields = ['user']  # ✅ 유저는 요청에서 따로 안 받아도 되게끔
+        fields = [
+            'id', 'cafe_name', 'description', 'genre', 'star',
+            'start_date', 'end_date', 'location', 'image', 'goods'
+        ]
 
-    def create(self, validated_data):
-        goods_data = validated_data.pop('goods', [])
-        event = BirthdayCafe.objects.create(**validated_data)
-        for g in goods_data:
-            Goods.objects.create(event=event, **g)
-        return event
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        elif obj.image:
+            return obj.image.url
+        return None
+
+    def get_location(self, obj):
+        return f"{obj.road_address} {obj.detail_address}"
+    
+class BirthdayCafeListSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+    location = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BirthdayCafe
+        fields = ['id', 'cafe_name', 'genre', 'start_date', 'end_date', 'location', 'image']
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        elif obj.image:
+            return obj.image.url
+        return None
+
+    def get_location(self, obj):
+        return f"{obj.road_address} {obj.detail_address}"

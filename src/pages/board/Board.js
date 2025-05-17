@@ -356,7 +356,9 @@ const Board = () => {
                               ? '#f5f5f5'
                               : 'transparent',
                           }}
-                        >{/*프사 */}
+                        >
+                          <Typography variant="body2">
+                            {/*프사 */}
                           <Avatar
                             alt={reply.user.nickname}
                             src={reply.user.profile_image}
@@ -364,9 +366,7 @@ const Board = () => {
                             onClick={() =>
                               navigate(`/profile/${reply.user.nickname}`)
                             }
-                          />  
-                          <Typography variant="body2">
-                            💬{' '}
+                          />  {' '}
                             <span
                               style={{
                                 fontWeight: 'bold',
