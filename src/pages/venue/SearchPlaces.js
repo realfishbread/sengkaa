@@ -33,11 +33,18 @@ const SearchPlaces = () => {
           endDate,
           genre,
         });
-        setEvents(data);
+
+        if (Array.isArray(data)) {
+          setEvents(data);
+        } else {
+          setEvents([]); // 🚨 혹시라도 results 빠졌을 때 대비
+        }
       } catch (err) {
         console.error('이벤트 불러오기 실패:', err);
+        setEvents([]);
       }
     };
+
     fetchEvents();
   }, [keyword, startDate, endDate, genre]);
   return (
