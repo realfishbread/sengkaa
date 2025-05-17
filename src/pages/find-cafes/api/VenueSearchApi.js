@@ -15,5 +15,5 @@ export const VenueSearchApi = async ({
       end_date: endDate,
     },
   });
-  return response.data;
+  return response.data.results;
 };

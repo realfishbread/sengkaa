@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const EventSearchApi = async ({ keyword, startDate, endDate, genre }) => {
-  const response = await axios.get('/user/events/search/', {
+  const response = await axios.get('https://eventcafe.site/user/events/birthday-cafes/search/', {
     params: {
       keyword,
       start_date: startDate,
