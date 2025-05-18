@@ -143,7 +143,7 @@ const BirthdayCafeRegister = () => {
       );
 
       alert('이벤트가 등록되었습니다!');
-      navigate('/'); // 등록 후 홈으로 이동
+      navigate('/search'); // 등록 후 홈으로 이동
     } catch (err) {
       if (err.response?.data) {
         console.error('서버 응답:', err.response.data);

@@ -355,10 +355,11 @@ const Board = () => {
                             backgroundColor: isReply
                               ? '#f5f5f5'
                               : 'transparent',
+                            display: 'flex',
+                            alignItems: 'center', // 👉 수직 정렬
+                            gap: 1,
                           }}
                         >
-                          <Typography variant="body2">
-                            {/*프사 */}
                           <Avatar
                             alt={reply.user.nickname}
                             src={reply.user.profile_image}
@@ -366,7 +367,13 @@ const Board = () => {
                             onClick={() =>
                               navigate(`/profile/${reply.user.nickname}`)
                             }
-                          />  {' '}
+                          />
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              lineHeight: 1, // ✨ 줄 간격 줄이기
+                            }}
+                          >
                             <span
                               style={{
                                 fontWeight: 'bold',

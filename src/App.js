@@ -25,6 +25,7 @@ import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
 import SearchPlaces from './pages/venue/SearchPlaces';
 import './styles/App.css';
 import ModifyPost from './pages/board/ModifyPost';
+import FavoriteStarModal from './pages/bias/FavoriteStarModal';
 
 const theme = createTheme({
   typography: {
@@ -71,7 +72,7 @@ function AppRoutes() {
           <Route path="search" element={<SearchPlaces />} />
           <Route path="venue-search" element={<VenueSearch />} />
           <Route path="/post/edit/:postId" element={<ModifyPost />} />
-
+          <Route path="/select-star" element={<FavoriteStarModal />} />
 
           <Route path="/oauth/kakao/redirect" element={<KakaoRedirectPage />} />
         </Route>

@@ -1,6 +1,8 @@
+import { Button } from '@mui/material'; // 👈 이거 꼭 필요!
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
+import FavoriteStarModal from '../bias/FavoriteStarModal'; // 경로 확인해서 맞게 수정
 
 export default function EditProfile() {
   const [nickname, setNickname] = useState('');
@@ -8,7 +10,7 @@ export default function EditProfile() {
   const [bio, setBio] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
-
+  const [showModal, setShowModal] = useState(false);
   const { user, setUser } = useContext(UserContext); // ✅ 로그인된 유저
 
   // ✅ 유저 정보가 들어오면 state에 반영
@@ -52,6 +54,20 @@ export default function EditProfile() {
     } catch (error) {
       console.error(error);
       alert('저장 실패, 다시 시도해주세요.');
+    }
+  };
+
+  const handleSelectStar = async (starId) => {
+    const formData = new FormData();
+    formData.append('star', starId);
+    try {
+      await axiosInstance.patch('/user/profile/update/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      alert('최애 등록 완료!');
+      setShowModal(false);
+    } catch (e) {
+      alert('등록 실패...');
     }
   };
 
@@ -105,6 +121,26 @@ export default function EditProfile() {
             placeholder="자기소개"
             style={styles.textarea}
           />
+
+          <Button
+            variant="outlined"
+            onClick={() => setShowModal(true)}
+            style={{
+              borderColor: '#6C63FF',
+              color: '#6C63FF',
+              fontWeight: '600',
+              borderRadius: '12px',
+              padding: '8px 16px',
+            }}
+          >
+            최애 스타 선택
+          </Button>
+          {showModal && (
+            <FavoriteStarModal
+              onClose={() => setShowModal(false)}
+              onSelect={handleSelectStar}
+            />
+          )}
           <div style={styles.buttonContainer}>
             <button type="submit" style={styles.saveButton}>
               저장하기

@@ -20,6 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)  # 🌟✨ bio 필드 추가!
+    
 
     # 🔥 문제 해결 핵심: related_name 수정
     groups = models.ManyToManyField(
@@ -31,6 +32,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         Permission,
         related_name='customuser_permissions',
         blank=True
+    )
+    
+    star = models.ForeignKey(  # ⭐ 최애 스타 추가
+        'api.Star',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='fans'
     )
 
     @property
@@ -120,12 +129,14 @@ class Star(models.Model):
     name = models.CharField(max_length=100)
     group = models.CharField(max_length=100, blank=True)
     display = models.CharField(max_length=200)
-    image = models.URLField(blank=True)
+    image = models.URLField(max_length=500, blank=True)
     birthday = models.DateField(null=True, blank=True)
     keywords = models.JSONField(default=list, blank=True)
     
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)  # 🔥 외래키 연결
-
+    
+    def __str__(self):
+        return self.name
 
 class BirthdayCafe(models.Model):
     cafe_name = models.CharField(max_length=200)
