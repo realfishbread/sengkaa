@@ -62,6 +62,8 @@
   cursor: pointer;
   background-color: white;
   pointer-events: auto; /* 👈 이거 필수! */
+  animation: pop-in 0.5s ease-out;
+  transition: transform 0.2s ease;
 }
 
 .custom-marker img {
@@ -69,6 +71,45 @@
   height: 100%;
   object-fit: cover;
   pointer-events: none; /* 👈 이거 없으면 이미지가 이벤트 막아 */
+}
+
+.custom-marker:hover {
+  animation: shake 0.3s ease-in-out;
+  transform: scale(1.05);
+}
+
+/* 진입 시 퐁! 하고 뜨는 애니메이션 */
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 흔들리는 애니메이션 */
+@keyframes shake {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+  25% {
+    transform: translate(2px, -2px) rotate(-2deg);
+  }
+  50% {
+    transform: translate(-2px, 2px) rotate(2deg);
+  }
+  75% {
+    transform: translate(2px, -1px) rotate(-1deg);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
 }
 
 .map-container {

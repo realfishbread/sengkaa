@@ -9,10 +9,10 @@
       const refresh = params.get("refresh");
       const username = params.get("username");
       const nickname = params.get("nickname");
-      const profile_image = params.get("profile_image");
+      const profile_image = params.get("profile_image") || params.get("profile_image_url"); // ✅ 우선순위 적용
 
       if (access && refresh) {
-        const redirectUrl = `exp://redirect?access=${access}&refresh=${refresh}&username=${username}&nickname=${nickname}&profile_image=${profile_image}`;
+        const redirectUrl = `eventcafeapp://redirect?access=${access}&refresh=${refresh}&username=${username}&nickname=${nickname}&profile_image=${profile_image}`;
         window.location.href = redirectUrl;
       } else {
         document.body.innerText = "로그인 실패: 토큰이 없습니다.";
