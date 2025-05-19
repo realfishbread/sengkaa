@@ -61,10 +61,20 @@
   box-shadow: 0 0 0 3px black;
   cursor: pointer;
   background-color: white;
+  pointer-events: auto; /* 👈 이거 필수! */
 }
 
 .custom-marker img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none; /* 👈 이거 없으면 이미지가 이벤트 막아 */
+}
+
+.map-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
 }

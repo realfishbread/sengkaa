@@ -48,14 +48,14 @@ const LoginPage = ({ isModal = false }) => {
           nickname: data.nickname,
           username: data.username,
           email: data.email,
-          profile_image: data.profile_image,
+          profile_image: data.profile_image_url,
         })
       ); // ✅ 추가
       setUser({
         nickname: data.nickname,
         username: data.username,
         email: data.email,
-        profile_image: data.profile_image,
+        profile_image: data.profile_image_url,
       });
       navigate('/'); // 홈으로
     } catch (err) {

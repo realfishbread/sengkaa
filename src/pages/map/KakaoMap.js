@@ -99,77 +99,80 @@ const KakaoMap = () => {
   useEffect(() => {
     const { kakao } = window;
     if (!kakao || !kakao.maps) {
-      console.error('Kakao SDK가 아직 로드되지 않았습니다.');
+      console.error('Kakao Maps SDK가 로드되지 않았습니다.');
       return;
     }
 
-    kakao.maps.load(() => {
-      const container = document.getElementById('myMap');
-      const options = {
-        center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-        level: 4,
-      };
-      const map = new kakao.maps.Map(container, options);
+    // 지도 초기화
+    const container = document.getElementById('myMap');
+    const options = {
+      center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+      level: 4,
+    };
+    const map = new kakao.maps.Map(container, options);
 
-      const defaultMarkerImage = new kakao.maps.MarkerImage(
-        markerIcons.general,
-        new kakao.maps.Size(40, 40),
-        { offset: new kakao.maps.Point(20, 40) }
-      );
-
-      const userMarker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-        image: defaultMarkerImage,
-      });
-      userMarker.setMap(map);
-
-      const ps = new kakao.maps.services.Places();
-      ps.keywordSearch(
-        '카페',
-        (data, status) => {
-          if (status === kakao.maps.services.Status.OK) {
-            data.forEach((place) => {
-              const category = getCategory(place);
-              displayMarker(place, category, map);
-            });
-          } else {
-            console.error('카페 검색 실패');
-          }
-        },
-        {
-          location: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-          radius: 5000,
-        }
-      );
-
-      function displayMarker(place, category, map) {
-        const imageUrl =
-          place.image_url ||
-          'https://via.placeholder.com/100x100.png?text=No+Image';
-
-        const borderColor = borderColors[category] || '#ffffff';
-
-        const content = `
-          <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.place_name.replace(
-          /'/g,
-          "\\'"
-        )}')">
-            <img src="${imageUrl}" alt="포스터" />
-          </div>
-        `;
-
-        new kakao.maps.CustomOverlay({
-          map: map,
-          position: new kakao.maps.LatLng(place.y, place.x),
-          content: content,
-          yAnchor: 1,
-        });
-      }
+    // 사용자 위치 표시용 기본 마커 생성
+    const defaultMarkerImage = new kakao.maps.MarkerImage(
+      markerIcons.general,
+      new kakao.maps.Size(40, 40),
+      { offset: new kakao.maps.Point(20, 40) }
+    );
+    const userMarker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+      image: defaultMarkerImage,
     });
+    userMarker.setMap(map);
+
+    // 장소 검색 서비스 생성
+    const ps = new kakao.maps.services.Places();
+
+    // "카페" 키워드로 검색 (반경 5km)
+    ps.keywordSearch(
+      '카페',
+      (data, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          data.forEach((place) => {
+            const category = getCategory(place);
+            displayMarker(place, category);
+          });
+        } else {
+          console.error('카페 검색 실패');
+        }
+      },
+      {
+        location: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+        radius: 5000,
+      }
+    );
+
+    // 마커 생성 함수
+    function displayMarker(place, category) {
+      const imageUrl =
+        place.image_url ||
+        'https://via.placeholder.com/100x100.png?text=No+Image';
+
+      const borderColor = borderColors[category] || '#ffffff';
+
+      const content = `
+        <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.place_name.replace(
+        /'/g,
+        "\\'"
+      )}')">
+          <img src="${imageUrl}" alt="포스터" />
+        </div>
+      `;
+
+      new kakao.maps.CustomOverlay({
+        map: map,
+        position: new kakao.maps.LatLng(place.y, place.x),
+        content: content,
+        yAnchor: 1,
+      });
+    }
   }, [userLocation]);
 
   return (
-    <div id="myMap" className="kakao-map-container">
+    <div className="kakao-map-container">
       {/* 상세 정보 패널 */}
       <div className={`info-panel ${selectedPlace ? '' : 'hidden'}`}>
         {selectedPlace && (
@@ -216,7 +219,8 @@ const KakaoMap = () => {
         )}
       </div>
 
-     
+      {/* 지도 영역 */}
+      <div id="myMap" className="map-container" />
     </div>
   );
 };

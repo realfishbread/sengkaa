@@ -53,6 +53,8 @@ def kakao_login_callback(request):
     kakao_id = user_info.get("id")  # ✅ 카카오 고유 ID
     nickname = user_info["properties"].get("nickname", "")
     profile_image = user_info["properties"].get("profile_image", "")
+    if profile_image.startswith("http://"):
+        profile_image = profile_image.replace("http://", "https://")
 
     if not kakao_id or not nickname:
         return Response({"error": "카카오 정보가 부족합니다."}, status=400)
@@ -83,7 +85,7 @@ def kakao_login_callback(request):
             "refresh": str(refresh),
             "username": user.username,
             "nickname": user.nickname,
-            "profile_image": profile_image,
+            "profile_image_url": profile_image,
         })
 
     if is_app_user(request):

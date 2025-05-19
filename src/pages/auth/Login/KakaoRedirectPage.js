@@ -13,7 +13,7 @@ const KakaoRedirectPage = () => {
     const refresh = params.get('refresh');
     const nickname = params.get('nickname');
     const username = params.get('username');
-    const profile_image = params.get('profile_image');
+    const profile_image = params.get("profile_image") || params.get("profile_image_url");
 
     if (access && refresh) {
       // 🔐 저장

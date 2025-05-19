@@ -49,7 +49,7 @@ function AppRoutes() {
 
   return (
     <>
-      <AuthRedirectNotice />
+      
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
