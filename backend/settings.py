@@ -210,8 +210,18 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
 }
 
+
+
+import os
+
+IS_APP = os.environ.get("IS_APP") == "true"
+
+if IS_APP:
+    KAKAO_REDIRECT_URI = "https://eventcafe.site/user/social/kakao/app-redirect.html"
+else:
+    KAKAO_REDIRECT_URI = "https://eventcafe.site/user/social/oauth/kakao/callback"
+    
 KAKAO_REST_API_KEY="4083ddda8b18709f62bb857f2c52f127"
-KAKAO_REDIRECT_URI="https://eventcafe.site/user/social/oauth/kakao/callback"
 
 AUTH_USER_MODEL = 'api.User'
 

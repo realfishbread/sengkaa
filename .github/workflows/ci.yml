@@ -86,6 +86,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
             echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" > /var/www/eventcafe-backend/.env
             echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> /var/www/eventcafe-backend/.env
+            echo "IS_APP_ENV=true" >> /var/www/eventcafe-backend/.env  
           EOF
 
       - name: Run deploy.sh on EC2

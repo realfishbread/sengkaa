@@ -2,51 +2,24 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>카카오 로그인 중...</title>
+    <title>앱으로 리디렉션 중...</title>
     <script>
-      (async () => {
-        const REST_API_KEY = '너의 카카오 REST API 키';
-        const REDIRECT_URI = location.origin + '/kakao/app-redirect.html';
+      const params = new URLSearchParams(window.location.search);
+      const access = params.get("access");
+      const refresh = params.get("refresh");
+      const username = params.get("username");
+      const nickname = params.get("nickname");
+      const profile = params.get("profile_image");
 
-        // 현재 URL에 code 파라미터가 없으면 → authorize 요청
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-
-        if (!code) {
-          const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${encodeURIComponent(
-            REDIRECT_URI
-          )}&response_type=code`;
-          window.location.href = authUrl;
-          return;
-        }
-
-        // code가 있으면 → 토큰 요청 (보안상 원래는 하면 안 됨... 하지만 백엔드 없을 때 쓰는 편법!)
-        const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            grant_type: 'authorization_code',
-            client_id: REST_API_KEY,
-            redirect_uri: REDIRECT_URI,
-            code: code,
-          }),
-        });
-
-        const tokenData = await tokenRes.json();
-        const accessToken = tokenData.access_token;
-        if (accessToken) {
-          // 앱으로 리디렉트
-          window.location.href = `eventcafeapp://redirect?token=${accessToken}`;
-        } else {
-          document.body.innerText = '토큰 획득 실패';
-          console.error(tokenData);
-        }
-      })();
+      if (access && refresh) {
+        const redirectUrl = `eventcafeapp://redirect?access=${access}&refresh=${refresh}&username=${username}&nickname=${nickname}&profile=${profile}`;
+        window.location.href = redirectUrl;
+      } else {
+        document.body.innerText = "로그인 실패: 토큰이 없습니다.";
+      }
     </script>
   </head>
   <body>
-    로그인 처리 중입니다...
+    앱으로 로그인 정보 전달 중...
   </body>
 </html>

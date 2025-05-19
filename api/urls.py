@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenRefreshView
 import os
 
 urlpatterns = [
@@ -11,6 +12,8 @@ urlpatterns = [
     path('events/', include('api.urls.event_urls')),
     path('reports/', include('api.urls.report_urls')),
     path('star/', include('api.urls.star_urls')),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('venues/', include('api.urls.venue_urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
