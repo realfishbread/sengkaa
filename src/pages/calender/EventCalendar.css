@@ -1,106 +1,103 @@
+/* 전체 캘린더와 일정 영역을 가로로 배치하고, 배경과 패딩, 그림자 적용 */
 .calendar-layout {
   display: flex;
-  min-height: 90vh;
+  min-height: 70vh;
   background: #f0f0ff;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  gap: 20px;
+  justify-content: center; /* 중앙 정렬 */
 }
 
-.left-panel {
-  flex: 1;
-  padding: 40px 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #eaeaea; /* fallback */
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  color: rgb(0, 0, 0);
-  position: relative;
-}
-.left-panel h2 {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-/* 오른쪽 캘린더 */
+/* 오른쪽 패널(일정 보기) 스타일 */
 .right-panel {
-  width: 55%;
+  flex: 0.9;
   background: #ffffff;
   padding: 24px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-left: 40px; /* 일정 보기와 캘린더 간격 */
 }
 
-.weather-icon {
-  font-size: 48px;
-  margin-bottom: 10px;
-}
-
-.task-list {
-  margin-top: 40px;
-}
-
-.task {
-  margin-bottom: 16px;
-  font-size: 15px;
-}
-
-.task-time {
-  display: inline-block;
-  background: white;
-  color: #1e88e5;
-  padding: 4px 10px;
-  border-radius: 12px;
-  padding: 4px 10px;
-  font-weight: bold;
-  margin-right: 10px;
-  font-size: 13px;
-}
-
-.right-panel {
-  flex: 1;
-  background: white;
-  padding: 40px 30px;
-  border: none;
-}
-
-.custom-calendar {
-  border: none;
-  width: 100%;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.custom-calendar abbr {
-  text-decoration: none;
-}
-
+/* 일정 상세 보기 박스 스타일 */
 .schedule-box {
-  margin-top: 30px;
-}
-
-.schedule-box h3 {
-  margin-bottom: 12px;
-  font-size: 18px;
-}
-
-.poster-overlay {
-  backdrop-filter: brightness(0.9);
-  background: rgba(0, 0, 0, 0.3); /* 조금 어둡게 */
+  width: 300px;
+  background: #f9fafe;
   padding: 20px;
-  border-radius: 20px;
-  height: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgb(0 0 0 / 0.1);
+}
+
+/* 캘린더 전체 스타일 */
+.custom-calendar {
+  width: 100%;
+  border: none;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 캘린더 날짜 타일 스타일 */
+.react-calendar__tile {
+  height: 120px !important;
+  max-width: none !important;
+  padding: 8px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.footer-msg {
-  font-size: 13px;
-  opacity: 0.9;
+/* 날짜 숫자 스타일 */
+.react-calendar__tile > abbr {
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* 날짜 타일 내 이벤트 리스트 세로 정렬 */
+.react-calendar__tile .event-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+}
+
+/* 개별 이벤트 아이템 스타일 */
+.react-calendar__tile .event-item {
+  background: #e3e8ff;
+  color: #333;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 4px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: center;
-  margin-top: 30px;
+  cursor: default;
+}
+
+/* 더 보기 버튼 스타일 (일정이 많을 때) */
+.react-calendar__tile .event-item.more {
+  background: #a3bffa;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+/* 일정 상세 보기 리스트 스타일 */
+.schedule-box ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+/* 일정 목록 아이템 스타일 */
+.schedule-box li {
+  margin-bottom: 6px;
+  font-size: 14px;
 }

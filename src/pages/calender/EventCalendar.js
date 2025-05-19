@@ -1,15 +1,14 @@
-// EventCalendar.js
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './EventCalendar.css'; // 👈 스타일 따로 관리 추천
+import './EventCalendar.css';
 
 const EventCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [weather, setWeather] = useState(null);
+  const [selectedEvents, setSelectedEvents] = useState([]);
 
   const events = {
+    '2025-04-19': ['뛰기', '테스트', '미팅', '저녁 식사'],
     '2025-04-20': ['뷔 생일카페 🎂', '이태원 콜라보카페 🎉'],
     '2025-04-22': ['세븐틴 팬 이벤트 🧡'],
   };
@@ -17,105 +16,51 @@ const EventCalendar = () => {
   const formatDate = (date) => {
     const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
     return localDate.toISOString().split('T')[0];
-  }; //UTC 기준에서 한국 시간으로 변환
+  };
 
-  useEffect(() => {
-    const fetchWeather = async (lat, lon) => {
-      try {
-        const res = await axios.get(
-          `https://api.weatherapi.com/v1/current.json?key=9c026a429e95428e9a473521253004&q=${lat},${lon}&lang=ko`
-        );
-        console.log('✅ 날씨 데이터:', res.data);
-        setWeather({
-          ...res.data.current,
-          location: res.data.location.name,
-        });
-      } catch (err) {
-        console.error('❌ 날씨 불러오기 실패:', err);
-      }
-    };
-
-    // 위치 요청
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          fetchWeather(latitude, longitude);
-        },
-        (error) => {
-          console.error('❌ 위치 권한 거부 또는 실패:', error);
-          // fallback: 서울 날씨
-          fetchWeather(37.5665, 126.978);
-        }
-      );
-    } else {
-      console.warn('⚠️ 위치 기능을 사용할 수 없습니다.');
-      // fallback: 서울 날씨
-      fetchWeather(37.5665, 126.978);
-    }
-  }, []);
+  const handleDateClick = (date) => {
+    const dateStr = formatDate(date);
+    setSelectedDate(date);
+    setSelectedEvents(events[dateStr] || []);
+  };
 
   return (
     <div className="calendar-layout">
-      <div className="left-panel">
-        <div>
-          <div className="weather">
-            {weather ? (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <img
-                  src={`https:${weather.condition.icon}`}
-                  alt="weather icon"
-                  style={{ width: 60, height: 60 }}
-                />
-                <h2>{weather.temp_c}°C </h2>
-                <h2> {weather.location}</h2>
-                <p>{weather.condition.text}</p>
-              </div>
-            ) : (
-              <p style={{ color: '#fff' }}>
-                ⏳ 날씨 정보를 불러오는 중입니다...
-              </p>
-            )}
-          </div>
-          <div className="task-list">
-            <div className="task">
-              <span className="task-time">09:00</span>Send a message to James
-            </div>
-            <div className="task">
-              <span className="task-time">11:00</span>Reading a new book
-            </div>
-          </div>
-        </div>
-        <div style={{ fontSize: 18, opacity: 0.7, alignSelf: 'center' }}>
-          Have a nice day ☀️
-        </div>
-      </div>
-
       <div className="right-panel">
-        <h2 style={{ marginBottom: 20 }}>나의 덕질 일정</h2>
+        <h2>나의 덕질 일정</h2>
         <Calendar
-          onChange={setSelectedDate}
+          onChange={handleDateClick}
           value={selectedDate}
           className="custom-calendar"
+          tileContent={({ date }) => {
+            const dateStr = formatDate(date);
+            const eventList = events[dateStr] || [];
+
+            return (
+              <div className="event-list">
+                {eventList.slice(0, 2).map((event, idx) => (
+                  <div key={idx} className="event-item">{event}</div>
+                ))}
+                {eventList.length > 2 && (
+                  <div className="event-item more">
+                    + 더 보기
+                  </div>
+                )}~
+              </div>
+            );
+          }}
         />
-        <div className="schedule-box">
-          <h3>{formatDate(selectedDate)} 일정</h3>
-          <ul>
-            {events[formatDate(selectedDate)] ? (
-              events[formatDate(selectedDate)].map((event, idx) => (
-                <li key={idx}>{event}</li>
-              ))
-            ) : (
-              <li>일정이 없습니다.</li>
-            )}
-          </ul>
-        </div>
+      </div>
+
+      <div className="schedule-box">
+        <h3>{formatDate(selectedDate)} 일정</h3>
+        <ul>
+          {selectedEvents.length > 0 ? (
+            selectedEvents.map((event, idx) => <li key={idx}>{event}</li>)
+          ) : (
+            <li>일정이 없습니다.</li>
+          )}
+        </ul>
       </div>
     </div>
   );

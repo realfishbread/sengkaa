@@ -85,7 +85,7 @@ body {
 
 .popular-cafes .slick-slider {
   display: flex;
-  overflow-x: auto;
+  overflow-x: auto; /* 가로 스크롤 활성화 */
   gap: 2rem;
   max-width: 1200px;
   scrollbar-width: none;
@@ -146,7 +146,7 @@ body {
 
 .reservable-venues .slick-slider {
   display: flex;
-  overflow-x: auto;
+  overflow-x: auto; /* 가로 스크롤 활성화 */
   gap: 2rem;
   max-width: 1200px;
   scrollbar-width: none;
@@ -259,4 +259,22 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+/* 화살표 스타일 추가 */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #333;
+}
+
+.left-arrow {
+  left: 10px;
+}
+
+.right-arrow {
+  right: 10px;
 }
