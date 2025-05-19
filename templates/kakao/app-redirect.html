@@ -12,7 +12,7 @@
       const profile = params.get("profile_image");
 
       if (access && refresh) {
-        const redirectUrl = `eventcafeapp://redirect?access=${access}&refresh=${refresh}&username=${username}&nickname=${nickname}&profile=${profile}`;
+        const redirectUrl = `expo://redirect?access=${access}&refresh=${refresh}&username=${username}&nickname=${nickname}&profile=${profile}`;
         window.location.href = redirectUrl;
       } else {
         document.body.innerText = "로그인 실패: 토큰이 없습니다.";
