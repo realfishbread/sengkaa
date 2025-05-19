@@ -88,24 +88,11 @@ jobs:
             echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> /var/www/eventcafe-backend/.env
           EOF
 
-      - name: Deploy Django Backend to EC2
+      - name: Run deploy.sh on EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
-            cd /var/www/eventcafe-backend
-            if [ ! -d "venv" ]; then
-              python3 -m venv venv
-            fi
-            source venv/bin/activate
-            pip install --upgrade pip
-            pip install --upgrade pip setuptools wheel 
-            pip install -r requirements.txt
-            python manage.py migrate
-            python manage.py collectstatic --noinput
-            sudo systemctl restart gunicorn
-            sudo systemctl restart nginx
-          EOF
+          ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'bash /var/www/eventcafe-backend/deploy.sh'
 
