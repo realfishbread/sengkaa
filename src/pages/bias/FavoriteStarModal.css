@@ -1,78 +1,112 @@
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
   }
-  
-  .modal-container {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    animation-duration: 0.4s;
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
-  
-  .slide-in {
-    animation-name: slideIn;
-  }
-  
-  @keyframes slideIn {
-    from {
-      transform: translateY(50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0px);
-      opacity: 1;
-    }
-  }
-  
-  .star-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 16px;
-    margin-top: 20px;
-  }
-  
-  .star-card {
-    background: #f9f9ff;
-    border-radius: 12px;
-    padding: 12px;
-    cursor: pointer;
-    text-align: center;
-    transition: transform 0.2s ease;
-  }
-  
-  .star-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .star-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 8px;
-  }
-  
-  .close-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: #6C63FF;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-  }
-  
+}
+
+.genre-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.genre-tabs button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background-color: #eee;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.genre-tabs button.active {
+  background-color: #6c63ff;
+  color: #fff;
+}
+
+.search-input {
+  padding: 10px 14px;
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.star-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.star-card {
+  background: #f9f9f9;
+  border-radius: 14px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.star-card:hover {
+  background: #f0f0ff;
+}
+
+.star-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.close-button {
+  margin-top: 10px;
+  background: #888;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
