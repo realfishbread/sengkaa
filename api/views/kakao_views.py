@@ -3,8 +3,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from urllib.parse import urlencode
+
 
 from api.models import User
 
@@ -16,6 +17,9 @@ from django.utils.crypto import get_random_string
 import requests
 
 
+def is_app_user(request):
+    user_agent = request.META.get("HTTP_USER_AGENT", "").lower()
+    return "expo" in user_agent or "eventcafeapp" in user_agent or "okhttp" in user_agent
 
 
 @api_view(["GET"])
@@ -82,4 +86,11 @@ def kakao_login_callback(request):
             "profile_image": profile_image,
         })
 
-    return redirect(f"https://eventcafe.site/oauth/kakao/redirect?{query_params}")
+    if is_app_user(request):
+        return redirect(f"https://eventcafe.site/kakao/app-redirect.html?{query_params}")
+    else:
+        return redirect(f"https://eventcafe.site/oauth/kakao/redirect?{query_params}")
+    
+    
+def kakao_app_redirect(request):
+    return render(request, 'kakao/app-redirect.html')
