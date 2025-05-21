@@ -62,8 +62,8 @@
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  max-height: 150px; /* 높이 제한 */
-  overflow-y: auto; /* 내용이 넘치면 스크롤 */
+  max-height: 200px; /* 높이 증가 */
+  overflow-y: auto;
 }
 
 .schedule-box h3 {
@@ -145,5 +145,5 @@
 /* 일정 목록 아이템 스타일 */
 .schedule-box li {
   margin-bottom: 2px; /* 마진 줄임 */
-  font-size: 12px;
+  font-size: 14px;
 }

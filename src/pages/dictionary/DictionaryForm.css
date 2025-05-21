@@ -1,28 +1,41 @@
 /* DictionaryForm.css */
-.new-term-form {
-  width: 80%;
+.dictionary-form {
+  width: 100%;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  margin-top: 40px; /* ✅ 추가 */
   margin-bottom: 20px;
   background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  font-family: Arial, sans-serif;
 }
 
-.new-term-form h2 {
-  text-align: center;
+.dictionary-form h3 {
+  margin-bottom: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dictionary-form .form-section {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 15px;
+}
+
+.dictionary-form .form-group {
   margin-bottom: 15px;
 }
 
-.new-term-form label {
+.dictionary-form label {
   font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
 }
 
-.new-term-form input[type="text"],
-.new-term-form textarea,
-.new-term-form select {
+.dictionary-form input[type="text"],
+.dictionary-form select {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -30,8 +43,92 @@
   width: 100%;
 }
 
-.new-term-form textarea {
-  resize: vertical;
+.dictionary-form .input-inline {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.dictionary-form .input-inline input[type="text"],
+.dictionary-form .input-inline select {
+  flex-grow: 1;
+}
+
+.dictionary-form button {
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.dictionary-form button:hover {
+  background-color: #0056b3;
+}
+
+.dictionary-form .check-btn {
+  white-space: nowrap; /* 줄바꿈 방지 */
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.dictionary-form .check-btn:hover {
+  background-color: #117a8b;
+}
+
+.dictionary-form .add-btn {
+  background-color: #28a745;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 4px 12px;
+}
+
+.dictionary-form .add-btn:hover {
+  background-color: #1e7e34;
+}
+
+.dictionary-form .definition-block {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  background-color: #fff;
+}
+
+.dictionary-form .definition-block h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.dictionary-form .inline-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dictionary-form .inline-buttons button {
+  background-color: #6c757d;
+  padding: 5px 10px;
+  font-weight: bold;
+}
+
+.dictionary-form .inline-buttons button:hover {
+  background-color: #5a6268;
+}
+
+.dictionary-form .add-definition-btn {
+  text-align: right;
+}
+
+.dictionary-form .add-definition-btn button {
+  background-color: #28a745;
+  font-weight: bold;
+}
+
+.dictionary-form .add-definition-btn button:hover {
+  background-color: #1e7e34;
 }
 
 .form-buttons {

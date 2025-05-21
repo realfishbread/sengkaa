@@ -1,161 +1,135 @@
-// DictionaryList.js
 import React, { useState } from 'react';
-import './DictionaryList.css'; // CSS 파일 import
-import DictionaryForm from './DictionaryForm';
+import './DictionaryList.css';
 import DictionaryDetail from './DictionaryDetail';
+import DictionaryForm from './DictionaryForm';
 
-function DictionaryList() {
-  // 각 분야별 용어 데이터를 상태로 관리
-  const [idolTerms, setIdolTerms] = useState([
-    { id: 1, term: '최애', definition: '가장 좋아하는 멤버' },
-    { id: 2, term: '입덕', definition: '새로운 팬이 됨' },
-    // ... 더 많은 아이돌 용어
-  ]);
+const TAGS = ['전체', '아이돌', '여자 아이돌', '남자 아이돌', '스트리머', '게임', '웹툰'];
 
-  const [streamerTerms, setStreamerTerms] = useState([
-    { id: 3, term: '구독', definition: '스트리머 채널을 후원하는 행위' },
-    { id: 4, term: '트수', definition: '트위치 시청자를 이르는 말' },
-    // ... 더 많은 스트리머 용어
-  ]);
+const DictionaryList = () => {
+  const [selectedTag, setSelectedTag] = useState('전체');
+  const [selectedTerm, setSelectedTerm] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState('');
 
-  const [gameTerms, setGameTerms] = useState([
-    { id: 5, term: '핵', definition: '불법적인 프로그램' },
-    { id: 6, term: '뉴비', definition: '새로운 유저' },
-    // ... 더 많은 게임 용어
-  ]);
+const allTerms = [
+  // 아이돌
+  { id: 1, term: '최애', category: '아이돌', definition: '가장 좋아하는 멤버', likes: 5, views: 120 },
+  { id: 2, term: '입덕', category: '아이돌', definition: '새로운 팬이 됨', likes: 3, views: 95 },
+  { id: 8, term: '덕질', category: '아이돌', definition: '팬 활동을 열심히 하는 것', likes: 8, views: 130 },
+  { id: 9, term: '컴백', category: '아이돌', definition: '앨범 발매와 함께 활동 재개', likes: 6, views: 140 },
+  { id: 10, term: '스밍', category: '아이돌', definition: '스트리밍을 반복해서 듣는 것', likes: 12, views: 180 },
+  { id: 11, term: '비하인드', category: '아이돌', definition: '무대나 촬영 외의 뒷이야기 영상', likes: 4, views: 70 },
 
-  // 새 용어 작성 폼 표시 상태 관리
-  const [isAddingNewTerm, setIsAddingNewTerm] = useState(false);
+  // 스트리머
+  { id: 3, term: '칼픽', category: '스트리머', definition: '고정 픽을 빠르게 선택함', likes: 7, views: 80 },
+  { id: 18, term: '노잼', category: '스트리머', definition: '재미없을 때 자주 쓰는 말', likes: 2, views: 40 },
+  { id: 19, term: '채팅창', category: '스트리머', definition: '시청자와의 실시간 소통 공간', likes: 5, views: 85 },
+  { id: 20, term: '리액션', category: '스트리머', definition: '시청자 반응에 대한 행동 표현', likes: 6, views: 100 },
 
-  // 각 분야별 토글 상태 관리
-  const [isIdolOpen, setIsIdolOpen] = useState(false);
-  const [isStreamerOpen, setIsStreamerOpen] = useState(false);
-  const [isGameOpen, setIsGameOpen] = useState(false);
+  // 게임
+  { id: 4, term: '메타', category: '게임', definition: '최적 전략', likes: 10, views: 200 },
+  { id: 21, term: '버프', category: '게임', definition: '캐릭터나 능력치를 상승시키는 효과', likes: 7, views: 110 },
+  { id: 22, term: '너프', category: '게임', definition: '캐릭터나 아이템의 성능을 약화시키는 것', likes: 6, views: 90 },
+  { id: 23, term: '탱커', category: '게임', definition: '앞에서 피해를 막는 역할', likes: 5, views: 100 },
+  { id: 24, term: '딜러', category: '게임', definition: '주로 공격을 담당하는 포지션', likes: 9, views: 130 },
 
-  // 검색어 상태 관리
-  const [searchTerm, setSearchTerm] = useState('');
+  // 웹툰
+  { id: 5, term: '휴재', category: '웹툰', definition: '연재 중단', likes: 1, views: 20 },
+  { id: 25, term: '정주행', category: '웹툰', definition: '처음부터 끝까지 한 번에 보는 것', likes: 8, views: 100 },
+  { id: 26, term: '회차별 결제', category: '웹툰', definition: '개별 에피소드를 유료로 구매하여 보는 방식', likes: 3, views: 40 },
+  { id: 27, term: '쿠키', category: '웹툰', definition: '플랫폼에서 사용하는 결제 단위', likes: 4, views: 60 },
+  { id: 28, term: '선댓글 후감상', category: '웹툰', definition: '먼저 댓글을 읽고 나중에 웹툰 감상', likes: 2, views: 35 },
+];
 
-  // 선택된 용어 정보 상태 관리
-  const [selectedTermInfo, setSelectedTermInfo] = useState(null);
+  const filteredTerms = allTerms.filter(term => {
+    const tagMatch = selectedTag === '전체' || term.category === selectedTag;
+    const keywordMatch = term.term.includes(searchKeyword) || term.definition.includes(searchKeyword);
+    return tagMatch && keywordMatch;
+  });
 
-  // 검색 기능 (간단한 필터링)
-  const filteredIdolTerms = idolTerms.filter(termInfo =>
-    termInfo.term.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const filteredStreamerTerms = streamerTerms.filter(termInfo =>
-    termInfo.term.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const filteredGameTerms = gameTerms.filter(termInfo =>
-    termInfo.term.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleAddNewTermClick = () => {
-    setIsAddingNewTerm(true);
+  const handleTagClick = (tag) => {
+    setSelectedTag(tag);
   };
 
-  const handleSaveNewTerm = (newTermData) => {
-    switch (newTermData.category) {
-      case 'idol':
-        setIdolTerms(prevTerms => [...prevTerms, { id: Date.now(), ...newTermData }]);
-        break;
-      case 'streamer':
-        setStreamerTerms(prevTerms => [...prevTerms, { id: Date.now(), ...newTermData }]);
-        break;
-      case 'game':
-        setGameTerms(prevTerms => [...prevTerms, { id: Date.now(), ...newTermData }]);
-        break;
-      default:
-        break;
-    }
-    setIsAddingNewTerm(false);
+  const handleTermClick = (term) => {
+    setSelectedTerm(term);
   };
 
-  const handleCancelNewTerm = () => {
-    setIsAddingNewTerm(false);
+  const handleCloseModal = () => {
+    setSelectedTerm(null);
   };
 
-  const handleTermClick = (termInfo) => {
-    setSelectedTermInfo(termInfo);
+  const handleSaveTerm = (newTerm) => {
+    console.log('새 용어 저장:', newTerm);
+    setShowForm(false);
   };
 
-  const handleCloseDefinition = () => {
-    setSelectedTermInfo(null);
+  const handleCancelForm = () => {
+    setShowForm(false);
   };
 
   return (
-    <div className="dictionary-list">
-      <div className="title-container">
-        <h1>덕질 용어 사전</h1>
-        <button onClick={handleAddNewTermClick} className="add-term-button">
-          용어 작성하기
-        </button>
+    <div className="dictionary-container">
+      <div className="top-bar">
+        <div className="tag-filter">
+          {TAGS.map(tag => (
+            <button
+              key={tag}
+              className={`tag-button ${selectedTag === tag ? 'active' : ''}`}
+              onClick={() => handleTagClick(tag)}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+        <div className="top-right">
+          <input
+            type="text"
+            placeholder="용어 검색"
+            className="search-input"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+          <button className="write-term-btn" onClick={() => setShowForm(true)}>
+            용어 작성
+          </button>
+        </div>
       </div>
 
-      <input
-        type="text"
-        placeholder="용어 검색"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="search-input"
-      />
+      <div className="counter">
+        <span>📚 용어 수: {filteredTerms.length}</span>
+        <span>👁 총 조회수: {filteredTerms.reduce((sum, t) => sum + t.views, 0)}</span>
+      </div>
 
-      {isAddingNewTerm && (
-        <DictionaryForm
-          onSave={handleSaveNewTerm}
-          onCancel={handleCancelNewTerm}
-        />
+      <div className="term-card-list">
+        {filteredTerms.map(term => (
+          <div
+            key={term.id}
+            className="term-card"
+            onClick={() => handleTermClick(term)}
+          >
+            <div className="term-title">{term.term}</div>
+            <div className="term-definition">{term.definition}</div>
+            <div className="term-meta">
+              ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {selectedTerm && (
+        <DictionaryDetail termInfo={selectedTerm} onClose={handleCloseModal} />
       )}
 
-      {selectedTermInfo && (
-        <DictionaryDetail termInfo={selectedTermInfo} onClose={handleCloseDefinition} />
+      {showForm && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <DictionaryForm onSave={handleSaveTerm} onCancel={handleCancelForm} />
+          </div>
+        </div>
       )}
-
-      <div className="category">
-        <button onClick={() => setIsIdolOpen(!isIdolOpen)} className="category-button">
-          아이돌 ({idolTerms.length}) {isIdolOpen ? '▲' : '▼'}
-        </button>
-        {isIdolOpen && (
-          <ul className="term-list">
-            {filteredIdolTerms.map(termInfo => (
-              <li key={termInfo.id} onClick={() => handleTermClick(termInfo)}>
-                {termInfo.term}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <div className="category">
-        <button onClick={() => setIsStreamerOpen(!isStreamerOpen)} className="category-button">
-          스트리머 ({streamerTerms.length}) {isStreamerOpen ? '▲' : '▼'}
-        </button>
-        {isStreamerOpen && (
-          <ul className="term-list">
-            {filteredStreamerTerms.map(termInfo => (
-              <li key={termInfo.id} onClick={() => handleTermClick(termInfo)}>
-                {termInfo.term}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <div className="category">
-        <button onClick={() => setIsGameOpen(!isGameOpen)} className="category-button">
-          게임 ({gameTerms.length}) {isGameOpen ? '▲' : '▼'}
-        </button>
-        {isGameOpen && (
-          <ul className="term-list">
-            {filteredGameTerms.map(termInfo => (
-              <li key={termInfo.id} onClick={() => handleTermClick(termInfo)}>
-                {termInfo.term}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
     </div>
   );
-}
+};
 
 export default DictionaryList;

@@ -13,7 +13,8 @@ const EventCalendar = () => {
     '2025-04-19': ['뛰기', '테스트', '미팅', '저녁 식사'],
     '2025-04-20': ['뷔 생일카페 🎂', '이태원 콜라보카페 🎉'],
     '2025-04-22': ['세븐틴 팬 이벤트 🧡'],
-    '2025-05-19': ['오늘의 덕질!'], // 예시로 오늘의 일정 추가
+    '2025-05-19': ['오늘의 덕질!'],
+    '2025-05-21': ['MBC M <쇼! 챔피언>', '2025 광운대학교 AINES: 조각', 'MBC 아이돌 라디오 4', '2025 목포 뮤직 플레이', '신한대학교 대동제 SPLASH'  ],
   };
 
   const formatDate = (date) => {
@@ -97,7 +98,7 @@ const EventCalendar = () => {
           )}
         </div>
 
-        <div className="schedule-box" style={{ maxHeight: '150px', overflowY: 'auto' }}>
+        <div className="schedule-box">
           <h3>{formatDate(selectedDate)} 일정</h3>
           <ul>
             {selectedEvents.length > 0 ? (
