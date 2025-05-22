@@ -1,9 +1,37 @@
 from django.db import models
+from django.contrib import admin
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 import random
+from django.contrib.auth.models import BaseUserManager
 
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("이메일은 필수입니다.")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)  # 🔐 비밀번호 해시처리
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('슈퍼유저는 is_staff=True 여야 합니다.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('슈퍼유저는 is_superuser=True 여야 합니다.')
+
+        return self.create_user(email, password, **extra_fields)
+
+    def get_by_natural_key(self, email):
+        return self.get(email=email)
 
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)  # ✅ 실제 PK 컬럼
@@ -20,8 +48,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)  # 🌟✨ bio 필드 추가!
-    
-
     # 🔥 문제 해결 핵심: related_name 수정
     groups = models.ManyToManyField(
         Group,
@@ -41,6 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         on_delete=models.SET_NULL,
         related_name='fans'
     )
+    objects = CustomUserManager()
 
     @property
     def id(self):  # ✅ Django가 기대하는 id 속성 생성
@@ -61,7 +88,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'nickname']  # ⭐ nickname도 필수 필드에 넣기
-    
+    class Meta:
+        swappable = 'AUTH_USER_MODEL'  # 🔥 이거 추가
     
     
 class Post(models.Model):
@@ -208,3 +236,7 @@ class Venue(models.Model):
 class Booking(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='bookings')
     available_date = models.DateField()
+
+
+
+
