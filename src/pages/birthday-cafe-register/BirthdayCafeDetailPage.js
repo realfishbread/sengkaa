@@ -6,14 +6,19 @@ import {
   Divider,
   Grid,
   Typography,
+  IconButton,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../shared/api/axiosInstance';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const BirthdayCafeDetailPage = () => {
   const { id } = useParams();
   const [cafe, setCafe] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
     const fetchCafeDetail = async () => {
@@ -22,6 +27,8 @@ const BirthdayCafeDetailPage = () => {
           `/user/events/birthday-cafes/${id}/`
         );
         setCafe(response.data);
+        setIsLiked(response.data.is_liked);
+        setLikeCount(response.data.liked_count || 0);
       } catch (error) {
         console.error('이벤트 상세 불러오기 실패:', error);
       }
@@ -30,13 +37,31 @@ const BirthdayCafeDetailPage = () => {
     fetchCafeDetail();
   }, [id]);
 
+  const handleLikeToggle = async () => {
+    try {
+      await axiosInstance.post(`/user/events/${id}/like/`);
+      setIsLiked((prev) => !prev);
+      setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+    } catch (error) {
+      console.error('찜 실패:', error);
+    }
+  };
+
   if (!cafe) return <Typography>불러오는 중...</Typography>;
 
   return (
     <Box sx={{ maxWidth: '800px', mx: 'auto', p: 4 }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
-        {cafe.cafe_name}
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          {cafe.cafe_name}
+        </Typography>
+        <Box display="flex" alignItems="center">
+          <IconButton onClick={handleLikeToggle} color="error">
+            {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+          <Typography>{likeCount}</Typography>
+        </Box>
+      </Box>
 
       <Card sx={{ mb: 4 }}>
         <CardMedia

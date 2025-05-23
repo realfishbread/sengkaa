@@ -20,7 +20,6 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     type = serializers.CharField(source='genre')  # genre를 type으로 보여줄 거라면
-    availableDate = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
 
@@ -28,7 +27,7 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         model = BirthdayCafe
         fields = [
             'id', 'cafe_name', 'description', 'genre', 'star',
-            'start_date', 'end_date', 'location', 'image', 'goods', 'like_count', 'is_liked'
+            'start_date', 'end_date', 'location', 'image', 'goods', 'like_count', 'is_liked', 'view_count'
         ]
 
     def get_image(self, obj):
@@ -46,18 +45,19 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         return obj.liked_events.count()
 
     def get_is_liked(self, obj):
-        user = self.context['request'].user
-        return obj.liked_events.filter(id=user.id).exists() if user.is_authenticated else False
+        user = self.context.get("request").user
+        return obj.liked_events.filter(user_id=user.user_id).exists() if user.is_authenticated else False
     
 class BirthdayCafeListSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
+    view_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = BirthdayCafe
-        fields = ['id', 'cafe_name', 'genre', 'start_date', 'end_date', 'location', 'image', 'like_count', 'is_liked']
+        fields = ['id', 'cafe_name', 'genre', 'start_date', 'end_date', 'location', 'image', 'like_count', 'is_liked', 'view_count']
 
     def get_image(self, obj):
         request = self.context.get('request')
@@ -74,5 +74,8 @@ class BirthdayCafeListSerializer(serializers.ModelSerializer):
         return obj.liked_events.count()  # ✅ 이름 변경 반영
 
     def get_is_liked(self, obj):
-        user = self.context['request'].user
-        return obj.liked_events.filter(id=user.id).exists() if user.is_authenticated else False
+        user = self.context.get("request").user
+        return obj.liked_events.filter(user_id=user.user_id).exists() if user.is_authenticated else False
+
+    
+    
