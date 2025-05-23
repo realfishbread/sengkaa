@@ -33,6 +33,7 @@ const SignupPage = () => {
   const [nickname, setNickname] = useState(''); // 🔥 닉네임 추가
   const [nicknameChecked, setNicknameChecked] = useState(false);
   const [nicknameMessage, setNicknameMessage] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false); // ✅ 추가
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -118,6 +119,7 @@ const SignupPage = () => {
         }
       );
       alert('✅ 이메일 인증이 완료되었습니다!');
+      setIsEmailVerified(true); // ✅ 인증 완료 상태 저장
     } catch (err) {
       console.error('인증 실패:', err.response?.data);
       setError('❌ 인증 코드가 잘못되었거나 만료되었습니다.');
@@ -372,6 +374,7 @@ const SignupPage = () => {
                   variant="contained"
                   onClick={handleVerifyCode}
                   className="signup-button"
+                  disabled={isEmailVerified} // ✅ 인증되었으면 비활성화 가능 (선택)
                 >
                   인증 확인
                 </Button>
@@ -386,9 +389,19 @@ const SignupPage = () => {
                   ? `남은 시간: ${formatTime(timer)}`
                   : '인증 시간이 만료되었습니다.'}
               </Typography>
+
+              {/* ✅ 인증 성공 메시지 추가 */}
+              {isEmailVerified && (
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  sx={{ mt: 1, textAlign: 'right' }}
+                >
+                  ✅ 이메일 인증이 완료되었습니다.
+                </Typography>
+              )}
             </>
           )}
-
           {/* 🔹 사용자 유형 선택 추가 */}
           <FormControl
             fullWidth

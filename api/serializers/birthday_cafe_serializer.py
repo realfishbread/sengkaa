@@ -27,7 +27,7 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         model = BirthdayCafe
         fields = [
             'id', 'cafe_name', 'description', 'genre', 'star',
-            'start_date', 'end_date', 'location', 'image', 'goods', 'like_count', 'is_liked', 'view_count'
+            'start_date', 'end_date', 'location', 'image', 'goods', 'like_count', 'is_liked', 'view_count', 'type'
         ]
 
     def get_image(self, obj):

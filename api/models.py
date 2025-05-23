@@ -5,7 +5,9 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 import random
 from django.contrib.auth.models import BaseUserManager
-
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from .utils import geocode_kakao
 
 
 class CustomUserManager(BaseUserManager):
@@ -245,3 +247,11 @@ class Booking(models.Model):
 
 
 
+@receiver(pre_save, sender=BirthdayCafe)
+def set_coordinates(sender, instance, **kwargs):
+    if (not instance.latitude or not instance.longitude) and instance.road_address and instance.detail_address:
+        full_address = f"{instance.road_address} {instance.detail_address}"
+        lat, lng = geocode_kakao(full_address)
+        if lat and lng:
+            instance.latitude = lat
+            instance.longitude = lng
