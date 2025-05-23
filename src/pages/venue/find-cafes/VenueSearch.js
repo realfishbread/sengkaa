@@ -134,7 +134,7 @@ const VenueSearch = () => {
                   sx={{ display: 'flex', alignItems: 'center', mt: 1 }}
                 >
                   <VisibilityIcon fontSize="small" sx={{ mr: 0.5 }} />
-                  {venue.view_count || 0}회 조회
+                  {venue.view_count || 0}
                 </Typography>
               </CardContent>
             </Card>

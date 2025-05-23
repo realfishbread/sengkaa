@@ -7,6 +7,8 @@ from api.serializers.birthday_cafe_serializer import BirthdayCafeDetailSerialize
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny
+from django.db.models import F
+import math
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
@@ -102,3 +104,27 @@ def toggle_like_cafe(request, cafe_id):
     else:
         cafe.liked_events.add(user)
         return Response({"message": "찜 추가"}, status=200)
+    
+    
+    
+@api_view(['GET'])
+def nearby_birthday_cafes(request):
+    lat = float(request.query_params.get('lat', 0))
+    lng = float(request.query_params.get('lng', 0))
+    radius_km = float(request.query_params.get('radius', 5))  # km 단위
+
+    def haversine(lat1, lng1, lat2, lng2):
+        R = 6371
+        d_lat = math.radians(lat2 - lat1)
+        d_lng = math.radians(lng2 - lng1)
+        a = (math.sin(d_lat / 2) ** 2 +
+             math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) *
+             math.sin(d_lng / 2) ** 2)
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        return R * c
+
+    cafes = BirthdayCafe.objects.exclude(latitude=None).exclude(longitude=None)
+    nearby = [cafe for cafe in cafes if haversine(lat, lng, cafe.latitude, cafe.longitude) <= radius_km]
+
+    serializer = BirthdayCafeListSerializer(nearby, many=True, context={'request': request})
+    return Response(serializer.data)

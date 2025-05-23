@@ -14,6 +14,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { EventSearchApi } from './api/EventSearchApi';
 import NotFoundBox from '../../components/common/NotFoundBox';
+import { useNavigate } from 'react-router-dom';
+
 
 const SearchPlaces = () => {
   const [keyword, setKeyword] = useState('');
@@ -21,6 +23,7 @@ const SearchPlaces = () => {
   const [endDate, setEndDate] = useState('');
   const [genre, setGenre] = useState('');
   const [events, setEvents] = useState([]); // ✅ 바뀐 데이터 저장용
+  const navigate = useNavigate();
 
   const handleGenreChange = (event, newGenre) => setGenre(newGenre);
 
@@ -107,10 +110,10 @@ const SearchPlaces = () => {
       <Grid container spacing={3}>
         {events.map((event) => (
           <Grid item xs={12} sm={6} md={4} key={event.id}>
-            <Card>
+            <Card onClick={() => navigate(`/birthday-cafes/${event.id}`)} sx={{ cursor: 'pointer' }}>
               <CardMedia
                 component="img"
-                height="180"
+                height="300"
                 image={event.image} // image 필드로 맞춰줘야 해
                 alt={event.cafe_name}
               />

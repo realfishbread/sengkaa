@@ -12,6 +12,8 @@ export default function EditProfile() {
   const [profileImage, setProfileImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const { user, setUser } = useContext(UserContext); // ✅ 로그인된 유저
+  const [selectedStarId, setSelectedStarId] = useState(null);
+  const [selectedStarImage, setSelectedStarImage] = useState(null); // ✅ 사진
 
   // ✅ 유저 정보가 들어오면 state에 반영
   useEffect(() => {
@@ -22,6 +24,10 @@ export default function EditProfile() {
       setNickname(user.nickname || '');
       setEmail(user.email || '');
       setBio(user.bio || '');
+      if (user?.star) {
+        setSelectedStarId(user.star.id);
+        setSelectedStarImage(user.star.image); // or user.star.image_url
+      }
     }
   }, [user]);
 
@@ -36,6 +42,8 @@ export default function EditProfile() {
       if (profileImage) {
         formData.append('profile_image', profileImage); // ✅ 파일도 추가!
       }
+
+      if (selectedStarId) formData.append('star', selectedStarId);
 
       const response = await axiosInstance.patch(
         '/user/profile/update/',
@@ -57,18 +65,10 @@ export default function EditProfile() {
     }
   };
 
-  const handleSelectStar = async (starId) => {
-    const formData = new FormData();
-    formData.append('star', starId);
-    try {
-      await axiosInstance.patch('/user/profile/update/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      alert('최애 등록 완료!');
-      setShowModal(false);
-    } catch (e) {
-      alert('등록 실패...');
-    }
+  const handleSelectStar = (star) => {
+    setSelectedStarId(star.id);
+    setSelectedStarImage(star.image); // ✅ 이미지 저장
+    setShowModal(false);
   };
 
   return (
@@ -121,6 +121,14 @@ export default function EditProfile() {
             placeholder="자기소개"
             style={styles.textarea}
           />
+
+          {selectedStarImage && (
+            <img
+              src={selectedStarImage}
+              alt="최애"
+              style={{ width: 120, borderRadius: 12, marginBottom: 12 }}
+            />
+          )}
 
           <Button
             variant="outlined"

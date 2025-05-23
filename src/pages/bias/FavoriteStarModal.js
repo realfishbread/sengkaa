@@ -68,7 +68,7 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
             <div
               key={star.id}
               className="star-card"
-              onClick={() => onSelect(star.id)}
+              onClick={() => onSelect(star)}
             >
               <img
                 src={star.image}

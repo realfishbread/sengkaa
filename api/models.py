@@ -180,6 +180,8 @@ class BirthdayCafe(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')  # ✅ 추가!
     liked_events = models.ManyToManyField(User, related_name='liked_cafes', blank=True)
     view_count = models.PositiveIntegerField(default=0)  # ✅ 조회수 추가
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.cafe_name

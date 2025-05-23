@@ -26,6 +26,7 @@ import Settings from './pages/settings/Settings';
 import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
 import MyBookingsPage from './pages/booking/my-booking-page/MyBookingsPage';
 import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
+import BirthdayCafeDetailPage from './pages/birthday-cafe-register/BirthdayCafeDetailPage';
 import './styles/App.css';
 
 const theme = createTheme({
@@ -76,6 +77,8 @@ function AppRoutes() {
           <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/oauth/kakao/redirect" element={<KakaoRedirectPage />} />
           <Route path="/venues/:id" element={<VenueDetailPage />} />
+          <Route path="/birthday-cafes/:id" element={<BirthdayCafeDetailPage />} />
+
         </Route>
       </Routes>
 
