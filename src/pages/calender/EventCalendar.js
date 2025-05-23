@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './EventCalendar.css';
 import axios from 'axios';
+import { UserContext } from '../../context/UserContext';
+
 
 const EventCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [weather, setWeather] = useState(null);
+  const { user } = useContext(UserContext);
 
-  const events = {
-    '2025-04-19': ['뛰기', '테스트', '미팅', '저녁 식사'],
-    '2025-04-20': ['뷔 생일카페 🎂', '이태원 콜라보카페 🎉'],
-    '2025-04-22': ['세븐틴 팬 이벤트 🧡'],
-    '2025-05-19': ['오늘의 덕질!'],
-    '2025-05-21': ['MBC M <쇼! 챔피언>', '2025 광운대학교 AINES: 조각', 'MBC 아이돌 라디오 4', '2025 목포 뮤직 플레이', '신한대학교 대동제 SPLASH'  ],
-  };
+
+  const [events, setEvents] = useState({});
 
   const formatDate = (date) => {
     const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
@@ -51,6 +49,23 @@ const EventCalendar = () => {
 
     fetchWeather(latitude, longitude);
   }, []);
+
+  
+
+  useEffect(() => {
+    const birthday = user?.star?.birthday; // 'YYYY-MM-DD'
+    const name = user?.star?.name;
+  
+    if (birthday && name) {
+      const [, month, day] = birthday.split('-');
+      const birthdayKey = `${new Date().getFullYear()}-${month}-${day}`;
+  
+      setEvents((prev) => ({
+        ...prev,
+        [birthdayKey]: [`${name} 생일 🎉`, ...(prev[birthdayKey] || [])],
+      }));
+    }
+  }, [user?.star]);
 
   return (
     <div className="calendar-layout">

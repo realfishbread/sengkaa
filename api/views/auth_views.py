@@ -141,6 +141,16 @@ def login_view(request):
 
     if not check_password(password, user.password):
         return Response({"error": "비밀번호가 일치하지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    star = user.star
+    star_info = {
+        "id": star.id,
+        "name": star.name,
+        "birthday": star.birthday.isoformat() if star.birthday else None,
+        "image": star.image,
+        "group": star.group,
+        "display": star.display,
+    } if star else None
 
     # ✅ 토큰 발급
     if user is not None:
@@ -155,7 +165,8 @@ def login_view(request):
         "profile_image": (
             request.build_absolute_uri(user.profile_image.url)
             if user.profile_image else ""
-        )
+        ),
+        "star": star_info,  # ✨ 최애 스타 정보 추가
         }, status=status.HTTP_200_OK)
     else:
         return Response({"error": "로그인 정보가 올바르지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)

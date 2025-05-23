@@ -12,13 +12,26 @@ from api.models import User
 @permission_classes([IsAuthenticated])
 def user_profile(request):
     user = request.user  # 토큰에서 유저 자동으로 찾아줌
-
+    star = user.star
+    star_info = None
+    if star:
+        star_info = {
+            "id": star.id,
+            "name": star.name,
+            "birthday": star.birthday.isoformat() if star.birthday else None,  # ✅ 'YYYY-MM-DD'
+            "image": star.image,
+            "group": star.group,
+            "display": star.display,
+        }
     return Response({
         "email": user.email,
         "nickname": user.nickname,
         "user_type": user.user_type,
         "created_at": user.created_at,
-        "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else ""
+        "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
+        "star_id": user.star_id,
+        "star": star_info,
+        "bio": user.bio,
     }, status=200)
     
     
@@ -39,13 +52,25 @@ def update_profile(request):
 def user_profile_detail(request, nickname):
     try:
         user = User.objects.get(nickname=nickname)
+        star = user.star
+        star_info = {
+            "id": star.id,
+            "name": star.name,
+            "birthday": star.birthday.isoformat() if star.birthday else None,
+            "image": star.image,
+            "group": star.group,
+            "display": star.display,
+        } if star else None
+
         return Response({
             "email": user.email,
             "nickname": user.nickname,
             "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else "",
             "created_at": user.created_at,
             "bio": user.bio,
+            "star": star_info,  # 🌟 여기!
         })
+
     except User.DoesNotExist:
         return Response({"error": "사용자가 없습니다."}, status=404)
 

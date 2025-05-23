@@ -49,6 +49,7 @@ const LoginPage = ({ isModal = false }) => {
           username: data.username,
           email: data.email,
           profile_image: data.profile_image_url,
+          star: data.star,
         })
       ); // ✅ 추가
       setUser({
@@ -56,6 +57,7 @@ const LoginPage = ({ isModal = false }) => {
         username: data.username,
         email: data.email,
         profile_image: data.profile_image_url,
+        star: data.star,
       });
       navigate('/'); // 홈으로
     } catch (err) {
