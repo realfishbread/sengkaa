@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { EventSearchApi } from './api/EventSearchApi';
+import NotFoundBox from '../../components/common/NotFoundBox';
 
 const SearchPlaces = () => {
   const [keyword, setKeyword] = useState('');
@@ -40,7 +41,7 @@ const SearchPlaces = () => {
           setEvents([]); // 🚨 혹시라도 results 빠졌을 때 대비
         }
       } catch (err) {
-        console.error('이벤트 불러오기 실패:', err);
+        <NotFoundBox />;
         setEvents([]);
       }
     };
@@ -96,6 +97,8 @@ const SearchPlaces = () => {
             <ToggleButton value="아이돌">아이돌</ToggleButton>
             <ToggleButton value="유튜버">유튜버</ToggleButton>
             <ToggleButton value="웹툰">웹툰</ToggleButton>
+            <ToggleButton value="게임">게임</ToggleButton>
+            <ToggleButton value="애니">애니</ToggleButton>
           </ToggleButtonGroup>
         </Box>
       </Box>

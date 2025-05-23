@@ -1,7 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import AuthRedirectNotice from './components/common/LoginRequiredModal';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -9,23 +8,25 @@ import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
 import KakaoRedirectPage from './pages/auth/Login/KakaoRedirectPage';
 import LoginModalWrapper from './pages/auth/Login/LoginModalWrapper';
 import SignupPage from './pages/auth/SignUp/Signup';
+import FavoriteStarModal from './pages/bias/FavoriteStarModal';
 import BirthdayCafeRegister from './pages/birthday-cafe-register/BirthdayCafeRegister';
+import SearchPlaces from './pages/birthday-cafe-register/SearchPlaces';
 import Board from './pages/board/Board';
+import ModifyPost from './pages/board/ModifyPost';
 import Post from './pages/board/Post';
 import EventCalendar from './pages/calender/EventCalendar';
 import DictionaryList from './pages/dictionary/DictionaryList';
 import FaqPage from './pages/faq/FaqPage';
-import VenueSearch from './pages/find-cafes/VenueSearch';
+import VenueSearch from './pages/venue/find-cafes/VenueSearch';
 import Home from './pages/Home';
 import KakaoMap from './pages/map/KakaoMap';
 import EditProfile from './pages/profile/EditProfile';
 import ProfilePage from './pages/profile/ProfilePage';
 import Settings from './pages/settings/Settings';
 import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
-import SearchPlaces from './pages/venue/SearchPlaces';
+import MyBookingsPage from './pages/booking/my-booking-page/MyBookingsPage';
+import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
 import './styles/App.css';
-import ModifyPost from './pages/board/ModifyPost';
-import FavoriteStarModal from './pages/bias/FavoriteStarModal';
 
 const theme = createTheme({
   typography: {
@@ -49,7 +50,6 @@ function AppRoutes() {
 
   return (
     <>
-      
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -73,8 +73,9 @@ function AppRoutes() {
           <Route path="venue-search" element={<VenueSearch />} />
           <Route path="/post/edit/:postId" element={<ModifyPost />} />
           <Route path="/select-star" element={<FavoriteStarModal />} />
-
+          <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/oauth/kakao/redirect" element={<KakaoRedirectPage />} />
+          <Route path="/venues/:id" element={<VenueDetailPage />} />
         </Route>
       </Routes>
 

@@ -19,12 +19,16 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     goods = GoodsSerializer(many=True, read_only=True)  # related_name='goods'
     image = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
+    type = serializers.CharField(source='genre')  # genre를 type으로 보여줄 거라면
+    availableDate = serializers.SerializerMethodField()
+    like_count = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = BirthdayCafe
         fields = [
             'id', 'cafe_name', 'description', 'genre', 'star',
-            'start_date', 'end_date', 'location', 'image', 'goods'
+            'start_date', 'end_date', 'location', 'image', 'goods', 'like_count', 'is_liked'
         ]
 
     def get_image(self, obj):
@@ -38,13 +42,22 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     def get_location(self, obj):
         return f"{obj.road_address} {obj.detail_address}"
     
+    def get_like_count(self, obj):
+        return obj.liked_events.count()
+
+    def get_is_liked(self, obj):
+        user = self.context['request'].user
+        return obj.liked_events.filter(id=user.id).exists() if user.is_authenticated else False
+    
 class BirthdayCafeListSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
+    like_count = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = BirthdayCafe
-        fields = ['id', 'cafe_name', 'genre', 'start_date', 'end_date', 'location', 'image']
+        fields = ['id', 'cafe_name', 'genre', 'start_date', 'end_date', 'location', 'image', 'like_count', 'is_liked']
 
     def get_image(self, obj):
         request = self.context.get('request')
@@ -56,3 +69,10 @@ class BirthdayCafeListSerializer(serializers.ModelSerializer):
 
     def get_location(self, obj):
         return f"{obj.road_address} {obj.detail_address}"
+    
+    def get_like_count(self, obj):
+        return obj.liked_events.count()  # ✅ 이름 변경 반영
+
+    def get_is_liked(self, obj):
+        user = self.context['request'].user
+        return obj.liked_events.filter(id=user.id).exists() if user.is_authenticated else False

@@ -1,4 +1,5 @@
 // VenueSearchPage.js
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
   Box,
   Card,
@@ -12,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { VenueSearchApi } from './api/VenueSearchApi';
 
 const VenueSearch = () => {
@@ -20,6 +22,7 @@ const VenueSearch = () => {
   const [endDate, setEndDate] = useState('');
   const [venueType, setVenueType] = useState('');
   const [venues, setVenues] = useState([]); // ✅ venues 상태 추가
+  const navigate = useNavigate();
 
   const handleVenueTypeChange = (event, newType) => {
     setVenueType(newType);
@@ -102,7 +105,10 @@ const VenueSearch = () => {
       <Grid container spacing={3}>
         {venues.map((venue) => (
           <Grid item xs={12} sm={6} md={4} key={venue.id}>
-            <Card>
+            <Card
+              onClick={() => navigate(`/venues/${venue.id}`)}
+              sx={{ cursor: 'pointer' }}
+            >
               <CardMedia
                 component="img"
                 height="180"
@@ -121,6 +127,14 @@ const VenueSearch = () => {
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   📅 가능일: {venue.availableDate}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ display: 'flex', alignItems: 'center', mt: 1 }}
+                >
+                  <VisibilityIcon fontSize="small" sx={{ mr: 0.5 }} />
+                  {venue.view_count || 0}회 조회
                 </Typography>
               </CardContent>
             </Card>

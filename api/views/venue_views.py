@@ -6,13 +6,13 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
 from api.models import Venue
-from api.serializers.venue_serializer import VenueSerializer, VenueListSerializer
+from api.serializers.venue_serializer import VenueDetailSerializer, VenueListSerializer
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
 def create_venue(request):
-    serializer = VenueSerializer(data=request.data)
+    serializer = VenueDetailSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)  # 유저 저장
         return Response({'message': '장소가 등록되었습니다!', 'data': serializer.data}, status=status.HTTP_201_CREATED)
@@ -43,5 +43,19 @@ class VenueSearchAPIView(ListAPIView):
             queryset = queryset.order_by('rental_fee')
         elif sort == 'price_desc':
             queryset = queryset.order_by('-rental_fee')
+        elif sort == 'view_desc':  # ✅ 추가된 정렬 옵션
+            queryset = queryset.order_by('-view_count')
 
         return queryset
+    
+@api_view(['GET'])
+def venue_detail(request, venue_id):
+    try:
+        venue = Venue.objects.get(id=venue_id)
+        venue.view_count += 1  # ✅ 조회수 증가
+        venue.save(update_fields=['view_count'])
+    except Venue.DoesNotExist:
+        return Response({"error": "존재하지 않는 대관 장소입니다."}, status=404)
+
+    serializer = VenueDetailSerializer(venue, context={'request': request})
+    return Response(serializer.data)

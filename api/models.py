@@ -178,6 +178,8 @@ class BirthdayCafe(models.Model):
     image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')  # ✅ 추가!
+    liked_events = models.ManyToManyField(User, related_name='liked_cafes', blank=True)
+    view_count = models.PositiveIntegerField(default=0)  # ✅ 조회수 추가
 
     def __str__(self):
         return self.cafe_name
@@ -228,6 +230,7 @@ class Venue(models.Model):
     sns_type = models.CharField(max_length=50, blank=True)
     sns_account = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    view_count = models.PositiveIntegerField(default=0)  # ✅ 조회수 추가
 
     def __str__(self):
         return self.name
@@ -235,8 +238,8 @@ class Venue(models.Model):
     
 class Booking(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='bookings')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='venue_bookings')  # ✅ 추가
     available_date = models.DateField()
-
 
 
 

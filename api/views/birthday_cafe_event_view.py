@@ -71,8 +71,34 @@ class BirthdayCafeSearchAPIView(ListAPIView):
             queryset = queryset.filter(end_date__lte=end_date)
 
         return queryset
+    def get_serializer_context(self):
+        return {'request': self.request}  # 🔥 사용자 정보 포함 (is_liked 계산용)
     
 class BirthdayCafeDetailAPIView(RetrieveAPIView):
     queryset = BirthdayCafe.objects.all()
     serializer_class = BirthdayCafeDetailSerializer
     lookup_field = 'id'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.view_count += 1  # ✅ 조회수 증가
+        instance.save(update_fields=['view_count'])
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])  # 찜한 생일 카페
+def toggle_like_cafe(request, cafe_id):
+    try:
+        cafe = BirthdayCafe.objects.get(id=cafe_id)
+    except BirthdayCafe.DoesNotExist:
+        return Response({"error": "해당 카페가 존재하지 않습니다."}, status=404)
+
+    user = request.user
+
+    if user in cafe.liked_events.all():  # ✅ 여기!
+        cafe.liked_events.remove(user)
+        return Response({"message": "찜 취소"}, status=200)
+    else:
+        cafe.liked_events.add(user)
+        return Response({"message": "찜 추가"}, status=200)

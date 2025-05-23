@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
+import { CalendarMonth } from '@mui/icons-material';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -71,6 +72,14 @@ const SettingsPage = () => {
             <ListItemText primary="비밀번호 변경" />
           </ListItem>
 
+          <Divider />
+
+          <ListItem button onClick={() => navigate('/my-bookings')}>
+            <ListItemIcon>
+              <CalendarMonth />
+            </ListItemIcon>
+            <ListItemText primary="내 예약 목록" />
+          </ListItem>
           <Divider />
 
           <ListItem button>
