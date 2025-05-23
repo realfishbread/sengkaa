@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './EventCalendar.css';
-import axios from 'axios';
 import { UserContext } from '../../context/UserContext';
-
+import './EventCalendar.css';
 
 const EventCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -12,11 +11,12 @@ const EventCalendar = () => {
   const [weather, setWeather] = useState(null);
   const { user } = useContext(UserContext);
 
-
   const [events, setEvents] = useState({});
 
   const formatDate = (date) => {
-    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    const localDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000
+    );
     return localDate.toISOString().split('T')[0];
   };
 
@@ -50,22 +50,26 @@ const EventCalendar = () => {
     fetchWeather(latitude, longitude);
   }, []);
 
-  
-
   useEffect(() => {
-    const birthday = user?.star?.birthday; // 'YYYY-MM-DD'
-    const name = user?.star?.name;
-  
+    if (!user?.star) return;
+
+    const birthday = user.star.birthday;
+    const name = user.star.name;
+
     if (birthday && name) {
       const [, month, day] = birthday.split('-');
-      const birthdayKey = `${new Date().getFullYear()}-${month}-${day}`;
-  
+      const birthdayKey = `${new Date().getFullYear()}-${month.padStart(
+        2,
+        '0'
+      )}-${day.padStart(2, '0')}`;
+
       setEvents((prev) => ({
         ...prev,
         [birthdayKey]: [`${name} 생일 🎉`, ...(prev[birthdayKey] || [])],
       }));
+      console.log('✅ 생일 이벤트 추가됨:', birthdayKey);
     }
-  }, [user?.star]);
+  }, [user]);
 
   return (
     <div className="calendar-layout">
@@ -82,12 +86,12 @@ const EventCalendar = () => {
             return (
               <div className="event-list">
                 {eventList.slice(0, 2).map((event, idx) => (
-                  <div key={idx} className="event-item">{event}</div>
+                  <div key={idx} className="event-item">
+                    {event}
+                  </div>
                 ))}
                 {eventList.length > 2 && (
-                  <div className="event-item more">
-                    + 더 보기
-                  </div>
+                  <div className="event-item more">+ 더 보기</div>
                 )}
               </div>
             );

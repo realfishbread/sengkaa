@@ -17,3 +17,10 @@ export const VenueSearchApi = async ({
   });
   return response.data.results;
 };
+
+export const fetchPopularVenues = async () => {
+  const res = await axios.get('https://eventcafe.site/user/venues/search/', {
+    params: { sort: 'view_desc' } // ✅ 여긴 view_desc임
+  });
+  return res.data.results;
+};

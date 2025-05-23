@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import './KakaoMap.css';
 import axiosInstance from '../../shared/api/axiosInstance';
+import './KakaoMap.css';
 const KakaoMap = () => {
   const [userLocation, setUserLocation] = useState({
     lat: 37.5665,
     lng: 126.978,
   });
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const markerIcons = {
     general: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -105,9 +106,38 @@ const KakaoMap = () => {
     };
   }, []);
 
+  // ✅ 지도 초기화
+  const initMap = () => {
+    const { kakao } = window;
+    if (!kakao || !kakao.maps) return;
+
+    const container = document.getElementById('myMap');
+    const options = {
+      center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+      level: 4,
+    };
+
+    const map = new kakao.maps.Map(container, options);
+
+    const defaultMarkerImage = new kakao.maps.MarkerImage(
+      markerIcons.general,
+      new kakao.maps.Size(40, 40),
+      { offset: new kakao.maps.Point(20, 40) }
+    );
+
+    new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+      image: defaultMarkerImage,
+      map,
+    });
+
+    // 🔥 카카오 API 검색 제거!
+    // ✅ 이벤트 마커는 useEffect(fetchCafes)에서 직접 불러오고 있음.
+  };
+
   useEffect(() => {
     if (!userLocation.lat || !userLocation.lng) return;
-  
+
     const fetchCafes = async () => {
       try {
         const response = await axiosInstance.get('/user/events/nearby/', {
@@ -117,59 +147,33 @@ const KakaoMap = () => {
             radius: 5,
           },
         });
-  
+
         const data = response.data;
+        setIsEmpty(data.length === 0); // ✅ 없으면 true로 세팅
         const { kakao } = window;
         const map = new kakao.maps.Map(document.getElementById('myMap'), {
           center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
           level: 4,
         });
-  
+
         data.forEach((place) => {
-          displayMarker({
-            ...place,
-            x: place.longitude,
-            y: place.latitude,
-          }, getCategory(place), map);
+          displayMarker(
+            {
+              ...place,
+              x: place.longitude,
+              y: place.latitude,
+            },
+            getCategory(place),
+            map
+          );
         });
-  
       } catch (e) {
         console.error('이벤트 불러오기 실패', e);
       }
     };
-  
+
     fetchCafes();
   }, [userLocation]);
-
-  // ✅ 지도 초기화
-  const initMap = () => {
-    const { kakao } = window;
-    if (!kakao || !kakao.maps) return;
-  
-    const container = document.getElementById('myMap');
-    const options = {
-      center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      level: 4,
-    };
-  
-    const map = new kakao.maps.Map(container, options);
-  
-    const defaultMarkerImage = new kakao.maps.MarkerImage(
-      markerIcons.general,
-      new kakao.maps.Size(40, 40),
-      { offset: new kakao.maps.Point(20, 40) }
-    );
-  
-    new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      image: defaultMarkerImage,
-      map,
-    });
-  
-    // 🔥 카카오 API 검색 제거!
-    // ✅ 이벤트 마커는 useEffect(fetchCafes)에서 직접 불러오고 있음.
-  };
-
   // ✅ 마커 출력 함수 (initMap 바깥으로 분리)
   const displayMarker = (place, category, map) => {
     const imageUrl =
@@ -241,6 +245,11 @@ const KakaoMap = () => {
       </div>
 
       <div id="myMap" className="map-container" />
+      {isEmpty && (
+        <div className="no-events-box">
+          <p>📭 근처에 등록된 생일카페 이벤트가 없어요.</p>
+        </div>
+      )}
     </div>
   );
 };

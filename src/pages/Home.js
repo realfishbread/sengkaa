@@ -1,16 +1,19 @@
-import { Box, Typography, IconButton } from '@mui/material';
-import React, { useState, useRef, useCallback } from 'react';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, IconButton, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import '../styles/App.css';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
+import { fetchPopularCafes } from './birthday-cafe-register/api/EventSearchApi';
+import { fetchPopularVenues } from './venue/find-cafes/api/VenueSearchApi';
 const Home = () => {
   const [activeNavItem, setActiveNavItem] = useState(null);
   const navigate = useNavigate();
+
+  
 
   const popularSliderRef = useRef(null);
   const venueSliderRef = useRef(null);
@@ -50,18 +53,22 @@ const Home = () => {
     { image: '/images/xx.jpg', caption: '흑집사 x 애니메이트 카페 콜라보' },
   ];
 
-  const popularCafes = [
-    { name: '카페 1', description: '뉴진스 해린', image: process.env.PUBLIC_URL + '/images/cafe1.jpg' },
-    { name: '카페 2', description: '트리플에스 나경', image: process.env.PUBLIC_URL + '/images/cafe2.jpg' },
-    { name: '카페 3', description: '리락쿠마 x 팝퍼블', image: process.env.PUBLIC_URL + '/images/rirakuma.jpg' },
-    { name: '카페 4', description: '캐릭캐릭 체인지 x 팝퍼블 용산', image: process.env.PUBLIC_URL + '/images/chacha.jpg' },
-    { name: '카페 5', description: '대구의 유명 카페', image: process.env.PUBLIC_URL + '/images/cafe5.jpg' },
-  ];
+  const [popularCafes, setPopularCafes] = useState([]);
+  const [reservableVenues, setReservableVenues] = useState([]);
 
-  const reservableVenues = [
-    { name: '대관 장소 1', description: '서울 강남', image: '/media/venue_images/venue1.jpg' },
-    { name: '대관 장소 2', description: '대구 수성구', image: '/media/venue_images/venue2.jpg' }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const cafes = await fetchPopularCafes();
+        const venues = await fetchPopularVenues();
+        setPopularCafes(cafes);
+        setReservableVenues(venues);
+      } catch (err) {
+        console.error('🔥 인기 데이터 불러오기 실패:', err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const goPrevPopular = useCallback(() => popularSliderRef.current?.slickPrev(), []);
   const goNextPopular = useCallback(() => popularSliderRef.current?.slickNext(), []);
@@ -93,9 +100,9 @@ const Home = () => {
             {popularCafes.map((cafe, index) => (
               <div key={index} className="cafe-slide" style={{ padding: '0 10px' }}>
                 <Box className="cafe-card" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '10px', overflow: 'hidden' }}>
-                  <img src={cafe.image} alt={cafe.name} style={{ width: '100%', height: 'auto' }} />
+                  <img src={cafe.image} alt={cafe.cafe_name} style={{ width: '100%', height: 'auto' }} />
                   <Box p={2} textAlign="center">
-                    <Typography variant="h6">{cafe.name}</Typography>
+                    <Typography variant="h6">{cafe.cafe_name}</Typography>
                     <Typography variant="body2">{cafe.description}</Typography>
                   </Box>
                 </Box>
@@ -118,7 +125,7 @@ const Home = () => {
                 <Box className="cafe-card">
                   <img src={venue.image} alt={venue.name} />
                   <Typography variant="h6">{venue.name}</Typography>
-                  <Typography variant="body2">{venue.description}</Typography>
+                  <Typography variant="body2">{venue.road_address}</Typography>
                 </Box>
               </div>
             ))}

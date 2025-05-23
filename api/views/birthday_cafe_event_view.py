@@ -9,6 +9,8 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny
 from django.db.models import F
 import math
+from rest_framework.views import APIView
+from django.db.models import Count
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
@@ -59,6 +61,9 @@ class BirthdayCafeSearchAPIView(ListAPIView):
         genre = self.request.query_params.get('genre')
         start_date = self.request.query_params.get('startDate')
         end_date = self.request.query_params.get('endDate')
+        sort = self.request.query_params.get('sort')  # ✅ 추가
+
+        print(f"🔥 [DEBUG] 받은 sort 파라미터: {sort}")
 
         if keyword:
             queryset = queryset.filter(cafe_name__icontains=keyword)
@@ -72,9 +77,25 @@ class BirthdayCafeSearchAPIView(ListAPIView):
         if end_date:
             queryset = queryset.filter(end_date__lte=end_date)
 
+        # ✅ 정렬 조건 처리
+        if sort == 'latest':
+            print("🕓 최신순 정렬 적용")
+            queryset = queryset.order_by('-created_at')
+        elif sort == 'likes':
+            print("❤️ 좋아요순 정렬 적용")
+            queryset = queryset.annotate(like_count=Count('liked_events', distinct=True)).order_by('-like_count')
+        elif sort == 'views':
+            print("👁️ 조회수순 정렬 적용")
+            queryset = queryset.order_by('-view_count')
+        else:
+            print("⚠️ 정렬 파라미터 없음, 기본 순서로 반환")
+
+        print("🧪 최종 쿼리셋 (정렬 확인):", queryset.values("cafe_name", "view_count"))
+
         return queryset
+
     def get_serializer_context(self):
-        return {'request': self.request}  # 🔥 사용자 정보 포함 (is_liked 계산용)
+        return {'request': self.request}
     
 class BirthdayCafeDetailAPIView(RetrieveAPIView):
     queryset = BirthdayCafe.objects.all()
@@ -128,3 +149,5 @@ def nearby_birthday_cafes(request):
 
     serializer = BirthdayCafeListSerializer(nearby, many=True, context={'request': request})
     return Response(serializer.data)
+
+
