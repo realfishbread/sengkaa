@@ -8,12 +8,10 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import '../styles/App.css';
 import { fetchPopularCafes } from './birthday-cafe-register/api/EventSearchApi';
-import { fetchPopularVenues } from './venue/find-cafes/api/VenueSearchApi';
+import { fetchPopularVenues } from './venue/find-cafes/VenueSearchApi';
 const Home = () => {
   const [activeNavItem, setActiveNavItem] = useState(null);
   const navigate = useNavigate();
-
-  
 
   const popularSliderRef = useRef(null);
   const venueSliderRef = useRef(null);
@@ -70,11 +68,23 @@ const Home = () => {
     fetchData();
   }, []);
 
-  const goPrevPopular = useCallback(() => popularSliderRef.current?.slickPrev(), []);
-  const goNextPopular = useCallback(() => popularSliderRef.current?.slickNext(), []);
+  const goPrevPopular = useCallback(
+    () => popularSliderRef.current?.slickPrev(),
+    []
+  );
+  const goNextPopular = useCallback(
+    () => popularSliderRef.current?.slickNext(),
+    []
+  );
 
-  const goPrevVenue = useCallback(() => venueSliderRef.current?.slickPrev(), []);
-  const goNextVenue = useCallback(() => venueSliderRef.current?.slickNext(), []);
+  const goPrevVenue = useCallback(
+    () => venueSliderRef.current?.slickPrev(),
+    []
+  );
+  const goNextVenue = useCallback(
+    () => venueSliderRef.current?.slickNext(),
+    []
+  );
 
   return (
     <div className="Home">
@@ -98,9 +108,24 @@ const Home = () => {
         <div className="slider-wrapper" style={{ position: 'relative' }}>
           <Slider ref={popularSliderRef} {...sliderSettings(3)}>
             {popularCafes.map((cafe, index) => (
-              <div key={index} className="cafe-slide" style={{ padding: '0 10px' }}>
-                <Box className="cafe-card" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '10px', overflow: 'hidden' }}>
-                  <img src={cafe.image} alt={cafe.cafe_name} style={{ width: '100%', height: 'auto' }} />
+              <div
+                key={index}
+                className="cafe-slide"
+                style={{ padding: '0 10px' }}
+              >
+                <Box
+                  className="cafe-card"
+                  style={{
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <img
+                    src={cafe.image}
+                    alt={cafe.cafe_name}
+                    style={{ width: '100%', height: 'auto' }}
+                  />
                   <Box p={2} textAlign="center">
                     <Typography variant="h6">{cafe.cafe_name}</Typography>
                     <Typography variant="body2">{cafe.description}</Typography>
@@ -109,8 +134,30 @@ const Home = () => {
               </div>
             ))}
           </Slider>
-          <IconButton onClick={goPrevPopular} className="slider-arrow left-arrow" style={{ position: 'absolute', top: '50%', left: '-40px', transform: 'translateY(-50%)' }}><ArrowBackIosIcon /></IconButton>
-          <IconButton onClick={goNextPopular} className="slider-arrow right-arrow" style={{ position: 'absolute', top: '50%', right: '-40px', transform: 'translateY(-50%)' }}><ArrowForwardIosIcon /></IconButton>
+          <IconButton
+            onClick={goPrevPopular}
+            className="slider-arrow left-arrow"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '-40px',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <ArrowBackIosIcon />
+          </IconButton>
+          <IconButton
+            onClick={goNextPopular}
+            className="slider-arrow right-arrow"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '-40px',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
         </div>
       </section>
 
@@ -130,8 +177,30 @@ const Home = () => {
               </div>
             ))}
           </Slider>
-          <IconButton onClick={goPrevVenue} className="slider-arrow left-arrow" style={{ position: 'absolute', top: '50%', left: '-40px', transform: 'translateY(-50%)' }}><ArrowBackIosIcon /></IconButton>
-          <IconButton onClick={goNextVenue} className="slider-arrow right-arrow" style={{ position: 'absolute', top: '50%', right: '-40px', transform: 'translateY(-50%)' }}><ArrowForwardIosIcon /></IconButton>
+          <IconButton
+            onClick={goPrevVenue}
+            className="slider-arrow left-arrow"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '-40px',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <ArrowBackIosIcon />
+          </IconButton>
+          <IconButton
+            onClick={goNextVenue}
+            className="slider-arrow right-arrow"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '-40px',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
         </div>
       </section>
     </div>

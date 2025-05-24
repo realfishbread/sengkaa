@@ -108,13 +108,6 @@ const KakaoMap = () => {
       });
     };
   }, []);
-  const getImageUrl = (image) => {
-    if (!image) return 'https://via.placeholder.com/400x200?text=No+Image';
-  
-    return image.startsWith('http')
-      ? image
-      : `https://eventcafe.site${image}`;
-  };
   const fetchCafes = async (lat, lng, map) => {
     try {
       const response = await axiosInstance.get('/user/events/nearby/', {
@@ -142,7 +135,7 @@ const KakaoMap = () => {
             ...place,
             x: place.longitude,
             y: place.latitude,
-            image_url: getImageUrl(place.image),
+            image_url: `${place.image}`, // ✅ 여기 직접 넣기!
           },
           getCategory(place),
           map

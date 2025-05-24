@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const res = await axios.post('https://eventcafe.site/user/auth/refresh/', {
+        const res = await axiosInstance.post('/user/auth/refresh/', {
           refresh: refreshToken,
         });
 
@@ -49,7 +49,6 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         console.error('⚠️ 리프레시 토큰 만료됨:', refreshError);
         localStorage.clear();
-        window.location.href = '/login'; // 또는 navigate('/login')
         return Promise.reject(refreshError);
       }
     }
