@@ -255,9 +255,11 @@ const Board = () => {
                 </Box>
               )}
 
-              <Box mt={2}>
-                <Chip label="모집중" color="success" size="small" />
-              </Box>
+              <Chip
+                label={post.is_open ? '모집중' : '모집완료'}
+                color={post.is_open ? 'success' : 'default'}
+                size="small"
+              />
 
               {user?.nickname === post.nickname && (
                 <Box

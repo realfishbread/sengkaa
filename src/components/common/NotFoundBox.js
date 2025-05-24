@@ -5,7 +5,7 @@ import React from 'react';
 const NotFoundBox = ({ 
   image = '/images/error-cat.png', 
   title = '정보를 찾을 수 없어요!', 
-  message = '입력한 닉네임이 잘못되었거나, 서버에서 정보를 불러오지 못했어요.' 
+  message = '서버에서 정보를 불러오지 못했어요.' 
 }) => {
   return (
     <Box textAlign="center" py={5}>

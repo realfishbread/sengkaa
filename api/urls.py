@@ -14,6 +14,7 @@ urlpatterns = [
     path('star/', include('api.urls.star_urls')),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('venues/', include('api.urls.venue_urls')),
+    path('booking/', include('api.urls.booking_urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

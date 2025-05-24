@@ -14,27 +14,27 @@ const KakaoMap = () => {
   };
 
   const getCategory = (place) => {
-    const name = place.place_name;
+    const genre = place.genre;
 
     if (
-      (name.includes('아이돌') || name.includes('생일')) &&
-      name.includes('카페')
+      (genre.includes('아이돌') ||genre.includes('생일')) &&
+      genre.includes('카페')
     ) {
       return 'idol';
     }
-    if (name.includes('대관') || name.includes('개인')) {
+    if (genre.includes('대관') || genre.includes('개인')) {
       return 'rental';
     }
-    if (name.includes('유튜버')) {
+    if (genre.includes('유튜버')) {
       return 'youtuber';
     }
-    if (name.includes('게임')) {
+    if (genre.includes('게임')) {
       return 'game';
     }
     if (
-      name.includes('만화') ||
-      name.includes('애니') ||
-      name.includes('웹툰')
+      genre.includes('만화') ||
+      genre.includes('애니') ||
+      genre.includes('웹툰')
     ) {
       return 'comic';
     }
