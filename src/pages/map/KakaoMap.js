@@ -17,7 +17,7 @@ const KakaoMap = () => {
     const genre = place.genre;
 
     if (
-      (genre.includes('아이돌') ||genre.includes('생일')) &&
+      (genre.includes('아이돌') || genre.includes('생일')) &&
       genre.includes('카페')
     ) {
       return 'idol';
@@ -96,13 +96,15 @@ const KakaoMap = () => {
       ps.keywordSearch(placeName, (data, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const found = data.find((p) => p.place_name === placeName);
+          console.log('Found place data:', found);
           if (found) {
             setSelectedPlace({
               ...found,
-              image:
-                found.image ||
+              image_url:
+                found.image_url ||
                 'https://via.placeholder.com/400x200?text=No+Image',
             });
+            console.log('Selected place after set:', found);
           }
         }
       });
