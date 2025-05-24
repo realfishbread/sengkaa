@@ -99,8 +99,8 @@ const KakaoMap = () => {
           if (found) {
             setSelectedPlace({
               ...found,
-              image_url:
-                found.image_url ||
+              image:
+                found.image ||
                 'https://via.placeholder.com/400x200?text=No+Image',
             });
           }
@@ -135,6 +135,7 @@ const KakaoMap = () => {
             ...place,
             x: place.longitude,
             y: place.latitude,
+            image_url: `https://eventcafe.site${place.image}`, // ✅ 여기 직접 넣기!
           },
           getCategory(place),
           map
