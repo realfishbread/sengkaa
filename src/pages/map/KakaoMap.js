@@ -108,6 +108,13 @@ const KakaoMap = () => {
       });
     };
   }, []);
+  const getImageUrl = (image) => {
+    if (!image) return 'https://via.placeholder.com/400x200?text=No+Image';
+  
+    return image.startsWith('http')
+      ? image
+      : `https://eventcafe.site${image}`;
+  };
   const fetchCafes = async (lat, lng, map) => {
     try {
       const response = await axiosInstance.get('/user/events/nearby/', {
@@ -135,7 +142,7 @@ const KakaoMap = () => {
             ...place,
             x: place.longitude,
             y: place.latitude,
-            image_url: `https://eventcafe.site${place.image}`, // ✅ 여기 직접 넣기!
+            image_url: getImageUrl(place.image),
           },
           getCategory(place),
           map
@@ -184,7 +191,7 @@ const KakaoMap = () => {
   // ✅ 마커 출력 함수 (initMap 바깥으로 분리)
   const displayMarker = (place, category, map) => {
     const imageUrl =
-      place.image_url ||
+      place.image ||
       'https://via.placeholder.com/100x100.png?text=No+Image';
     const borderColor = borderColors[category] || '#ffffff';
 
