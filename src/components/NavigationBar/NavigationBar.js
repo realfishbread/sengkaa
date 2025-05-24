@@ -1,3 +1,4 @@
+import SearchIcon from '@mui/icons-material/Search';
 import {
   AppBar,
   Avatar,
@@ -7,19 +8,18 @@ import {
   Drawer,
   IconButton,
   InputAdornment,
+  List,
+  ListItem,
+  ListItemText,
   TextField,
   Toolbar,
   Typography,
-  List,
-  ListItem,
-  ListItemText
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import Logo from '../common/Logo';
-import SearchIcon from '@mui/icons-material/Search';
 import './NavigationBar.css';
 
 const NavigationBar = () => {
@@ -29,7 +29,10 @@ const NavigationBar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
       return;
     }
     setOpenDrawer(open);
@@ -37,7 +40,7 @@ const NavigationBar = () => {
 
   useEffect(() => {
     axiosInstance
-      .get('/user/profile/')
+      .get(`/user/profile/${user?.nickname}`) // ✅ 백틱 사용 + 값도 있어야 함
       .then((res) => setUser(res.data))
       .catch(() => setUser(null));
   }, []);
@@ -46,7 +49,12 @@ const NavigationBar = () => {
     <>
       {/* 상단 내비게이션 바 */}
       <AppBar position="static" className="navbar">
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}
+        <Toolbar
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}
           className="upper-navbar-container"
         >
           {/* 왼쪽: 로고 */}
@@ -66,11 +74,18 @@ const NavigationBar = () => {
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <Button
                   className="auth-button light"
-                  onClick={() => navigate('/login', { state: { backgroundLocation: location } })}
+                  onClick={() =>
+                    navigate('/login', {
+                      state: { backgroundLocation: location },
+                    })
+                  }
                 >
                   로그인
                 </Button>
-                <Button className="auth-button dark" onClick={() => navigate('/signup')}>
+                <Button
+                  className="auth-button dark"
+                  onClick={() => navigate('/signup')}
+                >
                   회원가입
                 </Button>
               </Box>
@@ -95,8 +110,18 @@ const NavigationBar = () => {
                 {/* 메뉴 아이템: 이벤트 */}
                 <Button className="nav-item">이벤트</Button>
                 <Box className="submenu">
-                  <Button onClick={() => navigate('/register')} className="submenu-item">이벤트 등록</Button>
-                  <Button onClick={() => navigate('/search')} className="submenu-item">이벤트 찾기</Button>
+                  <Button
+                    onClick={() => navigate('/register')}
+                    className="submenu-item"
+                  >
+                    이벤트 등록
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/search')}
+                    className="submenu-item"
+                  >
+                    이벤트 찾기
+                  </Button>
                 </Box>
               </Box>
 
@@ -104,14 +129,33 @@ const NavigationBar = () => {
               <Box className="nav-item-wrapper">
                 <Button className="nav-item">장소 대관</Button>
                 <Box className="submenu">
-                  <Button onClick={() => navigate('/venue')} className="submenu-item">장소 등록</Button>
-                  <Button onClick={() => navigate('/venue-search')} className="submenu-item">대관 찾기</Button>
+                  <Button
+                    onClick={() => navigate('/venue')}
+                    className="submenu-item"
+                  >
+                    장소 등록
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/venue-search')}
+                    className="submenu-item"
+                  >
+                    대관 찾기
+                  </Button>
                 </Box>
               </Box>
 
-              <Button className="nav-item" onClick={() => navigate('/map')}>주변 카페</Button>
-              <Button className="nav-item" onClick={() => navigate('/calendar')}>캘린더</Button>
-              <Button className="nav-item" onClick={() => navigate('/board')}>게시판</Button>
+              <Button className="nav-item" onClick={() => navigate('/map')}>
+                주변 카페
+              </Button>
+              <Button
+                className="nav-item"
+                onClick={() => navigate('/calendar')}
+              >
+                캘린더
+              </Button>
+              <Button className="nav-item" onClick={() => navigate('/board')}>
+                게시판
+              </Button>
             </Box>
           </Box>
 
@@ -159,7 +203,10 @@ const NavigationBar = () => {
           <Divider sx={{ my: 2 }} />
 
           <List>
-            <ListItem button onClick={() => navigate(`/profile/${user?.nickname}`)}>
+            <ListItem
+              button
+              onClick={() => navigate(`/profile/${user?.nickname}`)}
+            >
               <ListItemText primary="내 프로필" />
             </ListItem>
             <ListItem button onClick={() => navigate('/settings')}>

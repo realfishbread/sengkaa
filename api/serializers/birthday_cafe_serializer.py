@@ -22,12 +22,13 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='genre')  # genre를 type으로 보여줄 거라면
     like_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
+    goods = GoodsSerializer(many=True, read_only=True)
 
     class Meta:
         model = BirthdayCafe
         fields = [
             'id', 'cafe_name', 'description', 'genre', 'star',
-            'start_date', 'end_date', 'location', 'image', 'goods', 'like_count', 'is_liked', 'view_count', 'type'
+            'start_date', 'end_date', 'location', 'image', 'goods', 'like_count', 'is_liked', 'view_count', 'type', 'goods'
         ]
 
     def get_image(self, obj):
@@ -54,10 +55,11 @@ class BirthdayCafeListSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
     view_count = serializers.IntegerField(read_only=True)
+    goods = GoodsSerializer(many=True, read_only=True)
 
     class Meta:
         model = BirthdayCafe
-        fields = ['id', 'cafe_name', 'genre', 'start_date', 'end_date', 'location', 'image', 'like_count', 'is_liked', 'view_count']
+        fields = ['id', 'cafe_name', 'genre', 'start_date', 'end_date', 'location', 'image', 'like_count', 'is_liked', 'view_count', 'goods']
 
     def get_image(self, obj):
         request = self.context.get('request')

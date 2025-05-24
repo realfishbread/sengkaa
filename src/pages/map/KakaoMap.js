@@ -59,10 +59,13 @@ const KakaoMap = () => {
 
     script.onload = () => {
       window.kakao.maps.load(() => {
-        initMap();
+        // ✅ 위치가 유효할 때만 지도 초기화
+        if (userLocation.lat && userLocation.lng) {
+          initMap();
+        }
       });
     };
-  }, [userLocation]);
+  }, [userLocation.lat, userLocation.lng]);
 
   // ✅ 사용자 위치 갱신
   useEffect(() => {
@@ -105,6 +108,42 @@ const KakaoMap = () => {
       });
     };
   }, []);
+  const fetchCafes = async (lat, lng, map) => {
+    try {
+      const response = await axiosInstance.get('/user/events/nearby/', {
+        params: {
+          lat,
+          lng,
+          radius: 5,
+        },
+      });
+
+      const data = response.data;
+      setIsEmpty(data.length === 0);
+      if (data.length === 0) return;
+
+      const bounds = new window.kakao.maps.LatLngBounds();
+
+      data.forEach((place) => {
+        const latlng = new window.kakao.maps.LatLng(
+          place.latitude,
+          place.longitude
+        );
+        bounds.extend(latlng); // 🔥 지도 경계에 포함
+        displayMarker(
+          {
+            ...place,
+            x: place.longitude,
+            y: place.latitude,
+          },
+          getCategory(place),
+          map
+        );
+      });
+    } catch (e) {
+      console.error('이벤트 불러오기 실패', e);
+    }
+  };
 
   // ✅ 지도 초기화
   const initMap = () => {
@@ -131,49 +170,16 @@ const KakaoMap = () => {
       map,
     });
 
-    // 🔥 카카오 API 검색 제거!
-    // ✅ 이벤트 마커는 useEffect(fetchCafes)에서 직접 불러오고 있음.
+    // 🧠 idle 이벤트로 지도 움직임 감지
+    kakao.maps.event.addListener(map, 'idle', () => {
+      const center = map.getCenter();
+      fetchCafes(center.getLat(), center.getLng(), map);
+    });
+
+    // ✅ 초기 마커 세팅
+    fetchCafes(userLocation.lat, userLocation.lng, map);
   };
 
-  useEffect(() => {
-    if (!userLocation.lat || !userLocation.lng) return;
-
-    const fetchCafes = async () => {
-      try {
-        const response = await axiosInstance.get('/user/events/nearby/', {
-          params: {
-            lat: userLocation.lat,
-            lng: userLocation.lng,
-            radius: 5,
-          },
-        });
-
-        const data = response.data;
-        setIsEmpty(data.length === 0); // ✅ 없으면 true로 세팅
-        const { kakao } = window;
-        const map = new kakao.maps.Map(document.getElementById('myMap'), {
-          center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-          level: 4,
-        });
-
-        data.forEach((place) => {
-          displayMarker(
-            {
-              ...place,
-              x: place.longitude,
-              y: place.latitude,
-            },
-            getCategory(place),
-            map
-          );
-        });
-      } catch (e) {
-        console.error('이벤트 불러오기 실패', e);
-      }
-    };
-
-    fetchCafes();
-  }, [userLocation]);
   // ✅ 마커 출력 함수 (initMap 바깥으로 분리)
   const displayMarker = (place, category, map) => {
     const imageUrl =
@@ -182,7 +188,7 @@ const KakaoMap = () => {
     const borderColor = borderColors[category] || '#ffffff';
 
     const content = `
-      <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.place_name.replace(
+      <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.cafe_name.replace(
       /'/g,
       "\\'"
     )}')">
@@ -214,23 +220,37 @@ const KakaoMap = () => {
               alt="포스터 이미지"
               className="poster-image"
             />
-            <h2 className="place-title">📍 {selectedPlace.place_name}</h2>
+            <h2 className="place-title">📍 {selectedPlace.cafe_name}</h2>
             <p>
               <strong>🏠 주소:</strong>{' '}
-              {selectedPlace.road_address_name || selectedPlace.address_name}
+              {selectedPlace.road_address + ' ' + selectedPlace.detail_address}
             </p>
-            <p>
-              <strong>📞 전화번호:</strong> {selectedPlace.phone || '정보 없음'}
-            </p>
-            {selectedPlace.opening_hours && (
+            {selectedPlace.start_date && (
               <p>
-                <strong>🕒 영업시간:</strong> {selectedPlace.opening_hours}
+                <strong>🕒 이벤트 기간:</strong> {selectedPlace.start_date}
               </p>
             )}
-            {selectedPlace.menu && (
-              <p>
-                <strong>🍽 메뉴:</strong> {selectedPlace.menu}
-              </p>
+            {selectedPlace.goods && selectedPlace.goods.length > 0 && (
+              <div className="goods-section">
+                <strong>🎁 굿즈 목록:</strong>
+                <ul className="goods-list">
+                  {selectedPlace.goods.map((item) => (
+                    <li key={item.id} className="goods-item">
+                      <p>
+                        <strong>{item.name}</strong> -{' '}
+                        {item.price.toLocaleString()}원
+                      </p>
+                      {item.image && (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="goods-image"
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
             <a
               href={selectedPlace.place_url}
