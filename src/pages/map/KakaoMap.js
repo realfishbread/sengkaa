@@ -119,6 +119,8 @@ const KakaoMap = () => {
       });
 
       const data = response.data;
+      console.log('✅ 받아온 이벤트 목록:', data);
+
       setIsEmpty(data.length === 0);
       if (data.length === 0) return;
 
@@ -184,7 +186,7 @@ const KakaoMap = () => {
   // ✅ 마커 출력 함수 (initMap 바깥으로 분리)
   const displayMarker = (place, category, map) => {
     const imageUrl =
-      place.image ||
+      place.image_url ||
       'https://via.placeholder.com/100x100.png?text=No+Image';
     const borderColor = borderColors[category] || '#ffffff';
 

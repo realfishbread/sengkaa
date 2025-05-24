@@ -38,13 +38,6 @@ const NavigationBar = () => {
     setOpenDrawer(open);
   };
 
-  useEffect(() => {
-    axiosInstance
-      .get(`/user/profile/${user?.nickname}`) // ✅ 백틱 사용 + 값도 있어야 함
-      .then((res) => setUser(res.data))
-      .catch(() => setUser(null));
-  }, []);
-
   return (
     <>
       {/* 상단 내비게이션 바 */}
