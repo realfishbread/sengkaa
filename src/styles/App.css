@@ -1,6 +1,5 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 
-/* 기본 레이아웃 설정 */
 html,
 body {
   margin: 0;
@@ -28,21 +27,18 @@ body {
   font-weight: 500;
 }
 
-/* 메인 슬라이더 스타일 */
 .Home {
   overflow: visible;
   scroll-behavior: smooth;
-  margin-top: 20px; /* 배너와 인기 카페 이벤트 사이 간격 추가 */
+  margin-top: 20px;
 }
-
-
 
 .slider-wrapper {
   width: 100%;
   max-width: 1000px;
   margin: 20px auto;
-  padding: 0; /* 슬라이더 wrapper의 padding을 0으로 설정 또는 필요에 따라 조정 */
-  position: relative; /* 화살표 absolute positioning 기준 */
+  padding: 0;
+  position: relative;
 }
 
 .slide img {
@@ -58,112 +54,58 @@ body {
   color: #555;
 }
 
-/* 인기 카페 이벤트 섹션 스타일 */
-.popular-cafes {
-  padding: 20px 0; /* 섹션 상하 패딩 추가 */
+.reservable-venues,
+.popular-events {
+  padding: 20px 0;
 }
 
-.popular-cafes .slider-wrapper {
+.reservable-venues .slider-wrapper,
+.popular-events .slider-wrapper {
   width: 100%;
   max-width: 1000px;
-  margin: 20px auto; /* 섹션 제목과의 간격 및 가운데 정렬 */
-  padding: 0 20px; /* 슬라이더 양쪽 패딩 */
-  position: relative; /* 화살표 위치 기준 */
+  margin: 20px auto;
+  padding: 0 20px;
+  position: relative;
 }
 
-.popular-cafes .slick-slide > div {
-  /* slick-slide 바로 아래 div 선택 */
-  display: flex !important; /* flex 활성화 */
-  justify-content: center; /* 카드 가운데 정렬 */
-  padding: 0 10px; /* 카드 양쪽 간격 */
+.popular-cafes .slick-slide > div,
+.reservable-venues .slick-slide > div,
+.popular-events .slick-slide > div {
+  display: flex !important;
+  justify-content: center;
+  padding: 0 15px;
 }
 
-/* 인기 카페 카드 스타일 */
-.popular-cafes .cafe-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  width: 200px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  height: 350px; /* 동일한 높이 설정 */
+.popular-cafes .cafe-card,
+.reservable-venues .cafe-card,
+.popular-events .cafe-card {
+  border: none !important;
+  padding: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  box-shadow: none !important;
+  background: none !important;
+  display: block !important;
 }
 
-/* 인기 카페 카드 이미지 비율 조정 */
-.popular-cafes .cafe-card img {
-  width: 100%;
-  height: auto; /* 높이를 auto로 설정하여 원본 비율 유지 */
-  aspect-ratio: 3 / 4; /* 원하는 가로 세로 비율 설정 (예: 3:4) */
-  object-fit: cover; /* 비율에 맞춰 이미지를 채우고 넘치는 부분은 잘라냄 */
+.popular-cafes .cafe-card h6,
+.popular-cafes .cafe-card p,
+.reservable-venues .cafe-card h6,
+.reservable-venues .cafe-card p,
+.popular-events .cafe-card h6,
+.popular-events .cafe-card p {
+  display: none !important;
 }
 
-.popular-cafes .cafe-card h6 {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 0.5rem;
-}
-
-.popular-cafes .cafe-card p {
-  font-size: 0.8rem;
-  color: #555;
-  margin-top: 0.3rem;
-}
-
-/* 대관 가능한 장소 섹션 스타일 */
-.reservable-venues {
-  padding: 20px 0; /* 섹션 상하 패딩 추가 */
-}
-
-.reservable-venues .slider-wrapper {
-  width: 100%;
-  max-width: 1000px;
-  margin: 20px auto; /* 섹션 제목과의 간격 및 가운데 정렬 */
-  padding: 0 20px; /* 슬라이더 양쪽 패딩 */
-  position: relative; /* 화살표 위치 기준 */
-}
-
-.reservable-venues .slick-slide > div {
-  display: flex !important; /* flex 활성화 */
-  justify-content: center; /* 카드 가운데 정렬 */
-  padding: 0 10px; /* 카드 양쪽 간격 */
-}
-
-/* 대관 가능한 장소 카드 스타일 */
-.reservable-venues .cafe-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  width: 200px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  height: 350px; /* 동일한 높이 설정 */
-}
-
-/* 대관 가능한 장소 카드 이미지 비율 조정 */
-.reservable-venues .cafe-card img {
+.popular-cafes .cafe-card img,
+.reservable-venues .cafe-card img,
+.popular-events .cafe-card img {
   width: 100%;
   height: auto;
-  aspect-ratio: 3 / 4; /* 인기 카페와 동일한 비율 설정 */
+  aspect-ratio: 3 / 4;
   object-fit: cover;
 }
 
-.reservable-venues .cafe-card h6 {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 0.5rem;
-}
-
-.reservable-venues .cafe-card p {
-  font-size: 0.8rem;
-  color: #555;
-  margin-top: 0.3rem;
-}
-
-/* 슬라이더 화살표 스타일 */
 .slider-arrow {
   position: absolute;
   top: 50%;
@@ -180,25 +122,18 @@ body {
   cursor: pointer;
 }
 
-/* 인기 카페 이벤트 슬라이더 화살표 위치 조정 */
-.popular-cafes .slider-wrapper .left-arrow {
-  left: 10px; /* 대관 가능한 장소와 동일한 값으로 변경 */
-}
-
-.popular-cafes .slider-wrapper .right-arrow {
-  right: 10px; /* 대관 가능한 장소와 동일한 값으로 변경 */
-}
-
-/* 대관 가능한 장소 슬라이더 화살표 위치 조정 */
-.reservable-venues .slider-wrapper .left-arrow {
+.popular-cafes .slider-wrapper .left-arrow,
+.reservable-venues .slider-wrapper .left-arrow,
+.popular-events .slider-wrapper .left-arrow {
   left: 10px;
 }
 
-.reservable-venues .slider-wrapper .right-arrow {
+.popular-cafes .slider-wrapper .right-arrow,
+.reservable-venues .slider-wrapper .right-arrow,
+.popular-events .slider-wrapper .right-arrow {
   right: 10px;
 }
 
-/* 지도 스타일 */
 .map {
   width: 90%;
   height: 60vh;
@@ -206,7 +141,6 @@ body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Layout */
 .layout-content {
   flex: 1;
   overflow: visible;
@@ -218,7 +152,6 @@ body {
   min-height: 100vh;
 }
 
-/* 레이아웃 스타일 */
 .grid-container {
   display: grid;
   gap: 16px;

@@ -118,9 +118,6 @@ function DictionaryForm({ onSave, onCancel }) {
             </div>
           ))}
 
-        <div className="add-definition-btn">
-          <button onClick={handleAddDefinition}>＋ 뜻풀이</button>
-        </div>
       </section>
 
       {/* 저장/취소 */}

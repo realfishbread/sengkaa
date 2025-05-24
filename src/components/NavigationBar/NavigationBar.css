@@ -2,49 +2,78 @@
 .navbar {
   background-color: #fff !important;
   box-shadow: none !important;
-  min-height: 40px !important;
+  min-height: 72px !important; /* 80px에서 72px로 줄임 */
   border-bottom: 1px solid #eee;
+  width: 100%;
 }
 
-/* 상단 내비게이션 바 컨테이너 스타일 */
+/* 상단 내비게이션 바 컨테이너 */
 .upper-navbar-container {
-  max-width: 1300px !important; /* 로그인, 회원가입 버튼 움직임*/
-  margin: 0auto;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important; /* 추가: 양쪽 끝 정렬 보장 */
+  padding: 0 20px;
+  flex-wrap: nowrap !important; /* 줄바꿈 방지 */
+  min-height: 72px; /* 80px에서 72px로 줄임 */
 }
 
-/* 하단 내비게이션 바 컨테이너 스타일 */
+/* 로고 컨테이너 */
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* 로고가 줄어들지 않도록 */
+  min-width: fit-content; /* 최소 너비 보장 */
+}
+
+.logo {
+  height: 58px;
+  cursor: pointer;
+  max-width: 100%;
+  margin-right: 0;
+  object-fit: contain;
+}
+
+/* 우측 영역: 로그인/회원가입 버튼 */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* 20px에서 12px로 조정 */
+  flex-shrink: 0; /* 버튼 영역이 줄어들지 않도록 */
+  min-width: fit-content; /* 최소 너비 보장 */
+}
+
+/* 하단 내비게이션 바 컨테이너 */
 .bottom-navbar-container {
-  max-width: 1200px; /* 원하는 최대 너비 값으로 변경 */
-  margin: 0 auto; /* 가운데 정렬 */
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  min-height: 62px; /* 70px에서 62px로 줄임 */
 }
 
-/* 하단 내비게이션 바 툴바 스타일 (선택 사항) */
+/* 하단 내비게이션 바 툴바 스타일 */
 .bottom-navbar-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-/* 로고 */
-.logo {
-  max-width: 1000px;
-  height: 80px;
-  cursor: pointer;
-  margin-left: 140px; /*상단 내비게이션 바 로고 위치 이동*/
-}
-
-.logo-container {
-  display: flex;
-  align-items: right;
+  width: 100%;
+  min-height: 62px; /* 70px에서 62px로 줄임 */
 }
 
 /* 메뉴 그룹 */
 .nav-menu {
   display: flex;
-  gap: 30px;
+  gap: 35px; /* 40px에서 35px로 줄임 */
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  flex-wrap: nowrap; /* 메뉴 항목들도 줄바꿈 방지 */
 }
 
 /* 메뉴 아이템 래퍼 */
@@ -53,21 +82,24 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  flex-shrink: 0; /* 메뉴 항목이 줄어들지 않도록 */
 }
 
 /* 메뉴 버튼 */
 .nav-item {
   color: #333 !important;
-  font-size: 1.2rem !important;
-  font-weight: 500 !important;
+  font-size: 1.2rem !important; /* 1.3rem에서 1.2rem로 줄임 */
+  font-weight: 600 !important; /* 500에서 600으로 증가 */
   text-transform: none !important;
-  padding: 6px 0 !important;
+  padding: 10px 14px !important; /* 12px 16px에서 10px 14px로 줄임 */
   min-width: auto !important;
   position: relative;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  transition: color 0.2s ease; /* 부드러운 전환 효과 */
 }
 
 .nav-item:hover {
-  color: #000 !important;
+  color: #dcf2ff !important;
 }
 
 /* 서브메뉴 */
@@ -77,12 +109,13 @@
   position: absolute;
   top: 100%;
   left: 0;
-  width: 150px;
+  width: 160px; /* 170px에서 160px로 줄임 */
   background-color: #fff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 8px 0;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
+  padding: 10px 0; /* 12px에서 10px로 줄임 */
   z-index: 1000;
-  border-radius: 4px;
+  border-radius: 8px; /* 4px에서 8px로 증가 */
+  border: 1px solid #f0f0f0; /* 경계선 추가 */
 }
 
 /* 마우스 오버 시 서브메뉴 표시 */
@@ -116,61 +149,180 @@
 .search-bar {
   background-color: white;
   border-radius: 4px;
-  width: 250px;
+  width: 300px;
+  flex-shrink: 0;
 }
 
 .search-bar .MuiOutlinedInput-root {
-  border-radius: 20px;
+  border-radius: 24px;
+  height: 42px;
+}
+
+.search-bar .MuiOutlinedInput-input {
+  padding: 9px 15px;
+  font-size: 14px;
 }
 
 /* 로그인/회원가입 버튼 */
 .auth-button {
-  display: inline-block;
-  padding: 8px 20px !important;
-  border-radius: 4px !important;
+  display: inline-block !important;
+  padding: 10px 22px !important;
+  border-radius: 7px !important;
   font-size: 14px !important;
-  font-weight: 500;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  margin: 0 8px;
+  font-weight: 600 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
   text-transform: none !important;
-  min-width: 100px !important;
+  min-width: 85px !important;
+  height: 42px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
 }
 
 /* 밝은 스타일 버튼 (로그인) */
 .auth-button.light {
   background-color: #fff !important;
   color: #333 !important;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd !important;
 }
 
 /* 어두운 스타일 버튼 (회원가입) */
 .auth-button.dark {
-  background-color: #dcf2ff !important;
+  background-color: #dcf2ff  !important;
   color: #000000 !important;
-  border: 1px solid #ddd;
+  border: 1px solid #dcf2ff !important;
 }
 
 /* 버튼 호버 효과 */
 .auth-button.light:hover {
-  background-color: #f8f8f8 !important;
-  border-color: #ccc;
+  background-color: #f8f9fa !important;
+  border-color: #bbb !important;
+  transform: translateY(-1px);
 }
 
 .auth-button.dark:hover {
-  background-color: #333 !important;
+  background-color: #1565c0 !important;
+  color: #fff !important;
+  transform: translateY(-1px);
 }
 
 /* 애니메이션 */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* 반응형 미디어 쿼리 */
+@media (max-width: 1024px) {
+  .upper-navbar-container {
+    padding: 0 16px;
+  }
+  
+  .search-bar {
+    width: 220px;
+  }
+  
+  .nav-menu {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    min-height: 56px !important;
+  }
+  
+  .upper-navbar-container {
+    min-height: 56px;
+    padding: 0 12px;
+    flex-wrap: wrap !important;
+    gap: 8px;
+  }
+  
+  .logo {
+    height: 40px;
+  }
+
+  .nav-menu {
+    flex-direction: row;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 0 4px;
+  }
+  
+  .nav-item {
+    font-size: 0.95rem !important;
+    padding: 6px 8px !important;
+  }
+
+  .auth-button {
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    min-width: 70px !important;
+    height: 36px !important;
+  }
+
+  .search-bar {
+    width: 200px;
+  }
+  
+  .search-bar .MuiOutlinedInput-root {
+    height: 36px;
+  }
+
+  .right-section {
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+  
+  /* 서브메뉴 모바일 대응 */
+  .submenu {
+    position: fixed;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    bottom: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .upper-navbar-container {
+    padding: 0 8px;
+  }
+  
+  .logo {
+    height: 36px;
+  }
+  
+  .auth-button {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    min-width: 60px !important;
+    height: 32px !important;
+  }
+  
+  .search-bar {
+    width: 160px;
+  }
+  
+  .nav-menu {
+    gap: 10px;
+  }
+  
+  .nav-item {
+    font-size: 0.85rem !important;
+    padding: 4px 6px !important;
   }
 }

@@ -9,11 +9,10 @@ import 'slick-carousel/slick/slick.css';
 import '../styles/App.css';
 import { fetchPopularCafes } from './birthday-cafe-register/api/EventSearchApi';
 import { fetchPopularVenues } from './venue/find-cafes/api/VenueSearchApi';
+
 const Home = () => {
   const [activeNavItem, setActiveNavItem] = useState(null);
   const navigate = useNavigate();
-
-  
 
   const popularSliderRef = useRef(null);
   const venueSliderRef = useRef(null);
@@ -91,19 +90,23 @@ const Home = () => {
         </div>
       </main>
 
-      <section className="popular-cafes">
+      <section className="popular-events">
         <Typography variant="h5" textAlign="center" gutterBottom>
-          인기 카페 이벤트
+          현재 인기 이벤트
         </Typography>
         <div className="slider-wrapper" style={{ position: 'relative' }}>
-          <Slider ref={popularSliderRef} {...sliderSettings(3)}>
+          <Slider ref={popularSliderRef} {...sliderSettings(5)}>
             {popularCafes.map((cafe, index) => (
               <div key={index} className="cafe-slide" style={{ padding: '0 10px' }}>
                 <Box className="cafe-card" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '10px', overflow: 'hidden' }}>
                   <img src={cafe.image} alt={cafe.cafe_name} style={{ width: '100%', height: 'auto' }} />
                   <Box p={2} textAlign="center">
-                    <Typography variant="h6">{cafe.cafe_name}</Typography>
-                    <Typography variant="body2">{cafe.description}</Typography>
+                    <Typography variant="subtitle1" fontWeight="bold" color="primary">
+                      {cafe.group_name || cafe.cafe_name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                      {cafe.event_name || cafe.description}
+                    </Typography>
                   </Box>
                 </Box>
               </div>
@@ -119,7 +122,7 @@ const Home = () => {
           대관 가능한 장소
         </Typography>
         <div className="slider-wrapper" style={{ position: 'relative' }}>
-          <Slider ref={venueSliderRef} {...sliderSettings(3)}>
+          <Slider ref={venueSliderRef} {...sliderSettings(5)}>
             {reservableVenues.map((venue, index) => (
               <div key={index} className="cafe-slide">
                 <Box className="cafe-card">
