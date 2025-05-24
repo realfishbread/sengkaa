@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { VenueSearchApi } from './api/VenueSearchApi';
+import { VenueSearchApi } from './VenueSearchApi';
 
 const VenueSearch = () => {
   const [keyword, setKeyword] = useState('');

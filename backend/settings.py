@@ -57,7 +57,9 @@ INSTALLED_APPS = [
     'corsheaders',  # React와 연결할 때 필요
     'api',          # 생성한 앱 추가
     'django_extensions',  # ✅ django-extensions 추가
-    'redis'
+    'redis',
+    "channels",
+    "chat",  # 👈 WebSocket app
 ]
 
 MIDDLEWARE = [
@@ -90,6 +92,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = 'backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis://127.0.0.1:6379/1")],  # ✅ DB 번호는 URL로 전달!
+            "capacity": 1500,
+            "expiry": 10,
+        },
+    },
+}
 
 
 # Database

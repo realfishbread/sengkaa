@@ -255,3 +255,6 @@ def set_coordinates(sender, instance, **kwargs):
         if lat and lng:
             instance.latitude = lat
             instance.longitude = lng
+            
+            
+            
