@@ -1,0 +1,330 @@
+{
+  "PC": [
+    {
+      "name": "리그 오브 레전드",
+      "release_date": "2011-12-04",
+      "image": "https://i.namu.wiki/i/lwOCQlzORb-KoZJkNnfZFMh2jgvSo2su9tXiAPkvy3UMT_Eyk5Ppb-Mym_CjS8wEZQXzAkFgoGQd0AJCThV4KHoUjOJx_BevZqF_scRmlQdCTPwbRRL8sghOlEsjTOfCmaC2xzlk2b4DuQ2qKzHrDw.webp",
+      "slug": "https://namu.wiki/w/%EB%A6%AC%EA%B7%B8%20%EC%98%A4%EB%B8%8C%20%EB%A0%88%EC%A0%84%EB%93%9C"
+    },
+    {
+      "name": "이터널 리턴",
+      "release_date": "2023-07-19",
+      "image": "https://i.namu.wiki/i/aCQ8qDv51HJkey7L_q-mjLNJ5dU__wzUhmk82qzjPBrmP1Wq7CNRx0pVFDHDHQXyWTtwjF1ZN1pOEBpzh2KOIwpcFfO51iT5i1hD3kN-Fe3qT6eFmk8kGhcq6NzTvy4nR3R5wNEhTkGMMcHXa5Sk6A.webp",
+      "slug": "https://namu.wiki/w/%EC%9D%B4%ED%84%B0%EB%84%90%20%EB%A6%AC%ED%84%B4"
+    },
+    {
+      "name": "메이플스토리",
+      "release_date": "2003-04-29",
+      "image": "https://i.namu.wiki/i/oRCr1_wsnDUYbkMPosAh5x8b2cp9vgGmhDeYlcTaPU9yprjcqgPRzIvE2ay51_JxUMPPPdPIVjtafQwSFGjb61O4dAt3qbX6wly0393Oi6I1enWokBmnw7Rk87dDP--bGw3Rj8UzDruyBFG9RhyeKA.webp",
+      "slug": "https://namu.wiki/w/%EB%A9%94%EC%9D%B4%ED%94%8C%EC%8A%A4%ED%86%A0%EB%A6%AC"
+    },
+    {
+      "name": "던전앤 파이터",
+      "release_date": "2005-08-10",
+      "image": "https://i.namu.wiki/i/PO9FwwUvhm1RYLPxX-8rtJEestFXgIjj1dvwSfv4kRh8dy5gXpuG0R2UJNI1ZVTkKNzht4nmwGhAO1Rze3cexQ.webp",
+      "slug": "https://namu.wiki/w/%EB%8D%98%EC%A0%84%EC%95%A4%ED%8C%8C%EC%9D%B4%ED%84%B0"
+    },
+    {
+      "name": "배틀그라운드",
+      "release_date": "2017-03-23",
+      "image": "https://i.namu.wiki/i/M_sxsDjDupNFf7-dzbL0DK4Ox7YvUIvPV9-ac_Ef9s8nQKu8k0rGwtEqZc_Z-hFUwQUyzKQFRYvqcwiGfX4UaabXPKw5b6pVFY4jhuwWEHrIDemXbUFybM3-RhWWa0mr99DwqQllB4q5DGGJBroSvA.webp",
+      "slug": "https://namu.wiki/w/PUBG:%20BATTLEGROUNDS"
+    },
+    {
+      "name": "발로란트",
+      "release_date": "2020-06-02",
+      "image": "https://i.namu.wiki/i/Duz3KgbmasJ_BsuigulIHhvJdIT2W1hUCGW5eUZttecmMwFGNpGDbBpbrHwCoUSA_8h465dTic3_wTN61RLjsg.svg",
+      "slug": "https://namu.wiki/w/%EB%B0%9C%EB%A1%9C%EB%9E%80%ED%8A%B8"
+    },
+    {
+      "name": "로스트 아크",
+      "release_date": "2018-11-07",
+      "image": "https://i.namu.wiki/i/P0p-tKGiS1Hi9fVrF_xlFRWBdM7Lci3rVAw0TyVpInBnBKRL4QEZsWuI-LmmnpndlSzY8dP8l_6_nNoTHKNlhMvFugzP3neGHnTp9nUdnZOLLFfET35WfjpWld3kNix2uJpHUB9foFsPWDJI6qY4RA.webp",
+      "slug": "https://namu.wiki/w/%EB%A1%9C%EC%8A%A4%ED%8A%B8%EC%95%84%ED%81%AC"
+    },
+    {
+      "name": "스타크래프트",
+      "release_date": "1998-03-31",
+      "image": "https://i.namu.wiki/i/ziKZTdh4k8FBDwI2G728Zs3f2yZrvlOlI8Y6DQLZDZ_CbMebSnDmfN42MOV6fYx41t17V0mpk2kCDSjc5WBMjeSU_gbDIjUABduPT22XPgplUMwllmk9MKoYMkcBx1MRDQl6w0BUocn68iJvaKietw.webp",
+      "slug": "https://namu.wiki/w/%EC%8A%A4%ED%83%80%ED%81%AC%EB%9E%98%ED%94%84%ED%8A%B8"
+    },
+    {
+      "name": "마비노기",
+      "release_date": "2004-06-22",
+      "image": "https://i.namu.wiki/i/ORTyEYaDv70h3F9wqqYt2dFXHHXvdrK6bnWkF93XSFhUL4WGfUKaGushFEDpL4hvxClnXbD_1idrGDOZ2oi444KTVgOQniIcZ10kmXGbvr3bM-mpacu2PO6aHRb3_tBfxNlMZw1z_81JjxGGCXX7zg.webp",
+      "slug": "https://namu.wiki/w/%EB%A7%88%EB%B9%84%EB%85%B8%EA%B8%B0"
+    },
+    {
+      "name": "월드 오브 워크래프트",
+      "release_date": "2004-11-23",
+      "image": "https://i.namu.wiki/i/lHlxMWZJXK1sl1tM17o8DS4q7WEF26UeA3kYV23m2kvdtvWqQQdrqsSNv6As8bLNiDoM4Se69nnGeCJECSVfMsDH8hozWNVZKUXpUeUneKIVERvmlH7-GLj2Ph_9T7lR278TmsNJBiJwLJ8LloL1KQ.webp",
+      "slug": "https://namu.wiki/w/%EC%9B%94%EB%93%9C%20%EC%98%A4%EB%B8%8C%20%EC%9B%8C%ED%81%AC%EB%9E%98%ED%94%84%ED%8A%B8"
+    },
+    {
+      "name": "카트라이더 - 드리프트",
+      "release_date": "2023-01-12",
+      "image": "https://i.namu.wiki/i/5aB318cUOZeWaCYBgpx6ro4e3qu3kvS4k5RUhsHlkgkq7sGn7xgeGHM8icoSKxzPnm8f-nwDEc84aXG0y9jdyK4L26zdrkZO1q4cyokF9yK1Xxi66xXnZvbFSZGLeGhovWS8e7seo2EjH95gzViA8Q.svg",
+      "slug": "https://namu.wiki/w/%EC%B9%B4%ED%8A%B8%EB%9D%BC%EC%9D%B4%EB%8D%94:%20%EB%93%9C%EB%A6%AC%ED%94%84%ED%8A%B8"
+    },
+    {
+      "name": "오버워치2",
+      "release_date": "2022-10-05",
+      "image": "https://i.namu.wiki/i/l0V0qekDu0OFFeHn1JxJ0dwSgXt2EBA3tbAXagc06AAIPdLha2aerq8ZDUTbJf--ghnfBgkBMVeFmQKIft_XmEleWSt72-Ub2MH1hcf2q9_psMl3vi0mL0KVAbbGa3oySuKRQnw0tcQ2ygSk6Ai-7w.svg",
+      "slug": "https://namu.wiki/w/%EC%98%A4%EB%B2%84%EC%9B%8C%EC%B9%98%202"
+    },
+    {
+      "name": "엘소드",
+      "release_date": "2007-12-27",
+      "image": "https://i.namu.wiki/i/1QJvvWp0JnkgbqiONfdEVEgmoXmarNIKLNtOWuO6pyI1BvsqU-ql0nex5JMYklnFB17ItxXHibpxLiT3UjYkPIzijrwDFRgla_VoV8MdQCasLzaF6XAwWixIFyTtnY1a2GS4cz1WIm_En-fP1vuMbA.webp",
+      "slug": "https://namu.wiki/w/%EC%97%98%EC%86%8C%EB%93%9C"
+    }
+  ],
+  "Mobile": [
+    {
+      "name": "젠레스 존 제로",
+      "release_date": "2024-07-04",
+      "image": "https://i.namu.wiki/i/c0ULcUXOemJHBK80ejwEDVloVo4I_-mOYl9xpTj8ZxWR3wOzEjIlHM4rrm6HQbzUGc428DZzYvyYh9qLnHvpKwRdc7nRrXEUe454kV4Y4mt0Uob4GoliymahdvemRzZZvnHt1-9Of_ZapcigKP1--w.webp",
+      "slug": "https://namu.wiki/w/%EC%A0%A0%EB%A0%88%EC%8A%A4%20%EC%A1%B4%20%EC%A0%9C%EB%A1%9C"
+    },
+    {
+      "name": "명조",
+      "release_date": "2024-05-23",
+      "image": "https://i.namu.wiki/i/1W9kWy86p3kg0_8tDkWoo0LxgF4_BfxfsV_6UWNan24FTxbT5kRiIDOEAMsPwiZZ8InsIMPFEwqWc-xapTdL8ML2zcnj-wHc2tEKx0kfTanExIHQKlwji4utK86lTFw0NDXEBJYUGwpJgMoRmyTTkQ.webp",
+      "slug": "https://namu.wiki/w/%EB%AA%85%EC%A1%B0:%20%EC%9B%8C%EB%8D%94%EB%A7%81%20%EC%9B%A8%EC%9D%B4%EB%B8%8C"
+    },
+    {
+      "name": "프린세스 커넥트! Re:Dive",
+      "release_date": "2018-02-15",
+      "image": "https://i.namu.wiki/i/mlGkyVbm7UCmD7pudzoBa9ujETMgMZYllMiJjcyo0z42l3i7nLtaFnDooLogVJ0uYvDBqsRqKoBea_XdSPcT0NkK6kJVCjxHkdSl0iph-PczAApvzU9FrCKrxXx4G9rYh9fkQPSP8IhlwjtmNSTvDw.webp",
+      "slug": "https://namu.wiki/w/%ED%94%84%EB%A6%B0%EC%84%B8%EC%8A%A4%20%EC%BB%A4%EB%84%A5%ED%8A%B8!%20Re:Dive"
+    },
+    {
+      "name": "페이트/그랜드 오더",
+      "release_date": "2015-07-30",
+      "image": "https://i.namu.wiki/i/tv6AbZlM5cVuSZi8QaxD3JBTqdLG0wGRw62gLtCPVg2E1LEhG69M7RqXhomWbAslN6BwEU50btXhxz89IoMXzfuWCcufsAabpCGFD1pE4wPnYGIuSvxfBiaXm-xbEAuWdKghqAb_MG_K-JFZ0CLU8w.webp",
+      "slug": "https://namu.wiki/w/Fate/Grand%20Order"
+    },
+    {
+      "name": "명일방주",
+      "release_date": "2020-01-16",
+      "image": "https://i.namu.wiki/i/FAmHyU96ziGx_gUN8KDL5ftufXHAx3sT_Ka1hu-6TUqz3xjrczqqdodeVcFv8S2v4qQUQ2UUYTmmCkMFpfvRAsmBI7xUgy1bk_ilinZQCJvixPSwZOYAQlyp6wW3E62f79aPeKadJCT6DPK9iXUCcQ.webp",
+      "slug": "https://namu.wiki/w/%EB%AA%85%EC%9D%BC%EB%B0%A9%EC%A3%BC"
+    },
+    {
+      "name": "카운터사이드",
+      "release_date": "2020-05-19",
+      "image": "https://i.namu.wiki/i/z8XFrFYmn3EPY42lZyRXsqHIumxPaZpvvqGcMMX44F98QUkUqaUg-YDJRog1Ki5w58KuJLIoHtSPH1AlG6H17Rku5SBkTaw72MSeNr_P14DZaAgnHGdT7xHOT9lNE3V4RZjd0IiO7Hfv5E9XER9_HA.webp",
+      "slug": "https://namu.wiki/w/%EC%B9%B4%EC%9A%B4%ED%84%B0%EC%82%AC%EC%9D%B4%EB%93%9C"
+    },
+    {
+      "name": "벽람항로",
+      "release_date": "2017-05-25",
+      "image": "https://i.namu.wiki/i/FtIE3noJTX7gb-3ZxjK0gfbBbK0HFCGibQDIsP1YXVBF_p4g8Y4wLUUqB9B5f0c-5LJmPuB-9G__4xibbIjsNANnCpj7JtiDkqZH3H0kolW5fqKcHxdDLKRUzi9n2gBx_kVqeI4_Ec4ikLGIIkeOcA.webp",
+      "slug": "https://namu.wiki/w/%EB%B2%BD%EB%9E%8C%ED%95%AD%EB%A1%9C"
+    },
+    {
+      "name": "라스트 오리진",
+      "release_date": "2019-02-20",
+      "image": "https://i.namu.wiki/i/TzD-tocamhN5psU_E3eNO-CTQSwkUkHQhKwXkkLvxsIx-yGdA7_DjaQbu2Y_voIZyLdKz4Qx_JA2FqpZvaoszkioly-cSYqtQf3ayfLIcLsBxINnKMM-gBucHlVtpiMc4UmZuQG3vdqgaE7z_BDMjw.webp",
+      "slug": "https://namu.wiki/w/%EB%9D%BC%EC%8A%A4%ED%8A%B8%EC%98%A4%EB%A6%AC%EC%A7%84"
+    },
+    {
+      "name": "림버스 컴퍼니",
+      "release_date": "2023-02-27",
+      "image": "https://i.namu.wiki/i/wpbZ0EXEsSQypHYymvPmlJipzPGqRvltvhINw_yuxh8ufhLh0LRFKIsUUplf0XVlNPzfIbbrPKBCNIR3rOKqj7q7Tq4YL4m76y46pUE2QTFBRP7IvtuS6gCeiPqVBMwJCDL_Ttyy-7eCzfVdtM0c5Q.webp",
+      "slug": "https://namu.wiki/w/Limbus%20Company"
+    },
+    {
+      "name": "Reverse: 1999",
+      "release_date": "2023-10-26",
+      "image": "https://i.namu.wiki/i/SamoSNA309EBzsN7PEmPB13UPoCSrE5qaYf_27rGcgCDKZJX3L7TBqrUvIVgmxP-8BhyuQ829-7hLfsTc1IQeiLFzYjhSnN62iV_Ks7b3q7mZl1SsRGFFpI3iV5rNt_0T55Vt9u3Zwn6Hb9hXW9x3Q.webp",
+      "slug": "https://namu.wiki/w/%EB%A6%AC%EB%B2%84%EC%8A%A4:%201999"
+    },
+    {
+      "name": "에픽세븐",
+      "release_date": "2018-08-30",
+      "image": "https://i.namu.wiki/i/HM2X0jk1k1AXClvCRWo3bLIlfhpzSow_IixRZbzkfnWx_fLU_g8E53evOuJ2hAQmlRdxs9secCc1aNsb0m3eOTHF2jo7KlN2DuV20Fj8dike_oj7m04IRXtq-SrgMPeLKCxnpujL7EkRWw2ur1V_4Q.webp",
+      "slug": "https://namu.wiki/w/%EC%97%90%ED%94%BD%EC%84%B8%EB%B8%90"
+    },
+    {
+      "name": "냥코 대전쟁",
+      "release_date": "2012-11-15",
+      "image": "https://i.namu.wiki/i/a_wzgq42h5jgw3beTOQlVdNclXeQK2kK0UxUly2uPfEL3I3Mik5NLy2rkH5TljTdibsDdhX1pcpfa0Fiv30g3G3LmUZ6etEDzPHIbG9iXWNOSqoGxuILi1phM8JadtZ0I-sY5ybrIKy1N83v0g7ANA.webp",
+      "slug": "https://namu.wiki/w/%EB%83%A5%EC%BD%94%20%EB%8C%80%EC%A0%84%EC%9F%81"
+    },
+    {
+      "name": "블레이징 소울즈",
+      "release_date": "2013-02-14",
+      "image": "https://i.namu.wiki/i/SRgr8FwclvUDcetjDxDzFUNxWSvd4Bsr1d1g2nC9Ppzqb60PlaZgIAgVBqGpXhyajNUIL731oLRIrhke2SbRU7urR-qoDECOmmaOfdReOGVKz5jOkOWG6exNykJx8kwhymmEXKjZVushbSa56eO4XQ.webp",
+      "slug": "https://namu.wiki/w/%EB%B8%94%EB%A0%88%EC%9D%B4%EC%A7%95%20%EC%86%8C%EC%9A%B8%EC%A6%88"
+    },
+    {
+      "name": "쿠키런",
+      "release_date": "2013-04-02",
+      "image": "https://i.namu.wiki/i/8xDllAIYBE1gldmBEwNzbrU-whOqipjEnwwkGvTCbHYM9MHTXBWgWVoccXkD5ju151p75cjAJy7JREC_XB-TfM2sAdkm2stxNBnXdgUuHSREuNR6Vd-mehIEUVqX-PUwq1RN9NGE7Qd2bB4QMVYGUw.webp",
+      "slug": "https://namu.wiki/w/%EC%BF%A0%ED%82%A4%EB%9F%B0"
+    },
+    {
+      "name": "뿌요뿌요!! 퀘스트",
+      "release_date": "2013-04-24",
+      "image": "https://i.namu.wiki/i/NxYPxkDnhmtZoOBwIhSzai4hAg6EXpz8QyFRNcuXSPuAnWtHUt7KaIZCCyfV1w8mIlTBbMUsLC7PrPbBQ9hONkDfKerocCx1amRZBFKY6MVRTZ-ifIPv--dZZlBeyUkFKKyQftkXIewBVQd6lUxTmQ.webp",
+      "slug": "https://namu.wiki/w/%EB%BF%8C%EC%9A%94%EB%BF%8C%EC%9A%94!!%20%ED%80%98%EC%8A%A4%ED%8A%B8"
+    },
+    {
+      "name": "크루세이더퀘스트",
+      "release_date": "2014-11-10",
+      "image": "https://i.namu.wiki/i/6BK9N7l7JRftwO_4k2cuv7poVq_1BGBb3ZmsXxOPePvQ77WDGdNYOZtzttscriUudY8HQ7wV9Gv40b9iKXNVDHMDlJb30Uh-UJJh4TD43r9HFJrEfHI1NChcpp7PnRgCi4ijMBiPr3HKogTFAjZd9A.webp",
+      "slug": "https://namu.wiki/w/%ED%81%AC%EB%A3%A8%EC%84%B8%EC%9D%B4%EB%8D%94%20%ED%80%98%EC%8A%A4%ED%8A%B8"
+    },
+    {
+      "name": "대해적 스토리",
+      "release_date": "2015-02-09",
+      "image": "https://i.namu.wiki/i/5WfD6UgHtjOHBOR1o9EhlIGz954sCDk4Yto0MhaOU0TGJ0Fqdsbia9T_f-txWVRPW19pL0xZGVsOsoY9QIh1FGKBwNA7b5wg5ey7APSlL_sn9jh46V2SweHR57AywjPrI2Laquu_Rzqzcr1RnKeJ1A.webp",
+      "slug": "https://namu.wiki/w/%EB%8C%80%ED%95%B4%EC%A0%81%20%EC%8A%A4%ED%86%A0%EB%A6%AC"
+    },
+    {
+      "name": "꿈왕국과 잠자는 100명의 왕자님",
+      "release_date": "2015-03-09",
+      "image": "https://i.namu.wiki/i/tgvjJVQaE8bwjdYYOjvvjeNqsAIv-56X267l2t1byrydSMp3xVK9FkjtvnC53Jb3iPGWWBW-fThjKtZj60JXfxVeL5VA_qcFvg9kIyof4KflNh-iR1XlRYcg5ByZWV3lWIgjQPXLhqMAz2Ao4OgoOg.webp",
+      "slug": "https://namu.wiki/w/%EA%BF%88%EC%99%95%EA%B5%AD%EA%B3%BC%20%EC%9E%A0%EC%9E%90%EB%8A%94%20100%EB%AA%85%EC%9D%98%20%EC%99%95%EC%9E%90%EB%8B%98"
+    },
+    {
+      "name": "앙상블 스타즈!",
+      "release_date": "2015-04-28",
+      "image": "https://i.namu.wiki/i/K-W8m7Zl5r0McMnJgrBm3TxsZq2zx9Udl9w4rMpNtGd0UAp2ZY-pccczGvMwKXixvVdO6qPSyctnTnFs4-FfmF50wgGI5nTcIFOqKJikLexFw_IDMjxzc9nyAJhrwTM_vRlsvHOtVo0ohhRZGV0PHg.webp",
+      "slug": "https://namu.wiki/w/%EC%95%99%EC%83%81%EB%B8%94%20%EC%8A%A4%ED%83%80%EC%A6%88!!"
+    },
+    {
+      "name": "강철의 왈츠",
+      "release_date": "2015-11-24",
+      "image": "https://i.namu.wiki/i/YuX7HmhN2DU2_3MrtBaJTLdejbY7hojgQBYufW7SMP0Myv8BJna0OrnX7cJ0DF_VE2e90vbKvH7fgh5Bpo2KQfbkzeixJcL4t2bgi3Kg2rn-Hr6pPPmXTIugHbs_XBOiAQOV3QOnFB7pu0bEJPDLJg.webp",
+      "slug": "https://namu.wiki/w/%EA%B0%95%EC%B2%A0%EC%9D%98%20%EC%99%88%EC%B8%A0"
+    },
+    {
+      "name": "소녀전선",
+      "release_date": "2016-05-20",
+      "image": "https://i.namu.wiki/i/92eopIUtDfympQgX7qT-_NTwdlD7bZr63PpULhlgWA81KSW1g1AjxQKCPFe4JMHM9U0EMCQmsxOdU3Pe_2I1AWrY_ml9lITHQuHvZEnGQwcvg2DZHqTdC5V8BjBser4hlqdKgCZtjuP5z299394VGQ.webp",
+      "slug": "https://namu.wiki/w/%EC%86%8C%EB%85%80%EC%A0%84%EC%84%A0"
+    },
+    {
+      "name": "몬스터 슈퍼 리그",
+      "release_date": "2016-09-07",
+      "image": "https://i.namu.wiki/i/ZlU8ijz_uW2-gGTeQDqdE1ManBnYlaca-o_eYbIizHLRRvQaYeSb13uUEsn_XEP5tZ3Y1cUKtIipwJGnV6pLqNZH44DMjqxWclVEGjW8dtSuDzjYbfW6FJFaiVIgKGW7qAeC6lndoVP6ltT4OGNHmg.webp",
+      "slug": "https://namu.wiki/w/%EB%AA%AC%EC%8A%A4%ED%84%B0%EC%8A%88%ED%8D%BC%EB%A6%AC%EA%B7%B8"
+    },
+    {
+      "name": "붕괴3rd",
+      "release_date": "2016- 10- 14",
+      "image": "https://i.namu.wiki/i/P9C1umU_4WpDSiKfZlKQMsna2B9CBj51Z3pVMj9iP6Du-LcqQx7F13vLvfmd8cdOggb32-kBlqtIEkVDaNHBs8bwx4CGInquFZKQuETlO9TDf-66sw64jYwpSOX1LarK76cveNkaQtx3dE-mKb7DrA.webp",
+      "slug": "https://namu.wiki/w/%EB%B6%95%EA%B4%B43rd"
+    },
+    {
+      "name": "쿠키런: 오븐브레이크",
+      "release_date": "2016-10-27",
+      "image": "https://i.namu.wiki/i/9UPGqvcMkOY94Bv0ND0jLvBJGIWGRLH9H3KcdxpakyMg5YAIpqUoq9BJwzjqCC8YpnW-fcF-rQZnifwwZ-O9eWTo9UL_kMkDwO_K-iuBRFgUGIGKLN0KQvqMyWZzm91n35LiHPUdyK6MJam2LYZSCw.webp",
+      "slug": "https://namu.wiki/w/%EC%BF%A0%ED%82%A4%EB%9F%B0:%20%EC%98%A4%EB%B8%90%EB%B8%8C%EB%A0%88%EC%9D%B4%ED%81%AC"
+    },
+    {
+      "name": "제5인격",
+      "release_date": "2018-04-02",
+      "image": "https://i.namu.wiki/i/Tp0xaBAWVnhngUWXF66qrYhmy4DbGEZZRlLsH6L0Dr1uryv97rVNbWS1jaYmUBzgsUXeuvnTF5gb3IZ1YdTtt8bdYXr6Sk-DxC1-aSfBsr4kAmPV9n1BWkUVFB-XRLZqCYMrKJlNDyZjs9pyLvbMLA.webp",
+      "slug": "https://namu.wiki/w/%EC%A0%9C5%EC%9D%B8%EA%B2%A9"
+    },
+    {
+      "name": "거짓된 앨리스: 방치세계와 미숙한 소녀",
+      "release_date": "2019-10-03",
+      "image": "https://i.namu.wiki/i/4859WondxPg_Z0PxYGRNHYh3YgWXRUjhc4XCI1z-PJ3xQKk0kzYnCZ_j4IvH9mmHyLVr5rNX03DLIE4Sd8ZQ-P1DuKxx5m3hIZPok0vMxmWMbzoGrORouLzp3NjB8hXX-gsbWCoyad9kE2OmJAtqmQ.webp",
+      "slug": "https://namu.wiki/w/%EA%B1%B0%EC%A7%93%EB%90%9C%20%EC%95%A8%EB%A6%AC%EC%8A%A4"
+    },
+    {
+      "name": "로드 오브 히어로즈",
+      "release_date": "2020-03-26",
+      "image": "https://i.namu.wiki/i/WhovreOqyGONSYd-Z9OQZMsowKFoBYpaWQHpm_HiKcGGnKvYYr_ink1TWtthacWcTof34A6vGg3e1R1zm3Ldn9mq_wNtgaXqvn5LtyVAdyCbPjX28vIO44z-xqmC82ht1vjNdyY-FVPY-iGBsT8SDA.webp",
+      "slug": "https://namu.wiki/w/%EB%A1%9C%EB%93%9C%20%EC%98%A4%EB%B8%8C%20%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88"
+    },
+    {
+      "name": "동방 로스트워드",
+      "release_date": "2020-04-30",
+      "image": "https://i.namu.wiki/i/YWi69CF2qjltqw3ECtdenS87Ze4ISgJF6HqjDNRk9r-w7V9X040qsVEvAqeImbT2xEWIc31SFfqtI9p0cb-SCkmdc9aisOkzaFq2n0gdUcLcsBaFIlBWeW3yZxu55PVDIc14IExBljCK4y2x4ySYZw.webp",
+      "slug": "https://namu.wiki/w/%EB%8F%99%EB%B0%A9%20%EB%A1%9C%EC%8A%A4%ED%8A%B8%EC%9B%8C%EB%93%9C"
+    },
+    {
+      "name": "원신",
+      "release_date": "2020-09-28",
+      "image": "https://i.namu.wiki/i/BZ9uIw1-SQRN2rd2QNy_SGvUdHc2wKD-3QVA9BblCMstliE0iu1QZChv6iSFcw0jelTmC0iOJNMkONxsOcUBUHDAM89ZvQB1I6MbTx7bgiVKoLr-5OaG6Yng3ibjtoFBAN-1od2pfpPuCx7SM3Yhow.webp",
+      "slug": "https://namu.wiki/w/%EC%9B%90%EC%8B%A0"
+    },
+    {
+      "name": "쿠키런: 킹덤",
+      "release_date": "2021-01-21",
+      "image": "https://i.namu.wiki/i/TgMn32GShT63Ko9tfEtYUuTzrh9Vph4JWTSCGdNnYQGZnwlALFAKbPbfqTTKbPvFb28flbP2T2t5iUByqeZYk0LnugTYFHyfWT-tskZKKD57u9MS03BzxG9BnIeHlqDtmO9U0YgjsgDTzfE-8UksuA.svg",
+      "slug": "https://namu.wiki/w/%EC%BF%A0%ED%82%A4%EB%9F%B0:%20%ED%82%B9%EB%8D%A4"
+    },
+    {
+      "name": "블루 아카이브",
+      "release_date": "2021-02-04",
+      "image": "https://i.namu.wiki/i/DNrEqybGmf2v7lFBWhXTXKe2Qmc4LzH7u6HTyhz9WnsAhUVavqGz7QySp3KvmGD5FigusbqjokNL5e6izf8Jkrm_CvpFteGgRzSjBgdpnKkS9D6EobMvkIKHdm8h8vhn5HdEuqGwbbwQN4UAoyXSQA.webp",
+      "slug": "https://namu.wiki/w/%EB%B8%94%EB%A3%A8%20%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B8%8C"
+    },
+    {
+      "name": "소녀전선: 뉴럴 클라우드",
+      "release_date": "2021-09-23",
+      "image": "https://i.namu.wiki/i/ltljEPHFnHns9Ey4hUucVDkBv1ZvmBVZ7LWczEoLdB0MK-tgU8-a2HWmvZlLk-NNaRrd6fZQc8TIcBRwGCllm5_B1GKUBy47x9tjOSIXr1kb9gp6BKtsps2h3ALL767QT7rhNYeK0z_it9q87g23fw.webp",
+      "slug": "https://namu.wiki/w/%EB%89%B4%EB%9F%B4%20%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C"
+    },
+    {
+      "name": "승리의 여신: 니케",
+      "release_date": "2022-11-04",
+      "image": "https://i.namu.wiki/i/mleyU3IQUWU_jSM0tl_QyqP-t7LiRTF9PffxM1optPpV3kZRfUtvXEEcmnbNtLPdJLTBnxgnzZcPRxVg8ONXxZjSW3nJj-rlLdwU1Xgi9MzzU-JgjBSiZfzIFmOgVk7kOP1qo8vyQNvFBbaBEg3clg.webp",
+      "slug": "https://namu.wiki/w/%EC%8A%B9%EB%A6%AC%EC%9D%98%20%EC%97%AC%EC%8B%A0:%20%EB%8B%88%EC%BC%80"
+    },
+    {
+      "name": "무명 기사단",
+      "release_date": "2023-04-18",
+      "image": "https://i.namu.wiki/i/P4NkS6kJw7NUI6EOdRDQyeEqUelHeG1f5ovTNRA-KgBFHlFwAXO5a63fSb3KOM8LUcY4SfBBotwwAwQfgv5yvn4Ve1O4HLpn2KBSKyxbfVZElA19G85ftTh0fgy5opwdOnLMqiOFFdEfqh0muJuhfw.webp",
+      "slug": "https://namu.wiki/w/%EB%AC%B4%EB%AA%85%20%EA%B8%B0%EC%82%AC%EB%8B%A8"
+    },
+    {
+      "name": "붕괴: 스타레일",
+      "release_date": "2023-04-26",
+      "image": "https://i.namu.wiki/i/-ok60U6Km7ubzWU2t5mFTxJUMrjNjIyrO75TS1-tsi_F8y7iPTjTbo5CuAwexwrGUjMnzwW18r99kRMxWAKpzfO5vNpsSlLxwKjh-j7Prb2lz0A6oKN_W7d6wgQJvcD90RyCKM2rz1BAjILw204SQg.webp",
+      "slug": "https://namu.wiki/w/%EB%B6%95%EA%B4%B4:%20%EC%8A%A4%ED%83%80%EB%A0%88%EC%9D%BC"
+    },
+    {
+      "name": "세븐나이츠 키우기",
+      "release_date": "2023-09-06",
+      "image": "https://i.namu.wiki/i/9LxEwT_XjBbCmxbVkF9YhXHX4ujyZijnrE1s523nE4TOyIFjFiPjNhGsz752NnQn-Ff6mzTJFMAKhyX-B7xkhy7iikqhGWw8aBf0viLYufeGzfLQnbGaHhUwkCKXn4YJYzIh8vJr4o1D_GmY_Gi3RQ.webp",
+      "slug": "https://namu.wiki/w/%EC%84%B8%EB%B8%90%EB%82%98%EC%9D%B4%EC%B8%A0%20%ED%82%A4%EC%9A%B0%EA%B8%B0"
+    },
+    {
+      "name": "트릭컬 리바이브",
+      "release_date": "2023-09-27",
+      "image": "https://i.namu.wiki/i/WSihZpesdEgcQLjxzBqdrvt83XB7A8kw5oJLqQWz9kVxGsOvZb5SpOhb4srLtOUBd0_eXHTufKB33oWRSbwaN4TGgNd1KyON-9MfCJmoqneLplm3tdj75BpdDfgn2WQace9t2t079n2ZoEzI16Zl1w.webp",
+      "slug": "https://namu.wiki/w/%ED%8A%B8%EB%A6%AD%EC%BB%AC%20%EB%A6%AC%EB%B0%94%EC%9D%B4%EB%B8%8C"
+    },
+    {
+      "name": "동방 환상 이클립스",
+      "release_date": "2023-11-22",
+      "image": "https://i.namu.wiki/i/qib3-ZZzFHZZ6Yqu80biDNa7hNzvSjjrFk7a3Kd4PM8IsoiFm8PLiJYVYJohI18YDI60VIYntRBoeyKGaefBNNX6MLQ6iZw6iUJHoHY4pHqBe1lYiPGYj0FDe9vJEFj9-qGld8qlbftEFC4yVOdgNg.webp",
+      "slug": "https://namu.wiki/w/%EB%8F%99%EB%B0%A9%20%ED%99%98%EC%83%81%20%EC%9D%B4%ED%81%B4%EB%A6%BD%EC%8A%A4"
+    },
+    {
+      "name": "소녀전선2: 망명",
+      "release_date": "2023-12-21",
+      "image": "https://i.namu.wiki/i/ug0NIXt9kPTGEn5CRgfZrgvP32pQcM5A7gPqjQXEXtMO6IKFoGiHc4SMs-xC4kyNYg3X6AJvgujcnjuHRAbJvfFqEGRPPivdFim34jLVT5XTakGx1r72qK7bOqj5-eMPgAMQScD4BcH4qWvFXweybw.webp",
+      "slug": "https://namu.wiki/w/%EC%86%8C%EB%85%80%EC%A0%84%EC%84%A02:%20%EB%A7%9D%EB%AA%85"
+    },
+    {
+      "name": "던전앤 걸스: 카드 배틀 RPG",
+      "release_date": "2025-01-21",
+      "image": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAxMjFfMjMg%2FMDAxNzA1ODQ3NDc5Njkx.T7C9zVpe24fBmfKy_-2STCthnN_Z6Y33i1fMA_t9ELQg.3vc5db3Ln2v0ejVwDX64NBLCWv-vavxRQtrcdqzH61sg.PNG.1wsxx%2Fimage.png&type=ff332_332",
+      "slug": "https://namu.wiki/w/%EB%8D%98%EC%A0%84%EC%95%A4%EA%B1%B8%EC%A6%88"
+    },
+    {
+      "name": "마비노기 모바일",
+      "release_date": "2025-03-27",
+      "image": "https://i.namu.wiki/i/dHKRrqWT-4xhP6KVIHyNgjQsRVZgSdvvXcpcyJpKpukw-7mb2soiZiijvJhxXmfzwgPERvr5NBuoJRyTS8CEUfCah4LxcVFlkDOnjMbDkt8Peeq3o2OZI0JjJmvy1P4-GUeFG3AihcjbA6XtQQg7QA.svg",
+      "slug": "https://namu.wiki/w/%EB%A7%88%EB%B9%84%EB%85%B8%EA%B8%B0%20%EB%AA%A8%EB%B0%94%EC%9D%BC"
+    }
+  ]
+}

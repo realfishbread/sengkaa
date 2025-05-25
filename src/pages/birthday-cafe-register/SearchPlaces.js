@@ -1,22 +1,22 @@
 // SearchPlaces.js
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import ShareIcon from '@mui/icons-material/Share';
 import {
   Box,
   Card,
   CardContent,
+  Chip,
   Container,
   Grid,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-  Chip,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { EventSearchApi } from './api/EventSearchApi';
-import NotFoundBox from '../../components/common/NotFoundBox';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import ShareIcon from '@mui/icons-material/Share';
+import NotFoundBox from '../../components/common/NotFoundBox';
+import { EventSearchApi } from './api/EventSearchApi';
 
 import './SearchPlaces.css';
 
@@ -140,7 +140,7 @@ const SearchPlaces = () => {
                     <Box className="event-card-right">
                       <Box className="event-card-header">
                         <Typography variant="subtitle1" fontWeight="bold">
-                          {event.artist_group || '아티스트/그룹명'}
+                          {event.star_display || '아티스트/그룹명'}
                         </Typography>
                         <Box className="event-card-header-icons">
                           <BookmarkBorderIcon sx={{ color: '#ccc' }} />
@@ -156,14 +156,25 @@ const SearchPlaces = () => {
                         {event.cafe_name || '이벤트명'}
                       </Typography>
 
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-                        📍 {event.detail_address || '상세 위치 없음'}
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 0.5 }}
+                      >
+                        📍 {event.road_address || '상세 위치 없음 '}{' '}
+                        {event.detail_address || '상세 위치 없음'}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 1 }}
+                      >
                         📅 {event.start_date} ~ {event.end_date}
                       </Typography>
 
-                      <Box sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                      <Box
+                        sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}
+                      >
                         {event.genre && (
                           <Chip
                             label={event.genre}

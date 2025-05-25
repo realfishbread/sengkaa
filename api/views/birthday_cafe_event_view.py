@@ -62,8 +62,11 @@ class BirthdayCafeSearchAPIView(ListAPIView):
         start_date = self.request.query_params.get('startDate')
         end_date = self.request.query_params.get('endDate')
         sort = self.request.query_params.get('sort')  # ✅ 추가
+  
+
 
         print(f"🔥 [DEBUG] 받은 sort 파라미터: {sort}")
+        
 
         if keyword:
             queryset = queryset.filter(cafe_name__icontains=keyword)
