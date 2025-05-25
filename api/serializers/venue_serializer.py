@@ -1,10 +1,11 @@
 from rest_framework import serializers
 from api.serializers.booking_serializer import BookingSerializer
-from api.models import Venue
+from api.models import Venue, User
 from datetime import date
 
 class VenueDetailSerializer(serializers.ModelSerializer):
     main_image_url = serializers.SerializerMethodField()
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     
     bookings = BookingSerializer(many=True, read_only=True)  # ✅ 바뀜
 
@@ -29,7 +30,7 @@ class VenueListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Venue
-        fields = ['id', 'name', 'location', 'image', 'rentalFee', 'availableDate', 'type', 'view_count']
+        fields = '__all__'
 
     def get_image(self, obj):
         request = self.context.get('request')

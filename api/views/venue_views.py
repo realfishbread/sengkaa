@@ -12,9 +12,9 @@ from api.serializers.venue_serializer import VenueDetailSerializer, VenueListSer
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
 def create_venue(request):
-    serializer = VenueDetailSerializer(data=request.data)
+    serializer = VenueDetailSerializer(data=request.data, context={"request": request})
     if serializer.is_valid():
-        serializer.save(user=request.user)  # 유저 저장
+        serializer.save()  # 유저 저장
         return Response({'message': '장소가 등록되었습니다!', 'data': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

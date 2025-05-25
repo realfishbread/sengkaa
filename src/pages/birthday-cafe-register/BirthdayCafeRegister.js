@@ -70,7 +70,6 @@ const BirthdayCafeRegister = () => {
       ].join(' '),
   });
 
- 
   const [goodsList, setGoodsList] = useState([
     {
       name: '',
@@ -89,16 +88,20 @@ const BirthdayCafeRegister = () => {
     }).open();
   };
 
-  const handleImageUpload = (event) => {
-    setImage(event.target.files[0]);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
       navigate('/login'); // 홈에 감성 로그인 알림 띄우기
+      return;
+    }
+
+    const fullAddress = `${roadAddress} ${detailAddress}`;
+    const { lat, lng } = await geocodeKakao(fullAddress);
+
+    if (!lat || !lng) {
+      alert('주소의 위도/경도 변환에 실패했습니다.');
       return;
     }
 
@@ -111,6 +114,8 @@ const BirthdayCafeRegister = () => {
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
     formData.append('genre', genre); // 🔥 여기 수정
     formData.append('star', selectedStar?.id ?? null); // null이면 NULL로 전송됨
+    formData.append('latitude', lat); // ✅ 위도 추가
+    formData.append('longitude', lng); // ✅ 경도 추가
 
     if (image) {
       formData.append('image', image); // ✅ 모델 필드랑 맞춤
@@ -151,6 +156,31 @@ const BirthdayCafeRegister = () => {
       console.error('등록 실패 ❌', err);
       alert('등록에 실패했습니다.');
     }
+  };
+
+  const handleImageUpload = async (event) => {
+    setImage(event.target.files[0]);
+  };
+
+  const geocodeKakao = (address) => {
+    return new Promise((resolve) => {
+      if (!window.kakao?.maps?.services) {
+        console.error('카카오 맵 로드 안됨');
+        resolve({ lat: null, lng: null });
+        return;
+      }
+
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.addressSearch(address, function (result, status) {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const lat = result[0].y;
+          const lng = result[0].x;
+          resolve({ lat, lng });
+        } else {
+          resolve({ lat: null, lng: null });
+        }
+      });
+    });
   };
 
   const addGoods = () => {

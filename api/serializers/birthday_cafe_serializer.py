@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from api.models import BirthdayCafe, Goods
+from api.serializers.star_serializer import StarSerializer
+from api.models import BirthdayCafe, Goods, Star
 class GoodsSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
 
@@ -16,18 +17,24 @@ class GoodsSerializer(serializers.ModelSerializer):
         return None
 
 class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     goods = GoodsSerializer(many=True, read_only=True)  # related_name='goods'
-    image = serializers.SerializerMethodField()
+    image = serializers.ImageField(required=False)  # ✅ write용 필드 추가
+    image_url = serializers.SerializerMethodField()  # ✅ 조회용 필드 따로
     location = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
     goods = GoodsSerializer(many=True, read_only=True)
+    latitude = serializers.FloatField(required=False, allow_null=True)
+    longitude = serializers.FloatField(required=False, allow_null=True)
+    star = StarSerializer(read_only=True)
+    star_id = serializers.PrimaryKeyRelatedField(queryset=Star.objects.all(), source='star', write_only=True)  # 등록 시 사용
 
     class Meta:
         model = BirthdayCafe
         fields ='__all__'
 
-    def get_image(self, obj):
+    def get_image_url(self, obj):
         request = self.context.get('request')
         if obj.image and request:
             return request.build_absolute_uri(obj.image.url)
@@ -46,18 +53,23 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         return obj.liked_events.filter(user_id=user.user_id).exists() if user.is_authenticated else False
     
 class BirthdayCafeListSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    image = serializers.ImageField(required=False)  # ✅ write용 필드 추가
+    image_url = serializers.SerializerMethodField()  # ✅ 조회용 필드 따로
     location = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
     view_count = serializers.IntegerField(read_only=True)
     goods = GoodsSerializer(many=True, read_only=True)
+    latitude = serializers.FloatField(required=False, allow_null=True)
+    longitude = serializers.FloatField(required=False, allow_null=True)
+
 
     class Meta:
         model = BirthdayCafe
         fields = '__all__'
 
-    def get_image(self, obj):
+    def get_image_url(self, obj):
         request = self.context.get('request')
         if obj.image and request:
             return request.build_absolute_uri(obj.image.url)
