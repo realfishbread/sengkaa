@@ -8,7 +8,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import '../styles/App.css';
 import { fetchPopularCafes } from './birthday-cafe-register/api/EventSearchApi';
-import { fetchPopularVenues } from './venue/find-cafes/api/VenueSearchApi';
+import { fetchPopularVenues } from '../pages/venue/find-cafes/VenueSearchApi';
 const Home = () => {
   const [activeNavItem, setActiveNavItem] = useState(null);
   const navigate = useNavigate();
