@@ -9,7 +9,7 @@ import {
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from '../../components/common/CustomTextField';
 import FlexInputButton from '../../components/common/FlexInputButton';
@@ -70,7 +70,6 @@ const BirthdayCafeRegister = () => {
       ].join(' '),
   });
 
- 
   const [goodsList, setGoodsList] = useState([
     {
       name: '',
@@ -87,10 +86,6 @@ const BirthdayCafeRegister = () => {
         setRoadAddress(fullRoadAddr);
       },
     }).open();
-  };
-
-  const handleImageUpload = (event) => {
-    setImage(event.target.files[0]);
   };
 
   const handleSubmit = async (event) => {
@@ -110,7 +105,9 @@ const BirthdayCafeRegister = () => {
     formData.append('start_date', startDate?.toISOString().slice(0, 10));
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
     formData.append('genre', genre); // 🔥 여기 수정
-    formData.append('star', selectedStar?.id ?? null); // null이면 NULL로 전송됨
+    formData.append('star_id', selectedStar?.id ?? null); // null이면 NULL로 전송됨
+    formData.append('latitude', null); // ✅ 위도 추가
+    formData.append('longitude', null); // ✅ 경도 추가
 
     if (image) {
       formData.append('image', image); // ✅ 모델 필드랑 맞춤
@@ -151,6 +148,31 @@ const BirthdayCafeRegister = () => {
       console.error('등록 실패 ❌', err);
       alert('등록에 실패했습니다.');
     }
+  };
+
+  const handleImageUpload = async (event) => {
+    setImage(event.target.files[0]);
+  };
+
+  const geocodeKakao = (address) => {
+    return new Promise((resolve) => {
+      if (!window.kakao?.maps?.services) {
+        console.error('카카오 맵 로드 안됨');
+        resolve({ lat: null, lng: null });
+        return;
+      }
+
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.addressSearch(address, function (result, status) {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const lat = result[0].y;
+          const lng = result[0].x;
+          resolve({ lat, lng });
+        } else {
+          resolve({ lat: null, lng: null });
+        }
+      });
+    });
   };
 
   const addGoods = () => {

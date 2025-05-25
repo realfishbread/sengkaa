@@ -27,6 +27,8 @@ const NavigationBar = () => {
   const location = useLocation();
   const { user, setUser } = useContext(UserContext);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -39,11 +41,23 @@ const NavigationBar = () => {
   };
 
   useEffect(() => {
-    axiosInstance
-      .get('/user/profile/')
-      .then((res) => setUser(res.data))
-      .catch(() => setUser(null));
-  }, []);
+    const delayDebounce = setTimeout(async () => {
+      if (searchTerm.trim() === '') {
+        setSearchResults([]);
+        return;
+      }
+  
+      try {
+        const response = await axiosInstance.get(`/user/star/stars/?keyword=${searchTerm}`);
+        setSearchResults(response.data); // 스타 리스트
+      } catch (error) {
+        console.error('스타 검색 실패 ❌', error);
+        setSearchResults([]);
+      }
+    }, 300); // debounce 300ms
+  
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   return (
     <>
@@ -172,7 +186,14 @@ const NavigationBar = () => {
                 </InputAdornment>
               ),
             }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+                setSearchTerm('');
+              }
+            }}
           />
+          
         </Toolbar>
       </AppBar>
 

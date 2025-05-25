@@ -244,6 +244,20 @@ class Booking(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='bookings')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='venue_bookings')  # ✅ 추가
     available_date = models.DateField()
+    
+    
+
+class DictionaryTerm(models.Model):
+    term = models.CharField(max_length=100)
+    category = models.CharField(max_length=50)
+    likes = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class DictionaryDefinition(models.Model):
+    term = models.ForeignKey(DictionaryTerm, related_name="definitions", on_delete=models.CASCADE)
+    definition = models.TextField()
+    example = models.TextField(blank=True, null=True)
 
 
 

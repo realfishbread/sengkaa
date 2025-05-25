@@ -112,7 +112,7 @@ const VenueSearch = () => {
               <CardMedia
                 component="img"
                 height="180"
-                image={venue.image}
+                image={venue.image || '/images/default_venue.png'} // ✅ 기본 이미지 지정
                 alt={venue.name}
               />
               <CardContent>
