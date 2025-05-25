@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './DictionaryForm.css';
+import { checkTermExists, createDictionaryItem  } from './api/DictionaryApi';
 
 function DictionaryForm({ onSave, onCancel }) {
   const [term, setTerm] = useState('');
@@ -18,20 +19,40 @@ function DictionaryForm({ onSave, onCancel }) {
     setDefinitions(updated);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!term) return alert('표제어를 입력해주세요.');
     if (!category) return alert('카테고리를 선택해주세요.');
     if (!definitions[0].definition) return alert('뜻풀이를 입력해주세요.');
 
-    onSave({
-      term,
-      category,
-      definitions,
-    });
+    try {
+      const payload = { term, category, definitions };
+      const saved = await createDictionaryItem(payload);
+      alert('용어가 성공적으로 등록되었습니다! 🎉');
+      onSave(saved);
 
-    setTerm('');
-    setCategory('');
-    setDefinitions([{ definition: '', example: '' }]);
+      // 초기화
+      setTerm('');
+      setCategory('');
+      setDefinitions([{ definition: '', example: '' }]);
+    } catch (err) {
+      console.error('등록 실패 ❌', err);
+      alert('등록 중 오류가 발생했습니다');
+    }
+  };
+
+  const handleCheckDuplicate = async () => {
+    if (!term) return alert('표제어를 입력해주세요!');
+    try {
+      const exists = await checkTermExists(term);
+      if (exists) {
+        alert('이미 존재하는 용어입니다 ❌');
+      } else {
+        alert('사용 가능한 용어입니다 ✅');
+      }
+    } catch (err) {
+      console.error('중복 확인 오류:', err);
+      alert('중복 확인 중 오류가 발생했습니다');
+    }
   };
 
   return (
@@ -48,7 +69,7 @@ function DictionaryForm({ onSave, onCancel }) {
               placeholder="표제어를 입력해주세요"
               onChange={(e) => setTerm(e.target.value)}
             />
-            <button className="check-btn">중복 확인</button>
+            <button className="check-btn" onClick={handleCheckDuplicate}>중복 확인</button>
           </div>
         </div>
       </section>
