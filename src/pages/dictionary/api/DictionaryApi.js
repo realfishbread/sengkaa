@@ -1,16 +1,16 @@
 // src/api/dictionaryApi.js
 import axiosInstance from '../../../shared/api/axiosInstance';
-import axios from 'axios';
+
 
 
 export const fetchDictionaryList = async () => {
-  const response = await axios.get(`https://eventcafe.site/user/dictionary/dictionary/`);
+  const response = await axiosInstance.get(`/user/dictionary/dictionary/`);
   return response.data;
 };
 
 export const fetchDictionaryItem = async (id) => {
-  const response = await axios.get(
-    `https://eventcafe.site/user/dictionary/dictionary/${id}/`
+  const response = await axiosInstance.get(
+    `/user/dictionary/dictionary/${id}/`
   );
   return response.data;
 };
@@ -33,8 +33,8 @@ export const likeDictionaryItem = async (id) => {
 
 // 👁 조회수 증가 (서버에서 자동 처리되는 경우, 생략 가능)
 export const fetchDictionaryItemWithView = async (id) => {
-  const response = await axios.get(
-    `https://eventcafe.site/user/dictionary/dictionary/${id}/`
+  const response = await axiosInstance.get(
+    `/user/dictionary/dictionary/${id}/`
   );
   return response.data;
 };
