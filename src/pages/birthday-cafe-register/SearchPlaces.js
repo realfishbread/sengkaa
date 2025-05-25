@@ -1,9 +1,8 @@
-// EventSearchPage.js
+// SearchPlaces.js
 import {
   Box,
   Card,
   CardContent,
-  CardMedia,
   Container,
   Grid,
   TextField,
@@ -29,7 +28,9 @@ const SearchPlaces = () => {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
 
-  const handleGenreChange = (event, newGenre) => setGenre(newGenre);
+  const handleGenreChange = (event, newGenre) => {
+    setGenre(newGenre || '');
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -41,13 +42,17 @@ const SearchPlaces = () => {
           genre,
         });
 
+        console.log('API 응답 데이터:', data);
+
         if (Array.isArray(data)) {
           setEvents(data);
+          console.log('설정된 events:', data);
         } else {
+          console.warn('API에서 배열이 아닌 데이터를 반환했습니다:', data);
           setEvents([]);
         }
       } catch (err) {
-        console.error("Failed to fetch events:", err);
+        console.error('이벤트 불러오기 실패:', err);
         setEvents([]);
       }
     };
@@ -112,58 +117,76 @@ const SearchPlaces = () => {
 
       {/* 이벤트 카드 리스트 */}
       <Grid container spacing={3}>
-        {events.map((event) => (
-          <Grid item xs={12} sm={6} md={6} key={event.id}>
-            <Card
-              onClick={() => navigate(`/birthday-cafes/${event.id}`)}
-              className="event-card-container"
-              sx={{ cursor: 'pointer' }}
-            >
-              <CardMedia
-                component="img"
-                className="event-card-image"
-                image={event.image}
-                alt={event.cafe_name}
-              />
-              <CardContent className="event-card-content">
-                <Box>
-                  <Box className="event-card-header">
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      {event.artist_group || '아티스트/그룹명'}
-                    </Typography>
-                    <Box className="event-card-header-icons">
-                      <BookmarkBorderIcon sx={{ color: '#ccc' }} />
-                      <ShareIcon sx={{ color: '#ccc' }} />
+        {events && events.length > 0 ? (
+          events.map((event) => (
+            <Grid item xs={12} sm={6} md={6} key={event.id}>
+              <Card
+                onClick={() => navigate(`/birthday-cafes/${event.id}`)}
+                className="event-card-container"
+                sx={{ cursor: 'pointer' }}
+              >
+                <CardContent className="event-card-content">
+                  <Box className="event-card-inner">
+                    {/* 왼쪽 이미지 */}
+                    <Box className="event-card-left">
+                      <img
+                        src={event.image}
+                        alt={event.cafe_name}
+                        className="event-poster"
+                      />
+                    </Box>
+
+                    {/* 오른쪽 텍스트 */}
+                    <Box className="event-card-right">
+                      <Box className="event-card-header">
+                        <Typography variant="subtitle1" fontWeight="bold">
+                          {event.artist_group || '아티스트/그룹명'}
+                        </Typography>
+                        <Box className="event-card-header-icons">
+                          <BookmarkBorderIcon sx={{ color: '#ccc' }} />
+                          <ShareIcon sx={{ color: '#ccc', ml: 1 }} />
+                        </Box>
+                      </Box>
+
+                      <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{ fontWeight: 'bold', fontStyle: 'italic', mb: 1 }}
+                      >
+                        {event.cafe_name || '이벤트명'}
+                      </Typography>
+
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                        📍 {event.detail_address || '상세 위치 없음'}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        📅 {event.start_date} ~ {event.end_date}
+                      </Typography>
+
+                      <Box sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {event.genre && (
+                          <Chip
+                            label={event.genre}
+                            size="small"
+                            className="event-card-chip"
+                          />
+                        )}
+                        {event.tags?.map((tag, index) => (
+                          <Chip
+                            key={index}
+                            label={tag}
+                            className="event-tag-chip"
+                            size="small"
+                          />
+                        ))}
+                      </Box>
                     </Box>
                   </Box>
-
-                  <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                    {event.cafe_name || '이벤트명'}
-                  </Typography>
-
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-                    📍 {event.detail_address || '상세 위치 없음'}
-                  </Typography>
-
-                  <Typography variant="body2" color="text.secondary">
-                    📅 {event.start_date} ~ {event.end_date}
-                  </Typography>
-                </Box>
-
-                <Box className="event-card-tags">
-                  {event.genre && (
-                    <Chip
-                      label={event.genre}
-                      size="small"
-                      className="event-card-chip"
-                    />
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-        {events.length === 0 && (
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        ) : (
           <Grid item xs={12}>
             <NotFoundBox />
           </Grid>

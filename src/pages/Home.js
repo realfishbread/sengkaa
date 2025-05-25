@@ -212,7 +212,7 @@ const Home = () => {
               right: '-40px',
               transform: 'translateY(-50%)',
             }}
-          >
+        >
             <ArrowForwardIosIcon />
           </IconButton>
         </div>

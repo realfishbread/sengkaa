@@ -1,74 +1,73 @@
-/* 이벤트 카드 컨테이너 스타일 */
+/* SearchPlaces.css */
+
+/* 카드 전체 컨테이너 스타일 */
 .event-card-container {
-    display: flex;
-    border-radius: 12px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    height: 200px;
-    overflow: hidden;
-    background-color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* 반응형 대응 */
-@media (max-width: 600px) {
-    .event-card-container {
-        flex-direction: column;
-        height: auto;
-    }
-
-    .event-card-image {
-        width: 100%;
-        height: 180px;
-        border-radius: 12px 12px 0 0;
-    }
+.event-card-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* 카드 이미지 스타일 */
-.event-card-image {
-    width: 180px;
-    height: 100%;
-    object-fit: cover;
-    flex-shrink: 0;
-    border-radius: 12px 0 0 12px;
+/* 카드 내부 콘텐츠: 왼쪽 이미지 + 오른쪽 텍스트 */
+.event-card-inner {
+  display: flex;
+  gap: 16px;
 }
 
-/* 카드 내용 영역 스타일 */
-.event-card-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 16px;
+/* 왼쪽 이미지 영역 */
+.event-card-left {
+  flex-shrink: 0;
 }
 
-/* 카드 상단 정보 (아티스트, 아이콘) */
+.event-poster {
+  width: 130px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 오른쪽 텍스트 영역 */
+.event-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 카드 상단 헤더: 아티스트명 + 아이콘 */
 .event-card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-.event-card-header-icons {
-    margin-left: auto;
-    display: flex;
-    gap: 8px;
+/* 아이콘 묶음 스타일 */
+.event-card-header-icons svg {
+  margin-left: 8px;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-/* 태그 영역 스타일 */
-.event-card-tags {
-    margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
+.event-card-header-icons svg:hover {
+  color: #ff4081; /* 강조 색 */
 }
 
-/* 개별 태그 (Chip) 스타일 */
-.event-card-tags .MuiChip-root {
-    background-color: #FFEBEE;
-    color: #E91E63;
-    font-weight: 500;
-    border-radius: 6px;
-    height: 24px;
-    font-size: 0.75rem;
-    line-height: 1;
-    padding: 0 8px;
+/* 장르 칩 스타일 */
+.event-card-chip {
+  background-color: #e0f7fa;
+  color: #00796b;
+  font-weight: 500;
+}
+
+/* 태그 칩 스타일 */
+.event-tag-chip {
+  background-color: #fce4ec;
+  color: #c2185b;
+  font-weight: 500;
 }
