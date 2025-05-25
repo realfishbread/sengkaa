@@ -193,7 +193,7 @@ const KakaoMap = () => {
     const borderColor = borderColors[category] || '#ffffff';
 
     const content = `
-      <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.cafe_name.replace(
+      <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.replace(
       /'/g,
       "\\'"
     )}')">

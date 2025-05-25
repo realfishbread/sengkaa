@@ -28,6 +28,7 @@ import MyBookingsPage from './pages/booking/my-booking-page/MyBookingsPage';
 import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
 import BirthdayCafeDetailPage from './pages/birthday-cafe-register/BirthdayCafeDetailPage';
 import ChatPage from './pages/chat/ChatPage';
+import SearchResults from './pages/search/SearchResult';
 import './styles/App.css';
 
 const theme = createTheme({
@@ -80,6 +81,7 @@ function AppRoutes() {
           <Route path="/venues/:id" element={<VenueDetailPage />} />
           <Route path="/birthday-cafes/:id" element={<BirthdayCafeDetailPage />} />
           <Route path="chat" element={<ChatPage />} />
+          <Route path="/search" element={<SearchResults />} />
         </Route>
       </Routes>
 

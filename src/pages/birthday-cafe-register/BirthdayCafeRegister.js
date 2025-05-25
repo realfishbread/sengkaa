@@ -9,7 +9,7 @@ import {
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from '../../components/common/CustomTextField';
 import FlexInputButton from '../../components/common/FlexInputButton';
@@ -97,14 +97,6 @@ const BirthdayCafeRegister = () => {
       return;
     }
 
-    const fullAddress = `${roadAddress} ${detailAddress}`;
-    const { lat, lng } = await geocodeKakao(fullAddress);
-
-    if (!lat || !lng) {
-      alert('주소의 위도/경도 변환에 실패했습니다.');
-      return;
-    }
-
     const formData = new FormData();
     formData.append('cafe_name', cafeName);
     formData.append('description', description);
@@ -113,9 +105,9 @@ const BirthdayCafeRegister = () => {
     formData.append('start_date', startDate?.toISOString().slice(0, 10));
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
     formData.append('genre', genre); // 🔥 여기 수정
-    formData.append('star', selectedStar?.id ?? null); // null이면 NULL로 전송됨
-    formData.append('latitude', lat); // ✅ 위도 추가
-    formData.append('longitude', lng); // ✅ 경도 추가
+    formData.append('star_id', selectedStar?.id ?? null); // null이면 NULL로 전송됨
+    formData.append('latitude', null); // ✅ 위도 추가
+    formData.append('longitude', null); // ✅ 경도 추가
 
     if (image) {
       formData.append('image', image); // ✅ 모델 필드랑 맞춤

@@ -27,8 +27,6 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     goods = GoodsSerializer(many=True, read_only=True)
     latitude = serializers.FloatField(required=False, allow_null=True)
     longitude = serializers.FloatField(required=False, allow_null=True)
-    star = StarSerializer(read_only=True)
-    star_id = serializers.PrimaryKeyRelatedField(queryset=Star.objects.all(), source='star', write_only=True)  # 등록 시 사용
 
     class Meta:
         model = BirthdayCafe
@@ -51,6 +49,15 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     def get_is_liked(self, obj):
         user = self.context.get("request").user
         return obj.liked_events.filter(user_id=user.user_id).exists() if user.is_authenticated else False
+    
+    def get_star(self, obj):
+        return {
+            "id": obj.star.id,
+            "name": obj.star.name,
+            "group": obj.star.group,
+            "display": obj.star.display,
+            "image": self.context['request'].build_absolute_uri(obj.star.image.url) if obj.star.image else None,
+        }
     
 class BirthdayCafeListSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
