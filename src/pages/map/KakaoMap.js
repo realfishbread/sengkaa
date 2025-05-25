@@ -8,6 +8,7 @@ const KakaoMap = () => {
   });
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [isEmpty, setIsEmpty] = useState(false);
+  const [fetchedPlaces, setFetchedPlaces] = useState([]);
 
   const markerIcons = {
     general: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -122,6 +123,7 @@ const KakaoMap = () => {
 
       const data = response.data;
       console.log('✅ 받아온 이벤트 목록:', data);
+      setFetchedPlaces(data); // 🔥 저장
 
       setIsEmpty(data.length === 0);
       if (data.length === 0) return;
@@ -193,7 +195,7 @@ const KakaoMap = () => {
     const borderColor = borderColors[category] || '#ffffff';
 
     const content = `
-      <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.replace(
+      <div class="custom-marker" style="border-color: ${borderColor}" onclick="window.handleMarkerClick('${place.cafe_name.replace(
       /'/g,
       "\\'"
     )}')">
@@ -211,35 +213,35 @@ const KakaoMap = () => {
 
   return (
     <div className="kakao-map-container">
-      <div className={`info-panel ${selectedPlace ? '' : 'hidden'}`}>
-        {selectedPlace && (
+      <div className={`info-panel ${fetchedPlaces ? '' : 'hidden'}`}>
+        {fetchedPlaces && (
           <>
             <button
               className="close-button"
-              onClick={() => setSelectedPlace(null)}
+              onClick={() => setFetchedPlaces(null)}
             >
               ❌
             </button>
             <img
-              src={selectedPlace.image_url}
+              src={fetchedPlaces.image_url}
               alt="포스터 이미지"
               className="poster-image"
             />
-            <h2 className="place-title">📍 {selectedPlace.cafe_name}</h2>
+            <h2 className="place-title">📍 {fetchedPlaces.cafe_name}</h2>
             <p>
               <strong>🏠 주소:</strong>{' '}
-              {selectedPlace.road_address + ' ' + selectedPlace.detail_address}
+              {fetchedPlaces.road_address + ' ' + fetchedPlaces.detail_address}
             </p>
-            {selectedPlace.start_date && (
+            {fetchedPlaces.start_date && (
               <p>
-                <strong>🕒 이벤트 기간:</strong> {selectedPlace.start_date}
+                <strong>🕒 이벤트 기간:</strong> {fetchedPlaces.start_date}
               </p>
             )}
-            {selectedPlace.goods && selectedPlace.goods.length > 0 && (
+            {fetchedPlaces.goods && fetchedPlaces.goods.length > 0 && (
               <div className="goods-section">
                 <strong>🎁 굿즈 목록:</strong>
                 <ul className="goods-list">
-                  {selectedPlace.goods.map((item) => (
+                  {fetchedPlaces.goods.map((item) => (
                     <li key={item.id} className="goods-item">
                       <p>
                         <strong>{item.name}</strong> -{' '}
@@ -258,7 +260,7 @@ const KakaoMap = () => {
               </div>
             )}
             <a
-              href={selectedPlace.place_url}
+              href={fetchedPlaces.place_url}
               target="_blank"
               rel="noopener noreferrer"
               className="place-link"
