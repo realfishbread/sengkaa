@@ -25,9 +25,8 @@
 /* 카드 이미지 스타일 */
 .event-card-image {
     width: 180px;
-    height: auto; /* 100% 대신 auto */
-    max-height: 200px; /* 카드 높이와 맞추기 */
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     flex-shrink: 0;
     border-radius: 12px 0 0 12px;
 }
