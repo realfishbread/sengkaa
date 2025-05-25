@@ -10,24 +10,27 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  Chip,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { EventSearchApi } from './api/EventSearchApi';
 import NotFoundBox from '../../components/common/NotFoundBox';
 import { useNavigate } from 'react-router-dom';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import ShareIcon from '@mui/icons-material/Share';
 
+import './SearchPlaces.css';
 
 const SearchPlaces = () => {
   const [keyword, setKeyword] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [genre, setGenre] = useState('');
-  const [events, setEvents] = useState([]); // ✅ 바뀐 데이터 저장용
+  const [events, setEvents] = useState([]);
   const navigate = useNavigate();
 
   const handleGenreChange = (event, newGenre) => setGenre(newGenre);
 
-  // 🔥 필터 변경될 때마다 API 호출
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -41,16 +44,17 @@ const SearchPlaces = () => {
         if (Array.isArray(data)) {
           setEvents(data);
         } else {
-          setEvents([]); // 🚨 혹시라도 results 빠졌을 때 대비
+          setEvents([]);
         }
       } catch (err) {
-        <NotFoundBox />;
+        console.error("Failed to fetch events:", err);
         setEvents([]);
       }
     };
 
     fetchEvents();
   }, [keyword, startDate, endDate, genre]);
+
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
@@ -109,28 +113,61 @@ const SearchPlaces = () => {
       {/* 이벤트 카드 리스트 */}
       <Grid container spacing={3}>
         {events.map((event) => (
-          <Grid item xs={12} sm={6} md={4} key={event.id}>
-            <Card onClick={() => navigate(`/birthday-cafes/${event.id}`)} sx={{ cursor: 'pointer' }}>
+          <Grid item xs={12} sm={6} md={6} key={event.id}>
+            <Card
+              onClick={() => navigate(`/birthday-cafes/${event.id}`)}
+              className="event-card-container"
+              sx={{ cursor: 'pointer' }}
+            >
               <CardMedia
                 component="img"
-                height="300"
-                image={event.image} // image 필드로 맞춰줘야 해
+                className="event-card-image"
+                image={event.image}
                 alt={event.cafe_name}
               />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {event.cafe_name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  📍 {event.location}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  📅 {event.start_date} ~ {event.end_date}
-                </Typography>
+              <CardContent className="event-card-content">
+                <Box>
+                  <Box className="event-card-header">
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {event.artist_group || '아티스트/그룹명'}
+                    </Typography>
+                    <Box className="event-card-header-icons">
+                      <BookmarkBorderIcon sx={{ color: '#ccc' }} />
+                      <ShareIcon sx={{ color: '#ccc' }} />
+                    </Box>
+                  </Box>
+
+                  <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                    {event.cafe_name || '이벤트명'}
+                  </Typography>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                    📍 {event.detail_address || '상세 위치 없음'}
+                  </Typography>
+
+                  <Typography variant="body2" color="text.secondary">
+                    📅 {event.start_date} ~ {event.end_date}
+                  </Typography>
+                </Box>
+
+                <Box className="event-card-tags">
+                  {event.genre && (
+                    <Chip
+                      label={event.genre}
+                      size="small"
+                      className="event-card-chip"
+                    />
+                  )}
+                </Box>
               </CardContent>
             </Card>
           </Grid>
         ))}
+        {events.length === 0 && (
+          <Grid item xs={12}>
+            <NotFoundBox />
+          </Grid>
+        )}
       </Grid>
     </Container>
   );

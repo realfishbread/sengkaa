@@ -141,7 +141,6 @@ const VenueSearch = () => {
           </Grid>
         ))}
       </Grid>
-      );
     </Container>
   );
 };

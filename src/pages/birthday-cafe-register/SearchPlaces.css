@@ -1,0 +1,75 @@
+/* 이벤트 카드 컨테이너 스타일 */
+.event-card-container {
+    display: flex;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    height: 200px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+/* 반응형 대응 */
+@media (max-width: 600px) {
+    .event-card-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .event-card-image {
+        width: 100%;
+        height: 180px;
+        border-radius: 12px 12px 0 0;
+    }
+}
+
+/* 카드 이미지 스타일 */
+.event-card-image {
+    width: 180px;
+    height: auto; /* 100% 대신 auto */
+    max-height: 200px; /* 카드 높이와 맞추기 */
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 12px 0 0 12px;
+}
+
+/* 카드 내용 영역 스타일 */
+.event-card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+/* 카드 상단 정보 (아티스트, 아이콘) */
+.event-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.event-card-header-icons {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+/* 태그 영역 스타일 */
+.event-card-tags {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* 개별 태그 (Chip) 스타일 */
+.event-card-tags .MuiChip-root {
+    background-color: #FFEBEE;
+    color: #E91E63;
+    font-weight: 500;
+    border-radius: 6px;
+    height: 24px;
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0 8px;
+}
