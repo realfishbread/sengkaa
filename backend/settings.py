@@ -226,9 +226,9 @@ KAKAO_REST_API_KEY="4083ddda8b18709f62bb857f2c52f127"
 
 AUTH_USER_MODEL = 'api.User'
 
-TOSS_SECRET_KEY = 'test_sk_vZnjEJeQVxRoP1jQkN998PmOoBN0'
+TOSS_SECRET_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6'
 
-TOSS_CLIENT_KEY = 'test_ck_Z1aOwX7K8mj9ZpJvzAP03yQxzvNP'
+TOSS_CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'
 
 REST_FRAMEWORK = {
         
