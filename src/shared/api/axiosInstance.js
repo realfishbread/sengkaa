@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createBrowserHistory } from 'history';
+import { LoginModalWrapper } from '../../pages/auth/Login/LoginModalWrapper';
 
 const history = createBrowserHistory();
 
@@ -22,22 +23,19 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-axiosInstance.interceptors.response.use(
-  (res) => res,
-  (error) => {
-    if (error.response?.status === 403) {
-      const currentUrl = window.location.pathname + window.location.search;
-
-      // ❗ 페이지 전환 시 backgroundLocation으로 현재 페이지 기억시킴
-      history.push('/login', {
-        backgroundLocation: {
-          pathname: currentUrl,
-        },
-      });
+export const injectLoginModalHandler = (showLoginModal) => {
+  axiosInstance.interceptors.response.use(
+    (res) => res,
+    (error) => {
+      if (error.response?.status === 403) {
+        // 페이지 이동 대신 모달 띄우기
+        showLoginModal();
+      }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
-);
+  );
+};
+
 
 // ✅ 응답 인터셉터 (accessToken 만료 시 → refresh로 재발급 & 재요청)
 axiosInstance.interceptors.response.use(

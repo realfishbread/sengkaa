@@ -4,9 +4,11 @@ from rest_framework.response import Response
 from api.serializers.booking_serializer import MyBookedVenueSerializer
 from api.models import Booking, Venue
 import base64
+from datetime import datetime, timedelta
 import requests
 from rest_framework.permissions import AllowAny
 from django.conf import settings
+from uuid import uuid4
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -29,32 +31,49 @@ def reserved_dates(request, venue_id):
     return Response(date_list)
 
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_payment_request(request):
     user = request.user
     venue_id = request.data.get('venue_id')
     amount = request.data.get('amount')
-    date_str = request.data.get('date')  # 🧠 날짜는 반드시 전달받아야 함
+    start_date = request.data.get("start_date")
+    end_date = request.data.get("end_date")
 
     # 🧼 유효성 검사
-    if not venue_id or not amount or not date_str:
-        return Response({'error': 'venue_id, amount, date는 필수입니다.'}, status=400)
+    if not venue_id or not amount or not start_date or not end_date:
+        return Response({'error': 'venue_id, amount, start_date, end_date는 필수입니다.'}, status=400)
 
     try:
         venue = Venue.objects.get(id=venue_id)
     except Venue.DoesNotExist:
         return Response({'error': '존재하지 않는 장소입니다.'}, status=404)
 
-    # 🎯 결제용 orderId 생성 (💡 예약 중복 확인 및 검증 시에도 사용)
-    order_id = f"venue-{venue.id}-user-{user.id}-{date_str}"
+    # 날짜 반복 생성
+    dates = []
+    current = datetime.strptime(start_date, "%Y-%m-%d")
+    end = datetime.strptime(end_date, "%Y-%m-%d")
 
-    # 🎁 클라이언트에게 필요한 정보 전달
+    while current <= end:
+        date_obj = current.date()
+        # 중복 체크
+        if Booking.objects.filter(venue=venue, available_date=date_obj, is_paid=True).exists():
+            return Response({'error': f'{date_obj} 날짜는 이미 예약됨'}, status=400)
+        dates.append(date_obj)
+        current += timedelta(days=1)
+
+    # 💡 주문 ID 생성
+    order_id = f"venue-{venue.id}-user-{user.id}-{uuid4().hex[:8]}"
+
+    # 🔁 order_id는 결제 검증 시도에서 다시 쓸 수 있도록 고유하게 만들기!
     return Response({
         "orderId": order_id,
         "clientKey": settings.TOSS_CLIENT_KEY,
-        "amount": int(amount)
+        "amount": int(amount),
+        "dates": [str(d) for d in dates]  # 필요하면 프론트에서 보여줄 수 있도록
     })
+
 
 
 @api_view(['POST'])
@@ -63,8 +82,9 @@ def toss_payment_verify(request):
     paymentKey = request.data.get('paymentKey')
     orderId = request.data.get('orderId')
     amount = request.data.get('amount')
+    dates = request.data.get('dates')  # ✅ 배열 형태로 예약 날짜 받기
 
-    if not paymentKey or not orderId or not amount:
+    if not paymentKey or not orderId or not amount or not dates:
         return Response({'error': '필수 값 누락'}, status=400)
 
     url = 'https://api.tosspayments.com/v1/payments/confirm'
@@ -83,20 +103,28 @@ def toss_payment_verify(request):
     if res.status_code != 200:
         return Response({'error': 'Toss 결제 검증 실패'}, status=400)
 
-    # ✅ orderId 파싱
-    _, venue_id, _, _, date = orderId.split('-')
-    venue = Venue.objects.get(id=venue_id)
+    # ✅ orderId에서 venue_id 추출
+    try:
+        _, venue_id, _, _, _ = orderId.split('-')
+    except ValueError:
+        return Response({'error': 'orderId 파싱 실패'}, status=400)
 
-    if Booking.objects.filter(venue=venue, available_date=date, is_paid=True).exists():
-        return Response({'error': '이미 예약됨'}, status=400)
+    try:
+        venue = Venue.objects.get(id=venue_id)
+    except Venue.DoesNotExist:
+        return Response({'error': '존재하지 않는 장소입니다.'}, status=404)
 
-    Booking.objects.create(
-        venue=venue,
-        user=request.user,
-        available_date=date,
-        is_paid=True
-    )
+    # ✅ 여러 날짜 예약 생성
+    for d in dates:
+        date_obj = datetime.strptime(d, "%Y-%m-%d").date()
+        if Booking.objects.filter(venue=venue, available_date=date_obj, is_paid=True).exists():
+            return Response({'error': f'{d}는 이미 예약됨'}, status=400)
+
+        Booking.objects.create(
+            venue=venue,
+            user=request.user,
+            available_date=date_obj,
+            is_paid=True
+        )
 
     return Response({'message': '예약 완료'})
-
-

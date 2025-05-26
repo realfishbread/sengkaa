@@ -6,7 +6,7 @@ import {
   Container,
   Typography,
 } from '@mui/material';
-import { isSameDay } from 'date-fns'; // 날짜 비교용
+import { format, isSameDay } from 'date-fns'; // 날짜 비교용
 import { useContext, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -14,7 +14,6 @@ import { useParams } from 'react-router-dom';
 import { UserContext } from '../../../context/UserContext'; // 사용자 정보 컨텍스트
 import axiosInstance from '../../../shared/api/axiosInstance';
 import TossModal from '../../toss/TossModal'; // 결제 모달 컴포넌트
-import { format } from 'date-fns'; // 날짜 포맷팅용
 
 const VenueDetailPage = () => {
   const { id } = useParams();
@@ -39,12 +38,23 @@ const VenueDetailPage = () => {
   }, [id]);
 
   const handleReserve = async () => {
-    if (!date) return alert('날짜를 선택해주세요!');
+    if (!date || !Array.isArray(date))
+      return alert('날짜 범위를 선택해주세요!');
+
+    const [startDate, endDate] = date;
+    const formattedStart = format(startDate, 'yyyy-MM-dd');
+    const formattedEnd = format(endDate, 'yyyy-MM-dd');
+
+    sessionStorage.setItem(
+      'booking_dates',
+      JSON.stringify([formattedStart, formattedEnd]) // 👉 문자열 배열로 저장
+    );
 
     const res = await axiosInstance.post('/user/payment/create/', {
       venue_id: venue.id,
       amount: venue.deposit,
-      date: format(date, 'yyyy-MM-dd'), // 🧠 예약 날짜도 꼭 보내줘야!
+      start_date: formattedStart,
+      end_date: formattedEnd,
     });
 
     setPaymentInfo({
@@ -82,6 +92,7 @@ const VenueDetailPage = () => {
         <Calendar
           onChange={setDate}
           value={date}
+          selectRange={true}
           tileDisabled={({ date, view }) =>
             view === 'month' && bookedDates.some((d) => isSameDay(d, date))
           }

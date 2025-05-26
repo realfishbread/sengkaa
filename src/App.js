@@ -1,6 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material';
-import React from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -8,28 +7,31 @@ import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
 import KakaoRedirectPage from './pages/auth/Login/KakaoRedirectPage';
 import LoginModalWrapper from './pages/auth/Login/LoginModalWrapper';
 import SignupPage from './pages/auth/SignUp/Signup';
+import FavoriteEvents from './pages/bias/bias-event/FavoriteEvents';
 import FavoriteStarModal from './pages/bias/FavoriteStarModal';
+import BirthdayCafeDetailPage from './pages/birthday-cafe-register/BirthdayCafeDetailPage';
 import BirthdayCafeRegister from './pages/birthday-cafe-register/BirthdayCafeRegister';
 import SearchPlaces from './pages/birthday-cafe-register/SearchPlaces';
 import Board from './pages/board/Board';
 import ModifyPost from './pages/board/ModifyPost';
 import Post from './pages/board/Post';
+import MyBookingsPage from './pages/booking/my-booking-page/MyBookingsPage';
 import EventCalendar from './pages/calender/EventCalendar';
+import ChatPage from './pages/chat/ChatPage';
 import DictionaryList from './pages/dictionary/DictionaryList';
 import FaqPage from './pages/faq/FaqPage';
-import VenueSearch from './pages/venue/find-cafes/VenueSearch';
 import Home from './pages/Home';
 import KakaoMap from './pages/map/KakaoMap';
 import EditProfile from './pages/profile/EditProfile';
 import ProfilePage from './pages/profile/ProfilePage';
-import Settings from './pages/settings/Settings';
-import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
-import MyBookingsPage from './pages/booking/my-booking-page/MyBookingsPage';
-import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
-import BirthdayCafeDetailPage from './pages/birthday-cafe-register/BirthdayCafeDetailPage';
-import ChatPage from './pages/chat/ChatPage';
 import SearchResults from './pages/search/SearchResult';
-import FavoriteEvents from './pages/bias/bias-event/FavoriteEvents';
+import Settings from './pages/settings/Settings';
+import VenueSearch from './pages/venue/find-cafes/VenueSearch';
+import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
+import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
+import PaymentFailPage from './pages/booking/PaymentFailPage';
+import PaymentSuccessPage from './pages/booking/PaymentSuccessPage';
+
 import './styles/App.css';
 
 const theme = createTheme({
@@ -49,7 +51,6 @@ const theme = createTheme({
 
 function AppRoutes() {
   const location = useLocation();
-  const navigate = useNavigate();
   const state = location.state;
 
   return (
@@ -84,6 +85,8 @@ function AppRoutes() {
           <Route path="chat" element={<ChatPage />} />
           <Route path="result" element={<SearchResults />} />
           <Route path="/favorite-events" element={<FavoriteEvents />} />
+          <Route path="/payment/success" element={<PaymentSuccessPage />} />
+          <Route path="/payment/fail" element={<PaymentFailPage />} />
         </Route>
       </Routes>
 
@@ -103,6 +106,8 @@ function AppRoutes() {
 }
 
 function App() {
+  
+  
   return (
     <ThemeProvider theme={theme}>
       <AppRoutes />
