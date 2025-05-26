@@ -1,5 +1,6 @@
 // SearchPlaces.js
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ShareIcon from '@mui/icons-material/Share';
 import {
   Box,
@@ -143,7 +144,23 @@ const SearchPlaces = () => {
                           {event.star_display || '아티스트/그룹명'}
                         </Typography>
                         <Box className="event-card-header-icons">
-                          <BookmarkBorderIcon sx={{ color: '#ccc' }} />
+                          {event.is_liked ? (
+                            <BookmarkIcon
+                              sx={{ color: '#ff4081', cursor: 'pointer' }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                EventSearchApi(event.id);
+                              }}
+                            />
+                          ) : (
+                            <BookmarkBorderIcon
+                              sx={{ color: '#ccc', cursor: 'pointer' }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                EventSearchApi(event.id);
+                              }}
+                            />
+                          )}
                           <ShareIcon sx={{ color: '#ccc', ml: 1 }} />
                         </Box>
                       </Box>

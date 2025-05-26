@@ -91,7 +91,10 @@ class BirthdayCafeListSerializer(serializers.ModelSerializer):
         return obj.liked_events.count()  # ✅ 이름 변경 반영
 
     def get_is_liked(self, obj):
-        user = self.context.get("request").user
-        return obj.liked_events.filter(user_id=user.user_id).exists() if user.is_authenticated else False
+        request = self.context.get('request')
+        user = request.user if request else None
+        if user and user.is_authenticated:
+            return user in obj.liked_events.all()
+        return None  
 
     

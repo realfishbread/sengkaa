@@ -223,21 +223,21 @@ const KakaoMap = () => {
               ❌
             </button>
             <img
-              src={selectedPlace.image_url}
+              src={fetchedPlaces.image_url}
               alt="포스터 이미지"
               className="poster-image"
             />
-            <h2 className="place-title">📍 {selectedPlace.cafe_name}</h2>
+            <h2 className="place-title">📍 {fetchedPlaces.cafe_name}</h2>
             <p>
               <strong>🏠 주소:</strong>{' '}
-              {selectedPlace.road_address + ' ' + selectedPlace.detail_address}
+              {fetchedPlaces.road_address + ' ' + fetchedPlaces.detail_address}
             </p>
-            {selectedPlace.start_date && (
+            {fetchedPlaces.start_date && (
               <p>
-                <strong>🕒 이벤트 기간:</strong> {selectedPlace.start_date}
+                <strong>🕒 이벤트 기간:</strong> {fetchedPlaces.start_date}
               </p>
             )}
-            {selectedPlace.goods && selectedPlace.goods.length > 0 && (
+            {fetchedPlaces.goods && fetchedPlaces.goods.length > 0 && (
               <div className="goods-section">
                 <strong>🎁 굿즈 목록:</strong>
                 <ul className="goods-list">
