@@ -86,7 +86,10 @@ class BirthdayCafeSearchAPIView(ListAPIView):
             queryset = queryset.order_by('-created_at')
         elif sort == 'likes':
             print("❤️ 좋아요순 정렬 적용")
-            queryset = queryset.annotate(like_count=Count('liked_events', distinct=True)).order_by('-like_count')
+            # 🔥 이 줄 제거하고 아래처럼 두 줄로 나눔
+            # queryset = queryset.annotate(like_count=Count('liked_events', distinct=True)).order_by('-like_count')
+            queryset = list(queryset)  # 강제 evaluate
+            queryset.sort(key=lambda x: x.liked_events.count(), reverse=True)  # 파이썬 정렬
         elif sort == 'views':
             print("👁️ 조회수순 정렬 적용")
             queryset = queryset.order_by('-view_count')
@@ -154,3 +157,12 @@ def nearby_birthday_cafes(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def liked_birthday_cafes(request):
+    user = request.user
+    liked_events = user.liked_cafes.all()  # ✅ related_name='liked_cafes'
+    serializer = BirthdayCafeListSerializer(
+        liked_events, many=True, context={'request': request}
+    )
+    return Response(serializer.data)

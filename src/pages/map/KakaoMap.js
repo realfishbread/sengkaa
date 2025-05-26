@@ -130,7 +130,7 @@ const KakaoMap = () => {
 
       const bounds = new window.kakao.maps.LatLngBounds();
 
-      data.forEach((place) => {
+      data.forEach((place, index) => {
         const latlng = new window.kakao.maps.LatLng(
           place.latitude,
           place.longitude
@@ -146,6 +146,14 @@ const KakaoMap = () => {
           getCategory(place),
           map
         );
+        if (index === 0) {
+          setSelectedPlace({
+            ...place,
+            image_url:
+              place.image ||
+              'https://via.placeholder.com/400x200?text=No+Image',
+          });
+        }
       });
     } catch (e) {
       console.error('이벤트 불러오기 실패', e);
@@ -213,35 +221,35 @@ const KakaoMap = () => {
 
   return (
     <div className="kakao-map-container">
-      <div className={`info-panel ${fetchedPlaces ? '' : 'hidden'}`}>
-        {fetchedPlaces && (
+      <div className={`info-panel ${selectedPlace ? '' : 'hidden'}`}>
+        {selectedPlace && (
           <>
             <button
               className="close-button"
-              onClick={() => setFetchedPlaces(null)}
+              onClick={() => setSelectedPlace(null)}
             >
               ❌
             </button>
             <img
-              src={fetchedPlaces.image_url}
+              src={selectedPlace.image_url}
               alt="포스터 이미지"
               className="poster-image"
             />
-            <h2 className="place-title">📍 {fetchedPlaces.cafe_name}</h2>
+            <h2 className="place-title">📍 {selectedPlace.cafe_name}</h2>
             <p>
               <strong>🏠 주소:</strong>{' '}
-              {fetchedPlaces.road_address + ' ' + fetchedPlaces.detail_address}
+              {selectedPlace.road_address}
             </p>
-            {fetchedPlaces.start_date && (
+            {selectedPlace.start_date && (
               <p>
-                <strong>🕒 이벤트 기간:</strong> {fetchedPlaces.start_date}
+                <strong>🕒 이벤트 기간:</strong> {selectedPlace.start_date}
               </p>
             )}
-            {fetchedPlaces.goods && fetchedPlaces.goods.length > 0 && (
+            {selectedPlace.goods && selectedPlace.goods.length > 0 && (
               <div className="goods-section">
                 <strong>🎁 굿즈 목록:</strong>
                 <ul className="goods-list">
-                  {fetchedPlaces.goods.map((item) => (
+                  {selectedPlace.goods.map((item) => (
                     <li key={item.id} className="goods-item">
                       <p>
                         <strong>{item.name}</strong> -{' '}
@@ -260,7 +268,7 @@ const KakaoMap = () => {
               </div>
             )}
             <a
-              href={fetchedPlaces.place_url}
+              href={selectedPlace.place_url}
               target="_blank"
               rel="noopener noreferrer"
               className="place-link"

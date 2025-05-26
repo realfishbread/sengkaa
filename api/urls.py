@@ -14,7 +14,7 @@ urlpatterns = [
     path('star/', include('api.urls.star_urls')),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('venues/', include('api.urls.venue_urls')),
-    path('booking/', include('api.urls.booking_urls')),
+    path('bookings/', include('api.urls.booking_urls')),
     path('dictionary/', include('api.urls.dictionary_urls')),
 ]
 

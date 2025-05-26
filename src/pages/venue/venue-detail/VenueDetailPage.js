@@ -6,46 +6,54 @@ import {
   Container,
   Typography,
 } from '@mui/material';
-import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { isSameDay } from 'date-fns'; // 날짜 비교용
+import { useContext, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useParams } from 'react-router-dom';
+import { UserContext } from '../../../context/UserContext'; // 사용자 정보 컨텍스트
 import axiosInstance from '../../../shared/api/axiosInstance';
+import TossModal from '../../toss/TossModal'; // 결제 모달 컴포넌트
+import { format } from 'date-fns'; // 날짜 포맷팅용
 
 const VenueDetailPage = () => {
   const { id } = useParams();
+  const { user } = useContext(UserContext);
   const [venue, setVenue] = useState(null);
   const [date, setDate] = useState(null);
+  const [bookedDates, setBookedDates] = useState([]); // 예약된 날짜
+  const [modalOpen, setModalOpen] = useState(false);
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
   useEffect(() => {
     const fetchVenue = async () => {
       const res = await axiosInstance.get(`/user/venues/${id}/`);
       setVenue(res.data);
+
+      const bookedRes = await axiosInstance.get(
+        `/user/bookings/reserved-dates/${id}/`
+      );
+      setBookedDates(bookedRes.data.map((dateStr) => new Date(dateStr))); // 날짜 문자열 → Date 객체로
     };
     fetchVenue();
   }, [id]);
 
   const handleReserve = async () => {
     if (!date) return alert('날짜를 선택해주세요!');
+
     const res = await axiosInstance.post('/user/payment/create/', {
       venue_id: venue.id,
-      amount: venue.rental_fee,
+      amount: venue.deposit,
+      date: format(date, 'yyyy-MM-dd'), // 🧠 예약 날짜도 꼭 보내줘야!
     });
 
-    const toss = await import('@tosspayments/payment-sdk').then((m) =>
-      m.loadTossPayments(res.data.clientKey)
-    );
-    toss.requestPayment('카드', {
-      amount: res.data.amount,
+    setPaymentInfo({
+      clientKey: res.data.clientKey,
       orderId: res.data.orderId,
+      amount: res.data.amount,
       orderName: venue.name,
-      customerName: venue.user?.nickname || '사용자',
-      successUrl: `https://eventcafe.site/payment/success/?venue_id=${
-        venue.id
-      }&date=${dayjs(date).format('YYYY-MM-DD')}`,
-      failUrl: `https://eventcafe.site/payment/fail/`,
     });
+    setModalOpen(true); // 모달 오픈
   };
 
   if (!venue) return null;
@@ -63,9 +71,7 @@ const VenueDetailPage = () => {
           alt={venue.name}
         />
       </Card>
-      <Typography mt={2}>
-        📍 {venue.road_address} {venue.detail_address}
-      </Typography>
+      <Typography mt={2}>📍 {venue.road_address}</Typography>
       <Typography>💰 ₩{venue.rental_fee.toLocaleString()}</Typography>
       <Typography>⏰ {venue.operating_hours}</Typography>
       <Typography>{venue.operating_info}</Typography>
@@ -73,7 +79,13 @@ const VenueDetailPage = () => {
 
       <Box mt={4}>
         <Typography variant="h6">예약할 날짜를 선택하세요</Typography>
-        <Calendar onChange={setDate} value={date} />
+        <Calendar
+          onChange={setDate}
+          value={date}
+          tileDisabled={({ date, view }) =>
+            view === 'month' && bookedDates.some((d) => isSameDay(d, date))
+          }
+        />
       </Box>
 
       <Button
@@ -81,9 +93,21 @@ const VenueDetailPage = () => {
         color="primary"
         sx={{ mt: 3 }}
         onClick={handleReserve}
+        disabled={!user}
       >
         예약하고 결제하기
       </Button>
+      {paymentInfo && (
+        <TossModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          clientKey={paymentInfo.clientKey}
+          orderId={paymentInfo.orderId}
+          orderName={paymentInfo.orderName}
+          amount={paymentInfo.amount}
+          user={user}
+        />
+      )}
     </Container>
   );
 };

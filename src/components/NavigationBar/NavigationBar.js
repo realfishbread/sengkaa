@@ -46,16 +46,18 @@ const NavigationBar = () => {
         setSearchResults([]);
         return;
       }
-  
+
       try {
-        const response = await axiosInstance.get(`/user/star/stars/?keyword=${searchTerm}`);
+        const response = await axiosInstance.get(
+          `/user/star/stars/?keyword=${searchTerm}`
+        );
         setSearchResults(response.data); // 스타 리스트
       } catch (error) {
         console.error('스타 검색 실패 ❌', error);
         setSearchResults([]);
       }
     }, 300); // debounce 300ms
-  
+
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
 
@@ -188,12 +190,11 @@ const NavigationBar = () => {
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+                navigate(`/result?query=${encodeURIComponent(searchTerm)}`);
                 setSearchTerm('');
               }
             }}
           />
-          
         </Toolbar>
       </AppBar>
 
@@ -235,6 +236,12 @@ const NavigationBar = () => {
             </ListItem>
             <ListItem button onClick={() => navigate('/dictionary')}>
               <ListItemText primary="덕질 사전" />
+            </ListItem>
+            <ListItem button onClick={() => navigate('/my-bookings')}>
+              <ListItemText primary="내 예약 목록" />
+            </ListItem>
+            <ListItem button onClick={() => navigate('/favorite-events')}>
+              <ListItemText primary="찜한 이벤트" />
             </ListItem>
             <ListItem
               button

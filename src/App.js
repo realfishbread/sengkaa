@@ -29,6 +29,7 @@ import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
 import BirthdayCafeDetailPage from './pages/birthday-cafe-register/BirthdayCafeDetailPage';
 import ChatPage from './pages/chat/ChatPage';
 import SearchResults from './pages/search/SearchResult';
+import FavoriteEvents from './pages/bias/bias-event/FavoriteEvents';
 import './styles/App.css';
 
 const theme = createTheme({
@@ -81,7 +82,8 @@ function AppRoutes() {
           <Route path="/venues/:id" element={<VenueDetailPage />} />
           <Route path="/birthday-cafes/:id" element={<BirthdayCafeDetailPage />} />
           <Route path="chat" element={<ChatPage />} />
-          <Route path="/search" element={<SearchResults />} />
+          <Route path="result" element={<SearchResults />} />
+          <Route path="/favorite-events" element={<FavoriteEvents />} />
         </Route>
       </Routes>
 
@@ -91,7 +93,7 @@ function AppRoutes() {
           <Route
             path="/login"
             element={
-              <LoginModalWrapper open={true} onClose={() => navigate(-1)} />
+              <LoginModalWrapper open={true} onClose={() => window.history.back()} />
             }
           />
         </Routes>

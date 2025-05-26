@@ -47,8 +47,11 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         return obj.liked_events.count()
 
     def get_is_liked(self, obj):
-        user = self.context.get("request").user
-        return obj.liked_events.filter(user_id=user.user_id).exists() if user.is_authenticated else False
+        request = self.context.get('request')
+        user = request.user if request else None
+        if user and user.is_authenticated:
+            return user in obj.liked_events.all()
+        return None  
     
     def get_star(self, obj):
         return {
@@ -71,6 +74,7 @@ class BirthdayCafeListSerializer(serializers.ModelSerializer):
     latitude = serializers.FloatField(required=False, allow_null=True)
     longitude = serializers.FloatField(required=False, allow_null=True)
     star_display = serializers.CharField(source='star.display', read_only=True)
+    pagination_class = None
 
     class Meta:
         model = BirthdayCafe

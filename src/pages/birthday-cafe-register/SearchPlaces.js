@@ -1,6 +1,6 @@
 // SearchPlaces.js
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import {
   Box,
@@ -149,7 +149,6 @@ const SearchPlaces = () => {
                               sx={{ color: '#ff4081', cursor: 'pointer' }}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                EventSearchApi(event.id);
                               }}
                             />
                           ) : (
@@ -157,11 +156,21 @@ const SearchPlaces = () => {
                               sx={{ color: '#ccc', cursor: 'pointer' }}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                EventSearchApi(event.id);
                               }}
                             />
                           )}
-                          <ShareIcon sx={{ color: '#ccc', ml: 1 }} />
+                          <ShareIcon
+                            sx={{ color: '#ccc', ml: 1 }}
+                            onClick={(e) => {
+                              e.stopPropagation(); // 카드 클릭 방지
+
+                              const url = `${window.location.origin}/user/event/birthday-cafes/${event.id}/`;
+                              navigator.clipboard
+                                .writeText(url)
+                                .then(() => alert('링크가 복사되었습니다!'))
+                                .catch((err) => alert('복사 실패 😢'));
+                            }}
+                          />
                         </Box>
                       </Box>
 

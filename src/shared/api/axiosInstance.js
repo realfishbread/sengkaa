@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 // ① 인스턴스 만들기
 const axiosInstance = axios.create({
@@ -18,6 +20,23 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response?.status === 403) {
+      const currentUrl = window.location.pathname + window.location.search;
+
+      // ❗ 페이지 전환 시 backgroundLocation으로 현재 페이지 기억시킴
+      history.push('/login', {
+        backgroundLocation: {
+          pathname: currentUrl,
+        },
+      });
+    }
+    return Promise.reject(error);
+  }
 );
 
 // ✅ 응답 인터셉터 (accessToken 만료 시 → refresh로 재발급 & 재요청)

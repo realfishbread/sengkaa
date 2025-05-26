@@ -37,7 +37,6 @@ export default function EditProfile() {
     try {
       const formData = new FormData();
       formData.append('nickname', nickname);
-      formData.append('email', email);
       formData.append('bio', bio);
       if (profileImage) {
         formData.append('profile_image', profileImage); // ✅ 파일도 추가!
@@ -111,7 +110,6 @@ export default function EditProfile() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
             placeholder="이메일"
             style={styles.input}
           />
@@ -127,7 +125,9 @@ export default function EditProfile() {
               src={selectedStarImage}
               alt="최애"
               style={{ width: 120, borderRadius: 12, marginBottom: 12 }}
+              text={`최애: ${selectedStarId}`}
             />
+            
           )}
 
           <Button
