@@ -19,7 +19,7 @@ const PaymentSuccessPage = () => {
       }
 
       try {
-        const res = await axiosInstance.post('/user/payment/verify/', {
+        const res = await axiosInstance.post('/user/bookings/payment/verify/', {
           paymentKey,
           orderId,
           amount,

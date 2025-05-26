@@ -169,9 +169,24 @@ const NavigationBar = () => {
               >
                 캘린더
               </Button>
-              <Button className="nav-item" onClick={() => navigate('/board')}>
-                게시판
-              </Button>
+              <Box className="nav-item-wrapper">
+                <Button className="nav-item">커뮤니티</Button>
+                <Box className="submenu">
+                  <Button
+                    className="submenu-item"
+                    onClick={() => navigate('/board')}
+                  >
+                    게시판
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/chat')}
+                    className="submenu-item"
+                  >
+                    채팅
+                  </Button>
+                  
+                </Box>
+              </Box>
             </Box>
           </Box>
 

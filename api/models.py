@@ -244,7 +244,7 @@ class Booking(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='bookings')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='venue_bookings')  # ✅ 추가
     available_date = models.DateField()
-    
+    is_paid = models.BooleanField(default=False)  # 결제 완료 여부
     
 
 class DictionaryTerm(models.Model):

@@ -50,7 +50,7 @@ const VenueDetailPage = () => {
       JSON.stringify([formattedStart, formattedEnd]) // 👉 문자열 배열로 저장
     );
 
-    const res = await axiosInstance.post('/user/payment/create/', {
+    const res = await axiosInstance.post('/user/bookings/payment/create/', {
       venue_id: venue.id,
       amount: venue.deposit,
       start_date: formattedStart,

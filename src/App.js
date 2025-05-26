@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
@@ -16,6 +17,8 @@ import Board from './pages/board/Board';
 import ModifyPost from './pages/board/ModifyPost';
 import Post from './pages/board/Post';
 import MyBookingsPage from './pages/booking/my-booking-page/MyBookingsPage';
+import PaymentFailPage from './pages/booking/PaymentFailPage';
+import PaymentSuccessPage from './pages/booking/PaymentSuccessPage';
 import EventCalendar from './pages/calender/EventCalendar';
 import ChatPage from './pages/chat/ChatPage';
 import DictionaryList from './pages/dictionary/DictionaryList';
@@ -29,8 +32,7 @@ import Settings from './pages/settings/Settings';
 import VenueSearch from './pages/venue/find-cafes/VenueSearch';
 import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
 import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
-import PaymentFailPage from './pages/booking/PaymentFailPage';
-import PaymentSuccessPage from './pages/booking/PaymentSuccessPage';
+import { injectLoginModalHandler } from './shared/api/axiosInstance';
 
 import './styles/App.css';
 
@@ -52,6 +54,12 @@ const theme = createTheme({
 function AppRoutes() {
   const location = useLocation();
   const state = location.state;
+
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  useEffect(() => {
+    injectLoginModalHandler(() => setShowLoginModal(true));
+  }, []);
 
   return (
     <>
@@ -81,7 +89,10 @@ function AppRoutes() {
           <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/oauth/kakao/redirect" element={<KakaoRedirectPage />} />
           <Route path="/venues/:id" element={<VenueDetailPage />} />
-          <Route path="/birthday-cafes/:id" element={<BirthdayCafeDetailPage />} />
+          <Route
+            path="/birthday-cafes/:id"
+            element={<BirthdayCafeDetailPage />}
+          />
           <Route path="chat" element={<ChatPage />} />
           <Route path="result" element={<SearchResults />} />
           <Route path="/favorite-events" element={<FavoriteEvents />} />
@@ -91,12 +102,15 @@ function AppRoutes() {
       </Routes>
 
       {/* ✅ 로그인 모달은 백그라운드 location 있을 때만 렌더링 */}
-      {state?.backgroundLocation && (
+      {(state?.backgroundLocation || showLoginModal) && (
         <Routes>
           <Route
             path="/login"
             element={
-              <LoginModalWrapper open={true} onClose={() => window.history.back()} />
+              <LoginModalWrapper
+                open={true}
+                onClose={() => window.history.back()}
+              />
             }
           />
         </Routes>
@@ -106,8 +120,6 @@ function AppRoutes() {
 }
 
 function App() {
-  
-  
   return (
     <ThemeProvider theme={theme}>
       <AppRoutes />
