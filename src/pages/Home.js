@@ -1,12 +1,10 @@
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, IconButton, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
-import '../styles/App.css'; // CSS 파일 임포트 유지
+import '../styles/App.css';
 import { fetchPopularCafes } from './birthday-cafe-register/api/EventSearchApi';
 import { fetchPopularVenues } from '../pages/venue/find-cafes/VenueSearchApi';
 
@@ -22,15 +20,15 @@ const Home = () => {
     navigate(path);
   };
 
-  // sliderSettings 함수 수정: slidesToShow 기본값을 4로 설정
-  // 반응형 설정은 유지하되, 전체 화면에서 4개 보여주도록
   const sliderSettings = (slidesToShow = 4) => ({
     dots: false,
-    infinite: false, // 겹침 문제가 발생하면 infinite를 false로 두는 것이 디버깅에 유리
+    infinite: false,
     speed: 500,
-    slidesToShow: slidesToShow, // 기본값 또는 전달된 값 사용
+    slidesToShow,
     slidesToScroll: 1,
     arrows: false,
+    swipe: true,
+    draggable: true,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 2 } },
       { breakpoint: 768, settings: { slidesToShow: 1 } },
@@ -71,23 +69,26 @@ const Home = () => {
     fetchData();
   }, []);
 
-  const goPrevPopular = useCallback(
-    () => popularSliderRef.current?.slickPrev(),
-    []
-  );
-  const goNextPopular = useCallback(
-    () => popularSliderRef.current?.slickNext(),
-    []
-  );
+  // 대관 가능한 장소 슬라이더에 마우스 휠 이벤트 적용
+  useEffect(() => {
+    const sliderNode = venueSliderRef.current?.innerSlider?.list;
+    if (!sliderNode) return;
 
-  const goPrevVenue = useCallback(
-    () => venueSliderRef.current?.slickPrev(),
-    []
-  );
-  const goNextVenue = useCallback(
-    () => venueSliderRef.current?.slickNext(),
-    []
-  );
+    const onWheel = (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        venueSliderRef.current.slickPrev();
+      } else {
+        venueSliderRef.current.slickNext();
+      }
+    };
+
+    sliderNode.addEventListener('wheel', onWheel);
+
+    return () => {
+      sliderNode.removeEventListener('wheel', onWheel);
+    };
+  }, []);
 
   return (
     <div className="Home">
@@ -109,32 +110,11 @@ const Home = () => {
           현재 인기 이벤트
         </Typography>
         <div className="slider-wrapper" style={{ position: 'relative' }}>
-          {/* ⭐ slidesToShow를 4로 명시적으로 지정 (혹은 sliderSettings 기본값 사용) */}
           <Slider ref={popularSliderRef} {...sliderSettings(4)}>
             {popularCafes.map((cafe, index) => (
-              <div
-                key={index}
-                className="cafe-slide"
-                // ⭐ 이 인라인 스타일을 제거합니다. CSS 파일의 .slick-slide가 처리
-                // style={{ padding: '0 10px' }}
-              >
-                <Box
-                  className="cafe-card"
-                  // MUI Box 컴포넌트의 style은 인라인 스타일로 적용되므로,
-                  // CSS 파일에서 .cafe-card 스타일을 정의하고 여기서는 필요한 override만 남깁니다.
-                  // 현재 설정은 문제가 없으나, App.css에 정의된 내용을 고려하세요.
-                  style={{
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                    borderRadius: '10px',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <img
-                    src={cafe.image}
-                    alt={cafe.cafe_name}
-                    // 이미지 스타일도 App.css로 옮기는 것을 권장합니다.
-                    style={{ width: '100%', height: 'auto' }}
-                  />
+              <div key={index} className="cafe-slide">
+                <Box className="cafe-card">
+                  <img src={cafe.image} alt={cafe.cafe_name} />
                   <Box p={2} textAlign="center">
                     <Typography variant="subtitle1" fontWeight="bold" color="primary">
                       {cafe.group_name || cafe.cafe_name}
@@ -147,30 +127,6 @@ const Home = () => {
               </div>
             ))}
           </Slider>
-          <IconButton
-            onClick={goPrevPopular}
-            className="slider-arrow left-arrow"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '-40px',
-              transform: 'translateY(-50%)',
-            }}
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
-          <IconButton
-            onClick={goNextPopular}
-            className="slider-arrow right-arrow"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              right: '-40px',
-              transform: 'translateY(-50%)',
-            }}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
         </div>
       </section>
 
@@ -179,42 +135,19 @@ const Home = () => {
           대관 가능한 장소
         </Typography>
         <div className="slider-wrapper" style={{ position: 'relative' }}>
-          {/* ⭐ slidesToShow를 4로 명시적으로 지정 (혹은 sliderSettings 기본값 사용) */}
           <Slider ref={venueSliderRef} {...sliderSettings(4)}>
             {reservableVenues.map((venue, index) => (
               <div key={index} className="cafe-slide">
-                <Box className="cafe-card"> {/* cafe-card 클래스 사용 */}
+                <Box className="cafe-card">
                   <img src={venue.image} alt={venue.name} />
-                  <Typography variant="h6">{venue.name}</Typography>
-                  <Typography variant="body2">{venue.road_address}</Typography>
+                  <Box p={2} textAlign="center">
+                    <Typography variant="h6">{venue.name}</Typography>
+                    <Typography variant="body2">{venue.road_address}</Typography>
+                  </Box>
                 </Box>
               </div>
             ))}
           </Slider>
-          <IconButton
-            onClick={goPrevVenue}
-            className="slider-arrow left-arrow"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '-40px',
-              transform: 'translateY(-50%)',
-            }}
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
-          <IconButton
-            onClick={goNextVenue}
-            className="slider-arrow right-arrow"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              right: '-40px',
-              transform: 'translateY(-50%)',
-            }}
-        >
-            <ArrowForwardIosIcon />
-          </IconButton>
         </div>
       </section>
     </div>

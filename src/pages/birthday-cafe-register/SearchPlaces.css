@@ -1,25 +1,27 @@
 /* SearchPlaces.css */
 
-/* 카드 전체 컨테이너 스타일 */
+/* 카드 전체 컨테이너 */
 .event-card-container {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border-radius: 16px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
 }
 
 .event-card-container:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* 카드 내부 콘텐츠: 왼쪽 이미지 + 오른쪽 텍스트 */
+/* 카드 내부: 이미지 + 텍스트 */
 .event-card-inner {
   display: flex;
   gap: 16px;
+  padding: 8px;
 }
 
-/* 왼쪽 이미지 영역 */
+/* 이미지 영역 */
 .event-card-left {
   flex-shrink: 0;
 }
@@ -28,26 +30,26 @@
   width: 130px;
   height: 180px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
-/* 오른쪽 텍스트 영역 */
+/* 텍스트 영역 */
 .event-card-right {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding-right: 8px;
 }
 
-/* 카드 상단 헤더: 아티스트명 + 아이콘 */
+/* 헤더: 아티스트명 + 아이콘 */
 .event-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
-/* 아이콘 묶음 스타일 */
 .event-card-header-icons svg {
   margin-left: 8px;
   cursor: pointer;
@@ -55,19 +57,54 @@
 }
 
 .event-card-header-icons svg:hover {
-  color: #ff4081; /* 강조 색 */
+  color: #ff4081;
 }
 
-/* 장르 칩 스타일 */
+/* 이벤트명 */
+.event-card-title {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+/* 주소 & 날짜 */
+.event-info {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+/* 칩 스타일 */
 .event-card-chip {
   background-color: #e0f7fa;
   color: #00796b;
   font-weight: 500;
 }
 
-/* 태그 칩 스타일 */
 .event-tag-chip {
   background-color: #fce4ec;
   color: #c2185b;
   font-weight: 500;
 }
+
+/* 장르 토글 버튼 그룹 상단 필터 스타일 */
+.MuiToggleButtonGroup-root {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.MuiToggleButton-root {
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  padding: 6px 16px !important;
+  background-color: #f5f5f5;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.MuiToggleButton-root.Mui-selected {
+  background-color: #1976d2 !important;
+  color: #ffffff !important;
+}
+

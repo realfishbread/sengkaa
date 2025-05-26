@@ -16,6 +16,7 @@ body {
 #root {
     display: flex;
     flex-direction: column;
+    flex: 1;
 }
 
 .header {
@@ -28,9 +29,10 @@ body {
 }
 
 .Home {
-    overflow: visible;
-    scroll-behavior: smooth;
     margin-top: 20px;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .slider-wrapper {
@@ -39,6 +41,7 @@ body {
     margin: 20px auto;
     padding: 0;
     position: relative;
+    box-sizing: border-box;
 }
 
 .slide img {
@@ -66,63 +69,50 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 20px auto;
+    /* 화살표를 제거했으므로 padding: 0 40px; 대신 0으로 변경하거나 원하는 여백을 설정 */
     padding: 0;
     position: relative;
+    box-sizing: border-box;
 }
 
 .slick-slide {
-    padding: 0 10px;
+    padding: 0 !important;
     box-sizing: border-box;
-    flex: 0 0 auto;
 }
 
-/* ✅ 간격 확실히 늘리는 부분 */
-.reservable-venues .slick-slide {
-    padding: 0 10px !important;
-    box-sizing: border-box;
-    flex: 0 0 auto;
-}
-
-/* 카드 내부 래퍼 */
-.reservable-venues .slick-slide > div {
+.slick-slide > div {
     display: flex;
     justify-content: center;
-    width: 280px;
-}
-
-.popular-cafes .slick-slide > div,
-.popular-events .slick-slide > div {
-    display: flex;
-    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .reservable-venues .cafe-card {
     border: 1px solid #eee;
-    padding: 10px !important;
+    padding: 10px;
     width: 280px;
     height: auto;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     background: #fff;
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     border-radius: 12px;
     overflow: hidden;
-    flex-shrink: 0;
-    margin: 0 auto;
+    margin: 0 10px;
+    box-sizing: border-box;
 }
 
 .reservable-venues .cafe-card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    aspect-ratio: auto;
     border-radius: 8px;
     margin-bottom: 10px;
 }
 
 .reservable-venues .cafe-card h6,
 .reservable-venues .cafe-card p {
-    display: block !important;
+    display: block;
     text-align: left;
     margin: 0;
     padding: 0;
@@ -143,59 +133,72 @@ body {
 
 .popular-cafes .cafe-card,
 .popular-events .cafe-card {
-    border: none !important;
-    padding: 0 !important;
-    width: auto !important;
-    height: auto !important;
-    box-shadow: none !important;
-    background: none !important;
-    display: block !important;
+    border: none;
+    padding: 0;
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    background: none;
+    display: block;
     flex-shrink: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
-.popular-cafes .cafe-card h6,
-.popular-cafes .cafe-card p,
-.popular-events .cafe-card h6,
-.popular-events .cafe-card p {
+.popular-cafes .cafe-card .MuiBox-root,
+.popular-events .cafe-card .MuiBox-root {
     display: none !important;
 }
 
-.popular-cafes .cafe-card img,
+.popular-events .cafe-card {
+    width: 260px;
+    height: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    box-sizing: border-box;
+}
+
 .popular-events .cafe-card img {
     width: 100%;
+    max-width: 225px;
     height: auto;
     aspect-ratio: 2 / 3;
     object-fit: cover;
     border-radius: 12px;
 }
 
-.slider-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background-color: rgba(255, 255, 255, 0.7);
-    color: #333;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
+.popular-cafes .cafe-card {
+    width: 260px;
+    height: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border: none;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    margin: 0 10px;
+    box-sizing: border-box;
 }
 
-.popular-cafes .slider-wrapper .left-arrow,
-.reservable-venues .slider-wrapper .left-arrow,
-.popular-events .slider-wrapper .left-arrow {
-    left: 10px;
+.popular-cafes .cafe-card img {
+    width: 100%;
+    max-width: 100px;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 12px;
 }
 
-.popular-cafes .slider-wrapper .right-arrow,
-.reservable-venues .slider-wrapper .right-arrow,
-.popular-events .slider-wrapper .right-arrow {
-    right: 10px;
-}
+/* 화살표 관련 스타일을 제거했습니다. */
 
 .map {
     width: 90%;

@@ -82,7 +82,7 @@ function DictionaryForm({ onSave, onCancel }) {
         {showCategory && (
           <div className="form-group">
             <label>카테고리</label>
-            <div className="input-inline">
+            <div className="category-select-group">
               <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">선택하세요</option>
                 <option value="아이돌">아이돌</option>

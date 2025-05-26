@@ -8,27 +8,43 @@ import {
   Container,
   Grid,
   TextField,
-  ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { VenueSearchApi } from './VenueSearchApi';
+import { styled } from '@mui/material/styles'; // 🔹 styled 추가
+
+// 🔧 커스텀 토글 버튼 스타일
+const CustomToggleButton = styled('button')(({ theme, selected }) => ({
+  border: '1px solid #ccc',
+  borderRadius: '20px',
+  padding: '8px 18px',
+  fontSize: '14px',
+  backgroundColor: selected ? '#1976d2' : '#fff',
+  color: selected ? '#fff' : '#333',
+  marginRight: '8px',
+  cursor: 'pointer',
+  outline: 'none',
+  transition: 'all 0.2s ease-in-out',
+  '&:hover': {
+    backgroundColor: selected ? '#1565c0' : '#f0f0f0',
+  },
+}));
 
 const VenueSearch = () => {
   const [keyword, setKeyword] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [venueType, setVenueType] = useState('');
-  const [venues, setVenues] = useState([]); // ✅ venues 상태 추가
+  const [venues, setVenues] = useState([]);
   const navigate = useNavigate();
 
-  const handleVenueTypeChange = (event, newType) => {
-    setVenueType(newType);
+  const handleVenueTypeChange = (type) => {
+    setVenueType((prev) => (prev === type ? '' : type)); // 이미 선택된 걸 누르면 해제
   };
 
-  // 🔥 keyword, startDate, endDate, venueType가 바뀔 때마다 API 호출
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -52,6 +68,7 @@ const VenueSearch = () => {
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         대관 공간 찾기
       </Typography>
+
       {/* 필터 영역 */}
       <Box mb={4}>
         <Grid container spacing={2}>
@@ -84,23 +101,22 @@ const VenueSearch = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <ToggleButtonGroup
-              value={venueType}
-              exclusive
-              onChange={handleVenueTypeChange}
-              sx={{ '& .MuiToggleButton-root': { mr: 1 } }}
-            >
-              {['카페', '음식점', '전시회', '포토부스', '파티룸'].map(
-                (type) => (
-                  <ToggleButton key={type} value={type}>
-                    {type}
-                  </ToggleButton>
-                )
-              )}
-            </ToggleButtonGroup>
+            {/* 🔹 커스텀 카테고리 버튼 */}
+            <Box>
+              {['카페', '음식점', '전시회', '포토부스', '파티룸'].map((type) => (
+                <CustomToggleButton
+                  key={type}
+                  selected={venueType === type}
+                  onClick={() => handleVenueTypeChange(type)}
+                >
+                  {type}
+                </CustomToggleButton>
+              ))}
+            </Box>
           </Grid>
         </Grid>
       </Box>
+
       {/* 대관 장소 카드 리스트 */}
       <Grid container spacing={3}>
         {venues.map((venue) => (
@@ -112,7 +128,7 @@ const VenueSearch = () => {
               <CardMedia
                 component="img"
                 height="180"
-                image={venue.image || '/images/default_venue.png'} // ✅ 기본 이미지 지정
+                image={venue.image || '/images/default_venue.png'}
                 alt={venue.name}
               />
               <CardContent>
