@@ -1,4 +1,3 @@
-// SearchPlaces.js
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareIcon from '@mui/icons-material/Share';
@@ -36,20 +35,11 @@ const SearchPlaces = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const data = await EventSearchApi({
-          keyword,
-          startDate,
-          endDate,
-          genre,
-        });
-
-        console.log('API 응답 데이터:', data);
+        const data = await EventSearchApi({ keyword, startDate, endDate, genre });
 
         if (Array.isArray(data)) {
           setEvents(data);
-          console.log('설정된 events:', data);
         } else {
-          console.warn('API에서 배열이 아닌 데이터를 반환했습니다:', data);
           setEvents([]);
         }
       } catch (err) {
@@ -100,25 +90,41 @@ const SearchPlaces = () => {
           </Grid>
         </Grid>
 
+        {/* 장르 필터 */}
         <Box mt={3}>
           <ToggleButtonGroup
             value={genre}
             exclusive
             onChange={handleGenreChange}
-            sx={{ '& .MuiToggleButton-root': { mr: 1 } }}
+            sx={{
+              '& .MuiToggleButton-root': {
+                border: '1px solid #ddd',
+                borderRadius: '20px',
+                minWidth: '60px',
+                fontWeight: 'bold',
+                px: 2,
+                py: 0.5,
+                color: '#333',
+              },
+              '& .Mui-selected': {
+                backgroundColor: '#f0f0f0',
+                color: '#000',
+                borderColor: '#999',
+              },
+            }}
           >
-            <ToggleButton value="아이돌">아이돌</ToggleButton>
-            <ToggleButton value="유튜버">유튜버</ToggleButton>
-            <ToggleButton value="웹툰">웹툰</ToggleButton>
-            <ToggleButton value="게임">게임</ToggleButton>
-            <ToggleButton value="애니">애니</ToggleButton>
+            {['아이돌', '유튜버', '웹툰', '게임', '애니'].map((label) => (
+              <ToggleButton key={label} value={label}>
+                {label}
+              </ToggleButton>
+            ))}
           </ToggleButtonGroup>
         </Box>
       </Box>
 
-      {/* 이벤트 카드 리스트 */}
+      {/* 카드 리스트 */}
       <Grid container spacing={3}>
-        {events && events.length > 0 ? (
+        {events.length > 0 ? (
           events.map((event) => (
             <Grid item xs={12} sm={6} md={6} key={event.id}>
               <Card
@@ -137,7 +143,7 @@ const SearchPlaces = () => {
                       />
                     </Box>
 
-                    {/* 오른쪽 텍스트 */}
+                    {/* 오른쪽 정보 */}
                     <Box className="event-card-right">
                       <Box className="event-card-header">
                         <Typography variant="subtitle1" fontWeight="bold">
@@ -147,28 +153,23 @@ const SearchPlaces = () => {
                           {event.is_liked ? (
                             <BookmarkIcon
                               sx={{ color: '#ff4081', cursor: 'pointer' }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
+                              onClick={(e) => e.stopPropagation()}
                             />
                           ) : (
                             <BookmarkBorderIcon
                               sx={{ color: '#ccc', cursor: 'pointer' }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
+                              onClick={(e) => e.stopPropagation()}
                             />
                           )}
                           <ShareIcon
                             sx={{ color: '#ccc', ml: 1 }}
                             onClick={(e) => {
-                              e.stopPropagation(); // 카드 클릭 방지
-
+                              e.stopPropagation();
                               const url = `${window.location.origin}/user/event/birthday-cafes/${event.id}/`;
                               navigator.clipboard
                                 .writeText(url)
                                 .then(() => alert('링크가 복사되었습니다!'))
-                                .catch((err) => alert('복사 실패 😢'));
+                                .catch(() => alert('복사 실패 😢'));
                             }}
                           />
                         </Box>
@@ -187,8 +188,8 @@ const SearchPlaces = () => {
                         color="text.secondary"
                         sx={{ mb: 0.5 }}
                       >
-                        📍 {event.road_address || '상세 위치 없음 '}{' '}
-                        {event.detail_address || '상세 위치 없음'}
+                        📍 {event.road_address || '상세 위치 없음'}{' '}
+                        {event.detail_address || ''}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -198,23 +199,12 @@ const SearchPlaces = () => {
                         📅 {event.start_date} ~ {event.end_date}
                       </Typography>
 
-                      <Box
-                        sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}
-                      >
+                      <Box sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                         {event.genre && (
-                          <Chip
-                            label={event.genre}
-                            size="small"
-                            className="event-card-chip"
-                          />
+                          <Chip label={event.genre} size="small" className="event-card-chip" />
                         )}
-                        {event.tags?.map((tag, index) => (
-                          <Chip
-                            key={index}
-                            label={tag}
-                            className="event-tag-chip"
-                            size="small"
-                          />
+                        {event.tags?.map((tag, i) => (
+                          <Chip key={i} label={tag} size="small" className="event-tag-chip" />
                         ))}
                       </Box>
                     </Box>
