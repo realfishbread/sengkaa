@@ -34,7 +34,7 @@ const TossWidget = ({ clientKey, orderId, orderName, amount, user }) => {
               orderName,
               customerName: user.nickname || '익명 유저',
               customerEmail: user.email || '',
-              successUrl: `${window.location.origin}/user/bookings/payment/success/`,
+              successUrl: `${window.location.origin}/user/bookings/payment/success/page/`,
               failUrl: `${window.location.origin}/user/bookings/payment/fail/`,
             });
           } catch (error) {

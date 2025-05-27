@@ -16,6 +16,7 @@ urlpatterns = [
     path('venues/', include('api.urls.venue_urls')),
     path('bookings/', include('api.urls.booking_urls')),
     path('dictionary/', include('api.urls.dictionary_urls')),
+    path('chat/', include('api.urls.chat_urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
