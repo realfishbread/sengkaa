@@ -4,6 +4,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import axiosInstance from '../../shared/api/axiosInstance';
 
 const ChatLobbyPage = () => {
   const [roomName, setRoomName] = useState('');
@@ -13,7 +14,7 @@ const ChatLobbyPage = () => {
 
   const fetchRooms = async () => {
     try {
-      const res = await axios.get(`/user/chat/list/?q=${search}`);
+      const res = await axios.get(`https://eventcafe.site/user/chat/list/?q=${search}`);
       setRooms(res.data);
     } catch (err) {
       console.error('방 목록 불러오기 실패:', err);
@@ -24,7 +25,7 @@ const ChatLobbyPage = () => {
     if (!roomName.trim()) return;
 
     try {
-      const res = await axios.post('/user/chat/create/', { name: roomName });
+      const res = await axiosInstance.post('/user/chat/create/', { name: roomName });
       navigate(`/chat/${res.data.roomId}`);
     } catch (err) {
       console.error('방 만들기 실패:', err);
@@ -72,7 +73,7 @@ const ChatLobbyPage = () => {
       <Typography variant="h6">채팅방 목록</Typography>
       <List>
         {rooms.map((room) => (
-          <ListItem button key={room.id} onClick={() => navigate(`/chat-list`)}>
+          <ListItem button key={room.id} onClick={() => navigate(`/chat/${room.id}`)}>
             <ListItemText primary={room.name} />
           </ListItem>
         ))}

@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { UserContext } from '../../context/UserContext';
+import axiosInstance from '../../shared/api/axiosInstance'; // axios 인스턴스스
 import './EventCalendar.css';
 
 const EventCalendar = () => {
@@ -48,6 +49,37 @@ const EventCalendar = () => {
     const longitude = 127.0569;
 
     fetchWeather(latitude, longitude);
+  }, []);
+
+  useEffect(() => {
+    const loadLikedEvents = async () => {
+      try {
+        const res = await axiosInstance.get('/user/events/liked/calendar/');
+        const data = res.data;
+
+        // 날짜별로 일정 정리해서 events에 추가
+        const updated = { ...events };
+
+        data.forEach((event) => {
+          const start = new Date(event.start);
+          const end = new Date(event.end);
+          const current = new Date(start);
+
+          while (current <= end) {
+            const dateStr = current.toISOString().split('T')[0];
+            if (!updated[dateStr]) updated[dateStr] = [];
+            updated[dateStr].push(`📍 ${event.title}`);
+            current.setDate(current.getDate() + 1);
+          }
+        });
+
+        setEvents(updated);
+      } catch (err) {
+        console.error('찜한 생일카페 일정 불러오기 실패 ❌', err);
+      }
+    };
+
+    loadLikedEvents();
   }, []);
 
   useEffect(() => {
