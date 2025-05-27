@@ -27,12 +27,17 @@ const Home = () => {
     slidesToShow,
     slidesToScroll: 1,
     arrows: false,
-    swipe: true,
-    draggable: true,
+    swipe: false,
+    draggable: false,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } },
-      { breakpoint: 768, settings: { slidesToShow: 1 } },
+      { breakpoint: 1024, settings: { slidesToShow: 3 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
+    touchThreshold: 1,
+    swipeToSlide: false,
+    useCSS: true,
+    useTransform: true
   });
 
   const adSliderSettings = {
@@ -69,24 +74,98 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // 대관 가능한 장소 슬라이더에 마우스 휠 이벤트 적용
+  // 대관 가능한 장소 슬라이더에 마우스 드래그 이벤트 적용
   useEffect(() => {
     const sliderNode = venueSliderRef.current?.innerSlider?.list;
     if (!sliderNode) return;
 
-    const onWheel = (e) => {
-      e.preventDefault();
-      if (e.deltaY < 0) {
-        venueSliderRef.current.slickPrev();
-      } else {
-        venueSliderRef.current.slickNext();
-      }
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    const handleMouseDown = (e) => {
+      isDown = true;
+      sliderNode.style.cursor = 'grabbing';
+      startX = e.pageX - sliderNode.offsetLeft;
+      scrollLeft = sliderNode.scrollLeft;
     };
 
-    sliderNode.addEventListener('wheel', onWheel);
+    const handleMouseLeave = () => {
+      isDown = false;
+      sliderNode.style.cursor = 'grab';
+    };
+
+    const handleMouseUp = () => {
+      isDown = false;
+      sliderNode.style.cursor = 'grab';
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - sliderNode.offsetLeft;
+      const walk = (x - startX) * 2;
+      sliderNode.scrollLeft = scrollLeft - walk;
+    };
+
+    sliderNode.style.cursor = 'grab';
+    sliderNode.addEventListener('mousedown', handleMouseDown);
+    sliderNode.addEventListener('mouseleave', handleMouseLeave);
+    sliderNode.addEventListener('mouseup', handleMouseUp);
+    sliderNode.addEventListener('mousemove', handleMouseMove);
 
     return () => {
-      sliderNode.removeEventListener('wheel', onWheel);
+      sliderNode.removeEventListener('mousedown', handleMouseDown);
+      sliderNode.removeEventListener('mouseleave', handleMouseLeave);
+      sliderNode.removeEventListener('mouseup', handleMouseUp);
+      sliderNode.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  useEffect(() => {
+    const sliderNode = popularSliderRef.current?.innerSlider?.list;
+    if (!sliderNode) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    const handleMouseDown = (e) => {
+      isDown = true;
+      sliderNode.style.cursor = 'grabbing';
+      startX = e.pageX - sliderNode.offsetLeft;
+      scrollLeft = sliderNode.scrollLeft;
+    };
+
+    const handleMouseLeave = () => {
+      isDown = false;
+      sliderNode.style.cursor = 'grab';
+    };
+
+    const handleMouseUp = () => {
+      isDown = false;
+      sliderNode.style.cursor = 'grab';
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - sliderNode.offsetLeft;
+      const walk = (x - startX) * 2;
+      sliderNode.scrollLeft = scrollLeft - walk;
+    };
+
+    sliderNode.style.cursor = 'grab';
+    sliderNode.addEventListener('mousedown', handleMouseDown);
+    sliderNode.addEventListener('mouseleave', handleMouseLeave);
+    sliderNode.addEventListener('mouseup', handleMouseUp);
+    sliderNode.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      sliderNode.removeEventListener('mousedown', handleMouseDown);
+      sliderNode.removeEventListener('mouseleave', handleMouseLeave);
+      sliderNode.removeEventListener('mouseup', handleMouseUp);
+      sliderNode.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -134,7 +213,7 @@ const Home = () => {
         <Typography variant="h5" textAlign="center" gutterBottom>
           대관 가능한 장소
         </Typography>
-        <div className="slider-wrapper" style={{ position: 'relative' }}>
+        <div className="slider-wrapper" style={{ position: 'relative', overflow: 'hidden' }}>
           <Slider ref={venueSliderRef} {...sliderSettings(4)}>
             {reservableVenues.map((venue, index) => (
               <div key={index} className="cafe-slide">

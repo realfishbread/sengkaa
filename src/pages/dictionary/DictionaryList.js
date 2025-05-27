@@ -8,7 +8,7 @@ import {
   createDictionaryItem
 } from './api/DictionaryApi';
 
-const TAGS = ['전체', '아이돌', '여자 아이돌', '남자 아이돌', '스트리머', '게임', '웹툰'];
+const TAGS = ['전체', '아이돌', '스트리머', '게임', '웹툰'];
 
 const DictionaryList = () => {
   const [selectedTag, setSelectedTag] = useState('전체');

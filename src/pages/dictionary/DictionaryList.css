@@ -160,54 +160,55 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* 중앙 정렬 → 상단 정렬 */
+  align-items: center;
   z-index: 9999;
-  padding-top: 40px; /* 상단 여백 */
-}
-
-/* 모달 컨테이너 */
-.modal-container {
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
 }
 
 /* 모달 내용 */
 .modal-content {
   background-color: white;
-  border-radius: 8px;
-  max-width: 1500px;
-  width: auto;
-  min-width: 1300px;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 40px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  width: 520px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   position: relative;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 모달 입력 필드 */
 .modal-content input[type="text"],
 .modal-content textarea {
-  width: calc(100% - 20px);
+  width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin-bottom: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
   box-sizing: border-box;
+  font-size: 14px;
 }
 
 /* 모달 select 박스 */
 .modal-content select {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin-bottom: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
   box-sizing: border-box;
+  font-size: 14px;
+  background-color: white;
 }
