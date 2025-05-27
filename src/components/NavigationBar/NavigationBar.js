@@ -179,7 +179,7 @@ const NavigationBar = () => {
                     게시판
                   </Button>
                   <Button
-                    onClick={() => navigate('/chat')}
+                    onClick={() => navigate('/chat-list')}
                     className="submenu-item"
                   >
                     채팅

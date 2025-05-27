@@ -20,6 +20,7 @@ import MyBookingsPage from './pages/booking/my-booking-page/MyBookingsPage';
 import PaymentFailPage from './pages/booking/PaymentFailPage';
 import PaymentSuccessPage from './pages/booking/PaymentSuccessPage';
 import EventCalendar from './pages/calender/EventCalendar';
+import ChatLobbyPage from './pages/chat/ChatLobbyPage';
 import ChatPage from './pages/chat/ChatPage';
 import DictionaryList from './pages/dictionary/DictionaryList';
 import FaqPage from './pages/faq/FaqPage';
@@ -98,6 +99,7 @@ function AppRoutes() {
           <Route path="/favorite-events" element={<FavoriteEvents />} />
           <Route path="/payment/success" element={<PaymentSuccessPage />} />
           <Route path="/payment/fail" element={<PaymentFailPage />} />
+          <Route path="chat-list" element={<ChatLobbyPage />} />
         </Route>
       </Routes>
 
