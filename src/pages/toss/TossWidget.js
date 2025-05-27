@@ -34,8 +34,8 @@ const TossWidget = ({ clientKey, orderId, orderName, amount, user }) => {
               orderName,
               customerName: user.nickname || '익명 유저',
               customerEmail: user.email || '',
-              successUrl: `${window.location.origin}/payment/success`,
-              failUrl: `${window.location.origin}/payment/fail`,
+              successUrl: `${window.location.origin}/user/bookings/payment/success`,
+              failUrl: `${window.location.origin}/user/bookings/payment/fail`,
             });
           } catch (error) {
             console.error('결제 위젯 오류:', error);
