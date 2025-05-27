@@ -74,15 +74,22 @@ def create_payment_request(request):
         "dates": [str(d) for d in dates]  # 필요하면 프론트에서 보여줄 수 있도록
     })
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def toss_payment_success_page(request):
+    """
+    Toss에서 결제 성공 시 유저를 리디렉션할 페이지 (프론트에서 결제키 추출용)
+    """
+    return Response({"message": "🎉 Toss 결제 리디렉션 도착! 이제 프론트에서 paymentKey를 POST로 보내주세요."})
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+@permission_classes([AllowAny])
 def toss_payment_verify(request):
     paymentKey = request.data.get('paymentKey')
     orderId = request.data.get('orderId')
     amount = request.data.get('amount')
-    dates = request.data.get('dates')  # ✅ 배열 형태로 예약 날짜 받기
+    dates = request.data.get('dates')  # ✅ 배열 형태
 
     if not paymentKey or not orderId or not amount or not dates:
         return Response({'error': '필수 값 누락'}, status=400)
@@ -114,7 +121,6 @@ def toss_payment_verify(request):
     except Venue.DoesNotExist:
         return Response({'error': '존재하지 않는 장소입니다.'}, status=404)
 
-    # ✅ 여러 날짜 예약 생성
     for d in dates:
         date_obj = datetime.strptime(d, "%Y-%m-%d").date()
         if Booking.objects.filter(venue=venue, available_date=date_obj, is_paid=True).exists():
@@ -122,7 +128,7 @@ def toss_payment_verify(request):
 
         Booking.objects.create(
             venue=venue,
-            user=request.user,
+            user=request.user if request.user.is_authenticated else None,
             available_date=date_obj,
             is_paid=True
         )

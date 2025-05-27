@@ -36,6 +36,12 @@ class DictionaryTermSerializer(serializers.ModelSerializer):
         return instance  
 
     def validate_term(self, value):
-        if DictionaryTerm.objects.filter(term=value).exists():
-            raise serializers.ValidationError("이미 존재하는 용어입니다.")
+        if self.instance:
+            # update일 경우, 자기 자신은 제외하고 중복 검사
+            if DictionaryTerm.objects.exclude(pk=self.instance.pk).filter(term=value).exists():
+                raise serializers.ValidationError("이미 존재하는 용어입니다.")
+        else:
+            # create일 경우 전체 중복 검사
+            if DictionaryTerm.objects.filter(term=value).exists():
+                raise serializers.ValidationError("이미 존재하는 용어입니다.")
         return value

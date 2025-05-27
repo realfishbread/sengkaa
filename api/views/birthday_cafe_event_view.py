@@ -166,3 +166,21 @@ def liked_birthday_cafes(request):
         liked_events, many=True, context={'request': request}
     )
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def calendar_liked_cafes(request):
+    user = request.user
+    liked_events = user.liked_cafes.all()
+
+    # 달력용 간단한 형태로 가공
+    calendar_data = []
+    for cafe in liked_events:
+        calendar_data.append({
+            "id": cafe.id,
+            "title": cafe.cafe_name,
+            "start": str(cafe.start_date),
+            "end": str(cafe.end_date),
+        })
+
+    return Response(calendar_data)

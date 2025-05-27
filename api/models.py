@@ -8,6 +8,7 @@ from django.contrib.auth.models import BaseUserManager
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .utils import geocode_kakao
+import uuid
 
 
 class CustomUserManager(BaseUserManager):
@@ -259,6 +260,17 @@ class DictionaryDefinition(models.Model):
     definition = models.TextField()
     example = models.TextField(blank=True, null=True)
 
+class ChatRoom(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField(User, related_name="api_chat_rooms")
+
+class ChatRoomInvite(models.Model):
+    room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
+    inviter = models.ForeignKey(User, related_name="sent_invites", on_delete=models.CASCADE)
+    invitee = models.ForeignKey(User, related_name="received_invites", on_delete=models.CASCADE)
+    is_accepted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(pre_save, sender=BirthdayCafe)

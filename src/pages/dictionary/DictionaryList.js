@@ -22,7 +22,7 @@ const DictionaryList = () => {
     const loadTerms = async () => {
       try {
         const data = await fetchDictionaryList();
-        setTerms(data);
+        setTerms(data.results);
       } catch (error) {
         console.error('용어 목록 불러오기 실패 ❌', error);
       }
@@ -68,7 +68,7 @@ const DictionaryList = () => {
     try {
       await createDictionaryItem(newTerm);
       const updatedList = await fetchDictionaryList();
-      setTerms(updatedList);
+      setTerms(updatedList.results);
       setShowForm(false);
     } catch (err) {
       console.error('용어 등록 실패 ❌', err);
