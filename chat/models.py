@@ -3,9 +3,12 @@
 # Create your models here.
 from django.db import models
 from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()  # 👈 api.models.User를 자동으로 가져와줌
 
 class ChatRoom(models.Model):
-    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='chat_rooms')
+    participants = models.ManyToManyField(User, related_name="chat_chat_rooms")  # ✅ 변경
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -19,3 +22,4 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message from {self.sender.username} at {self.timestamp}"
+
