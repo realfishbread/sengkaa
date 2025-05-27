@@ -86,6 +86,8 @@ function DictionaryForm({ onSave, onCancel }) {
               <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">선택하세요</option>
                 <option value="아이돌">아이돌</option>
+                <option value="여자 아이돌">여자 아이돌</option>
+                <option value="남자 아이돌">남자 아이돌</option>
                 <option value="스트리머">스트리머</option>
                 <option value="게임">게임</option>
                 <option value="웹툰">웹툰</option>
