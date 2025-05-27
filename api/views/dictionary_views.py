@@ -1,17 +1,21 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum
 from api.models import DictionaryTerm
 from api.serializers.dictionary_serializer import DictionaryTermSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import action
 
 class DictionaryTermViewSet(viewsets.ModelViewSet):
     queryset = DictionaryTerm.objects.all()
-    serializer_class = DictionaryTermSerializer
+    serializer_class = DictionaryTermSerializer  # ✅ 전체는 인증 없이 허용
+    
+    def get_permissions(self):
+        # self.action이 None인 경우도 고려해서 GET 요청도 허용
+        if self.action in ['list', 'retrieve', 'check', 'total_views'] or self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsAuthenticated()]
 
-    # 검색 & 태그(카테고리) 필터
     def get_queryset(self):
         queryset = DictionaryTerm.objects.all()
         category = self.request.query_params.get("category")
@@ -24,7 +28,6 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    # ✅ 조회 시 자동 조회수 증가
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
@@ -32,25 +35,20 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    # ✅ 좋아요 증가용 커스텀 액션
-    @permission_classes([IsAuthenticated])
-    @action(detail=True, methods=["post"])
+    # ✅ POST 요청인 like만 인증 필요하게 설정
+    @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
         term = self.get_object()
         term.likes += 1
         term.save()
         return Response({"likes": term.likes}, status=status.HTTP_200_OK)
 
-    # ✅ 용어 중복 확인
-    @permission_classes([IsAuthenticated])
     @action(detail=False, methods=["get"])
     def check(self, request):
         term = request.query_params.get("term", "")
         exists = DictionaryTerm.objects.filter(term=term).exists()
         return Response({"exists": exists})
 
-    # ✅ 전체 조회수 합산 반환
-    @permission_classes([IsAuthenticated])
     @action(detail=False, methods=["get"])
     def total_views(self, request):
         total = DictionaryTerm.objects.aggregate(total_views=Sum("views"))["total_views"] or 0
