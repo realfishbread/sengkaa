@@ -56,3 +56,14 @@ def respond_to_invite(request, room_id):
 
     else:
         return Response({"error": "action은 'accept' 또는 'reject'여야 해요."}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def search_users(request):
+    q = request.GET.get("q", "")
+    users = User.objects.filter(username__icontains=q).exclude(id=request.user.id)[:10]
+    return Response([
+        {"id": u.user_id, "username": u.username}
+        for u in users
+    ])
+

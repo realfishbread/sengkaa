@@ -21,6 +21,7 @@ import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import Logo from '../common/Logo';
 import './NavigationBar.css';
+import NotificationBell from './NotificationBell'; // 알림 벨 컴포넌트
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -79,7 +80,9 @@ const NavigationBar = () => {
           </Box>
 
           {/* 오른쪽: 로그인/회원가입 */}
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            {user && <NotificationBell />}
             {user ? (
               <IconButton onClick={toggleDrawer(true)}>
                 <Avatar src={user?.profile_image || ''} alt={user?.nickname}>
@@ -184,7 +187,6 @@ const NavigationBar = () => {
                   >
                     채팅
                   </Button>
-                  
                 </Box>
               </Box>
             </Box>
