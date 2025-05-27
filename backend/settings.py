@@ -155,7 +155,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko-kr'
 
-STATIC_ROOT = "/var/www/eventcafe-backend/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 TIME_ZONE = 'UTC'
 
