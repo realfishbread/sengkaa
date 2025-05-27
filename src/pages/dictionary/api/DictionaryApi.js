@@ -34,7 +34,7 @@ export const likeDictionaryItem = async (id) => {
 // 👁 조회수 증가 (서버에서 자동 처리되는 경우, 생략 가능)
 export const fetchDictionaryItemWithView = async (id) => {
   const response = await axios.get(
-    `https://eventcafe.site/user/dictionary/dictionary/${id}/`
+    `https://eventcafe.site/user/dictionary/${id}/`
   );
   return response.data;
 };
@@ -42,7 +42,7 @@ export const fetchDictionaryItemWithView = async (id) => {
 // 🔍 중복 확인 (term 이름)
 export const checkTermExists = async (term) => {
   const response = await axiosInstance.get(
-    `/user/dictionary/dictionary/check/`,
+    `/user/dictionary/check/`,
     {
       params: { term },
     }
