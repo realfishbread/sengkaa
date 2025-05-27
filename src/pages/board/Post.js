@@ -107,7 +107,7 @@ const Post = ({ onSubmitPost, onRefresh }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-        <Avatar alt={user?.nickname} src={user?.profileImage || ''} />
+        <Avatar alt={user?.nickname} src={user?.profile_image || ''} />
         <Typography variant="subtitle2" fontWeight="bold">
           {user?.nickname || user?.username || 'user'} 님
         </Typography>
