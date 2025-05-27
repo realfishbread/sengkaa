@@ -33,7 +33,7 @@ const ChatLobbyPage = () => {
 
   const fetchUsers = async (query) => {
     try {
-      const res = await axiosInstance.get('/user/search/', {
+      const res = await axiosInstance.get('/user/chat/search/', {
         params: { q: query },
       });
       setUserResults(res.data);

@@ -25,6 +25,8 @@ const TossWidget = ({ clientKey, orderId, orderName, amount, user }) => {
         variantKey: 'AGREEMENT',
       });
 
+      const bookingDates = sessionStorage.getItem('booking_dates');
+      
       document
         .getElementById('payment-button')
         .addEventListener('click', async () => {
@@ -32,9 +34,13 @@ const TossWidget = ({ clientKey, orderId, orderName, amount, user }) => {
             await widgets.requestPayment({
               orderId,
               orderName,
-              customerName: user.nickname || '익명 유저',
+              customerName: user.username || '익명 유저',
               customerEmail: user.email || '',
-              successUrl: `${window.location.origin}/user/bookings/payment/success/page/`,
+              successUrl: `${
+                window.location.origin
+              }/user/bookings/payment/success/page/?dates=${encodeURIComponent(
+                bookingDates
+              )}`,
               failUrl: `${window.location.origin}/user/bookings/payment/fail/`,
             });
           } catch (error) {

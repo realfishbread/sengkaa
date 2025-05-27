@@ -19,7 +19,13 @@ const PaymentSuccessPage = () => {
       }
 
       try {
-        sessionStorage.removeItem('booking_dates');
+        sessionStorage.setItem('booking_dates', JSON.stringify(dates));
+        console.log({
+          paymentKey,
+          orderId,
+          amount,
+          dates,
+        });
         const res = await axiosInstance.post(
           '/user/bookings/payment/success/',
           {
