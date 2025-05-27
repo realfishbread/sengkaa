@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axiosInstance from '../../shared/api/axiosInstance';
 
 const PaymentSuccessPage = () => {
@@ -19,15 +19,19 @@ const PaymentSuccessPage = () => {
       }
 
       try {
-        const res = await axiosInstance.post('/user/bookings/payment/success/', {
-          paymentKey,
-          orderId,
-          amount,
-          dates: JSON.parse(dates), // 문자열을 배열로 변환
-        });
+        sessionStorage.removeItem('booking_dates');
+        const res = await axiosInstance.post(
+          '/user/bookings/payment/success/',
+          {
+            paymentKey,
+            orderId,
+            amount,
+            dates: JSON.parse(dates), // 문자열을 배열로 변환
+          }
+        );
 
         alert('예약이 완료되었습니다!');
-        sessionStorage.removeItem('booking_dates');
+
         navigate('/my-bookings'); // 예약 목록으로 이동하거나 원하는 경로
       } catch (err) {
         console.error(err);
