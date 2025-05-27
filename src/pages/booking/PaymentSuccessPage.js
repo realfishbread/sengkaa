@@ -11,7 +11,7 @@ const PaymentSuccessPage = () => {
       const paymentKey = searchParams.get('paymentKey');
       const orderId = searchParams.get('orderId');
       const amount = searchParams.get('amount');
-      const dates = sessionStorage.getItem('booking_dates'); // ✅ 날짜 기억해뒀던 것 꺼내기
+      const dates = localStorage.getItem('booking_dates'); // ✅ 날짜 기억해뒀던 것 꺼내기
 
       if (!paymentKey || !orderId || !amount || !dates) {
         alert('필수 정보 누락');
@@ -19,7 +19,6 @@ const PaymentSuccessPage = () => {
       }
 
       try {
-        sessionStorage.setItem('booking_dates', JSON.stringify(dates));
         console.log({
           paymentKey,
           orderId,
@@ -37,7 +36,7 @@ const PaymentSuccessPage = () => {
         );
 
         alert('예약이 완료되었습니다!');
-
+        localStorage.removeItem('booking_dates');
         navigate('/my-bookings'); // 예약 목록으로 이동하거나 원하는 경로
       } catch (err) {
         console.error(err);

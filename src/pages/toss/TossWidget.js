@@ -26,7 +26,7 @@ const TossWidget = ({ clientKey, orderId, orderName, amount, user }) => {
       });
 
       const bookingDates = sessionStorage.getItem('booking_dates');
-      
+
       document
         .getElementById('payment-button')
         .addEventListener('click', async () => {
