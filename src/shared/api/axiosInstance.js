@@ -9,6 +9,18 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// ② 요청 인터셉터: 매 요청 전에 토큰을 헤더에 추가
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken'); // 저장해 둔 토큰 읽기
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export const injectLoginModalHandler = (showLoginModal) => {
   loginModalCallback = showLoginModal;
 };
@@ -19,10 +31,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     // ✅ 401 토큰 만료 → 재발급 시도
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -47,6 +56,7 @@ axiosInstance.interceptors.response.use(
     // ✅ 403 → 직접 모달 띄움
     if (error.response?.status === 403) {
       console.warn('403 발생 → 로그인 모달 호출됨');
+      window.history.pushState({}, '', '/login'); // ← 여기에 강제 이동 추가!
       if (loginModalCallback) loginModalCallback();
     }
 
