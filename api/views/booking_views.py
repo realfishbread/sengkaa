@@ -77,7 +77,7 @@ def create_payment_request(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def toss_payment_verify(request):
     paymentKey = request.data.get('paymentKey')
     orderId = request.data.get('orderId')
