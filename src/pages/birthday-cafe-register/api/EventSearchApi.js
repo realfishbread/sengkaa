@@ -16,7 +16,7 @@ export const EventSearchApi = async ({
   if (sort) params.append('sort', sort);
 
   const response = await axios.get(
-    `https://eventcafe.site/user/events/birthday-cafes/?${params.toString()}`
+    `https://eventcafe.site/user/events/birthday-cafes/search/?${params.toString()}`
   );
   return response.data.results || [];
 };
