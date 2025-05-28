@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Tabs, Tab } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -10,9 +10,12 @@ import { fetchPopularVenues } from '../pages/venue/find-cafes/VenueSearchApi';
 
 const Home = () => {
   const [activeNavItem, setActiveNavItem] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('idol');
   const navigate = useNavigate();
 
-  const popularSliderRef = useRef(null);
+  const idolSliderRef = useRef(null);
+  const streamerSliderRef = useRef(null);
+  const gameSliderRef = useRef(null);
   const venueSliderRef = useRef(null);
 
   const handleNavItemClick = (index, path) => {
@@ -57,15 +60,25 @@ const Home = () => {
     { image: '/images/xx.jpg', caption: '흑집사 x 애니메이트 카페 콜라보' },
   ];
 
-  const [popularCafes, setPopularCafes] = useState([]);
+  const [popularCafes, setPopularCafes] = useState({
+    idol: [],
+    streamer: [],
+    game: []
+  });
   const [reservableVenues, setReservableVenues] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const cafes = await fetchPopularCafes();
+        // 카테고리별로 데이터 분류
+        const categorizedCafes = {
+          idol: cafes.filter(cafe => cafe.category === 'idol'),
+          streamer: cafes.filter(cafe => cafe.category === 'streamer'),
+          game: cafes.filter(cafe => cafe.category === 'game')
+        };
         const venues = await fetchPopularVenues();
-        setPopularCafes(cafes);
+        setPopularCafes(categorizedCafes);
         setReservableVenues(venues);
       } catch (err) {
         console.error('🔥 인기 데이터 불러오기 실패:', err);
@@ -74,9 +87,90 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // 대관 가능한 장소 슬라이더에 마우스 드래그 이벤트 적용
-  useEffect(() => {
-    const sliderNode = venueSliderRef.current?.innerSlider?.list;
+  const handleCategoryChange = (event, newValue) => {
+    setActiveCategory(newValue);
+  };
+
+  const handleMoreClick = (category) => {
+    if (category === 'venue') {
+      navigate('/venue-search');
+    } else {
+      navigate('/search', { state: { category } });
+    }
+  };
+
+  const SectionTitle = ({ title, category }) => (
+    <Box 
+      sx={{ 
+        position: 'relative',
+        mb: 4,
+        mt: 6,
+        px: 2,
+        maxWidth: 1200,
+        margin: '0 auto',
+        width: '100%'
+      }}
+    >
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          fontSize: '1.25rem',
+          fontWeight: 500,
+          color: '#000',
+          textAlign: 'center'
+        }}
+      >
+        {title}
+      </Typography>
+      <Box
+        onClick={() => handleMoreClick(category)}
+        sx={{ 
+          display: 'flex',
+          alignItems: 'center',
+          cursor: 'pointer',
+          position: 'absolute',
+          right: 16,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          '&:hover': {
+            '& .more-text': {
+              color: '#000'
+            },
+            '& .arrow': {
+              color: '#000'
+            }
+          }
+        }}
+      >
+        <Typography 
+          className="more-text"
+          sx={{ 
+            fontSize: '0.875rem',
+            color: '#666',
+            transition: 'color 0.2s'
+          }}
+        >
+          더보기
+        </Typography>
+        <Typography 
+          className="arrow"
+          sx={{ 
+            fontSize: '0.875rem',
+            color: '#666',
+            ml: 0.5,
+            mt: '-1px',
+            transition: 'color 0.2s'
+          }}
+        >
+          ›
+        </Typography>
+      </Box>
+    </Box>
+  );
+
+  // 각 슬라이더에 대한 마우스 드래그 이벤트 설정 함수
+  const setupSliderDrag = (sliderRef) => {
+    const sliderNode = sliderRef.current?.innerSlider?.list;
     if (!sliderNode) return;
 
     let isDown = false;
@@ -120,53 +214,13 @@ const Home = () => {
       sliderNode.removeEventListener('mouseup', handleMouseUp);
       sliderNode.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  };
 
   useEffect(() => {
-    const sliderNode = popularSliderRef.current?.innerSlider?.list;
-    if (!sliderNode) return;
-
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    const handleMouseDown = (e) => {
-      isDown = true;
-      sliderNode.style.cursor = 'grabbing';
-      startX = e.pageX - sliderNode.offsetLeft;
-      scrollLeft = sliderNode.scrollLeft;
-    };
-
-    const handleMouseLeave = () => {
-      isDown = false;
-      sliderNode.style.cursor = 'grab';
-    };
-
-    const handleMouseUp = () => {
-      isDown = false;
-      sliderNode.style.cursor = 'grab';
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - sliderNode.offsetLeft;
-      const walk = (x - startX) * 2;
-      sliderNode.scrollLeft = scrollLeft - walk;
-    };
-
-    sliderNode.style.cursor = 'grab';
-    sliderNode.addEventListener('mousedown', handleMouseDown);
-    sliderNode.addEventListener('mouseleave', handleMouseLeave);
-    sliderNode.addEventListener('mouseup', handleMouseUp);
-    sliderNode.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      sliderNode.removeEventListener('mousedown', handleMouseDown);
-      sliderNode.removeEventListener('mouseleave', handleMouseLeave);
-      sliderNode.removeEventListener('mouseup', handleMouseUp);
-      sliderNode.removeEventListener('mousemove', handleMouseMove);
-    };
+    setupSliderDrag(idolSliderRef);
+    setupSliderDrag(streamerSliderRef);
+    setupSliderDrag(gameSliderRef);
+    setupSliderDrag(venueSliderRef);
   }, []);
 
   return (
@@ -185,12 +239,56 @@ const Home = () => {
       </main>
 
       <section className="popular-events">
-        <Typography variant="h5" textAlign="center" gutterBottom>
-          현재 인기 이벤트
-        </Typography>
+        <SectionTitle title="인기 아이돌 카페" category="idol" />
         <div className="slider-wrapper" style={{ position: 'relative' }}>
-          <Slider ref={popularSliderRef} {...sliderSettings(4)}>
-            {popularCafes.map((cafe, index) => (
+          <Slider ref={idolSliderRef} {...sliderSettings(4)}>
+            {popularCafes.idol.map((cafe, index) => (
+              <div key={index} className="cafe-slide">
+                <Box className="cafe-card">
+                  <img src={cafe.image} alt={cafe.cafe_name} />
+                  <Box p={2} textAlign="center">
+                    <Typography variant="subtitle1" fontWeight="bold" color="primary">
+                      {cafe.group_name || cafe.cafe_name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                      {cafe.event_name || cafe.description}
+                    </Typography>
+                  </Box>
+                </Box>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </section>
+
+      <section className="popular-events">
+        <SectionTitle title="인기 스트리머 카페" category="streamer" />
+        <div className="slider-wrapper" style={{ position: 'relative' }}>
+          <Slider ref={streamerSliderRef} {...sliderSettings(4)}>
+            {popularCafes.streamer.map((cafe, index) => (
+              <div key={index} className="cafe-slide">
+                <Box className="cafe-card">
+                  <img src={cafe.image} alt={cafe.cafe_name} />
+                  <Box p={2} textAlign="center">
+                    <Typography variant="subtitle1" fontWeight="bold" color="primary">
+                      {cafe.group_name || cafe.cafe_name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                      {cafe.event_name || cafe.description}
+                    </Typography>
+                  </Box>
+                </Box>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </section>
+
+      <section className="popular-events">
+        <SectionTitle title="인기 게임 카페" category="game" />
+        <div className="slider-wrapper" style={{ position: 'relative' }}>
+          <Slider ref={gameSliderRef} {...sliderSettings(4)}>
+            {popularCafes.game.map((cafe, index) => (
               <div key={index} className="cafe-slide">
                 <Box className="cafe-card">
                   <img src={cafe.image} alt={cafe.cafe_name} />
@@ -210,9 +308,7 @@ const Home = () => {
       </section>
 
       <section className="reservable-venues">
-        <Typography variant="h5" textAlign="center" gutterBottom>
-          대관 가능한 장소
-        </Typography>
+        <SectionTitle title="대관 가능한 장소" category="venue" />
         <div className="slider-wrapper" style={{ position: 'relative', overflow: 'hidden' }}>
           <Slider ref={venueSliderRef} {...sliderSettings(4)}>
             {reservableVenues.map((venue, index) => (

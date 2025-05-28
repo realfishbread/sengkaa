@@ -90,7 +90,7 @@ const ChatPage = ({ roomId, username, profileImage }) => {
         <div ref={scrollRef} />
       </Paper>
 
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: 'flex', gap: 1, mb: 4 }}>
         <TextField
           fullWidth
           size="small"
@@ -98,7 +98,7 @@ const ChatPage = ({ roomId, username, profileImage }) => {
           onChange={(e) => setInput(e.target.value)}
           placeholder="메시지를 입력하세요"
         />
-        <Button variant="contained" onClick={handleSend} endIcon={<SendIcon />}>
+        <Button variant="contained" onClick={handleSend} endIcon={<SendIcon />} sx={{ whiteSpace: 'nowrap' }}>
           전송
         </Button>
       </Box>

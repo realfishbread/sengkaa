@@ -17,6 +17,7 @@ import {
   titleStyle,
 } from '../../../components/common/Styles';
 import axiosInstance from '../../../shared/api/axiosInstance';
+import './RegisterPlaces.css';
 
 const VenueRegister = () => {
   const [venueName, setVenueName] = useState('');
@@ -131,26 +132,20 @@ const VenueRegister = () => {
 
         <Box sx={{ marginBottom: '60px' }} />
         <Box sx={registerBox}>
-          <Typography variant="subtitle1" fontWeight="bold">
+          <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
             장소의 타입을 선택해 주세요 (필수)
           </Typography>
-          <ToggleButtonGroup
-            value={venueType}
-            exclusive
-            onChange={(event, newValue) => setVenueType(newValue)}
-            className="venue-type-group"
-          >
+          <Box className="venue-type-group">
             {['카페', '음식점', '전시회', '포토부스', '파티룸'].map((type) => (
-              <ToggleButton
+              <button
                 key={type}
-                value={type}
-                className="venue-type-button"
-                disableRipple
+                className={`venue-type-button ${venueType === type ? 'Mui-selected' : ''}`}
+                onClick={() => setVenueType(type === venueType ? '' : type)}
               >
                 {type}
-              </ToggleButton>
+              </button>
             ))}
-          </ToggleButtonGroup>
+          </Box>
         </Box>
 
         <Box sx={{ marginBottom: '60px' }} />

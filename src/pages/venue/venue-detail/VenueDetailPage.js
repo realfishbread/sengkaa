@@ -88,8 +88,8 @@ const VenueDetailPage = () => {
         <Typography mt={1}>📍 {venue.road_address}</Typography>
         <Typography>💰 ₩{venue.rental_fee.toLocaleString()}</Typography>
         <Typography>⏰ {venue.operating_hours}</Typography>
-        <Typography>{venue.operating_info}</Typography>
-        <Typography>{venue.sns_account}</Typography>
+        <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{venue.operating_info}</Typography>
+        <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{venue.sns_account}</Typography>
       </Box>
 
       <Box mt={5} sx={{ p: 3, border: '1px solid #ddd', borderRadius: 2 }}>

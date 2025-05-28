@@ -81,7 +81,7 @@ const ChatLobbyPage = () => {
           onChange={(e) => setRoomName(e.target.value)}
           fullWidth
         />
-        <Button variant="contained" onClick={handleCreateRoom}>
+        <Button variant="contained" onClick={handleCreateRoom} sx={{ whiteSpace: 'nowrap' }}>
           방 만들기
         </Button>
       </Box>
@@ -112,15 +112,29 @@ const ChatLobbyPage = () => {
 
       <Typography variant="h6">채팅방 목록</Typography>
       <List>
-        {rooms.map((room) => (
-          <ListItem
-            button
-            key={room.id}
-            onClick={() => navigate(`/chat/${room.id}`)}
-          >
-            <ListItemText primary={room.name} />
-          </ListItem>
-        ))}
+        <ListItem
+          button
+          onClick={() => navigate(`/chat/1`)}
+          sx={{
+            border: '1px solid #e0e0e0',
+            borderRadius: '8px',
+            mb: 1,
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+            }
+          }}
+        >
+          <ListItemText 
+            primary="이벤트 카페 단톡방" 
+            secondary="참여자: 3명"
+            sx={{
+              '& .MuiListItemText-primary': {
+                fontWeight: 'bold',
+                color: '#333'
+              }
+            }}
+          />
+        </ListItem>
       </List>
     </Box>
   );

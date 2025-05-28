@@ -9,18 +9,24 @@
 /* 상단 바: 태그 필터 + 검색창 + 작성 버튼 */
 .top-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.top-bar::-webkit-scrollbar {
+  display: none;
 }
 
 /* 필터 버튼 영역 */
 .tag-filter {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 /* 오른쪽 영역: 검색창 + 버튼 */
@@ -28,6 +34,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 /* 해시태그 필터 버튼 */
@@ -40,6 +47,8 @@
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .tag-button:hover {
@@ -56,11 +65,29 @@
 
 /* 검색 입력창 */
 .search-input {
-  padding: 8px 12px;
+  height: 40px;
+  padding: 0 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  width: 200px;
+  min-width: 150px;
+  max-width: 200px;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+  box-sizing: border-box;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.search-input::placeholder {
+  color: #666;
+  font-size: 14px;
+  line-height: normal;
 }
 
 .search-input:focus {
@@ -71,13 +98,21 @@
 
 /* 용어 작성 버튼 */
 .write-term-btn {
-  padding: 8px 16px;
+  height: 40px;
+  padding: 0 16px;
   background-color: #4285f4;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .write-term-btn:hover {
@@ -262,22 +297,13 @@
 /* 모바일 대응 */
 @media (max-width: 768px) {
   .top-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .tag-filter {
-    order: 1;
-    margin-bottom: 15px;
-  }
-
-  .top-right {
-    order: 2;
-    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 5px;
   }
 
   .search-input {
-    flex-grow: 1;
+    min-width: 120px;
+    max-width: 150px;
   }
 
   .term-card-list {

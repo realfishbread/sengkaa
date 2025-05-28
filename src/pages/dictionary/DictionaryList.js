@@ -149,18 +149,16 @@ const DictionaryList = () => {
             </button>
           ))}
         </div>
-        <div className="top-right">
-          <input
-            type="text"
-            placeholder="용어 검색"
-            className="search-input"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-          <button className="write-term-btn" onClick={() => setShowForm(true)}>
-            용어 작성
-          </button>
-        </div>
+        <input
+          type="text"
+          placeholder="용어 검색"
+          className="search-input"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+        />
+        <button className="write-term-btn" onClick={() => setShowForm(true)}>
+          용어 작성
+        </button>
       </div>
 
       <div className="counter">

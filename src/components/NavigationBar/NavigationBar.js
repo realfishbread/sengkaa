@@ -1,4 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
+import { NotificationsOutlined } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -21,7 +22,8 @@ import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import Logo from '../common/Logo';
 import './NavigationBar.css';
-import NotificationBell from './NotificationBell'; // 알림 벨 컴포넌트
+import NotificationBell from './NotificationBell';
+import NotificationModal from './NotificationModal';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -30,6 +32,17 @@ const NavigationBar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      message: "슬국 님이 친구 요청을 수락했어요.",
+      time: "1일"
+    },
+    {
+      message: "조아서 님이 친구 요청을 수락했어요.",
+      time: "2일"
+    }
+  ]);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -193,25 +206,27 @@ const NavigationBar = () => {
           </Box>
 
           {/* 검색창 */}
-          <TextField
-            variant="outlined"
-            placeholder="찾으시는 최애가 있으신가요?"
-            size="small"
-            className="search-bar"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                navigate(`/result?query=${encodeURIComponent(searchTerm)}`);
-                setSearchTerm('');
-              }
-            }}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <TextField
+              variant="outlined"
+              placeholder="찾으시는 최애가 있으신가요?"
+              size="small"
+              className="search-bar"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  navigate(`/result?query=${encodeURIComponent(searchTerm)}`);
+                  setSearchTerm('');
+                }
+              }}
+            />
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -274,6 +289,12 @@ const NavigationBar = () => {
           </List>
         </Box>
       </Drawer>
+
+      <NotificationModal
+        open={notificationOpen}
+        onClose={() => setNotificationOpen(false)}
+        notifications={notifications}
+      />
     </>
   );
 };
