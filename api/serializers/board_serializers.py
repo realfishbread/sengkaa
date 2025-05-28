@@ -28,10 +28,11 @@ class PostSerializer(serializers.ModelSerializer):
 
 class ReplySerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
+    children = serializers.SerializerMethodField()
 
     class Meta:
         model = Reply
-        fields = ['id', 'content', 'user', 'created_at']  # ✅ 깔끔하게
+        fields = ['id', 'user', 'post', 'content', 'created_at', 'parent', 'children']  # ✅ 깔끔하게
         read_only_fields = ['id', 'user', 'created_at']
 
     def get_user(self, obj):
@@ -47,3 +48,8 @@ class ReplySerializer(serializers.ModelSerializer):
             "nickname": obj.user.nickname,
             "profile_image": profile_image_url
         }
+    
+    def get_children(self, obj):
+        if obj.children.exists():
+            return ReplySerializer(obj.children.all(), many=True).data
+        return []

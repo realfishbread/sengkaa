@@ -25,3 +25,13 @@ def get_notification_list(request):
 def mark_all_notifications_as_read(request):
     Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
     return Response({'detail': '모든 알림을 읽음 처리했습니다.'})
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_notification(request, pk):
+    try:
+        notification = Notification.objects.get(pk=pk, user=request.user)
+        notification.delete()
+        return Response({'detail': '알림이 삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
+    except Notification.DoesNotExist:
+        return Response({'detail': '알림이 존재하지 않습니다.'}, status=status.HTTP_404_NOT_FOUND)

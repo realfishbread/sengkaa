@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import WarningBox from '../../components/common/WarningBox';
@@ -27,6 +27,9 @@ const Board = () => {
   const [filter, setFilter] = useState('all');
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportPostId, setReportPostId] = useState(null);
+
+  const [replyTo, setReplyTo] = useState({}); // 댓글 ID → 대댓글 입력값
+  const [parentMap, setParentMap] = useState({}); // postId → parentId (대댓글 달기용)
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -67,11 +70,12 @@ const Board = () => {
       .post('/user/posts/replies/', {
         post: postId,
         content: replyContent[postId],
+        parent_id: parentMap[postId] || null, // 대댓글이면 parent_id 포함
       })
       .then((res) => {
         alert('댓글이 등록되었습니다!');
         setReplyContent((prev) => ({ ...prev, [postId]: '' }));
-
+        setParentMap((prev) => ({ ...prev, [postId]: null }));
         fetchReplies(postId); // 🔥 댓글 등록 성공 후 목록 새로고침
       })
       .catch((err) => {
@@ -443,6 +447,31 @@ const Board = () => {
                     })
                   )}
                   <Box mt={2}>
+                    {parentMap[post.id] && (
+                      <Typography
+                        variant="caption"
+                        color="primary"
+                        sx={{ mb: 1 }}
+                      >
+                        {
+                          replies[post.id]?.find(
+                            (r) => r.id === parentMap[post.id]
+                          )?.user.nickname
+                        }
+                        님에게 답글 작성 중
+                        <Button
+                          size="small"
+                          onClick={() =>
+                            setParentMap((prev) => ({
+                              ...prev,
+                              [post.id]: null,
+                            }))
+                          }
+                        >
+                          취소
+                        </Button>
+                      </Typography>
+                    )} 
                     <Stack direction="row" spacing={1} alignItems="center">
                       <input
                         type="text"

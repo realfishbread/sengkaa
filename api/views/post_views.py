@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
-from api.models import Post, Reply
+from api.models import Post, Reply, Notification
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -77,25 +77,47 @@ class ClosedPostListView(generics.ListAPIView):
 
 
 # 게시글에 답글 기능
+# 게시글에 답글 기능
 class ReplyCreateView(generics.CreateAPIView):
     serializer_class = ReplySerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         post_id = self.request.data.get("post")
+        parent_id = self.request.data.get("parent")  # 🔥 대댓글 체크용
         try:
             post = Post.objects.get(id=post_id)
         except Post.DoesNotExist:
             raise NotFound("해당 게시글이 존재하지 않습니다.")
-        serializer.save(user=self.request.user, post=post)   
 
+        parent = None
+        if parent_id:
+            parent = Reply.objects.filter(id=parent_id).first()
+
+        reply = serializer.save(user=self.request.user, post=post, parent=parent)
+
+        # 🔔 알림
+        if parent and parent.user != self.request.user:
+            # 대댓글 알림
+            Notification.objects.create(
+                user=parent.user,
+                message=f"{self.request.user.username}님이 당신의 댓글에 대댓글을 남겼습니다.",
+                is_read=False
+            )
+        elif post.user != self.request.user:
+            # 일반 댓글 알림
+            Notification.objects.create(
+                user=post.user,
+                message=f"{self.request.user.username}님이 게시글에 댓글을 남겼습니다.",
+                is_read=False
+            )
 
         
 #답글 전체 보기 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def reply_list_view(request, post_id):
-    replies = Reply.objects.filter(post_id=post_id).order_by("created_at")
+    replies = Reply.objects.filter(post_id=post_id, parent__isnull=True).order_by("created_at")
     serializer = ReplySerializer(replies, many=True)
     return Response(serializer.data)
 

@@ -113,10 +113,21 @@ class Post(models.Model):
         return f"{self.user.nickname} - {self.title}"
     
 class Reply(models.Model):
-    post = models.ForeignKey(Post, related_name='replies', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    parent = models.ForeignKey(  # 🔥 이 줄 추가!
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='children'
+    )
+
+    def __str__(self):
+        return self.content[:20]
     
 class SocialAccount(models.Model):
     SOCIAL_CHOICES = [
