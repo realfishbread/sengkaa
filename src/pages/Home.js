@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import '../styles/App.css';
-import { fetchPopularCafes } from './birthday-cafe-register/api/EventSearchApi';
+import { fetchPopularCafes, fetchPopularGames, fetchPopularYoutubers } from './birthday-cafe-register/api/EventSearchApi';
 import { fetchPopularVenues } from '../pages/venue/find-cafes/VenueSearchApi';
 
 const Home = () => {
@@ -70,16 +70,18 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const cafes = await fetchPopularCafes();
-        // 카테고리별로 데이터 분류
-        const categorizedCafes = {
-          idol: cafes.filter(cafe => cafe.category === 'idol'),
-          streamer: cafes.filter(cafe => cafe.category === 'streamer'),
-          game: cafes.filter(cafe => cafe.category === 'game')
-        };
+        const [idol, streamer, game] = await Promise.all([
+        fetchPopularCafes(),          // idol
+        fetchPopularYoutubers(),      // youtuber -> streamer로 이름 바꿔서 사용 가능
+        fetchPopularGames(),          // game
+      ]);
         const venues = await fetchPopularVenues();
-        setPopularCafes(categorizedCafes);
-        setReservableVenues(venues);
+        setPopularCafes({
+        idol,
+        streamer,
+        game,
+      });
+      setReservableVenues(venues);
       } catch (err) {
         console.error('🔥 인기 데이터 불러오기 실패:', err);
       }
@@ -285,7 +287,7 @@ const Home = () => {
       </section>
 
       <section className="popular-events">
-        <SectionTitle title="인기 게임 카페" category="game" />
+        <SectionTitle title="인기 게임 콜라보" category="game" />
         <div className="slider-wrapper" style={{ position: 'relative' }}>
           <Slider ref={gameSliderRef} {...sliderSettings(4)}>
             {popularCafes.game.map((cafe, index) => (
