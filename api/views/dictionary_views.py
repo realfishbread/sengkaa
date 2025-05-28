@@ -53,3 +53,6 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
     def total_views(self, request):
         total = DictionaryTerm.objects.aggregate(total_views=Sum("views"))["total_views"] or 0
         return Response({"total_views": total})
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

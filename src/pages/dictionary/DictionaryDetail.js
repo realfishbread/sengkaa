@@ -48,10 +48,10 @@ function DictionaryDetail({ termInfo, onClose }) {
 
         {detail.definitions?.length > 1 && (
           <div className="extra-definitions">
-            {detail.definitions.slice(1).map((def, idx) => (
+            {detail.definitions.map((def, idx) => (
               <div key={idx}>
                 <p>
-                  <strong>뜻풀이 {idx + 2}:</strong> {def.definition}
+                  <strong>뜻풀이 {idx + 1}:</strong> {def.definition}
                 </p>
                 {def.example && (
                   <p className="example">💬 예문: {def.example}</p>

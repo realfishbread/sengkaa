@@ -50,7 +50,7 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         user = getattr(request, 'user', None)
         if user and user.is_authenticated:
-            return obj.liked_events.filter(id=user.id).exists()
+            return obj.liked_events.filter(user_id=user.id).exists()
         return False  # 명확하게 False 반환
     
     def get_star(self, obj):
@@ -98,7 +98,7 @@ class BirthdayCafeListSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         user = getattr(request, 'user', None)
         if user and user.is_authenticated:
-            return obj.liked_events.filter(id=user.id).exists()
+            return obj.liked_events.filter(user_id=user.user_id).exists()
         return False  # 명확하게 False 반환
 
     
