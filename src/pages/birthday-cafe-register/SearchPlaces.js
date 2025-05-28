@@ -26,16 +26,35 @@ const SearchPlaces = () => {
   const [endDate, setEndDate] = useState('');
   const [genre, setGenre] = useState('');
   const [events, setEvents] = useState([]);
+  const [sort, setSort] = useState('');
+  const [genreLabel, setGenreLabel] = useState('');
+
   const navigate = useNavigate();
 
   const handleGenreChange = (event, newGenre) => {
     setGenre(newGenre || '');
   };
 
+  const GENRE_MAP = {
+    아이돌: 'idol',
+    유튜버: 'youtuber',
+    웹툰: 'webtoon',
+    게임: 'game',
+    애니: 'anime',
+  };
+
+  const GENRE_LABELS = Object.keys(GENRE_MAP);
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const data = await EventSearchApi({ keyword, startDate, endDate, genre });
+        const data = await EventSearchApi({
+          keyword,
+          startDate,
+          endDate,
+          genre: GENRE_MAP[genreLabel] || '', // 🔥 여기만 딱 바꿔줌
+          sort,
+        });
 
         if (Array.isArray(data)) {
           setEvents(data);
@@ -49,7 +68,7 @@ const SearchPlaces = () => {
     };
 
     fetchEvents();
-  }, [keyword, startDate, endDate, genre]);
+  }, [keyword, startDate, endDate, genreLabel, sort]);
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
@@ -93,9 +112,9 @@ const SearchPlaces = () => {
         {/* 장르 필터 */}
         <Box mt={3}>
           <ToggleButtonGroup
-            value={genre}
+            value={genreLabel}
             exclusive
-            onChange={handleGenreChange}
+            onChange={(e, newLabel) => setGenreLabel(newLabel || '')}
             sx={{
               '& .MuiToggleButton-root': {
                 border: '1px solid #ddd',
@@ -113,13 +132,41 @@ const SearchPlaces = () => {
               },
             }}
           >
-            {['아이돌', '유튜버', '웹툰', '게임', '애니'].map((label) => (
+            {GENRE_LABELS.map((label) => (
               <ToggleButton key={label} value={label}>
                 {label}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
         </Box>
+      </Box>
+
+      <Box mt={3}>
+        <ToggleButtonGroup
+          value={sort}
+          exclusive
+          onChange={(e, newSort) => setSort(newSort || '')}
+          sx={{
+            '& .MuiToggleButton-root': {
+              border: '1px solid #ddd',
+              borderRadius: '20px',
+              minWidth: '60px',
+              fontWeight: 'bold',
+              px: 2,
+              py: 0.5,
+              color: '#333',
+            },
+            '& .Mui-selected': {
+              backgroundColor: '#dff0ff',
+              color: '#000',
+              borderColor: '#3399ff',
+            },
+          }}
+        >
+          <ToggleButton value="latest">최신순</ToggleButton>
+          <ToggleButton value="likes">좋아요순</ToggleButton>
+          <ToggleButton value="views">조회수순</ToggleButton>
+        </ToggleButtonGroup>
       </Box>
 
       {/* 카드 리스트 */}
@@ -199,12 +246,23 @@ const SearchPlaces = () => {
                         📅 {event.start_date} ~ {event.end_date}
                       </Typography>
 
-                      <Box sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                      <Box
+                        sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}
+                      >
                         {event.genre && (
-                          <Chip label={event.genre} size="small" className="event-card-chip" />
+                          <Chip
+                            label={event.genre}
+                            size="small"
+                            className="event-card-chip"
+                          />
                         )}
                         {event.tags?.map((tag, i) => (
-                          <Chip key={i} label={tag} size="small" className="event-tag-chip" />
+                          <Chip
+                            key={i}
+                            label={tag}
+                            size="small"
+                            className="event-tag-chip"
+                          />
                         ))}
                       </Box>
                     </Box>
