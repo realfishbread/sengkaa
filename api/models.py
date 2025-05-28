@@ -160,10 +160,9 @@ class Star(models.Model):
     name = models.CharField(max_length=100)
     group = models.CharField(max_length=100, blank=True)
     display = models.CharField(max_length=200)
-    image = models.URLField(max_length=500, blank=True)
+    image = models.URLField(max_length=500, blank=True, null=True)  # ← null=True 추가
     birthday = models.DateField(null=True, blank=True)
     keywords = models.JSONField(default=list, blank=True)
-    
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)  # 🔥 외래키 연결
     
     def __str__(self):

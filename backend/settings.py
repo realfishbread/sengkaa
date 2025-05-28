@@ -163,7 +163,15 @@ USE_I18N = True
 
 USE_TZ = True
 
-CORS_ALLOW_ALL_ORIGINS = True  # 보안이 필요하면 특정 도메인만 허용
+# settings.py
+
+CORS_ALLOW_ALL_ORIGINS = False  # ❌ 이건 끄고
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",      # 개발용
+    "https://eventcafe.site",     # 배포용 프론트엔드 주소
+]
+
+CORS_ALLOW_CREDENTIALS = True  # ✅ 쿠키/세션/인증정보 보낼 수 있게
 
 # settings.py
 REDIS_HOST = '127.0.0.1'

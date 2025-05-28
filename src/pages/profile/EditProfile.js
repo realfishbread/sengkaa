@@ -124,10 +124,15 @@ export default function EditProfile() {
             <img
               src={selectedStarImage}
               alt="최애"
-              style={{ width: 120, borderRadius: 12, marginBottom: 12 }}
-              text={`최애: ${selectedStarId}`}
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: '50%', // ← 동그랗게 만들기
+                objectFit: 'cover',
+                border: '2px solid #6C63FF',
+                marginBottom: 12,
+              }}
             />
-            
           )}
 
           <Button

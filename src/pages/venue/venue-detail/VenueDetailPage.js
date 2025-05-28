@@ -69,45 +69,74 @@ const VenueDetailPage = () => {
   if (!venue) return null;
 
   return (
-    <Container sx={{ py: 6 }}>
-      <Typography variant="h4" gutterBottom>
+    <Container sx={{ py: 6, maxWidth: 800, mx: 'auto' }}>
+      <Typography variant="h4" gutterBottom fontWeight={600} color="#333">
         {venue.name}
       </Typography>
-      <Card>
+
+      <Card sx={{ borderRadius: 3, overflow: 'hidden', boxShadow: 3 }}>
         <CardMedia
           component="img"
           image={venue.main_image_url}
           height="300"
           alt={venue.name}
+          sx={{ objectFit: 'cover' }}
         />
       </Card>
-      <Typography mt={2}>📍 {venue.road_address}</Typography>
-      <Typography>💰 ₩{venue.rental_fee.toLocaleString()}</Typography>
-      <Typography>⏰ {venue.operating_hours}</Typography>
-      <Typography>{venue.operating_info}</Typography>
-      <Typography>{venue.sns_account}</Typography>
 
-      <Box mt={4}>
-        <Typography variant="h6">예약할 날짜를 선택하세요</Typography>
-        <Calendar
-          onChange={setDate}
-          value={date}
-          selectRange={true}
-          tileDisabled={({ date, view }) =>
-            view === 'month' && bookedDates.some((d) => isSameDay(d, date))
-          }
-        />
+      <Box mt={3} sx={{ color: '#555', fontSize: 16 }}>
+        <Typography mt={1}>📍 {venue.road_address}</Typography>
+        <Typography>💰 ₩{venue.rental_fee.toLocaleString()}</Typography>
+        <Typography>⏰ {venue.operating_hours}</Typography>
+        <Typography>{venue.operating_info}</Typography>
+        <Typography>{venue.sns_account}</Typography>
+      </Box>
+
+      <Box mt={5} sx={{ p: 3, border: '1px solid #ddd', borderRadius: 2 }}>
+        <Typography variant="h6" fontWeight={500} mb={2}>
+          예약할 날짜를 선택하세요
+        </Typography>
+
+        <Box
+          sx={{
+            background: '#fafafa',
+            borderRadius: 2,
+            boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.05)',
+            p: 2,
+          }}
+        >
+          <Calendar
+            onChange={setDate}
+            value={date}
+            selectRange={true}
+            tileDisabled={({ date, view }) =>
+              view === 'month' && bookedDates.some((d) => isSameDay(d, date))
+            }
+          />
+        </Box>
       </Box>
 
       <Button
         variant="contained"
         color="primary"
-        sx={{ mt: 3 }}
+        sx={{
+          mt: 4,
+          backgroundColor: '#6C63FF',
+          px: 4,
+          py: 1.5,
+          borderRadius: 2,
+          fontWeight: 600,
+          fontSize: 16,
+          '&:hover': {
+            backgroundColor: '#574de3',
+          },
+        }}
         onClick={handleReserve}
         disabled={!user}
       >
         예약하고 결제하기
       </Button>
+
       {paymentInfo && (
         <TossModal
           open={modalOpen}
