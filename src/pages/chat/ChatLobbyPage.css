@@ -1,0 +1,119 @@
+/* 헤더 배경 */
+.chat-lobby-header {
+    width: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 48px 16px;
+    border-radius: 12px;
+    background-color: #f0f4ff;
+    background-image: radial-gradient(circle at 20% 40%, rgba(99, 102, 241, 0.12) 120px, transparent 120px),
+      radial-gradient(circle at 70% 60%, rgba(99, 102, 241, 0.08) 120px, transparent 120px),
+      radial-gradient(circle at 70% 60%, rgba(99, 102, 241, 0.08) 120px, transparent 120px);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    margin-bottom: 32px;
+  }
+  
+  .chat-lobby-header h1 {
+    color: black;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  
+  .chat-lobby-header p {
+    margin-top: 8px;
+    color: #555;
+  }
+  
+  /* 채팅방 카드 */
+  .chat-room-card {
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .chat-room-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    border-color: #6C63FF;
+  }
+  
+  .chat-room-avatar {
+    background-color: #6C63FF !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+  
+  /* 버튼 스타일 */
+  .create-room-button {
+    white-space: nowrap;
+    background-color: #6C63FF !important;
+    padding: 8px 24px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: none !important;
+  }
+  
+  .create-room-button:hover {
+    background-color: #5a55d3 !important;
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2) !important;
+  }
+  
+  /* 컨테이너 레이아웃 */
+  .chat-lobby-content {
+    max-width: 100%;
+  }
+  
+  /* 검색 및 생성 섹션 */
+  .search-create-section {
+    width: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 50px;
+    margin-bottom: 32px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #ffffff, #f5f7ff);
+    box-shadow: 0 4px 20px rgba(108, 99, 255, 0.08);
+    border: 1px solid rgba(108, 99, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .search-create-section:hover {
+    box-shadow: 0 6px 24px rgba(108, 99, 255, 0.12);
+    transform: translateY(-2px);
+  }
+  
+  /* 입력 필드 컨테이너 */
+  .input-group {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  
+  .input-group:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* 라벨 스타일 */
+  .input-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  /* 구분선 */
+  .section-divider {
+    margin: 24px 0;
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(108, 99, 255, 0.2), transparent);
+  } 

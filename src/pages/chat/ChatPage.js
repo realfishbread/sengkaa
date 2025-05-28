@@ -1,13 +1,59 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Button, TextField, Typography, Avatar, Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, Avatar, Paper, Container, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { styled } from '@mui/material/styles';
 
-const ChatPage = ({ roomId, username, profileImage }) => {
-  const [messages, setMessages] = useState([]);
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#f5f5f5',
+  padding: theme.spacing(2),
+  height: 'calc(100vh - 180px)',
+  overflowY: 'auto',
+  display: 'flex',
+  flexDirection: 'column',
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    background: '#f1f1f1',
+    borderRadius: '4px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: '#888',
+    borderRadius: '4px',
+    '&:hover': {
+      background: '#555',
+    },
+  },
+}));
+
+const MessageBubble = styled(Box)(({ theme, isUser }) => ({
+  backgroundColor: isUser ? theme.palette.primary.light : '#ffffff',
+  color: isUser ? '#fff' : theme.palette.text.primary,
+  padding: theme.spacing(1.5),
+  borderRadius: '16px',
+  maxWidth: '80%',
+  wordBreak: 'break-word',
+  boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+  position: 'relative',
+}));
+
+const ChatPage = ({ roomId, username = '사용자', profileImage }) => {
+  const [messages, setMessages] = useState([
+    {
+      username: 'host',
+      message: '채팅방에 오신 것을 환영합니다! 궁금하신 점이 있으시다면 편하게 물어보세요 😊',
+      profileImage: '',
+    },
+    {
+      username: username,
+      message: '안녕하세요! 이벤트 관련해서 문의드리고 싶은게 있어요.',
+      profileImage: profileImage || '',
+    }
+  ]);
   const [input, setInput] = useState('');
   const ws = useRef(null);
   const scrollRef = useRef(null);
-  const token=localStorage.getItem('accessToken');
+  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     ws.current = new WebSocket(`wss://eventcafe.site/ws/chat/room/${roomId}/?token=${token}`);
@@ -41,68 +87,137 @@ const ChatPage = ({ roomId, username, profileImage }) => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   return (
-    <Box
-      sx={{
-        maxWidth: 600,
-        mx: 'auto',
-        mt: 4,
+    <Container 
+      maxWidth="md" 
+      sx={{ 
+        height: '100vh',
+        py: 2,
         display: 'flex',
-        flexDirection: 'column',
-        gap: 2,
+        flexDirection: 'column'
       }}
     >
-      <Typography variant="h5" align="center">
-        실시간 채팅방 #{roomId}
-      </Typography>
-
-      <Paper
-        elevation={3}
-        sx={{ p: 2, height: 400, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
+      <Paper 
+        elevation={3} 
+        sx={{ 
+          height: 'calc(100vh - 32px)',
+          borderRadius: 2, 
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
       >
-        {messages.map((msg, idx) => (
-          <Box
-            key={idx}
-            sx={{
-              alignSelf: msg.username === username ? 'flex-end' : 'flex-start',
-              mb: 1,
-              maxWidth: '80%',
-              display: 'flex',
-              flexDirection: msg.username === username ? 'row-reverse' : 'row',
-              alignItems: 'center',
-              gap: 1,
-            }}
-          >
-            <Avatar src={msg.username === username ? profileImage : ''}>
-              {msg.username[0].toUpperCase()}
-            </Avatar>
+        <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            채팅방 #{roomId}
+          </Typography>
+        </Box>
+
+        <StyledPaper elevation={0}>
+          {messages.map((msg, idx) => (
             <Box
+              key={idx}
               sx={{
-                bgcolor: msg.username === username ? '#DCF8C6' : '#f1f1f1',
-                p: 1,
-                borderRadius: 2,
+                alignSelf: msg.username === username ? 'flex-end' : 'flex-start',
+                mb: 2,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                gap: 2,
+                width: '100%',
+                justifyContent: msg.username === username ? 'flex-end' : 'flex-start',
               }}
             >
-              <Typography variant="body2">{msg.message}</Typography>
+              {msg.username !== username && (
+                <Avatar
+                  src={''}
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    bgcolor: 'secondary.main',
+                    flexShrink: 0,
+                  }}
+                >
+                  {msg.username && msg.username[0] ? msg.username[0].toUpperCase() : '?'}
+                </Avatar>
+              )}
+              <Box 
+                sx={{ 
+                  maxWidth: '70%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 0.5,
+                }}
+              >
+                {msg.username !== username && (
+                  <Typography 
+                    variant="caption" 
+                    sx={{ 
+                      color: 'text.secondary',
+                      ml: msg.username === username ? 'auto' : 0,
+                    }}
+                  >
+                    {msg.username}
+                  </Typography>
+                )}
+                <MessageBubble isUser={msg.username === username}>
+                  <Typography variant="body1" sx={{ wordBreak: 'break-word' }}>
+                    {msg.message}
+                  </Typography>
+                </MessageBubble>
+              </Box>
             </Box>
-          </Box>
-        ))}
-        <div ref={scrollRef} />
-      </Paper>
+          ))}
+          <div ref={scrollRef} />
+        </StyledPaper>
 
-      <Box sx={{ display: 'flex', gap: 1, mb: 4 }}>
-        <TextField
-          fullWidth
-          size="small"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="메시지를 입력하세요"
-        />
-        <Button variant="contained" onClick={handleSend} endIcon={<SendIcon />} sx={{ whiteSpace: 'nowrap' }}>
-          전송
-        </Button>
-      </Box>
-    </Box>
+        <Box sx={{ p: 2, bgcolor: '#fff', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <TextField
+              fullWidth
+              multiline
+              maxRows={4}
+              size="medium"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="메시지를 입력하세요..."
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 3,
+                  backgroundColor: '#f5f5f5',
+                },
+              }}
+            />
+            <IconButton
+              color="primary"
+              onClick={handleSend}
+              disabled={!input.trim()}
+              sx={{
+                bgcolor: 'primary.main',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: 'primary.dark',
+                },
+                '&.Mui-disabled': {
+                  bgcolor: 'action.disabledBackground',
+                  color: 'action.disabled',
+                },
+              }}
+            >
+              <SendIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 
