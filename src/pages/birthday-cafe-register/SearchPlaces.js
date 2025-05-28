@@ -26,6 +26,8 @@ const SearchPlaces = () => {
   const [endDate, setEndDate] = useState('');
   const [genre, setGenre] = useState('');
   const [events, setEvents] = useState([]);
+  const [sort, setSort] = useState('');
+
   const navigate = useNavigate();
 
   const handleGenreChange = (event, newGenre) => {
@@ -35,7 +37,8 @@ const SearchPlaces = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const data = await EventSearchApi({ keyword, startDate, endDate, genre });
+        const data = await EventSearchApi({ keyword, startDate, endDate, genre, sort });
+
 
         if (Array.isArray(data)) {
           setEvents(data);
@@ -49,7 +52,7 @@ const SearchPlaces = () => {
     };
 
     fetchEvents();
-  }, [keyword, startDate, endDate, genre]);
+  }, [keyword, startDate, endDate, genre, sort]);
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
@@ -121,6 +124,34 @@ const SearchPlaces = () => {
           </ToggleButtonGroup>
         </Box>
       </Box>
+
+      <Box mt={3}>
+  <ToggleButtonGroup
+    value={sort}
+    exclusive
+    onChange={(e, newSort) => setSort(newSort || '')}
+    sx={{
+      '& .MuiToggleButton-root': {
+        border: '1px solid #ddd',
+        borderRadius: '20px',
+        minWidth: '60px',
+        fontWeight: 'bold',
+        px: 2,
+        py: 0.5,
+        color: '#333',
+      },
+      '& .Mui-selected': {
+        backgroundColor: '#dff0ff',
+        color: '#000',
+        borderColor: '#3399ff',
+      },
+    }}
+  >
+    <ToggleButton value="latest">최신순</ToggleButton>
+    <ToggleButton value="likes">좋아요순</ToggleButton>
+    <ToggleButton value="views">조회수순</ToggleButton>
+  </ToggleButtonGroup>
+</Box>
 
       {/* 카드 리스트 */}
       <Grid container spacing={3}>

@@ -57,16 +57,14 @@ class BirthdayCafeSearchAPIView(ListAPIView):
 
     def get_queryset(self):
         queryset = BirthdayCafe.objects.all()
+
         keyword = self.request.query_params.get('keyword')
         genre = self.request.query_params.get('genre')
+        star_id = self.request.query_params.get('star_id')
+        star_genre = self.request.query_params.get('star_genre')  # ⭐️ 장르 필터
         start_date = self.request.query_params.get('startDate')
         end_date = self.request.query_params.get('endDate')
-        sort = self.request.query_params.get('sort')  # ✅ 추가
-  
-
-
-        print(f"🔥 [DEBUG] 받은 sort 파라미터: {sort}")
-        
+        sort = self.request.query_params.get('sort')
 
         if keyword:
             queryset = queryset.filter(cafe_name__icontains=keyword)
@@ -74,34 +72,28 @@ class BirthdayCafeSearchAPIView(ListAPIView):
         if genre:
             queryset = queryset.filter(genre=genre)
 
+        if star_id:
+            queryset = queryset.filter(star__id=star_id)
+
+        if star_genre:
+            queryset = queryset.filter(star__genre__name__iexact=star_genre)  # ⭐️ 장르 이름으로 필터
+
         if start_date:
             queryset = queryset.filter(start_date__gte=start_date)
 
         if end_date:
             queryset = queryset.filter(end_date__lte=end_date)
 
-        # ✅ 정렬 조건 처리
         if sort == 'latest':
-            print("🕓 최신순 정렬 적용")
             queryset = queryset.order_by('-created_at')
         elif sort == 'likes':
-            print("❤️ 좋아요순 정렬 적용")
-            # 🔥 이 줄 제거하고 아래처럼 두 줄로 나눔
-            # queryset = queryset.annotate(like_count=Count('liked_events', distinct=True)).order_by('-like_count')
-            queryset = list(queryset)  # 강제 evaluate
-            queryset.sort(key=lambda x: x.liked_events.count(), reverse=True)  # 파이썬 정렬
+            queryset = list(queryset)
+            queryset.sort(key=lambda x: x.liked_events.count(), reverse=True)
         elif sort == 'views':
-            print("👁️ 조회수순 정렬 적용")
             queryset = queryset.order_by('-view_count')
-        else:
-            print("⚠️ 정렬 파라미터 없음, 기본 순서로 반환")
-
-        print("🧪 최종 쿼리셋 (정렬 확인):", queryset.values("cafe_name", "view_count"))
 
         return queryset
 
-    def get_serializer_context(self):
-        return {'request': self.request}
     
 class BirthdayCafeDetailAPIView(RetrieveAPIView):
     queryset = BirthdayCafe.objects.all()

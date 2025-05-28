@@ -1,17 +1,21 @@
 import axios from 'axios';
 
-export const EventSearchApi = async ({ keyword, startDate, endDate, genre }) => {
-  const response = await axios.get('https://eventcafe.site/user/events/birthday-cafes/search/', {
-    params: {
-      keyword,
-      start_date: startDate,
-      end_date: endDate,
-      genre,
-    },
-  });
+export const EventSearchApi = async ({ keyword, startDate, endDate, genre, sort }) => {
+  const params = new URLSearchParams();
 
-  return response.data.results; // ✅ 이렇게 꼭 `.results`만 반환해줘!
+  if (keyword) params.append('keyword', keyword);
+  if (startDate) params.append('startDate', startDate);
+  if (endDate) params.append('endDate', endDate);
+  if (genre) params.append('star_genre', genre);  // genre가 스타 장르라면
+  if (sort) params.append('sort', sort);
+
+  const response = await axios.get(
+    `https://eventcafe.site/user/events/birthday-cafes/?${params.toString()}`,
+    { withCredentials: true }  // 쿠키 인증 쓰는 경우만
+  );
+  return response.data.results || [];
 };
+
 
 export const fetchPopularCafes = async () => {
   const res = await axios.get('https://eventcafe.site/user/events/birthday-cafes/search/', {
