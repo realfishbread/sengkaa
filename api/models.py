@@ -264,6 +264,7 @@ class DictionaryTerm(models.Model):
     likes = models.PositiveIntegerField(default=0)
     views = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    
 
 class DictionaryDefinition(models.Model):
     term = models.ForeignKey(DictionaryTerm, related_name="definitions", on_delete=models.CASCADE)

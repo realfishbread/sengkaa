@@ -8,17 +8,16 @@ class DictionaryDefinitionSerializer(serializers.ModelSerializer):
 
 class DictionaryTermSerializer(serializers.ModelSerializer):
     definitions = DictionaryDefinitionSerializer(many=True)
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = DictionaryTerm
-        fields = ['id', 'term', 'category', 'likes', 'views', 'definitions', 'user']
+        fields = ['id', 'term', 'category', 'likes', 'views', 'definitions']
 
     def create(self, validated_data):
-        definitions_data = validated_data.pop('definitions', [])
+        definitions_data = validated_data.pop('definitions')
         term = DictionaryTerm.objects.create(**validated_data)
-        for d in definitions_data:
-            DictionaryDefinition.objects.create(term=term, **d)
+        for definition_data in definitions_data:
+            DictionaryDefinition.objects.create(term=term, **definition_data)
         return term
 
     def update(self, instance, validated_data):

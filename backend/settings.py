@@ -250,5 +250,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',  # 전체 기본을 로그인 필요로
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 8,
+    'PAGE_SIZE': 20,
 }
