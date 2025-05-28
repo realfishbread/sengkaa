@@ -1,17 +1,22 @@
 from rest_framework.decorators import api_view
 from api.serializers.chatroom_serializer import ChatRoomSerializer
-from api.models import ChatRoom, User, ChatRoomInvite
+from api.models import ChatRoom, User, ChatRoomInvite, Notification
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+
+User = get_user_model()
 
 # views.py
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_chat_room(request):
-    serializer = ChatRoomSerializer(data=request.data)
+    serializer = ChatRoomSerializer(data=request.data, context={"request": request})
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=201)
+        room = serializer.save()
+        return Response(ChatRoomSerializer(room).data, status=201)
     return Response(serializer.errors, status=400)
 
 @api_view(['GET'])
@@ -24,14 +29,36 @@ def list_chat_rooms(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def invite_user_to_room(request, room_id):
+    nickname = request.data.get('nickname')
+    if not nickname:
+        return Response({"error": "닉네임이 누락되었습니다."}, status=400)
+
+    room = get_object_or_404(ChatRoom, id=room_id)
+
+    if request.user.nickname == nickname:
+        return Response({"error": "자기 자신을 초대할 수 없습니다."}, status=400)
+
     try:
-        room = ChatRoom.objects.get(id=room_id)
-        invitee_username = request.data.get('username')
-        invitee = User.objects.get(username=invitee_username)
-        invite = ChatRoomInvite.objects.create(room=room, inviter=request.user, invitee=invitee)
-        return Response({"detail": f"{invitee.username} 초대 완료!"})
-    except Exception as e:
-        return Response({"error": str(e)}, status=400)
+        invitee = User.objects.get(nickname=nickname)
+    except User.DoesNotExist:
+        return Response({"error": "해당 닉네임의 유저가 존재하지 않습니다."}, status=404)
+
+    if room.members.filter(id=invitee.id).exists():
+        return Response({"error": "이미 해당 유저는 채팅방에 참여 중입니다."}, status=400)
+
+    if ChatRoomInvite.objects.filter(room=room, invitee=invitee).exists():
+        return Response({"error": "이미 초대한 유저입니다."}, status=400)
+
+    ChatRoomInvite.objects.create(room=room, inviter=request.user, invitee=invitee)
+
+    # ✉️ 알림 생성
+    Notification.objects.create(
+        user=invitee,
+        message=f"{request.user.nickname}가 '{room.name}' 채팅방에 초대했어요."
+    )
+
+    return Response({"detail": f"{invitee.nickname}님을 초대했습니다! 🎉"})
+
     
 
 @api_view(['POST'])
@@ -61,9 +88,8 @@ def respond_to_invite(request, room_id):
 @permission_classes([IsAuthenticated])
 def search_users(request):
     q = request.GET.get("q", "")
-    users = User.objects.filter(username__icontains=q).exclude(id=request.user.id)[:10]
+    users = User.objects.filter(nickname__icontains=q).exclude(id=request.user.id)[:10]
     return Response([
-        {"id": u.user_id, "username": u.username}
+        {"id": u.user_id, "username": u.nickname}
         for u in users
     ])
-

@@ -306,7 +306,7 @@ const BirthdayCafeRegister = () => {
             <NoticeText text="* 해당 이벤트와 관련된 스타를 선택해 주세요." />
           </Box>
 
-          <Divider sx={{ my: 4 }}>주소 입력</Divider>
+          <Divider sx={{ my: 4 }}>(특정된 장소일 경우) 주소 입력</Divider>
 
           <Box sx={registerBox}>
             <FlexInputButton
@@ -400,7 +400,7 @@ const BirthdayCafeRegister = () => {
               + 굿즈 추가하기
             </Button>
           </Box>
-          <Divider sx={{ my: 4 }}>카페 진행 설명</Divider>
+          <Divider sx={{ my: 4 }}>진행 설명</Divider>
 
           <Box sx={registerBox}>
             <CustomTextField

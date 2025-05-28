@@ -62,7 +62,7 @@ const ChatLobbyPage = () => {
 
     const payload = {
       name: roomName,
-      members: selectedUsers.map((user) => user.id),
+      members: selectedUsers.map((user) => user.nickname)
     };
 
     try {

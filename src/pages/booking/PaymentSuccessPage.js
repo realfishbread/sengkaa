@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import axiosInstance from '../../shared/api/axiosInstance';
+import axios from 'axios';
 
 const PaymentSuccessPage = () => {
   const [searchParams] = useSearchParams();
@@ -25,8 +25,8 @@ const PaymentSuccessPage = () => {
           amount,
           dates,
         });
-        const res = await axiosInstance.post(
-          '/user/bookings/payment/success/',
+        const res = await axios.post(
+          'https://eventcafe.site/user/bookings/payment/success/',
           {
             paymentKey,
             orderId,
