@@ -5,13 +5,13 @@
 2025년 상반기 졸업 작품으로 진행중입니다.
 
 >앱 프로젝트 상세 진행 노션:
-[링크](https://www.notion.so/c82cda15ec1c4f51a152a1e782a11bbb)   
+[링크](https://www.notion.so/1f3cd9738881816294cbcbde78bede66) 
 
 >앱 프로젝트 리포지토리:
 [링크](https://github.com/JYJ-0605/eventcafeapp)   
 
-- FE web: realfishbread
-- FE app: JYJ-0605
+- FE web, Devops, BE: realfishbread
+- FE web, app, Design: JYJ-0605
 
 
 | Frontend | Devops | Backend |
@@ -19,3 +19,7 @@
 | React | github action | Django |
 | React Native |  | Redis |
 
+
+>구현사항
+| 최윤희L | 주예진 |
+| --- | --- |
