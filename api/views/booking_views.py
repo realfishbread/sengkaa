@@ -83,7 +83,7 @@ def toss_payment_success_page(request):
     return Response({"message": "🎉 Toss 결제 리디렉션 도착! 이제 프론트에서 paymentKey를 POST로 보내주세요."})
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([AllowAny])
 def toss_payment_verify(request):
     paymentKey = request.data.get('paymentKey')
