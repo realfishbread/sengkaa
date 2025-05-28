@@ -235,8 +235,7 @@ const SearchPlaces = () => {
                         color="text.secondary"
                         sx={{ mb: 0.5 }}
                       >
-                        📍 {event.road_address || '상세 위치 없음'}{' '}
-                        {event.detail_address || ''}
+                        📍 {event.road_address || '상세 위치 없음'}
                       </Typography>
                       <Typography
                         variant="body2"
