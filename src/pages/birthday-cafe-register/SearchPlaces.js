@@ -68,7 +68,7 @@ const SearchPlaces = () => {
     };
 
     fetchEvents();
-  }, [keyword, startDate, endDate, genre, sort]);
+  }, [keyword, startDate, endDate, genreLabel, sort]);
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
