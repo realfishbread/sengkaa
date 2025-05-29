@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { UserContext } from '../../context/UserContext';
-import axiosInstance from '../../shared/api/axiosInstance'; // axios 인스턴스스
+import axiosInstance from '../../shared/api/axiosInstance'; // axios 인스턴스
 import './EventCalendar.css';
 
 const EventCalendar = () => {
