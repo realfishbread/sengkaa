@@ -74,7 +74,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${EC2_SSH_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no" . ${EC2_USER}@${EC2_HOST}:/var/www/eventcafe-backend --exclude=node_modules --exclude=build --exclude=.git
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" . ${EC2_USER}@${EC2_HOST}:/var/www/eventcafe-backend --exclude=node_modules --exclude=build --exclude=.git --exclude=venv
 
 
       - name: Create .env on EC2
