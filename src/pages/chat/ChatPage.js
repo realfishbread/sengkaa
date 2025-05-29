@@ -1,7 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Button, TextField, Typography, Avatar, Paper, Container, IconButton } from '@mui/material';
+import React, {  useRef, useState } from 'react';
+import { Box, TextField, Typography, Avatar, Paper, Container, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/material/styles';
+import axiosInstance from '../../shared/api/axiosInstance';
+import { UserContext } from '../../context/UserContext';
+import { useEffect } from 'react';
+import { useContext } from 'react';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: '#f5f5f5',
@@ -37,17 +41,23 @@ const MessageBubble = styled(Box)(({ theme, isUser }) => ({
   position: 'relative',
 }));
 
-const ChatPage = ({ roomId, username = '사용자', profileImage }) => {
+
+
+
+
+const ChatPage = ({ roomId, profile_image }) => {
+  const { user } = useContext(UserContext); // ✅ 여기 추가
+  const nickname = user?.nickname || '사용자';          // ✅ 그리고 여기서 username 정의
   const [messages, setMessages] = useState([
     {
-      username: 'host',
+      nickname: 'host',
       message: '채팅방에 오신 것을 환영합니다! 궁금하신 점이 있으시다면 편하게 물어보세요 😊',
-      profileImage: '',
+      profile_image: '',
     },
     {
-      username: username,
+      nickname: nickname,
       message: '안녕하세요! 이벤트 관련해서 문의드리고 싶은게 있어요.',
-      profileImage: profileImage || '',
+      profile_image: profile_image || '',
     }
   ]);
   const [input, setInput] = useState('');
@@ -56,37 +66,63 @@ const ChatPage = ({ roomId, username = '사용자', profileImage }) => {
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    ws.current = new WebSocket(`wss://eventcafe.site/ws/chat/room/${roomId}/?token=${token}`);
+  
+  const fetchMessages = async () => {
+    try {
+      const res = await axiosInstance.get(`/chat/rooms/${roomId}/messages/`);
+      setMessages(res.data);
+    } catch (err) {
+      console.error("메시지 불러오기 실패", err);
+    }
+  };
 
-    ws.current.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      setMessages((prev) => [...prev, data]);
-    };
+  fetchMessages();
+}, [roomId]);
 
-    ws.current.onclose = () => {
-      console.log('WebSocket disconnected');
-    };
+useEffect(() => {
+  const fetchRoomDetail = async () => {
+    try {
+      const res = await axiosInstance.get(`/chat/rooms/${roomId}/`);
+      console.log(res.data);  // name, participants 등!
+    } catch (err) {
+      console.error("방 정보 불러오기 실패", err);
+    }
+  };
 
-    return () => {
-      ws.current.close();
-    };
-  }, [roomId]);
+  fetchRoomDetail();
+}, [roomId]);
+
+useEffect(() => {
+  ws.current = new WebSocket(`wss://eventcafe.site/ws/chat/room/${roomId}/?token=${token}`);
+
+  ws.current.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    setMessages((prev) => [...prev, data]);
+  };
+
+  ws.current.onclose = () => {
+    console.log('WebSocket disconnected');
+  };
+
+  return () => {
+    ws.current.close();
+  };
+}, [roomId, token]); // ✅ token 추가
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = () => {
-    if (input.trim() !== '') {
-      ws.current.send(JSON.stringify({
-        type: 'chat.message',
-        message: input,
-        username: username,
-      }));
-      setInput('');
-    }
-  };
-
+ const handleSend = () => {
+  if (input.trim() !== '' && ws.current && nickname) {
+    ws.current.send(JSON.stringify({
+      type: 'chat.message',
+      message: input,
+      nickname: nickname,
+    }));
+    setInput('');
+  }
+};
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -125,17 +161,17 @@ const ChatPage = ({ roomId, username = '사용자', profileImage }) => {
             <Box
               key={idx}
               sx={{
-                alignSelf: msg.username === username ? 'flex-end' : 'flex-start',
+                alignSelf: msg.nickname === nickname ? 'flex-end' : 'flex-start',
                 mb: 2,
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'flex-start',
                 gap: 2,
                 width: '100%',
-                justifyContent: msg.username === username ? 'flex-end' : 'flex-start',
+                justifyContent: msg.nickname === nickname ? 'flex-end' : 'flex-start',
               }}
             >
-              {msg.username !== username && (
+              {msg.nickname !== nickname && (
                 <Avatar
                   src={''}
                   sx={{
@@ -145,7 +181,7 @@ const ChatPage = ({ roomId, username = '사용자', profileImage }) => {
                     flexShrink: 0,
                   }}
                 >
-                  {msg.username && msg.username[0] ? msg.username[0].toUpperCase() : '?'}
+                  {msg.nickname && msg.nickname[0] ? msg.nickname[0].toUpperCase() : '?'}
                 </Avatar>
               )}
               <Box 
@@ -156,18 +192,18 @@ const ChatPage = ({ roomId, username = '사용자', profileImage }) => {
                   gap: 0.5,
                 }}
               >
-                {msg.username !== username && (
+                {msg.nickname !== nickname && (
                   <Typography 
                     variant="caption" 
                     sx={{ 
                       color: 'text.secondary',
-                      ml: msg.username === username ? 'auto' : 0,
+                      ml: msg.nickname === nickname ? 'auto' : 0,
                     }}
                   >
-                    {msg.username}
+                    {msg.nickname}
                   </Typography>
                 )}
-                <MessageBubble isUser={msg.username === username}>
+                <MessageBubble isUser={msg.nickname === nickname}>
                   <Typography variant="body1" sx={{ wordBreak: 'break-word' }}>
                     {msg.message}
                   </Typography>

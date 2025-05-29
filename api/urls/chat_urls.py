@@ -9,7 +9,8 @@ from api.views.chatroom_view import (
     respond_to_invite,
     search_users,
     get_chat_messages,
-    mark_messages_as_read
+    mark_messages_as_read,
+    get_chat_room_detail
 )
 
 
@@ -22,4 +23,5 @@ urlpatterns = [
     path('search/', search_users),  # Assuming search is handled by the same view
     path('rooms/<uuid:room_id>/messages/', get_chat_messages),
     path("rooms/<uuid:room_id>/mark-read/", mark_messages_as_read),
+    path('rooms/<uuid:room_id>/', get_chat_room_detail),
 ]

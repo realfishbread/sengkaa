@@ -61,7 +61,7 @@ const LoginPage = ({ isModal = false }) => {
         star: data.star,
         bio: data.bio,
       });
-      window.location.reload(); // 강제 새로고침
+     
       navigate('/'); // 홈으로
     } catch (err) {
       const serverMessage =
