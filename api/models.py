@@ -274,7 +274,22 @@ class DictionaryDefinition(models.Model):
 class ChatRoom(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
-    members = models.ManyToManyField(User, related_name="api_chat_rooms")
+    participants = models.ManyToManyField(User, related_name="chat_rooms")
+    max_participants = models.PositiveIntegerField(default=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.participants.count()}/{self.max_participants})"
+
+class Message(models.Model):
+    room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)  # ✅ 추가
+
+    def __str__(self):
+        return f"Message from {self.sender.nickname} at {self.timestamp}"
 
 class ChatRoomInvite(models.Model):
     room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
@@ -282,6 +297,8 @@ class ChatRoomInvite(models.Model):
     invitee = models.ForeignKey(User, related_name="received_invites", on_delete=models.CASCADE)
     is_accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    
     
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')

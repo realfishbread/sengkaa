@@ -142,6 +142,9 @@ const VenueSearch = () => {
                   💰 ₩{venue.rentalFee.toLocaleString()} / 시간
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
+                  예약금: {venue.deposit.toLacaleString()}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
                   📅 가능일: {venue.availableDate}
                 </Typography>
                 <Typography
