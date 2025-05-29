@@ -141,7 +141,7 @@ const SearchPlaces = () => {
         </Box>
       </Box>
 
-      <Box mt={3}>
+      <Box mt={1}>
         <ToggleButtonGroup
           value={sort}
           exclusive
