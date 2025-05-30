@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App'; // ✅ MainApp을 최상위로 사용
 import { UserProvider } from './context/UserContext'; // ★경로주의
 import reportWebVitals from './reportWebVitals';
 import './styles/index.css';
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
