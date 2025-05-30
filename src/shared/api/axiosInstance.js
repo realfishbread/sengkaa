@@ -6,7 +6,6 @@ let loginModalCallback = null;
 const axiosInstance = axios.create({
   baseURL: 'https://eventcafe.site',
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true,
 });
 
 // ② 요청 인터셉터: 매 요청 전에 토큰을 헤더에 추가
