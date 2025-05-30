@@ -25,7 +25,7 @@ const TossWidget = ({ clientKey, orderId, orderName, amount, user }) => {
         variantKey: 'AGREEMENT',
       });
 
-      const bookingDates = sessionStorage.getItem('booking_dates');
+      const bookingDates = localStorage.getItem('booking_dates');
 
       document
         .getElementById('payment-button')
