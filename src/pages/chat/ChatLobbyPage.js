@@ -33,7 +33,7 @@ const ChatLobbyPage = () => {
 
   const fetchRooms = async () => {
     try {
-      const res = await axios.get(`/user/chat/list/?q=${search}`);
+      const res = await axios.get(`https://eventcafe.site/user/chat/list/?q=${search}`);
       setRooms(res.data);
     } catch (err) {
       console.error('방 목록 불러오기 실패:', err);
