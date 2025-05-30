@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from api.models import Post
-from api.models import User, Report  # 커스텀 User 모델
+from api.models import User, Report,Star  # 커스텀 User 모델
 from django.utils.html import format_html
 from django.urls import reverse
+from django.utils.html import format_html
 
 
 @admin.register(User)
@@ -60,3 +61,15 @@ class ReportAdmin(admin.ModelAdmin):
         self.message_user(request, f"{len(reported_users)}명의 게시글 작성자를 정지시켰습니다.")
     
     
+
+@admin.register(Star)
+class StarAdmin(admin.ModelAdmin):
+    list_display = ('name', 'group', 'image_preview')  # 리스트 페이지에도 미리보기
+    readonly_fields = ('image_preview',)  # 상세 페이지에서도 미리보기 가능
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(f'<img src="{obj.image}" width="150" style="object-fit: contain; border: 1px solid #ccc;" />')
+        return "No image"
+
+    image_preview.short_description = "미리보기"

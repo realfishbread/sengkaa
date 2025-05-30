@@ -1,43 +1,40 @@
+import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 
 const PaymentSuccessPage = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    const rawDates = searchParams.get('dates');
+    const parsedDates = rawDates
+      ? JSON.parse(decodeURIComponent(rawDates))
+      : [];
+
     const verifyPayment = async () => {
       const paymentKey = searchParams.get('paymentKey');
       const orderId = searchParams.get('orderId');
       const amount = searchParams.get('amount');
-      const dates = localStorage.getItem('booking_dates'); // ✅ 날짜 기억해뒀던 것 꺼내기
 
-      if (!paymentKey || !orderId || !amount || !dates) {
+      if (!paymentKey || !orderId || !amount || parsedDates.length === 0) {
         alert('필수 정보 누락');
         return;
       }
 
       try {
-        console.log({
-          paymentKey,
-          orderId,
-          amount,
-          dates,
-        });
-        const res = await axios.post(
+        await axios.post(
           'https://eventcafe.site/user/bookings/payment/success/',
           {
             paymentKey,
             orderId,
             amount,
-            dates: JSON.parse(dates), // 문자열을 배열로 변환
+            dates: parsedDates,
           }
         );
 
         alert('예약이 완료되었습니다!');
-        localStorage.removeItem('booking_dates');
-        navigate('/my-bookings'); // 예약 목록으로 이동하거나 원하는 경로
+        navigate('/my-bookings');
       } catch (err) {
         console.error(err);
         alert('예약 검증 실패!');

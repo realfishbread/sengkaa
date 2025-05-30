@@ -48,18 +48,8 @@ const MessageBubble = styled(Box)(({ theme, isUser }) => ({
 const ChatPage = ({ roomId, profile_image }) => {
   const { user } = useContext(UserContext); // ✅ 여기 추가
   const nickname = user?.nickname || '사용자';          // ✅ 그리고 여기서 username 정의
-  const [messages, setMessages] = useState([
-    {
-      nickname: 'host',
-      message: '채팅방에 오신 것을 환영합니다! 궁금하신 점이 있으시다면 편하게 물어보세요 😊',
-      profile_image: '',
-    },
-    {
-      nickname: nickname,
-      message: '안녕하세요! 이벤트 관련해서 문의드리고 싶은게 있어요.',
-      profile_image: profile_image || '',
-    }
-  ]);
+  const [messages, setMessages] = useState([]); // ← 이거 꼭 배열로!
+
   const [input, setInput] = useState('');
   const ws = useRef(null);
   const scrollRef = useRef(null);
