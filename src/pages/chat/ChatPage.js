@@ -6,6 +6,7 @@ import axiosInstance from '../../shared/api/axiosInstance';
 import { UserContext } from '../../context/UserContext';
 import { useEffect } from 'react';
 import { useContext } from 'react';
+import { useParams } from 'react-router-dom';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: '#f5f5f5',
@@ -45,11 +46,11 @@ const MessageBubble = styled(Box)(({ theme, isUser }) => ({
 
 
 
-const ChatPage = ({ roomId, profile_image }) => {
+const ChatPage = ({ profile_image }) => {
   const { user } = useContext(UserContext); // ✅ 여기 추가
   const nickname = user?.nickname || '사용자';          // ✅ 그리고 여기서 username 정의
   const [messages, setMessages] = useState([]); // ← 이거 꼭 배열로!
-
+  const { roomId } = useParams(); // ✅ 필수!
   const [input, setInput] = useState('');
   const ws = useRef(null);
   const scrollRef = useRef(null);
@@ -83,7 +84,7 @@ useEffect(() => {
 }, [roomId]);
 
 useEffect(() => {
-  ws.current = new WebSocket(`wss://eventcafe.site/ws/chat/room/${roomId}/?token=${token}`);
+  ws.current = new WebSocket(`wss://eventcafe.site/ws/chat/${roomId}/?token=${token}`);
 
   ws.current.onmessage = (e) => {
     const data = JSON.parse(e.data);

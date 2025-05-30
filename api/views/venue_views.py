@@ -18,7 +18,7 @@ def create_venue(request):
         return Response({'message': '장소가 등록되었습니다!', 'data': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@permission_classes([AllowAny])
 class VenueSearchAPIView(ListAPIView):
     serializer_class = VenueListSerializer
     permission_classes = [AllowAny]  # ⬅️ 명시적으로 모든 사용자 허용
@@ -49,6 +49,7 @@ class VenueSearchAPIView(ListAPIView):
         return queryset
     
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def venue_detail(request, venue_id):
     try:
         venue = Venue.objects.get(id=venue_id)

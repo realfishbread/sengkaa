@@ -24,6 +24,8 @@ const PaymentSuccessPage = () => {
     }
 
     setIsLoading(true);
+    const accessToken = localStorage.getItem('accessToken');
+
     try {
       await axios.post(
         'https://eventcafe.site/user/bookings/payment/success/',
@@ -32,6 +34,11 @@ const PaymentSuccessPage = () => {
           orderId,
           amount,
           dates: parsedDates,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // ✅ 반드시 넣기
+          },
         }
       );
 

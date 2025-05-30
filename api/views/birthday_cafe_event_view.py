@@ -50,7 +50,7 @@ def create_birthday_event(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+@permission_classes([AllowAny]) 
 class BirthdayCafeSearchAPIView(ListAPIView):
     serializer_class = BirthdayCafeListSerializer
     permission_classes = [AllowAny]
@@ -94,7 +94,7 @@ class BirthdayCafeSearchAPIView(ListAPIView):
 
         return queryset
 
-    
+@permission_classes([AllowAny])    
 class BirthdayCafeDetailAPIView(RetrieveAPIView):
     queryset = BirthdayCafe.objects.all()
     serializer_class = BirthdayCafeDetailSerializer
@@ -127,6 +127,7 @@ def toggle_like_cafe(request, cafe_id):
     
     
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def nearby_birthday_cafes(request):
     lat = float(request.query_params.get('lat', 0))
     lng = float(request.query_params.get('lng', 0))
