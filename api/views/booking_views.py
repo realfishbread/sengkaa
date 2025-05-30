@@ -82,7 +82,7 @@ def toss_payment_success_page(request):
     Toss에서 결제 성공 시 유저를 리디렉션할 페이지 (프론트에서 결제키 추출용)
     """
     params = request.GET.urlencode()
-    return redirect(f'/frontend_static/user/bookings/payment/success/page/?{params}')
+    return redirect(f'/payment/success/page/?{params}')
 
 
 @api_view(['POST'])
