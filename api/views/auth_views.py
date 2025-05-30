@@ -2,7 +2,6 @@
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import EmailMultiAlternatives
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,12 +10,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from api.serializers.auth_serializers import UserSerializer  # 헷갈
 from api.utils import get_redis_connection
+from django.views.decorators.csrf import csrf_exempt
 from api.models import User
 import random
 import string
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@csrf_exempt
 def register_view(request):
     username = request.data.get("username")
     email = request.data.get("email")
@@ -54,6 +55,7 @@ def register_view(request):
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@csrf_exempt
 def send_email_verification(request):
     email = request.data.get("email")
 

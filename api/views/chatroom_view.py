@@ -132,3 +132,15 @@ def mark_messages_as_read(request, room_id):
     unread = room.messages.filter(is_read=False).exclude(sender=request.user)
     unread.update(is_read=True)
     return Response({"detail": f"{unread.count()}개의 메시지를 읽음 처리했어요."})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_chat_room_detail(request, room_id):
+    room = get_object_or_404(ChatRoom, id=room_id)
+
+    if not room.participants.filter(user_id=request.user.id).exists():
+        return Response({"error": "채팅방에 참여하지 않았어요."}, status=403)
+
+    serializer = ChatRoomSerializer(room)
+    return Response(serializer.data)

@@ -97,8 +97,14 @@ function AppRoutes() {
           <Route path="chat/:roomId" element={<ChatPage />} />
           <Route path="result" element={<SearchResults />} />
           <Route path="/favorite-events" element={<FavoriteEvents />} />
-          <Route path="/user/bookings/payment/success/page/" element={<PaymentSuccessPage />} />
-          <Route path="/user/bookings/payment/fail" element={<PaymentFailPage />} />
+          <Route
+            path="/user/bookings/payment/success/page/:dates"
+            element={<PaymentSuccessPage />}
+          />
+          <Route
+            path="/user/bookings/payment/fail"
+            element={<PaymentFailPage />}
+          />
           <Route path="chat-list" element={<ChatLobbyPage />} />
         </Route>
       </Routes>
