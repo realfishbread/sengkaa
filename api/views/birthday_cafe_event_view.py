@@ -55,6 +55,11 @@ class BirthdayCafeSearchAPIView(ListAPIView):
     serializer_class = BirthdayCafeListSerializer
     permission_classes = [AllowAny]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request  # ✅ 여기 꼭 있어야 위에서 user 접근 가능
+        return context
+
     def get_queryset(self):
         queryset = BirthdayCafe.objects.all()
 
@@ -106,6 +111,11 @@ class BirthdayCafeDetailAPIView(RetrieveAPIView):
         instance.save(update_fields=['view_count'])
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request  # ✅ 여기 꼭 있어야 위에서 user 접근 가능
+        return context
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])  # 찜한 생일 카페
