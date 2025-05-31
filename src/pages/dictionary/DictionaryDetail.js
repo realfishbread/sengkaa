@@ -68,7 +68,7 @@ function DictionaryDetail({ termInfo, onClose }) {
     }
   };
 
-  if (!detail || liked || isEditing) return;
+  if (!detail) return;
 
   return (
     <div className="term-definition-modal">
@@ -78,7 +78,7 @@ function DictionaryDetail({ termInfo, onClose }) {
         </button>
         <h2 className="term-title">{detail.term}</h2>
         <p className="term-definition">{detail.definitions?.[0]?.definition}</p>
-
+      
         {isEditing ? (
           <div className="edit-definitions">
             {editedDefinitions.map((def, idx) => (
@@ -127,7 +127,7 @@ function DictionaryDetail({ termInfo, onClose }) {
               </div>
               <div className="term-meta-right">
                 &nbsp;&nbsp; 👁 {detail.views}
-                {user?.id === detail.user && (
+                {user?.id === detail.user?.id && (
                   <div className="term-actions" >
                     {isEditing ? (
                       <>

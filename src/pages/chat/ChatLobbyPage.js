@@ -164,7 +164,7 @@ const ChatLobbyPage = () => {
                   )}
                 />
               </div>
-
+            <Divider sx={{ my: 2 }} />
               <div className="input-group">
                 <Typography className="input-label">채팅방 검색</Typography>
                 <Box sx={{ display: 'flex', gap: 1 }}>

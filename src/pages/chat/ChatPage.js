@@ -87,9 +87,14 @@ useEffect(() => {
   ws.current = new WebSocket(`wss://eventcafe.site/ws/chat/${roomId}/?token=${token}`);
 
   ws.current.onmessage = (e) => {
-    const data = JSON.parse(e.data);
+  const data = JSON.parse(e.data);
+  if (Array.isArray(data)) {
+    setMessages((prev) => [...prev, ...data]);
+  } else {
     setMessages((prev) => [...prev, data]);
-  };
+  }
+};
+
 
   ws.current.onclose = () => {
     console.log('WebSocket disconnected');
