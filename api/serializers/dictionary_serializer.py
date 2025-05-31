@@ -8,10 +8,11 @@ class DictionaryDefinitionSerializer(serializers.ModelSerializer):
 
 class DictionaryTermSerializer(serializers.ModelSerializer):
     definitions = DictionaryDefinitionSerializer(many=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)  # ✅ 작성자 ID 포함
 
     class Meta:
         model = DictionaryTerm
-        fields = ['id', 'term', 'category', 'likes', 'views', 'definitions']
+        fields = ['id', 'term', 'category', 'likes', 'views', 'definitions', 'user']
 
     def create(self, validated_data):
         definitions_data = validated_data.pop('definitions')

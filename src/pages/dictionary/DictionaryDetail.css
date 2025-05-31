@@ -60,6 +60,32 @@
   color: #333;
 }
 
+.term-meta {
+  display: flex;
+  justify-content: space-between; /* 또는 flex-end도 괜찮음 */
+  align-items: center;
+  flex-wrap: nowrap;/* ✅ 줄바꿈 방지 */
+  margin-top: 16px;
+  gap: 12px;
+}
+
+.term-actions {
+  display: flex;
+  flex-direction: row; /* 👉 기본값이지만 명시적으로 써줘도 좋음 */
+  gap: 8px; /* 버튼 간 간격 */
+  margin-left: 12px;
+  align-items: center;
+}
+/* 좌우 정렬 나누고 싶으면 */
+.term-meta-left,
+.term-meta-right {
+  display: flex;
+  flex-direction: row; /* 👉 기본값이지만 명시적으로 써줘도 좋음 */
+  align-items: center;
+  gap: 8px;
+}
+
+
 @keyframes fadeIn {
   from {
     transform: scale(0.95);

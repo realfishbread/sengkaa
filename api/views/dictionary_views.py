@@ -5,15 +5,17 @@ from api.models import DictionaryTerm
 from api.serializers.dictionary_serializer import DictionaryTermSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
+from api.permissions import IsOwnerOrReadOnly  # ✅ 커스텀 권한 클래스 임포트
 
 class DictionaryTermViewSet(viewsets.ModelViewSet):
     queryset = DictionaryTerm.objects.all()
     serializer_class = DictionaryTermSerializer  # ✅ 전체는 인증 없이 허용
     
     def get_permissions(self):
-        # self.action이 None인 경우도 고려해서 GET 요청도 허용
         if self.action in ['list', 'retrieve', 'check', 'total_views'] or self.request.method == 'GET':
             return [AllowAny()]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            return [IsOwnerOrReadOnly()]
         return [IsAuthenticated()]
 
     def get_queryset(self):
