@@ -94,7 +94,7 @@ const ChatPage = ({ profile_image }) => {
       try {
         const data = JSON.parse(e.data);
 
-        // 🔽 여기다가 복붙!
+        // 데이터가 배열인지 먼저 체크!
         if (data.type === 'initial_messages' && Array.isArray(data.messages)) {
           const normalized = data.messages.map((m) => ({
             message: m.content,
@@ -112,7 +112,7 @@ const ChatPage = ({ profile_image }) => {
             },
           ]);
         } else {
-          console.warn('알 수 없는 메시지 구조:', data);
+          console.warn('💥 메시지 구조가 예상과 다름:', data);
         }
       } catch (err) {
         console.error('JSON 파싱 실패:', err, e.data);
@@ -176,64 +176,73 @@ const ChatPage = ({ profile_image }) => {
         </Box>
 
         <StyledPaper elevation={0}>
-          {messages.map((msg, idx) => (
-            <Box
-              key={idx}
-              sx={{
-                alignSelf:
-                  msg.nickname === nickname ? 'flex-end' : 'flex-start',
-                mb: 2,
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                gap: 2,
-                width: '100%',
-                justifyContent:
-                  msg.nickname === nickname ? 'flex-end' : 'flex-start',
-              }}
-            >
-              {msg.nickname !== nickname && (
-                <Avatar
-                  src={''}
-                  sx={{
-                    width: 36,
-                    height: 36,
-                    bgcolor: 'secondary.main',
-                    flexShrink: 0,
-                  }}
-                >
-                  {msg.nickname && msg.nickname[0]
-                    ? msg.nickname[0].toUpperCase()
-                    : '?'}
-                </Avatar>
-              )}
+          {Array.isArray(messages) ? (
+            messages.map((msg, idx) => (
               <Box
+                key={idx}
                 sx={{
-                  maxWidth: '70%',
+                  alignSelf:
+                    msg.nickname === nickname ? 'flex-end' : 'flex-start',
+                  mb: 2,
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: 0.5,
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  gap: 2,
+                  width: '100%',
+                  justifyContent:
+                    msg.nickname === nickname ? 'flex-end' : 'flex-start',
                 }}
               >
                 {msg.nickname !== nickname && (
-                  <Typography
-                    variant="caption"
+                  <Avatar
+                    src={''}
                     sx={{
-                      color: 'text.secondary',
-                      ml: msg.nickname === nickname ? 'auto' : 0,
+                      width: 36,
+                      height: 36,
+                      bgcolor: 'secondary.main',
+                      flexShrink: 0,
                     }}
                   >
-                    {msg.nickname}
-                  </Typography>
+                    {msg.nickname && msg.nickname[0]
+                      ? msg.nickname[0].toUpperCase()
+                      : '?'}
+                  </Avatar>
                 )}
-                <MessageBubble isUser={msg.nickname === nickname}>
-                  <Typography variant="body1" sx={{ wordBreak: 'break-word' }}>
-                    {msg.message}
-                  </Typography>
-                </MessageBubble>
+                <Box
+                  sx={{
+                    maxWidth: '70%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 0.5,
+                  }}
+                >
+                  {msg.nickname !== nickname && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: 'text.secondary',
+                        ml: msg.nickname === nickname ? 'auto' : 0,
+                      }}
+                    >
+                      {msg.nickname}
+                    </Typography>
+                  )}
+                  <MessageBubble isUser={msg.nickname === nickname}>
+                    <Typography
+                      variant="body1"
+                      sx={{ wordBreak: 'break-word' }}
+                    >
+                      {msg.message}
+                    </Typography>
+                  </MessageBubble>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))
+          ) : (
+            <Typography sx={{ mt: 2, textAlign: 'center' }}>
+              메시지가 없어요!
+            </Typography>
+          )}
           <div ref={scrollRef} />
         </StyledPaper>
 
