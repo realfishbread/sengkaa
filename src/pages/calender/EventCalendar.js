@@ -27,6 +27,53 @@ const EventCalendar = () => {
     setSelectedEvents(events[dateStr] || []);
   };
 
+  const groupEventsByTitle = (eventsData) => {
+    const grouped = {};
+
+    eventsData.forEach((event) => {
+      const { title, start, end } = event;
+      const key = title;
+
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+
+      grouped[key].push({ start: new Date(start), end: new Date(end) });
+    });
+
+    return grouped;
+  };
+
+  const formatGroupedEvents = (grouped) => {
+    const result = {};
+
+    Object.entries(grouped).forEach(([title, ranges]) => {
+      const formattedRanges = new Set();
+
+      ranges.forEach(({ start, end }) => {
+        const rangeText = `📍 ${title} (${formatDate(start)} ~ ${formatDate(
+          end
+        )})`;
+
+        const current = new Date(start);
+        while (current <= end) {
+          const dateStr = current.toISOString().split('T')[0];
+
+          if (!result[dateStr]) result[dateStr] = [];
+
+          // ✅ 날짜별로 동일한 rangeText가 없을 경우에만 추가
+          if (!result[dateStr].includes(rangeText)) {
+            result[dateStr].push(rangeText);
+          }
+
+          current.setDate(current.getDate() + 1);
+        }
+      });
+    });
+
+    return result;
+  };
+
   useEffect(() => {
     const fetchWeather = async (lat, lon) => {
       try {
@@ -55,25 +102,10 @@ const EventCalendar = () => {
     const loadLikedEvents = async () => {
       try {
         const res = await axiosInstance.get('/user/events/liked/calendar/');
-        const data = res.data;
+        const grouped = groupEventsByTitle(res.data);
+        const finalEvents = formatGroupedEvents(grouped);
 
-        // 날짜별로 일정 정리해서 events에 추가
-        const updated = { ...events };
-
-        data.forEach((event) => {
-          const start = new Date(event.start);
-          const end = new Date(event.end);
-          const current = new Date(start);
-
-          while (current <= end) {
-            const dateStr = current.toISOString().split('T')[0];
-            if (!updated[dateStr]) updated[dateStr] = [];
-            updated[dateStr].push(`📍 ${event.title}`);
-            current.setDate(current.getDate() + 1);
-          }
-        });
-
-        setEvents(updated);
+        setEvents(finalEvents);
       } catch (err) {
         console.error('찜한 생일카페 일정 불러오기 실패 ❌', err);
       }
