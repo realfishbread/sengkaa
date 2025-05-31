@@ -90,30 +90,43 @@ const ChatPage = ({ profile_image }) => {
     );
 
     ws.current.onmessage = (e) => {
+      // 🔥 여기에 들어가야 해!
       try {
         const data = JSON.parse(e.data);
 
-        // type 기반 처리
+        // 🔽 여기다가 복붙!
         if (data.type === 'initial_messages' && Array.isArray(data.messages)) {
-          setMessages((prev) => [...prev, ...data.messages]);
-        } else if (data.type === 'chat.message') {
-          setMessages((prev) => [...prev, data]);
+          const normalized = data.messages.map((m) => ({
+            message: m.content,
+            nickname: m.sender,
+            timestamp: m.timestamp,
+          }));
+          setMessages(normalized);
+        } else if (data.message && data.sender) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              message: data.message,
+              nickname: data.sender,
+              timestamp: data.timestamp,
+            },
+          ]);
         } else {
-          console.warn('Unhandled message type:', data);
+          console.warn('알 수 없는 메시지 구조:', data);
         }
       } catch (err) {
-        console.error('WebSocket 메시지 파싱 실패:', err, e.data);
+        console.error('JSON 파싱 실패:', err, e.data);
       }
     };
 
-    ws.current.onclose = () => {
-      console.log('WebSocket disconnected');
+    ws.current.onclose = (e) => {
+      console.warn('🔌 WebSocket 종료됨:', e.code, e.reason || '(이유 없음)');
     };
 
     return () => {
       ws.current.close();
     };
-  }, [roomId, token]); // ✅ token 추가
+  }, [roomId, token]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -123,7 +136,7 @@ const ChatPage = ({ profile_image }) => {
     if (input.trim() !== '' && ws.current && nickname) {
       ws.current.send(
         JSON.stringify({
-          message: input, // ✅ 이것만 보내
+          message: input,
         })
       );
       setInput('');
