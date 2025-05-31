@@ -6,7 +6,6 @@ let loginModalCallback = null;
 const axiosInstance = axios.create({
   baseURL: 'https://eventcafe.site',
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true,
 });
 
 // ② 요청 인터셉터: 매 요청 전에 토큰을 헤더에 추가
@@ -53,11 +52,13 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-    // ✅ 403 → 직접 모달 띄움
+    console.log('📌 loginModalCallback 존재함?', loginModalCallback);
     if (error.response?.status === 403) {
-      console.warn('403 발생 → 로그인 모달 호출됨');
-      window.history.pushState({}, '', '/login'); // ← 여기에 강제 이동 추가!
-      if (loginModalCallback) loginModalCallback();
+      if (typeof loginModalCallback === 'function') {
+        loginModalCallback();
+      } else {
+        console.warn('❌ loginModalCallback이 아직 없음');
+      }
     }
 
     return Promise.reject(error);

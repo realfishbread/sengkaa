@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './DictionaryForm.css';
 import { checkTermExists, createDictionaryItem  } from './api/DictionaryApi';
+import { nav } from 'framer-motion/client';
+import { useNavigate } from 'react-router-dom';
 
 function DictionaryForm({ onSave, onCancel }) {
   const [term, setTerm] = useState('');
@@ -8,6 +10,7 @@ function DictionaryForm({ onSave, onCancel }) {
   const [definitions, setDefinitions] = useState([{ definition: '', example: '' }]);
   const [showCategory, setShowCategory] = useState(true);
   const [showDefinitions, setShowDefinitions] = useState(true);
+  const navigate = useNavigate();
 
   const handleAddDefinition = () => {
     setDefinitions([...definitions, { definition: '', example: '' }]);
@@ -34,6 +37,7 @@ function DictionaryForm({ onSave, onCancel }) {
       setTerm('');
       setCategory('');
       setDefinitions([{ definition: '', example: '' }]);
+      navigate('/dictionary'); // 목록 페이지로 이동
     } catch (err) {
       console.error('등록 실패 ❌', err);
       alert('등록 중 오류가 발생했습니다');

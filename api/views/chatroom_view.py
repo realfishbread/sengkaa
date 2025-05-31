@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from api.serializers.chatroom_serializer import ChatRoomSerializer, MessageSerializer
 from api.models import ChatRoom, User, ChatRoomInvite, Notification
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes
 from django.contrib.auth import get_user_model
@@ -28,6 +28,7 @@ def create_chat_room(request):
     return Response(serializer.errors, status=400)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def list_chat_rooms(request):
     q = request.GET.get('q', '')
     rooms = ChatRoom.objects.filter(name__icontains=q)

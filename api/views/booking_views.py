@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.shortcuts import redirect
 from api.serializers.booking_serializer import MyBookedVenueSerializer
 from api.models import Booking, Venue
 import base64
@@ -80,11 +81,12 @@ def toss_payment_success_page(request):
     """
     Toss에서 결제 성공 시 유저를 리디렉션할 페이지 (프론트에서 결제키 추출용)
     """
-    return Response({"message": "🎉 Toss 결제 리디렉션 도착! 이제 프론트에서 paymentKey를 POST로 보내주세요."})
+    params = request.GET.urlencode()
+    return redirect(f'/payment/success/page/?{params}')
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def toss_payment_verify(request):
     paymentKey = request.data.get('paymentKey')
     orderId = request.data.get('orderId')

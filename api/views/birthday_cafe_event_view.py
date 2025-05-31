@@ -50,10 +50,15 @@ def create_birthday_event(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+@permission_classes([AllowAny]) 
 class BirthdayCafeSearchAPIView(ListAPIView):
     serializer_class = BirthdayCafeListSerializer
     permission_classes = [AllowAny]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request  # ✅ 여기 꼭 있어야 위에서 user 접근 가능
+        return context
 
     def get_queryset(self):
         queryset = BirthdayCafe.objects.all()
@@ -94,7 +99,7 @@ class BirthdayCafeSearchAPIView(ListAPIView):
 
         return queryset
 
-    
+@permission_classes([AllowAny])    
 class BirthdayCafeDetailAPIView(RetrieveAPIView):
     queryset = BirthdayCafe.objects.all()
     serializer_class = BirthdayCafeDetailSerializer
@@ -106,6 +111,11 @@ class BirthdayCafeDetailAPIView(RetrieveAPIView):
         instance.save(update_fields=['view_count'])
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request  # ✅ 여기 꼭 있어야 위에서 user 접근 가능
+        return context
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])  # 찜한 생일 카페
@@ -127,6 +137,7 @@ def toggle_like_cafe(request, cafe_id):
     
     
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def nearby_birthday_cafes(request):
     lat = float(request.query_params.get('lat', 0))
     lng = float(request.query_params.get('lng', 0))

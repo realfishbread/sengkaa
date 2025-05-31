@@ -75,7 +75,7 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
                 alt={star.name}
                 className="star-image"
                 onError={(e) => {
-                  e.target.src = '/default_star.png';
+                  e.target.src = '/default_star.jpg';
                 }}
               />
               <p>{star.name}</p>

@@ -1,0 +1,29 @@
+.btn-base {
+  border-radius: 50px !important; /* 완전히 둥글게 */
+  border: 1px solid #e0e0e0 !important;
+  min-width: 65px; /* 최소 너비 줄임 */
+  padding: 8px 16px !important; /* 좌우 패딩 줄임 */
+  color: #666 !important;
+  background-color: white !important;
+  box-shadow: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 14px;
+}
+
+.venue-type-button:hover {
+    background-color: #f5f5f5 !important;
+    border-color: #ccc !important;
+}
+  
+/* ✅ 선택된 버튼 */
+.venue-type-button.Mui-selected {
+    background-color: #DCF2FF !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    border-color: #DCF2FF !important;
+}

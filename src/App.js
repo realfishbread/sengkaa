@@ -1,6 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, RouterProvider } from 'react-router-dom';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -52,6 +52,8 @@ const theme = createTheme({
   },
 });
 
+
+
 function AppRoutes() {
   const location = useLocation();
   const state = location.state;
@@ -85,26 +87,20 @@ function AppRoutes() {
           <Route path="dictionary" element={<DictionaryList />} />
           <Route path="search" element={<SearchPlaces />} />
           <Route path="venue-search" element={<VenueSearch />} />
-          <Route path="/post/edit/:postId" element={<ModifyPost />} />
-          <Route path="/select-star" element={<FavoriteStarModal />} />
-          <Route path="/my-bookings" element={<MyBookingsPage />} />
-          <Route path="/oauth/kakao/redirect" element={<KakaoRedirectPage />} />
-          <Route path="/venues/:id" element={<VenueDetailPage />} />
+          <Route path="post/edit/:postId" element={<ModifyPost />} />
+          <Route path="select-star" element={<FavoriteStarModal />} />
+          <Route path="my-bookings" element={<MyBookingsPage />} />
+          <Route path="oauth/kakao/redirect" element={<KakaoRedirectPage />} />
+          <Route path="venues/:id" element={<VenueDetailPage />} />
           <Route
-            path="/birthday-cafes/:id"
+            path="birthday-cafes/:id"
             element={<BirthdayCafeDetailPage />}
           />
           <Route path="chat/:roomId" element={<ChatPage />} />
           <Route path="result" element={<SearchResults />} />
           <Route path="/favorite-events" element={<FavoriteEvents />} />
-          <Route
-            path="/user/bookings/payment/success/page/:dates"
-            element={<PaymentSuccessPage />}
-          />
-          <Route
-            path="/user/bookings/payment/fail"
-            element={<PaymentFailPage />}
-          />
+          <Route path="/user/bookings/payment/success/page/" element={<PaymentSuccessPage />} />
+          <Route path="/user/bookings/payment/fail" element={<PaymentFailPage />} />
           <Route path="chat-list" element={<ChatLobbyPage />} />
         </Route>
       </Routes>

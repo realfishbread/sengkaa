@@ -19,18 +19,12 @@ import axiosInstance from '../../shared/api/axiosInstance';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../../styles/fade.css';
 import './ChatLobbyPage.css';
+import axios from 'axios';
 
 const ChatLobbyPage = () => {
   const [roomName, setRoomName] = useState('');
   const [search, setSearch] = useState('');
-  const [rooms, setRooms] = useState([
-    {
-      id: 1,
-      name: "2024 케이콘 일본 참여 인증방 🎫",
-      member_count: 15,
-      created_at: "2024-03-15T10:30:00"
-    }
-  ]);
+  const [rooms, setRooms] = useState([]);
   const [userQuery, setUserQuery] = useState('');
   const [userResults, setUserResults] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -39,7 +33,7 @@ const ChatLobbyPage = () => {
 
   const fetchRooms = async () => {
     try {
-      const res = await axiosInstance.get(`/user/chat/list/?q=${search}`);
+      const res = await axios.get(`https://eventcafe.site/user/chat/list/?q=${search}`);
       setRooms(res.data);
     } catch (err) {
       console.error('방 목록 불러오기 실패:', err);
@@ -75,7 +69,7 @@ const ChatLobbyPage = () => {
 
   useEffect(() => {
     fetchRooms();
-  }, []);
+  }, [fetchRooms]);
 
   useEffect(() => {
     if (userQuery.length >= 1) {
@@ -170,7 +164,7 @@ const ChatLobbyPage = () => {
                   )}
                 />
               </div>
-
+            <Divider sx={{ my: 2 }} />
               <div className="input-group">
                 <Typography className="input-label">채팅방 검색</Typography>
                 <Box sx={{ display: 'flex', gap: 1 }}>
@@ -249,7 +243,7 @@ const ChatLobbyPage = () => {
                             gap: 0.5 
                           }}
                         >
-                          👥 참여자: {room.member_count}명
+                          👥 참여자: {room.current_participants}/{room.max_participants}명
                         </Typography>
                       </Box>
                       <Box sx={{ textAlign: 'right' }}>

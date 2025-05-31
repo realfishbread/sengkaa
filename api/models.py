@@ -259,6 +259,13 @@ class Booking(models.Model):
     
 
 class DictionaryTerm(models.Model):
+    user = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.CASCADE,
+    related_name="dictionary_terms",
+    null=True,  # ✅ 일단 null 허용
+    blank=True  # ✅ admin 폼에서도 비워도 됨
+)
     term = models.CharField(max_length=100)
     category = models.CharField(max_length=50)
     likes = models.PositiveIntegerField(default=0)
