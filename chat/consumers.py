@@ -65,7 +65,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # 🔥 현재 유저 정보 (로그인한 유저)
         user = self.scope["user"]
-        
+
+        try:
+            data = json.loads(text_data)
+            message = data["message"]
+        except (KeyError, json.JSONDecodeError) as e:
+            await self.send(text_data=json.dumps({"error": "잘못된 메시지 형식입니다."}))
+            await self.close()
+            return
+            
         # 🔥 방 객체 가져오기 (room_name은 UUID)
         try:
             room = await sync_to_async(ChatRoom.objects.get)(id=self.room_name)

@@ -212,7 +212,7 @@ const SearchPlaces = () => {
                             sx={{ color: '#ccc', ml: 1 }}
                             onClick={(e) => {
                               e.stopPropagation();
-                              const url = `${window.location.origin}/user/events/birthday-cafes/${event.id}/`;
+                              const url = `${window.location.origin}/birthday-cafes/${event.id}`;
                               navigator.clipboard
                                 .writeText(url)
                                 .then(() => alert('링크가 복사되었습니다!'))
