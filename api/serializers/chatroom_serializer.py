@@ -1,7 +1,7 @@
 # serializers/chatroom_serializer.py
 
 from rest_framework import serializers
-from api.models import ChatRoom
+from api.models import ChatRoom, Message
 from django.contrib.auth import get_user_model
 from api.models import Message
 
@@ -64,12 +64,22 @@ class ChatRoomSerializer(serializers.ModelSerializer):
     
     
     
-    
-    
-
 class MessageSerializer(serializers.ModelSerializer):
     sender_nickname = serializers.CharField(source='sender.nickname', read_only=True)
+    sender_profile_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
-        fields = ['id', 'room', 'sender', 'sender_nickname', 'content', 'timestamp']
+        fields = [
+            'id',
+            'room',
+            'sender_nickname',
+            'sender_profile_image',  # ✅ 이거 추가!
+            'content',
+            'timestamp',
+        ]
+
+    def get_sender_profile_image(self, obj):
+        if obj.sender and hasattr(obj.sender, 'profile_image_url'):
+            return obj.sender.profile_image_url
+        return None
