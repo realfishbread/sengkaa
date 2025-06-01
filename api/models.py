@@ -163,9 +163,10 @@ class Follow(models.Model):
 
 class Genre(models.Model):
     name = models.CharField(max_length=50, unique=True)  # 'idol', 'youtuber', ...
+    display_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return self.display_name
 
 class Star(models.Model):
     name = models.CharField(max_length=100)
@@ -175,6 +176,7 @@ class Star(models.Model):
     birthday = models.DateField(null=True, blank=True)
     keywords = models.JSONField(default=list, blank=True)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)  # 🔥 외래키 연결
+    
     
     def __str__(self):
         return self.name
@@ -267,11 +269,11 @@ class DictionaryTerm(models.Model):
     blank=True  # ✅ admin 폼에서도 비워도 됨
 )
     term = models.CharField(max_length=100)
-    category = models.CharField(max_length=50)
     likes = models.PositiveIntegerField(default=0)
     views = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    star_group = models.ManyToManyField(Star, related_name='dictionary_terms', blank=True)
+    genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, blank=True)
 
 class DictionaryDefinition(models.Model):
     term = models.ForeignKey(DictionaryTerm, related_name="definitions", on_delete=models.CASCADE)

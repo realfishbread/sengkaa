@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DictionaryDetail from './DictionaryDetail';
 import DictionaryForm from './DictionaryForm';
@@ -8,93 +9,25 @@ import {
   fetchTotalViews,
 } from './api/DictionaryApi';
 
+// 한글 태그 → 영어 슬러그
+const TAG_DISPLAY_TO_KEY = {
+  여자아이돌: 'idol',
+  남자아이돌: 'boy_idol',
+  스트리머: 'youtuber',
+  게임: 'game',
+  웹툰: 'webtoon',
+  애니: 'anime',
+};
+
 const TAGS = [
   '전체',
   '아이돌',
-  '여자 아이돌',
   '남자 아이돌',
   '스트리머',
   '게임',
   '웹툰',
+  '애니',
 ];
-
-const CATEGORIES = {
-  femaleIdols: {
-    title: '여자 아이돌',
-    items: [
-      '블랙핑크',
-      '트와이스',
-      '아이브',
-      '뉴진스',
-      '르세라핌',
-      '에스파',
-      '있지',
-      '케플러',
-      '프로미스나인',
-      '스테이씨',
-    ],
-  },
-  maleIdols: {
-    title: '남자 아이돌',
-    items: [
-      '방탄소년단',
-      '엑소',
-      '세븐틴',
-      'NCT',
-      '스트레이 키즈',
-      '투모로우바이투게더',
-      '엔하이픈',
-      '더보이즈',
-      '트레저',
-      '에이티즈',
-    ],
-  },
-  streamers: {
-    title: '스트리머',
-    items: [
-      '침착맨',
-      '우왁굳',
-      '주호민',
-      '풍월량',
-      '김도',
-      '쯔양',
-      '이세계아이돌',
-      '왁타버스',
-      '고세구',
-      '릴파',
-    ],
-  },
-  games: {
-    title: '게임',
-    items: [
-      '리그 오브 레전드',
-      '발로란트',
-      '오버워치 2',
-      '배틀그라운드',
-      '메이플스토리',
-      '로스트아크',
-      '피파 온라인 4',
-      '서든어택',
-      '던전앤파이터',
-      '디아블로 4',
-    ],
-  },
-  webtoons: {
-    title: '웹툰',
-    items: [
-      '김부장',
-      '독립일기',
-      '연애혁명',
-      '여신강림',
-      '싸움독학',
-      '취사병 전설이 되다',
-      '재혼 황후',
-      '나 혼자만 레벨업',
-      '외모지상주의',
-      '화산귀환',
-    ],
-  },
-};
 
 const DictionaryList = () => {
   const [selectedTag, setSelectedTag] = useState('전체');
@@ -105,6 +38,9 @@ const DictionaryList = () => {
   const [totalViews, setTotalViews] = useState(0);
   const [openCategories, setOpenCategories] = useState({});
   const [categorySearches, setCategorySearches] = useState({});
+  const [groupedTerms, setGroupedTerms] = useState({});
+
+  const selectedSlug = TAG_DISPLAY_TO_KEY[selectedTag] || 'all';
 
   useEffect(() => {
     const loadTerms = async () => {
@@ -130,17 +66,39 @@ const DictionaryList = () => {
   }, []);
 
   const filteredTerms = terms.filter((term) => {
-    const tagMatch = selectedTag === '전체' || term.category === selectedTag;
+    const slugTag = TAG_DISPLAY_TO_KEY[selectedTag];
+    const tagMatch = selectedTag === '전체' || term.category === slugTag;
+
     const keywordMatch =
       term.term.includes(searchKeyword) ||
       term.definitions?.some((d) => d.definition.includes(searchKeyword)) ||
-      term.star_group?.some((star) => star.includes(searchKeyword)); // 🔥추가됨
+      term.star_group?.some((star) => star.includes(searchKeyword));
+
     return tagMatch && keywordMatch;
   });
 
-  const handleTagClick = (tag) => {
+  const handleTagClick = async (tag) => {
     setSelectedTag(tag);
-    // 태그를 클릭할 때 카테고리를 닫힌 상태로 설정
+
+    const genreSlug = TAG_DISPLAY_TO_KEY[tag];
+    if (genreSlug) {
+      try {
+        const genreRes = await axios.get(
+          `/user/dictionary/terms-by-genre/?genre_id=${genreSlug}`
+        );
+        const genreId = genreRes.data.id;
+
+        const groupedRes = await axios.get(
+          `/user/dictionary/grouped-by-star-group/?genre_id=${genreId}`
+        );
+        setGroupedTerms(groupedRes.data);
+      } catch (err) {
+        console.error('스타 그룹별 용어 목록 불러오기 실패 ❌', err);
+      }
+    } else {
+      setGroupedTerms({});
+    }
+
     setOpenCategories({});
   };
 
@@ -192,7 +150,7 @@ const DictionaryList = () => {
               className={`tag-button ${selectedTag === tag ? 'active' : ''}`}
               onClick={() => handleTagClick(tag)}
             >
-              #{tag}
+              #{tag} {/* 🔥 여기서 #은 그냥 문자열, tag는 JSX 중괄호로 */}
             </button>
           ))}
         </div>
@@ -213,9 +171,10 @@ const DictionaryList = () => {
         <span>👁 총 조회수: {totalViews}</span>
       </div>
 
-      {selectedTag !== '전체' && selectedTag !== '아이돌' && (
+      {selectedTag !== '전체' && groupedTerms && (
         <div className="category-list">
-          {Object.entries(CATEGORIES)
+          {Object.entries(groupedTerms)
+            .sort(([a], [b]) => a.localeCompare(b))
             .filter(([key, category]) => category.title === selectedTag)
             .map(([key, category]) => (
               <div key={key} className="category-item">
@@ -272,18 +231,22 @@ const DictionaryList = () => {
       )}
 
       <div className="term-card-list">
-        {filteredTerms.map((term) => (
-          <div
-            key={term.id}
-            className="term-card"
-            onClick={() => handleTermClick(term)}
-          >
-            <div className="term-title">{term.term}</div>
-            <div className="term-definition">
-              {term.definitions?.[0]?.definition}
-            </div>
-            <div className="term-meta">
-              ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
+        {Object.entries(groupedTerms).map(([groupName, terms]) => (
+          <div key={groupName} className="group-section">
+            <h3>{groupName}</h3>
+            <div className="term-card-list">
+              {terms.map((term) => (
+                <div
+                  key={term.id}
+                  className="term-card"
+                  onClick={() => handleTermClick(term)}
+                >
+                  <div className="term-title">{term.term}</div>
+                  <div className="term-meta">
+                    ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}

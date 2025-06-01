@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api.models import DictionaryTerm, DictionaryDefinition
+from api.models import Star,Genre  # ✅ Star 모델 임포트
 
 class DictionaryDefinitionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,21 +9,29 @@ class DictionaryDefinitionSerializer(serializers.ModelSerializer):
 
 class DictionaryTermSerializer(serializers.ModelSerializer):
     definitions = DictionaryDefinitionSerializer(many=True)
+    genre = serializers.PrimaryKeyRelatedField(queryset=Genre.objects.all())
     user = serializers.PrimaryKeyRelatedField(read_only=True)  # ✅ 작성자 ID 포함
+    # ✅ Write할 때는 ID 리스트로 받고
+    star_group = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Star.objects.all()
+    )
 
     class Meta:
         model = DictionaryTerm
-        fields = ['id', 'term', 'category', 'likes', 'views', 'definitions', 'user']
+        fields = ['id','genre', 'term', 'likes', 'views', 'definitions', 'user', 'star_group']
 
     def create(self, validated_data):
         definitions_data = validated_data.pop('definitions')
+        stars = validated_data.pop('star_group', [])
         term = DictionaryTerm.objects.create(**validated_data)
         for definition_data in definitions_data:
             DictionaryDefinition.objects.create(term=term, **definition_data)
+        term.star_group.set(stars)
         return term
 
     def update(self, instance, validated_data):
         definitions_data = validated_data.pop('definitions', [])
+        stars_data = validated_data.pop('star_group', [])
 
         # 기본 필드 업데이트
         for attr, value in validated_data.items():
@@ -33,6 +42,8 @@ class DictionaryTermSerializer(serializers.ModelSerializer):
         instance.definitions.all().delete()
         for d in definitions_data:
             DictionaryDefinition.objects.create(term=instance, **d)
+
+        instance.star_group.set(stars_data)  # ✅ 스타 재설정
 
         return instance  
 
@@ -46,3 +57,11 @@ class DictionaryTermSerializer(serializers.ModelSerializer):
             if DictionaryTerm.objects.filter(term=value).exists():
                 raise serializers.ValidationError("이미 존재하는 용어입니다.")
         return value
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['star_group_detail'] = [
+            {'id': star.id, 'name': star.name, 'group': star.group}
+            for star in instance.star_group.all()
+        ]
+        return data
