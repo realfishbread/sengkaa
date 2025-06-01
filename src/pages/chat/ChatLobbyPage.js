@@ -25,6 +25,7 @@ const ChatLobbyPage = () => {
   const [userResults, setUserResults] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [page, setPage] = useState(1);
+  const [maxParticipants, setMaxParticipants] = useState(4);
 
   const totalPages = Math.ceil(rooms.length / ROOMS_PER_PAGE);
   const currentRooms = rooms.slice(
@@ -65,6 +66,7 @@ const ChatLobbyPage = () => {
     const payload = {
       name: roomName,
       participants: selectedUsers.map((user) => user.nickname),
+      max_participants: maxParticipants, // ✅ 사용자가 설정한 값
     };
 
     try {
@@ -132,6 +134,17 @@ const ChatLobbyPage = () => {
                 sx={{ mb: 2 }}
               />
             )}
+          />
+
+          <TextField
+            type="number"
+            label="최대 인원 수"
+            value={maxParticipants}
+            onChange={(e) => setMaxParticipants(Number(e.target.value))}
+            inputProps={{ min: 2, max: 100 }}
+            fullWidth
+            size="small"
+            sx={{ mb: 2 }}
           />
 
           <Button

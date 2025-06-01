@@ -56,6 +56,12 @@ class ChatRoomSerializer(serializers.ModelSerializer):
 
         return room
     
+    def validate_max_participants(self, value):
+        if value < 2 or value > 50:
+            raise serializers.ValidationError("참여 인원은 2명 이상 100명 이하만 가능합니다.")
+        return value
+
+    
     
     
     
