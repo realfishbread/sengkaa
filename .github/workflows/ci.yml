@@ -22,10 +22,6 @@ jobs:
         with:
           node-version: 16 # React LTS 버전
 
-      - name: Set React homepage for build
-        run: |
-          sed -i 's|"homepage": "[^"]*"|"homepage": "/frontend-static"|' package.json || echo '"homepage": "/frontend-static"' >> package.json
-
       - name: Install React dependencies
         run: npm install --legacy-peer-deps
 
