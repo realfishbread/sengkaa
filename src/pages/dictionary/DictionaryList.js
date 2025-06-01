@@ -11,12 +11,12 @@ import {
 
 // 한글 태그 → 영어 슬러그
 const TAG_DISPLAY_TO_KEY = {
-  여자아이돌: 'idol',
-  남자아이돌: 'boy_idol',
-  스트리머: 'youtuber',
-  게임: 'game',
-  웹툰: 'webtoon',
-  애니: 'anime',
+  여자아이돌: 1,
+  남자아이돌: 6,
+  스트리머: 2,
+  게임: 5,
+  웹툰: 4,
+  애니: 3,
 };
 
 const TAGS = [
