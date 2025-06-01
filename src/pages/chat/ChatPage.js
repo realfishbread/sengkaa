@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 
@@ -50,16 +50,15 @@ const MessageBubble = styled(Box)(({ theme, isUser }) => ({
 
 const ChatPage = ({ profile_image }) => {
   const { user } = useContext(UserContext); // ✅ 여기 추가
-  const nickname = user?.nickname || '사용자';          // ✅ 그리고 여기서 username 정의
+  const nickname = user?.nickname || '사용자'; // ✅ 그리고 여기서 username 정의
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-   const { roomId } = useParams(); // ✅ 필수!
-   
+  const { roomId } = useParams(); // ✅ 필수!
+  const navigate = useNavigate(); // ✅ 여기 추가
+
   const ws = useRef(null);
   const scrollRef = useRef(null);
   const token = localStorage.getItem('accessToken');
-
- 
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -174,7 +173,7 @@ const ChatPage = ({ profile_image }) => {
       >
         <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-            채팅방 
+            채팅방
           </Typography>
         </Box>
 
@@ -204,7 +203,12 @@ const ChatPage = ({ profile_image }) => {
                       height: 36,
                       bgcolor: 'secondary.main',
                       flexShrink: 0,
+                      cursor: 'pointer', // ✅ 커서 포인터 추가
+                      '&:hover': {
+                        opacity: 0.8, // ✅ 호버 효과 살짝
+                      },
                     }}
+                    onClick={() => navigate(`/profile/${msg.nickname}`)} // ✅ 여기가 핵심!
                   >
                     {msg.nickname && msg.nickname[0]
                       ? msg.nickname[0].toUpperCase()

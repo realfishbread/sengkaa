@@ -1,11 +1,14 @@
 from rest_framework.decorators import api_view
 from api.serializers.chatroom_serializer import ChatRoomSerializer, MessageSerializer
-from api.models import ChatRoom, User, ChatRoomInvite, Notification
+from api.models import ChatRoom, User, ChatRoomInvite, Notification, Message
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 
 User = get_user_model()
 
@@ -17,6 +20,31 @@ def create_chat_room(request):
     if serializer.is_valid():
         room = serializer.save()
 
+        # ✅ 초대된 유저들 닉네임 정리
+        invited_names = [u.nickname for u in room.participants.exclude(pk=request.user.pk)]
+
+        # ✅ 시스템 메시지 생성
+        if invited_names:
+            system_msg = Message.objects.create(
+                room=room,
+                sender=request.user,
+                content=f"{', '.join(invited_names)}님을 초대했습니다.",
+                is_system=True
+            )
+
+            # 🔥 WebSocket에 메시지 broadcast
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f"chat_{str(room.id)}",
+                {
+                    "type": "chat_message",  # consumers.py의 메서드 이름과 매칭됨 → chat_message()
+                    "message": system_msg.content,
+                    "sender": request.user.nickname,
+                    "timestamp": system_msg.timestamp.isoformat(),
+                    "is_system": True
+                }
+            )
+
         # ✅ 알림 보내기 (본인 제외 참여자에게만)
         for user in room.participants.exclude(pk=request.user.pk):
             Notification.objects.create(
@@ -25,6 +53,7 @@ def create_chat_room(request):
             )
 
         return Response(ChatRoomSerializer(room).data, status=201)
+    
     return Response(serializer.errors, status=400)
 
 @api_view(['GET'])
