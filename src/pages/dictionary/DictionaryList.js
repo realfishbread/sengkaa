@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DictionaryDetail from './DictionaryDetail';
 import DictionaryForm from './DictionaryForm';
@@ -6,29 +5,29 @@ import './DictionaryList.css';
 import {
   createDictionaryItem,
   fetchDictionaryList,
+  fetchGroupedTermsByGenre,
   fetchTotalViews,
+  fetchStarGroups
 } from './api/DictionaryApi';
-
-// 한글 태그 → 영어 슬러그
-const TAG_DISPLAY_TO_KEY = {
-  여자아이돌: 1,
-  남자아이돌: 6,
-  스트리머: 2,
-  게임: 5,
-  웹툰: 4,
-  애니: 3,
-};
 
 const TAGS = [
   '전체',
   '아이돌',
+  '여자 아이돌',
   '남자 아이돌',
   '스트리머',
   '게임',
   '웹툰',
-  '애니',
 ];
 
+const GENRE_TAG_TO_ID = {
+  '아이돌': 1,
+  '여자 아이돌': 1,
+  '남자 아이돌': 1,
+  '스트리머': 2,
+  '게임': 3,
+  '웹툰': 4,
+};
 const DictionaryList = () => {
   const [selectedTag, setSelectedTag] = useState('전체');
   const [selectedTerm, setSelectedTerm] = useState(null);
@@ -38,9 +37,11 @@ const DictionaryList = () => {
   const [totalViews, setTotalViews] = useState(0);
   const [openCategories, setOpenCategories] = useState({});
   const [categorySearches, setCategorySearches] = useState({});
-  const [groupedTerms, setGroupedTerms] = useState({});
 
-  const selectedSlug = TAG_DISPLAY_TO_KEY[selectedTag] || 'all';
+  const [groupedTerms, setGroupedTerms] = useState({});
+  const [expandedStars, setExpandedStars] = useState({});
+  const [starGroups, setStarGroups] = useState([]); // 🔥
+  const [categories, setCategories] = useState({});
 
   useEffect(() => {
     const loadTerms = async () => {
@@ -65,40 +66,48 @@ const DictionaryList = () => {
     loadViews();
   }, []);
 
-  const filteredTerms = terms.filter((term) => {
-    const slugTag = TAG_DISPLAY_TO_KEY[selectedTag];
-    const tagMatch = selectedTag === '전체' || term.category === slugTag;
+  useEffect(() => {
+  const loadStarGroups = async () => {
+    try {
+      const genreId = GENRE_TAG_TO_ID[selectedTag];
+      if (!genreId) return;
 
+      const res = await fetchStarGroups(genreId);
+      setStarGroups(res);  // ['르세라핌', '뉴진스'...]
+
+      const dynamicCategoryKey = `${selectedTag}-category`; // 키도 유니크하게
+      const newCategory = {
+        [dynamicCategoryKey]: {
+          title: selectedTag,
+          items: res,  // group 리스트
+        },
+      };
+
+      setCategories(newCategory); // 🔥 상태로 관리
+    } catch (err) {
+      console.error('스타 그룹 불러오기 실패 ❌', err);
+    }
+  };
+
+  if (selectedTag !== '전체' && selectedTag !== '아이돌') {
+    loadStarGroups();
+  }
+}, [selectedTag]);
+
+  const filteredTerms = terms.filter((term) => {
+    const tagMatch = selectedTag === '전체' || term.category === selectedTag;
     const keywordMatch =
       term.term.includes(searchKeyword) ||
       term.definitions?.some((d) => d.definition.includes(searchKeyword)) ||
-      term.star_group?.some((star) => star.includes(searchKeyword));
-
+      term.star_group?.some((star) => star.includes(searchKeyword)); // 🔥추가됨
     return tagMatch && keywordMatch;
   });
 
-  const handleTagClick = async (tag) => {
+  
+
+  const handleTagClick = (tag) => {
     setSelectedTag(tag);
-
-    const genreSlug = TAG_DISPLAY_TO_KEY[tag];
-    if (genreSlug) {
-      try {
-        const genreRes = await axios.get(
-          `/user/dictionary/terms-by-genre/?genre_id=${genreSlug}`
-        );
-        const genreId = genreRes.data.id;
-
-        const groupedRes = await axios.get(
-          `/user/dictionary/grouped-by-star-group/?genre_id=${genreId}`
-        );
-        setGroupedTerms(groupedRes.data);
-      } catch (err) {
-        console.error('스타 그룹별 용어 목록 불러오기 실패 ❌', err);
-      }
-    } else {
-      setGroupedTerms({});
-    }
-
+    // 태그를 클릭할 때 카테고리를 닫힌 상태로 설정
     setOpenCategories({});
   };
 
@@ -121,6 +130,26 @@ const DictionaryList = () => {
     }
   };
 
+  const handleStarClick = async (groupName, genreId) => {
+  setExpandedStars((prev) => ({
+    ...prev,
+    [groupName]: !prev[groupName],
+  }));
+
+  // 이미 있으면 fetch 생략
+  if (!groupedTerms[groupName]) {
+    try {
+      const res = await fetchGroupedTermsByGenre(genreId);
+      setGroupedTerms((prev) => ({
+        ...prev,
+        ...res, // ★ 그룹 이름이 키인 구조
+      }));
+    } catch (err) {
+      console.error('🔥 스타별 용어 로딩 실패:', err);
+    }
+  }
+};
+
   const handleCancelForm = () => {
     setShowForm(false);
   };
@@ -140,6 +169,8 @@ const DictionaryList = () => {
     return items.filter((item) => item.toLowerCase().includes(searchTerm));
   };
 
+ 
+
   return (
     <div className="dictionary-container">
       <div className="top-bar">
@@ -150,7 +181,7 @@ const DictionaryList = () => {
               className={`tag-button ${selectedTag === tag ? 'active' : ''}`}
               onClick={() => handleTagClick(tag)}
             >
-              #{tag} {/* 🔥 여기서 #은 그냥 문자열, tag는 JSX 중괄호로 */}
+              #{tag}
             </button>
           ))}
         </div>
@@ -171,82 +202,90 @@ const DictionaryList = () => {
         <span>👁 총 조회수: {totalViews}</span>
       </div>
 
-      {selectedTag !== '전체' && groupedTerms && (
+      {selectedTag !== '전체' && selectedTag !== '아이돌' && (
         <div className="category-list">
-          {Object.entries(groupedTerms)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .filter(([key, category]) => category.title === selectedTag)
-            .map(([key, category]) => (
-              <div key={key} className="category-item">
-                <button
-                  className="category-toggle"
+        {Object.entries(categories)
+  .filter(([_, category]) => category.title === selectedTag)
+  .map(([categoryKey, category]) => (
+    <div key={categoryKey} className="category-item">
+      <button
+        className="category-toggle"
+        onClick={() =>
+          setOpenCategories((prev) => ({
+            ...prev,
+            [categoryKey]: !prev[categoryKey],
+          }))
+        }
+      >
+        <span>{category.title}</span>
+        <span className={`arrow ${openCategories[categoryKey] ? 'open' : ''}`}>
+          ▼
+        </span>
+      </button>
+
+      {openCategories[categoryKey] && (
+        <>
+          <div className="category-search">
+            <input
+              type="text"
+              placeholder="리스트 내 검색..."
+              value={categorySearches[categoryKey] || ''}
+              onChange={(e) =>
+                handleCategorySearch(categoryKey, e.target.value)
+              }
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+
+          <ul className="category-content">
+            {getFilteredCategoryItems(category.items, categoryKey).map(
+              (groupName, index) => (
+                <li
+                  key={groupName}
                   onClick={() =>
-                    setOpenCategories((prev) => ({
-                      ...prev,
-                      [key]: !prev[key],
-                    }))
+                    handleStarClick(groupName, GENRE_TAG_TO_ID[selectedTag])
                   }
                 >
-                  <span>{category.title}</span>
-                  <span
-                    className={`arrow ${openCategories[key] ? 'open' : ''}`}
-                  >
-                    ▼
-                  </span>
-                </button>
-                {openCategories[key] && (
-                  <>
-                    <div className="category-search">
-                      <input
-                        type="text"
-                        placeholder="리스트 내 검색..."
-                        value={categorySearches[key] || ''}
-                        onChange={(e) =>
-                          handleCategorySearch(key, e.target.value)
-                        }
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    </div>
-                    <ul className="category-content">
-                      {getFilteredCategoryItems(category.items, key).map(
-                        (item, index) => (
-                          <li
-                            key={index}
-                            onClick={() => setSearchKeyword(item)}
-                          >
-                            {item}
-                          </li>
-                        )
-                      )}
-                      {getFilteredCategoryItems(category.items, key).length ===
-                        0 && (
-                        <li className="no-results">검색 결과가 없습니다</li>
-                      )}
+                  {groupName}
+                  {expandedStars[groupName] && groupedTerms[groupName] && (
+                    <ul className="term-sublist">
+                      {groupedTerms[groupName].map((term) => (
+                        <li
+                          key={term.id}
+                          onClick={() => setSelectedTerm(term)}
+                          className="term-subitem"
+                        >
+                          {term.term}
+                        </li>
+                      ))}
                     </ul>
-                  </>
-                )}
-              </div>
-            ))}
+                  )}
+                </li>
+              )
+            )}
+            {getFilteredCategoryItems(category.items, categoryKey).length ===
+              0 && <li className="no-results">검색 결과가 없습니다</li>}
+          </ul>
+        </>
+      )}
+    </div>
+  ))}
         </div>
       )}
 
       <div className="term-card-list">
-        {Object.entries(groupedTerms).map(([groupName, terms]) => (
-          <div key={groupName} className="group-section">
-            <h3>{groupName}</h3>
-            <div className="term-card-list">
-              {terms.map((term) => (
-                <div
-                  key={term.id}
-                  className="term-card"
-                  onClick={() => handleTermClick(term)}
-                >
-                  <div className="term-title">{term.term}</div>
-                  <div className="term-meta">
-                    ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
-                  </div>
-                </div>
-              ))}
+        {filteredTerms.map((term) => (
+          <div
+            key={term.id}
+            className="term-card"
+            onClick={() => handleTermClick(term)}
+          >
+            <div className="term-title">{term.term}</div>
+            <div className="term-definition">
+              {term.definitions?.[0]?.definition}
+            </div>
+            <div className="term-meta">
+              ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
             </div>
           </div>
         ))}

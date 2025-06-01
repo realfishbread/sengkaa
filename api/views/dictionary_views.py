@@ -92,3 +92,19 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         except Genre.DoesNotExist:
             return Response({'error': '장르가 존재하지 않음'}, status=404)
+        
+    @action(detail=False, methods=["get"], url_path="star-groups")
+    def star_groups_by_genre(self, request):
+        genre_id = request.query_params.get("genre_id")
+        if not genre_id:
+            return Response({"error": "genre_id is required"}, status=400)
+
+        terms = DictionaryTerm.objects.filter(genre__id=genre_id).prefetch_related('star_group')
+
+        star_group_names = set()
+        for term in terms:
+            for star in term.star_group.all():
+                if star.group:
+                    star_group_names.add(star.group)
+
+        return Response(sorted(star_group_names))
