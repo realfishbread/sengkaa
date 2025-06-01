@@ -5,7 +5,6 @@ import {
   deleteDictionaryItem,
   fetchDictionaryItemWithView,
   likeDictionaryItem,
-  updateDictionaryItem,
 } from './api/DictionaryApi';
 import './DictionaryDetail.css';
 import DictionaryForm from './DictionaryForm';
@@ -39,21 +38,6 @@ function DictionaryDetail({ termInfo, onClose }) {
     }
   };
 
-  const handleUpdate = async () => {
-    try {
-      const updated = await updateDictionaryItem(detail.id, {
-        term: detail.term,
-        category: detail.category,
-        definitions: editedDefinitions,
-      });
-      setDetail(updated);
-      setIsEditing(false);
-      alert('수정되었습니다! ✅');
-    } catch (err) {
-      console.error('수정 실패 ❌', err);
-      alert('수정 중 오류가 발생했습니다');
-    }
-  };
 
   const handleDelete = async () => {
     const confirmDelete = window.confirm('정말 삭제할까요?');
@@ -110,16 +94,12 @@ function DictionaryDetail({ termInfo, onClose }) {
               </div>
               <div className="term-meta-right">
                 &nbsp;&nbsp; 👁 {detail.views}
-                {user?.id === detail.user?.id && (
                   <div className="term-actions">
-                    <>
                       <CustomButton onClick={() => setIsEditing(true)}>
                         ✏️ 수정
                       </CustomButton>
                       <CustomButton onClick={handleDelete}>🗑 삭제</CustomButton>
-                    </>
                   </div>
-                )}
               </div>
             </div>
           </div>

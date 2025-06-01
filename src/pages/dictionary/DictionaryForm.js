@@ -47,7 +47,6 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
         setTerm('');
         setCategory('');
         setDefinitions([{ definition: '', example: '' }]);
-        
       }
       navigate('/dictionary'); // 목록 페이지로 이동
     } catch (err) {
@@ -85,9 +84,11 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
               placeholder="표제어를 입력해주세요"
               onChange={(e) => setTerm(e.target.value)}
             />
-            <button className="check-btn" onClick={handleCheckDuplicate}>
-              중복 확인
-            </button>
+            {!initialData ? (
+              <button className="check-btn" onClick={handleCheckDuplicate}>
+                중복 확인
+              </button>
+            ) : null}
           </div>
         </div>
       </section>
@@ -166,6 +167,16 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
             </div>
           ))}
       </section>
+
+      <p className="notice-text">
+        ✏️ <strong>수정 전 확인해주세요!</strong>
+        <br />
+        등록된 내용은 공유되는 정보입니다.
+        <br />
+        <strong>개인의견보다는 객관적인 설명</strong> 위주로 작성해 주세요.
+        <br />
+        삭제 요청시 관리자에게 알림이 갑니다.
+      </p>
 
       {/* 저장/취소 */}
       <div className="form-buttons">

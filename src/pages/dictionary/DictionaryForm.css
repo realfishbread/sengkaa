@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont,
+    sans-serif;
 }
 
 .dictionary-form h3 {
@@ -34,7 +35,7 @@
   font-weight: 500;
 }
 
-.dictionary-form input[type="text"],
+.dictionary-form input[type='text'],
 .dictionary-form select {
   width: 100%;
   height: 36px;
@@ -46,7 +47,7 @@
   background-color: white;
 }
 
-.dictionary-form input[type="text"]:focus,
+.dictionary-form input[type='text']:focus,
 .dictionary-form select:focus {
   outline: none;
   border-color: #1a73e8;
@@ -59,7 +60,7 @@
   align-items: center;
 }
 
-.dictionary-form .input-inline input[type="text"] {
+.dictionary-form .input-inline input[type='text'] {
   flex-grow: 1;
 }
 
@@ -163,4 +164,21 @@
 
 .dictionary-form .form-section {
   animation: slideDown 0.3s ease-out;
+}
+
+.notice-text {
+  font-size: 1em !important; /* 🔹 더 작고 상대적인 단위로 */
+  color: #555;
+  margin-top: 8px;
+  line-height: 1.4;
+  background: #f9f9f9;
+  padding: 6px 10px;
+  border-left: 3px solid #b3d4fc;
+  border-radius: 4px;
+}
+
+.notice-text.warning {
+  background: #fff4f4;
+  border-left-color: #e14d4d;
+  color: #a33;
 }

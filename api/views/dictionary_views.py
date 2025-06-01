@@ -14,8 +14,6 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'check', 'total_views'] or self.request.method == 'GET':
             return [AllowAny()]
-        elif self.action in ['update', 'partial_update', 'destroy']:
-            return [IsOwnerOrReadOnly()]
         return [IsAuthenticated()]
 
     def get_queryset(self):
