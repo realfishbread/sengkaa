@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const PaymentSuccessPage = () => {
@@ -9,12 +9,12 @@ const PaymentSuccessPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  useEffect(() => {
-    const verifyPayment = async () => {
-      const paymentKey = searchParams.get('paymentKey');
-      const orderId = searchParams.get('orderId');
-      const amount = searchParams.get('amount');
-      const dates = localStorage.getItem('booking_dates'); // ✅ 날짜 기억해뒀던 것 꺼내기
+  const verifyPayment = async () => {
+    const paymentKey = searchParams.get('paymentKey');
+    const orderId = searchParams.get('orderId');
+    const amount = searchParams.get('amount');
+    const dates = localStorage.getItem('booking_dates'); // ✅ 날짜 기억해뒀던 것 꺼내기
+    const parsedDates = dates ? JSON.parse(dates) : [];
 
     if (!paymentKey || !orderId || !amount || parsedDates.length === 0) {
       alert('필수 정보 누락');
@@ -58,7 +58,7 @@ const PaymentSuccessPage = () => {
 
       <div style={{ marginTop: '2rem' }}>
         {!isSuccess ? (
-          <button onClick={handleConfirmPayment} disabled={isLoading}>
+          <button onClick={verifyPayment} disabled={isLoading}>
             {isLoading ? '승인 중...' : '결제 승인하기'}
           </button>
         ) : (

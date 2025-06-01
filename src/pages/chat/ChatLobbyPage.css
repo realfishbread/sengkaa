@@ -1,4 +1,13 @@
-/* 헤더 배경 */
+/* 메인 레이아웃 */
+.chat-lobby-container {
+    padding: 40px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #fafafa;
+}
+
+/* 헤더 배경 - 원래 스타일 유지 */
 .chat-lobby-header {
     width: 100%;
     max-width: 1000px;
@@ -16,104 +25,250 @@
     text-align: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     margin-bottom: 32px;
-  }
-  
-  .chat-lobby-header h1 {
+}
+
+.chat-lobby-header h1 {
     color: black;
     text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  }
-  
-  .chat-lobby-header p {
+}
+
+.chat-lobby-header p {
     margin-top: 8px;
     color: #555;
-  }
-  
-  /* 채팅방 카드 */
-  .chat-room-card {
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .chat-room-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-    border-color: #6C63FF;
-  }
-  
-  .chat-room-avatar {
-    background-color: #6C63FF !important;
-    width: 48px !important;
-    height: 48px !important;
-  }
-  
-  /* 버튼 스타일 */
-  .create-room-button {
-    white-space: nowrap;
-    background-color: #6C63FF !important;
-    padding: 8px 24px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.5px !important;
-    text-transform: none !important;
-  }
-  
-  .create-room-button:hover {
-    background-color: #5a55d3 !important;
-    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2) !important;
-  }
-  
-  /* 컨테이너 레이아웃 */
-  .chat-lobby-content {
-    max-width: 100%;
-  }
-  
-  /* 검색 및 생성 섹션 */
-  .search-create-section {
-    width: 100%;
+}
+
+/* 기능 섹션 레이아웃 */
+.features-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 80px;
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
-    padding: 50px;
-    margin-bottom: 32px;
-    border-radius: 16px;
-    background: linear-gradient(145deg, #ffffff, #f5f7ff);
-    box-shadow: 0 4px 20px rgba(108, 99, 255, 0.08);
-    border: 1px solid rgba(108, 99, 255, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .search-create-section:hover {
-    box-shadow: 0 6px 24px rgba(108, 99, 255, 0.12);
-    transform: translateY(-2px);
-  }
-  
-  /* 입력 필드 컨테이너 */
-  .input-group {
-    background: white;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-  }
-  
-  .input-group:last-child {
-    margin-bottom: 0;
-  }
-  
-  /* 라벨 스타일 */
-  .input-label {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 8px;
-    display: block;
-  }
-  
-  /* 구분선 */
-  .section-divider {
-    margin: 24px 0;
-    border: none;
+    position: relative;
+}
+
+.features-section::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(108, 99, 255, 0.2), transparent);
-  } 
+}
+
+/* 기능 카드 공통 스타일 */
+.feature-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s ease;
+    height: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 채팅방 생성 카드 */
+.create-room-card {
+    background: linear-gradient(135deg, #6C63FF 0%, #5a55d3 100%);
+    color: white;
+}
+
+.create-room-card .MuiTextField-root {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.create-room-card .MuiOutlinedInput-root {
+    color: white;
+}
+
+.create-room-card .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 유저 초대 카드 */
+.invite-users-card {
+    background: linear-gradient(135deg, #38B2AC 0%, #319795 100%);
+    color: white;
+}
+
+/* 검색 카드 */
+.search-card {
+    background: white;
+    border: 2px solid #E2E8F0;
+}
+
+/* 채팅방 목록 섹션 */
+.chat-rooms-section {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+}
+
+.chat-room-list {
+    display: grid;
+    gap: 24px;
+    min-height: 400px;
+}
+
+/* 채팅방 카드 */
+.chat-room-item {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.chat-room-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-color: #6C63FF;
+}
+
+.chat-room-item:last-child {
+    margin-bottom: 0;
+}
+
+.chat-room-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.chat-room-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #6C63FF;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.chat-room-info {
+    flex: 1;
+}
+
+.chat-room-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.chat-room-meta {
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 페이지네이션 스타일 */
+.MuiPagination-root {
+    margin-top: 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.MuiPaginationItem-root {
+    font-size: 0.95rem;
+    color: #ffffff;
+    margin: 0 4px;
+    min-width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    transition: all 0.2s ease;
+}
+
+.MuiPaginationItem-root.Mui-selected {
+    background: linear-gradient(135deg, #6C63FF 0%, #5a55d3 100%) !important;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
+}
+
+.MuiPaginationItem-root:hover {
+    background-color: rgba(108, 99, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+.MuiPaginationItem-root.Mui-selected:hover {
+    transform: translateY(-1px) scale(1.05);
+}
+
+/* 이전/다음 버튼 스타일 */
+.MuiPaginationItem-previousNext {
+    border: 1px solid rgba(108, 99, 255, 0.2);
+}
+
+.MuiPaginationItem-previousNext:hover {
+    border-color: #6C63FF;
+    background-color: rgba(108, 99, 255, 0.05);
+}
+
+/* 페이드 애니메이션 */
+.fade-enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease-in, transform 300ms ease-in;
+}
+
+.fade-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 300ms ease-in, transform 300ms ease-in;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .features-section {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 16px;
+    }
+
+    .chat-rooms-section {
+        margin: 0 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .features-section {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-lobby-container {
+        padding: 24px 0;
+    }
+
+    .MuiPaginationItem-root {
+        min-width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+        margin: 0 2px;
+    }
+} 
