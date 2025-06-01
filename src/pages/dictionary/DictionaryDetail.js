@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import CustomButton from '../../components/common/CustomButton';
 import { UserContext } from '../../context/UserContext';
-import './DictionaryDetail.css';
 import {
   deleteDictionaryItem,
   fetchDictionaryItemWithView,
   likeDictionaryItem,
   updateDictionaryItem,
 } from './api/DictionaryApi';
+import './DictionaryDetail.css';
+import DictionaryForm from './DictionaryForm';
 
 function DictionaryDetail({ termInfo, onClose }) {
   const [detail, setDetail] = useState(null);
@@ -78,34 +79,16 @@ function DictionaryDetail({ termInfo, onClose }) {
         </button>
         <h2 className="term-title">{detail.term}</h2>
         <p className="term-definition">{detail.definitions?.[0]?.definition}</p>
-      
+
         {isEditing ? (
-          <div className="edit-definitions">
-            {editedDefinitions.map((def, idx) => (
-              <div key={idx}>
-                <label>뜻풀이 {idx + 1}</label>
-                <input
-                  type="text"
-                  value={def.definition}
-                  onChange={(e) => {
-                    const updated = [...editedDefinitions];
-                    updated[idx].definition = e.target.value;
-                    setEditedDefinitions(updated);
-                  }}
-                />
-                <label>예문</label>
-                <input
-                  type="text"
-                  value={def.example || ''}
-                  onChange={(e) => {
-                    const updated = [...editedDefinitions];
-                    updated[idx].example = e.target.value;
-                    setEditedDefinitions(updated);
-                  }}
-                />
-              </div>
-            ))}
-          </div>
+          <DictionaryForm
+            initialData={detail}
+            onSave={(updated) => {
+              setDetail(updated);
+              setIsEditing(false);
+            }}
+            onCancel={() => setIsEditing(false)}
+          />
         ) : (
           <div className="extra-definitions">
             {detail.definitions.map((def, idx) => (
@@ -128,28 +111,14 @@ function DictionaryDetail({ termInfo, onClose }) {
               <div className="term-meta-right">
                 &nbsp;&nbsp; 👁 {detail.views}
                 {user?.id === detail.user?.id && (
-                  <div className="term-actions" >
-                    {isEditing ? (
-                      <>
-                        <CustomButton onClick={handleUpdate} >
-                          💾 저장
-                        </CustomButton>
-                        <CustomButton onClick={() => setIsEditing(false)}>
-                          ❌ 취소
-                        </CustomButton>
-                      </>
-                    ) : (
-                      <>
-                        <CustomButton onClick={() => setIsEditing(true)}>
-                          ✏️ 수정
-                        </CustomButton>
-                        <CustomButton onClick={handleDelete}>
-                          🗑 삭제
-                        </CustomButton>
-                      </>
-                    )}
+                  <div className="term-actions">
+                    <>
+                      <CustomButton onClick={() => setIsEditing(true)}>
+                        ✏️ 수정
+                      </CustomButton>
+                      <CustomButton onClick={handleDelete}>🗑 삭제</CustomButton>
+                    </>
                   </div>
-                  
                 )}
               </div>
             </div>

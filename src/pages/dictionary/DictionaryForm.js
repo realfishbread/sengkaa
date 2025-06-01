@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
-import './DictionaryForm.css';
-import { checkTermExists, createDictionaryItem  } from './api/DictionaryApi';
-import { nav } from 'framer-motion/client';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './DictionaryForm.css';
+import {
+  checkTermExists,
+  createDictionaryItem,
+  updateDictionaryItem,
+} from './api/DictionaryApi';
 
-function DictionaryForm({ onSave, onCancel }) {
-  const [term, setTerm] = useState('');
-  const [category, setCategory] = useState('');
-  const [definitions, setDefinitions] = useState([{ definition: '', example: '' }]);
+function DictionaryForm({ onSave, onCancel, initialData = null }) {
+  const [term, setTerm] = useState(initialData?.term || '');
+  const [category, setCategory] = useState(initialData?.category || '');
+  const [definitions, setDefinitions] = useState(
+    initialData?.definitions || [{ definition: '', example: '' }]
+  );
   const [showCategory, setShowCategory] = useState(true);
   const [showDefinitions, setShowDefinitions] = useState(true);
   const navigate = useNavigate();
@@ -26,17 +31,24 @@ function DictionaryForm({ onSave, onCancel }) {
     if (!term) return alert('표제어를 입력해주세요.');
     if (!category) return alert('카테고리를 선택해주세요.');
     if (!definitions[0].definition) return alert('뜻풀이를 입력해주세요.');
-
+    const payload = { term, category, definitions };
     try {
-      const payload = { term, category, definitions };
-      const saved = await createDictionaryItem(payload);
-      alert('용어가 성공적으로 등록되었습니다! 🎉');
-      onSave(saved);
+      if (initialData) {
+        // 수정
+        const updated = await updateDictionaryItem(initialData.id, payload);
+        alert('수정 완료! ✅');
+        onSave(updated);
+      } else {
+        const saved = await createDictionaryItem(payload);
+        alert('용어가 성공적으로 등록되었습니다! 🎉');
+        onSave(saved);
 
-      // 초기화
-      setTerm('');
-      setCategory('');
-      setDefinitions([{ definition: '', example: '' }]);
+        // 초기화
+        setTerm('');
+        setCategory('');
+        setDefinitions([{ definition: '', example: '' }]);
+        
+      }
       navigate('/dictionary'); // 목록 페이지로 이동
     } catch (err) {
       console.error('등록 실패 ❌', err);
@@ -73,7 +85,9 @@ function DictionaryForm({ onSave, onCancel }) {
               placeholder="표제어를 입력해주세요"
               onChange={(e) => setTerm(e.target.value)}
             />
-            <button className="check-btn" onClick={handleCheckDuplicate}>중복 확인</button>
+            <button className="check-btn" onClick={handleCheckDuplicate}>
+              중복 확인
+            </button>
           </div>
         </div>
       </section>
@@ -87,7 +101,10 @@ function DictionaryForm({ onSave, onCancel }) {
           <div className="form-group">
             <label>카테고리</label>
             <div className="category-select-group">
-              <select value={category} onChange={(e) => setCategory(e.target.value)}>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
                 <option value="">선택하세요</option>
                 <option value="아이돌">아이돌</option>
                 <option value="여자 아이돌">여자 아이돌</option>
@@ -134,15 +151,20 @@ function DictionaryForm({ onSave, onCancel }) {
 
               <div className="inline-buttons">
                 <button onClick={handleAddDefinition}>＋</button>
-                <button onClick={() => setDefinitions(
-                  definitions.length > 1
-                    ? definitions.filter((_, i) => i !== idx)
-                    : definitions
-                )}>접기</button>
+                <button
+                  onClick={() =>
+                    setDefinitions(
+                      definitions.length > 1
+                        ? definitions.filter((_, i) => i !== idx)
+                        : definitions
+                    )
+                  }
+                >
+                  접기
+                </button>
               </div>
             </div>
           ))}
-
       </section>
 
       {/* 저장/취소 */}
