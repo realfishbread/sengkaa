@@ -82,7 +82,7 @@ const ChatLobbyPage = () => {
 
   useEffect(() => {
     fetchRooms();
-  }, [search]);
+  }, [fetchRooms, search]);
 
   useEffect(() => {
     if (userQuery.length >= 1) {

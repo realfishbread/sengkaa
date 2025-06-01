@@ -20,7 +20,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16  # React LTS 버전
+          node-version: 16 # React LTS 버전
+
+      - name: Set React homepage for build
+        run: |
+          sed -i 's|"homepage": "[^"]*"|"homepage": "/frontend-static"|' package.json || echo '"homepage": "/frontend-static"' >> package.json
 
       - name: Install React dependencies
         run: npm install --legacy-peer-deps
@@ -28,13 +32,13 @@ jobs:
       - name: Build React project
         run: |
           export CI=false
-          npm run build 
+          npm run build
 
       ## --------------- Django Backend 설정 ---------------
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.9.21  # Django 지원 버전
+          python-version: 3.9.21 # Django 지원 버전
 
       - name: Install Django dependencies
         run: |
@@ -64,7 +68,6 @@ jobs:
           find . -type d -name "__pycache__" -exec rm -r {} +
           find . -type f -name "*.pyc" -delete
 
-      
       - name: Deploy Backend source to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
@@ -75,7 +78,6 @@ jobs:
           echo "${EC2_SSH_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" . ${EC2_USER}@${EC2_HOST}:/var/www/eventcafe-backend --exclude=node_modules --exclude=build --exclude=.git --exclude=venv
-
 
       - name: Create .env on EC2
         env:
@@ -96,4 +98,3 @@ jobs:
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         run: |
           ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'bash /var/www/eventcafe-backend/deploy.sh'
-
