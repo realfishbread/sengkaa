@@ -186,3 +186,34 @@
 .react-calendar__tile--active:enabled:focus {
   background: #dcf2ff !important;
 }
+
+/* 반응형: 모바일일 땐 세로로 정렬 */
+@media (max-width: 768px) {
+  .calendar-layout {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .calendar-panel {
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  .right-section {
+    width: 100%;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .weather-box,
+  .schedule-box {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .react-calendar__tile {
+    height: 60px !important;
+    font-size: 11px;
+  }
+}

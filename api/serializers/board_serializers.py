@@ -51,5 +51,5 @@ class ReplySerializer(serializers.ModelSerializer):
     
     def get_children(self, obj):
         if obj.children.exists():
-            return ReplySerializer(obj.children.all(), many=True).data
+            return ReplySerializer(obj.children.all(), many=True, context=self.context).data
         return []

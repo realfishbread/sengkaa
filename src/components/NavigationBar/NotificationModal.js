@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Typography,
-  Modal,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Tabs,
-  Tab,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Button,
-} from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Modal,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
 
-const NotificationModal = ({ open, onClose, notifications = [], onDeleteNotification, onMarkAllAsRead }) => {
+const NotificationModal = ({
+  open,
+  onClose,
+  notifications = [],
+  onDeleteNotification,
+  onMarkAllAsRead,
+  onRespondToInvite,
+}) => {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [selectedNotification, setSelectedNotification] = useState(null);
@@ -47,7 +54,14 @@ const NotificationModal = ({ open, onClose, notifications = [], onDeleteNotifica
     }
   };
 
-  const hasUnreadNotifications = notifications.some(notification => !notification.isRead);
+  const hasUnreadNotifications = notifications.some(
+    (notification) => !notification.isRead
+  );
+
+  // ✅ 여기다가!
+  const isInviteNotification = (notification) =>
+    notification.message?.includes('채팅방에 초대했어요') &&
+    notification.metadata?.room_id;
 
   return (
     <Modal
@@ -55,7 +69,7 @@ const NotificationModal = ({ open, onClose, notifications = [], onDeleteNotifica
       onClose={onClose}
       aria-labelledby="notification-modal"
       BackdropProps={{
-        onClick: onClose
+        onClick: onClose,
       }}
     >
       <Box
@@ -71,15 +85,21 @@ const NotificationModal = ({ open, onClose, notifications = [], onDeleteNotifica
           outline: 'none',
         }}
       >
-        <Box sx={{ 
-          borderBottom: 1, 
-          borderColor: 'divider',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pr: 2
-        }}>
-          <Tabs value={currentTab} onChange={handleTabChange} aria-label="notification tabs">
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: 'divider',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            pr: 2,
+          }}
+        >
+          <Tabs
+            value={currentTab}
+            onChange={handleTabChange}
+            aria-label="notification tabs"
+          >
             <Tab label="나의 알림" />
           </Tabs>
           {hasUnreadNotifications && (
@@ -90,8 +110,8 @@ const NotificationModal = ({ open, onClose, notifications = [], onDeleteNotifica
               sx={{
                 color: 'primary.main',
                 '&:hover': {
-                  backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                }
+                  backgroundColor: 'rgba(25, 118, 210, 0.04)',
+                },
               }}
             >
               모두 읽음
@@ -112,27 +132,62 @@ const NotificationModal = ({ open, onClose, notifications = [], onDeleteNotifica
                   }}
                 >
                   <ListItemIcon sx={{ minWidth: 40 }}>
-                    <CheckCircleIcon 
-                      color={notification.isRead ? "disabled" : "success"} 
-                      sx={{ fontSize: 20 }} 
+                    <CheckCircleIcon
+                      color={notification.isRead ? 'disabled' : 'success'}
+                      sx={{ fontSize: 20 }}
                     />
                   </ListItemIcon>
                   <ListItemText
                     primary={notification.message}
-                    secondary={notification.time}
+                    secondary={
+                      <>
+                        {notification.time}
+                        {isInviteNotification(notification) && (
+                          <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
+                            <Button
+                              size="small"
+                              variant="contained"
+                              color="primary"
+                              onClick={() =>
+                                onRespondToInvite(
+                                  notification.metadata.room_id,
+                                  'accept'
+                                )
+                              }
+                            >
+                              수락
+                            </Button>
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              color="secondary"
+                              onClick={() =>
+                                onRespondToInvite(
+                                  notification.metadata.room_id,
+                                  'reject'
+                                )
+                              }
+                            >
+                              거절
+                            </Button>
+                          </Box>
+                        )}
+                      </>
+                    }
                     sx={{
                       '& .MuiListItemText-primary': {
                         fontSize: '0.9rem',
                         color: '#333',
                         wordBreak: 'keep-all',
-                        overflowWrap: 'break-word'
+                        overflowWrap: 'break-word',
                       },
                       '& .MuiListItemText-secondary': {
                         fontSize: '0.8rem',
                       },
                     }}
                   />
-                  <IconButton 
+
+                  <IconButton
                     size="small"
                     onClick={(e) => handleMenuOpen(e, notification)}
                   >
@@ -174,4 +229,4 @@ const NotificationModal = ({ open, onClose, notifications = [], onDeleteNotifica
   );
 };
 
-export default NotificationModal; 
+export default NotificationModal;

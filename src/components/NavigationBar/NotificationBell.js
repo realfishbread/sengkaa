@@ -5,30 +5,33 @@ import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../shared/api/axiosInstance';
 import NotificationModal from './NotificationModal';
+import { useNavigate } from 'react-router-dom';
 
 const NotificationBell = () => {
+  const navigate = useNavigate();
   const [count, setCount] = useState(0);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      message: "회원님이 참여 신청한 '방탄소년단 RM 생일카페' 이벤트가 승인되었습니다.",
-      time: "4일",
-      isRead: false
-    },
-    {
-      id: 2,
-      message: "회원님이 등록한 '카페 마루' 장소가 승인되었습니다.",
-      time: "5일",
-      isRead: false
-    },
-    {
-      id: 3,
-      message: "새로운 이벤트가 등록되었습니다: '뉴진스 해린 생일카페'",
-      time: "1일",
-      isRead: false
+  const [notifications, setNotifications] = useState([]);
+
+  const handleInviteResponse = async (roomId, action) => {
+  try {
+    const res = await axiosInstance.post(`/user/chat/respond/${roomId}/`, {
+      action: action
+    });
+    alert(res.data.detail); // 성공 메시지
+
+    // 수락했다면 채팅방으로 이동
+    if (action === 'accept') {
+      navigate(`/chat/${roomId}`);
     }
-  ]);
+
+    // 수락/거절 후 알림 목록 갱신
+    fetchNotifications();
+  } catch (err) {
+    console.error('초대 응답 실패:', err);
+    alert('초대 처리 중 오류가 발생했어요.');
+  }
+};
 
   const handleCloseModal = () => {
     // 모달이 닫힐 때 모든 알림을 읽음 처리
@@ -76,6 +79,7 @@ const NotificationBell = () => {
       time: new Date(notification.created_at).toLocaleDateString(),
       isRead: notification.is_read
     })));
+    
   } catch (err) {
     console.error('🔕 알림 데이터 불러오기 실패:', err);
   }
@@ -112,6 +116,7 @@ const NotificationBell = () => {
         notifications={notifications}
         onDeleteNotification={handleDeleteNotification}
         onMarkAllAsRead={markAllAsRead}
+        onRespondToInvite={handleInviteResponse} // ✅ 추가
       />
     </>
   );

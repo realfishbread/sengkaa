@@ -74,3 +74,18 @@ export const deleteDictionaryItem = async (id) => {
   );
   return response.data;
 };
+
+export const fetchGroupedTermsByGenre = async (genreId) => {
+  const res = await fetch(`/user/dictionary/grouped-by-star-group/?genre_id=${genreId}`);
+  if (!res.ok) throw new Error('🔥 그룹별 용어 불러오기 실패');
+  return await res.json();
+};
+
+// DictionaryApi.js
+export const fetchStarGroups = async (genreId) => {
+  const response = await axios.get(`https://eventcafe.site/user/dictionary/star-groups/`, {
+    params: { genre_id: genreId },
+  });
+  return response.data;
+};
+

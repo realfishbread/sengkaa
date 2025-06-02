@@ -1,10 +1,37 @@
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TossWidget from './TossWidget';
 
-const TossModal = ({ open, onClose, clientKey, orderId, orderName, amount, user }) => {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '90%',
+  maxWidth: 480,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 2,
+  outline: 'none',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+};
+
+const TossModal = ({
+  open,
+  onClose,
+  clientKey,
+  orderId,
+  orderName,
+  amount,
+  user,
+}) => {
   return (
     <Modal open={open} onClose={onClose}>
-      <div style={{ background: 'white', padding: 20, borderRadius: 8 }}>
+      <Box sx={style}>
         <TossWidget
           clientKey={clientKey}
           orderId={orderId}
@@ -12,8 +39,10 @@ const TossModal = ({ open, onClose, clientKey, orderId, orderName, amount, user 
           amount={amount}
           user={user}
         />
-        <button onClick={onClose}>닫기</button>
-      </div>
+        <Button variant="outlined" color="secondary" onClick={onClose}>
+          닫기
+        </Button>
+      </Box>
     </Modal>
   );
 };

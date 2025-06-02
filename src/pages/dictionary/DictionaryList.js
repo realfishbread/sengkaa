@@ -5,6 +5,8 @@ import './DictionaryList.css';
 import {
   createDictionaryItem,
   fetchDictionaryList,
+  fetchGroupedTermsByGenre,
+  fetchStarGroups,
   fetchTotalViews,
 } from './api/DictionaryApi';
 
@@ -18,84 +20,14 @@ const TAGS = [
   '웹툰',
 ];
 
-const CATEGORIES = {
-  femaleIdols: {
-    title: '여자 아이돌',
-    items: [
-      '블랙핑크',
-      '트와이스',
-      '아이브',
-      '뉴진스',
-      '르세라핌',
-      '에스파',
-      '있지',
-      '케플러',
-      '프로미스나인',
-      '스테이씨',
-    ],
-  },
-  maleIdols: {
-    title: '남자 아이돌',
-    items: [
-      '방탄소년단',
-      '엑소',
-      '세븐틴',
-      'NCT',
-      '스트레이 키즈',
-      '투모로우바이투게더',
-      '엔하이픈',
-      '더보이즈',
-      '트레저',
-      '에이티즈',
-    ],
-  },
-  streamers: {
-    title: '스트리머',
-    items: [
-      '침착맨',
-      '우왁굳',
-      '주호민',
-      '풍월량',
-      '김도',
-      '쯔양',
-      '이세계아이돌',
-      '왁타버스',
-      '고세구',
-      '릴파',
-    ],
-  },
-  games: {
-    title: '게임',
-    items: [
-      '리그 오브 레전드',
-      '발로란트',
-      '오버워치 2',
-      '배틀그라운드',
-      '메이플스토리',
-      '로스트아크',
-      '피파 온라인 4',
-      '서든어택',
-      '던전앤파이터',
-      '디아블로 4',
-    ],
-  },
-  webtoons: {
-    title: '웹툰',
-    items: [
-      '김부장',
-      '독립일기',
-      '연애혁명',
-      '여신강림',
-      '싸움독학',
-      '취사병 전설이 되다',
-      '재혼 황후',
-      '나 혼자만 레벨업',
-      '외모지상주의',
-      '화산귀환',
-    ],
-  },
+const GENRE_TAG_TO_ID = {
+  아이돌: 1,
+  '여자 아이돌': 1,
+  '남자 아이돌': 2,
+  스트리머: 2,
+  게임: 3,
+  웹툰: 4,
 };
-
 const DictionaryList = () => {
   const [selectedTag, setSelectedTag] = useState('전체');
   const [selectedTerm, setSelectedTerm] = useState(null);
@@ -105,6 +37,12 @@ const DictionaryList = () => {
   const [totalViews, setTotalViews] = useState(0);
   const [openCategories, setOpenCategories] = useState({});
   const [categorySearches, setCategorySearches] = useState({});
+
+  const [groupedTerms, setGroupedTerms] = useState({});
+  const [expandedStars, setExpandedStars] = useState({});
+  const [starGroups, setStarGroups] = useState([]); // 🔥
+  const [categories, setCategories] = useState({});
+  const [activeGroupTerms, setActiveGroupTerms] = useState(null);
 
   useEffect(() => {
     const loadTerms = async () => {
@@ -129,6 +67,34 @@ const DictionaryList = () => {
     loadViews();
   }, []);
 
+  useEffect(() => {
+    const loadStarGroups = async () => {
+      try {
+        const genreId = GENRE_TAG_TO_ID[selectedTag];
+        if (!genreId) return;
+
+        const res = await fetchStarGroups(genreId);
+        setStarGroups(res); // ['르세라핌', '뉴진스'...]
+
+        const dynamicCategoryKey = `${selectedTag}-category`; // 키도 유니크하게
+        const newCategory = {
+          [dynamicCategoryKey]: {
+            title: selectedTag,
+            items: res, // group 리스트
+          },
+        };
+
+        setCategories(newCategory); // 🔥 상태로 관리
+      } catch (err) {
+        console.error('스타 그룹 불러오기 실패 ❌', err);
+      }
+    };
+
+    if (selectedTag !== '전체' && selectedTag !== '아이돌') {
+      loadStarGroups();
+    }
+  }, [selectedTag]);
+
   const filteredTerms = terms.filter((term) => {
     const tagMatch = selectedTag === '전체' || term.category === selectedTag;
     const keywordMatch =
@@ -140,10 +106,9 @@ const DictionaryList = () => {
 
   const handleTagClick = (tag) => {
     setSelectedTag(tag);
-    // 태그를 클릭할 때 카테고리를 닫힌 상태로 설정
     setOpenCategories({});
+    setActiveGroupTerms(null); // ⭐ 초기화
   };
-
   const handleTermClick = (term) => {
     setSelectedTerm(term);
   };
@@ -160,6 +125,25 @@ const DictionaryList = () => {
       setShowForm(false);
     } catch (err) {
       console.error('용어 등록 실패 ❌', err);
+    }
+  };
+
+  const handleStarClick = async (groupName, genreId) => {
+    setExpandedStars((prev) => ({
+      ...prev,
+      [groupName]: !prev[groupName],
+    }));
+
+    try {
+      const res = await fetchGroupedTermsByGenre(genreId);
+      setGroupedTerms((prev) => ({
+        ...prev,
+        ...res,
+      }));
+
+      setActiveGroupTerms(res[groupName] || []); // ⭐ 이게 핵심
+    } catch (err) {
+      console.error('🔥 스타별 용어 로딩 실패:', err);
     }
   };
 
@@ -215,52 +199,76 @@ const DictionaryList = () => {
 
       {selectedTag !== '전체' && selectedTag !== '아이돌' && (
         <div className="category-list">
-          {Object.entries(CATEGORIES)
-            .filter(([key, category]) => category.title === selectedTag)
-            .map(([key, category]) => (
-              <div key={key} className="category-item">
+          {Object.entries(categories)
+            .filter(([_, category]) => category.title === selectedTag)
+            .map(([categoryKey, category]) => (
+              <div key={categoryKey} className="category-item">
                 <button
                   className="category-toggle"
                   onClick={() =>
                     setOpenCategories((prev) => ({
                       ...prev,
-                      [key]: !prev[key],
+                      [categoryKey]: !prev[categoryKey],
                     }))
                   }
                 >
                   <span>{category.title}</span>
                   <span
-                    className={`arrow ${openCategories[key] ? 'open' : ''}`}
+                    className={`arrow ${
+                      openCategories[categoryKey] ? 'open' : ''
+                    }`}
                   >
                     ▼
                   </span>
                 </button>
-                {openCategories[key] && (
+
+                {openCategories[categoryKey] && (
                   <>
                     <div className="category-search">
                       <input
                         type="text"
                         placeholder="리스트 내 검색..."
-                        value={categorySearches[key] || ''}
+                        value={categorySearches[categoryKey] || ''}
                         onChange={(e) =>
-                          handleCategorySearch(key, e.target.value)
+                          handleCategorySearch(categoryKey, e.target.value)
                         }
                         onClick={(e) => e.stopPropagation()}
                       />
                     </div>
+
                     <ul className="category-content">
-                      {getFilteredCategoryItems(category.items, key).map(
-                        (item, index) => (
-                          <li
-                            key={index}
-                            onClick={() => setSearchKeyword(item)}
-                          >
-                            {item}
-                          </li>
-                        )
-                      )}
-                      {getFilteredCategoryItems(category.items, key).length ===
-                        0 && (
+                      {getFilteredCategoryItems(
+                        category.items,
+                        categoryKey
+                      ).map((groupName, index) => (
+                        <li
+                          key={groupName}
+                          onClick={() =>
+                            handleStarClick(
+                              groupName,
+                              GENRE_TAG_TO_ID[selectedTag]
+                            )
+                          }
+                        >
+                          {groupName}
+                          {expandedStars[groupName] &&
+                            groupedTerms[groupName] && (
+                              <ul className="term-sublist">
+                                {groupedTerms[groupName].map((term) => (
+                                  <li
+                                    key={term.id}
+                                    onClick={() => setSelectedTerm(term)}
+                                    className="term-subitem"
+                                  >
+                                    {term.term}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                        </li>
+                      ))}
+                      {getFilteredCategoryItems(category.items, categoryKey)
+                        .length === 0 && (
                         <li className="no-results">검색 결과가 없습니다</li>
                       )}
                     </ul>
@@ -272,7 +280,7 @@ const DictionaryList = () => {
       )}
 
       <div className="term-card-list">
-        {filteredTerms.map((term) => (
+        {(activeGroupTerms || filteredTerms).map((term) => (
           <div
             key={term.id}
             className="term-card"

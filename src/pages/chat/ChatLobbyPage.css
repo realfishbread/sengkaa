@@ -1,274 +1,299 @@
 /* 메인 레이아웃 */
 .chat-lobby-container {
-    padding: 40px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    min-height: 100vh;
-    background: #fafafa;
+  padding: 40px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fafafa;
 }
 
 /* 헤더 배경 - 원래 스타일 유지 */
 .chat-lobby-header {
-    width: 100%;
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 48px 16px;
-    border-radius: 12px;
-    background-color: #f0f4ff;
-    background-image: radial-gradient(circle at 20% 40%, rgba(99, 102, 241, 0.12) 120px, transparent 120px),
-      radial-gradient(circle at 70% 60%, rgba(99, 102, 241, 0.08) 120px, transparent 120px),
-      radial-gradient(circle at 70% 60%, rgba(99, 102, 241, 0.08) 120px, transparent 120px);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-position: center;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    margin-bottom: 32px;
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 48px 16px;
+  border-radius: 12px;
+  background-color: #f0f4ff;
+  background-image: radial-gradient(
+      circle at 20% 40%,
+      rgba(99, 102, 241, 0.12) 120px,
+      transparent 120px
+    ),
+    radial-gradient(
+      circle at 70% 60%,
+      rgba(99, 102, 241, 0.08) 120px,
+      transparent 120px
+    ),
+    radial-gradient(
+      circle at 70% 60%,
+      rgba(99, 102, 241, 0.08) 120px,
+      transparent 120px
+    );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px;
 }
 
 .chat-lobby-header h1 {
-    color: black;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  color: black;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .chat-lobby-header p {
-    margin-top: 8px;
-    color: #555;
+  margin-top: 8px;
+  color: #555;
 }
 
 /* 기능 섹션 레이아웃 */
 .features-section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 80px;
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* 카드 너비 유지 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 24px;
+  margin-bottom: 80px;
+  max-width: 700px; /* 필요시 조정 */
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
 .features-section::after {
-    content: '';
-    position: absolute;
-    bottom: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(108, 99, 255, 0.2), transparent);
+  content: '';
+  position: absolute;
+  justify-content: center; /* 카드들을 수평 가운데로 */
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(108, 99, 255, 0.2),
+    transparent
+  );
 }
 
 /* 기능 카드 공통 스타일 */
 .feature-card {
-    background: white;
-    border-radius: 16px;
-    padding: 24px;
-    transition: all 0.3s ease;
-    height: 100%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  height: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 /* 채팅방 생성 카드 */
 .create-room-card {
-    background: linear-gradient(135deg, #6C63FF 0%, #5a55d3 100%);
-    color: white;
+  background: linear-gradient(135deg, #6c63ff 0%, #5a55d3 100%);
+  color: white;
 }
 
 .create-room-card .MuiTextField-root {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
 }
 
 .create-room-card .MuiOutlinedInput-root {
-    color: white;
+  color: white;
 }
 
 .create-room-card .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* 유저 초대 카드 */
 .invite-users-card {
-    background: linear-gradient(135deg, #38B2AC 0%, #319795 100%);
-    color: white;
+  background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+  color: white;
 }
 
 /* 검색 카드 */
 .search-card {
-    background: white;
-    border: 2px solid #E2E8F0;
+  background: white;
+  border: 2px solid #e2e8f0;
 }
 
 /* 채팅방 목록 섹션 */
 .chat-rooms-section {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 40px;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
 }
 
 .chat-room-list {
-    display: grid;
-    gap: 24px;
-    min-height: 400px;
+  display: grid;
+  gap: 24px;
+  min-height: 400px;
 }
 
 /* 채팅방 카드 */
 .chat-room-item {
-    background: white;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    padding: 24px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    margin-bottom: 8px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  margin-bottom: 8px;
 }
 
 .chat-room-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    border-color: #6C63FF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: #6c63ff;
 }
 
 .chat-room-item:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .chat-room-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .chat-room-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: #6C63FF;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1.2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #6c63ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
 }
 
 .chat-room-info {
-    flex: 1;
+  flex: 1;
 }
 
 .chat-room-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
 }
 
 .chat-room-meta {
-    color: #666;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* 페이지네이션 스타일 */
 .MuiPagination-root {
-    margin-top: 32px;
-    display: flex;
-    justify-content: center;
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
 }
 
 .MuiPaginationItem-root {
-    font-size: 0.95rem;
-    color: #ffffff;
-    margin: 0 4px;
-    min-width: 36px;
-    height: 36px;
-    border-radius: 18px;
-    transition: all 0.2s ease;
+  font-size: 0.95rem;
+  color: #ffffff;
+  margin: 0 4px;
+  min-width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  transition: all 0.2s ease;
 }
 
 .MuiPaginationItem-root.Mui-selected {
-    background: linear-gradient(135deg, #6C63FF 0%, #5a55d3 100%) !important;
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
+  background: linear-gradient(135deg, #6c63ff 0%, #5a55d3 100%) !important;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
 }
 
 .MuiPaginationItem-root:hover {
-    background-color: rgba(108, 99, 255, 0.08);
-    transform: translateY(-1px);
+  background-color: rgba(108, 99, 255, 0.08);
+  transform: translateY(-1px);
 }
 
 .MuiPaginationItem-root.Mui-selected:hover {
-    transform: translateY(-1px) scale(1.05);
+  transform: translateY(-1px) scale(1.05);
 }
 
 /* 이전/다음 버튼 스타일 */
 .MuiPaginationItem-previousNext {
-    border: 1px solid rgba(108, 99, 255, 0.2);
+  border: 1px solid rgba(108, 99, 255, 0.2);
 }
 
 .MuiPaginationItem-previousNext:hover {
-    border-color: #6C63FF;
-    background-color: rgba(108, 99, 255, 0.05);
+  border-color: #6c63ff;
+  background-color: rgba(108, 99, 255, 0.05);
 }
 
 /* 페이드 애니메이션 */
 .fade-enter {
-    opacity: 0;
-    transform: translateY(10px);
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 .fade-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 300ms ease-in, transform 300ms ease-in;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
 }
 
 .fade-exit {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .fade-exit-active {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 300ms ease-in, transform 300ms ease-in;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
 }
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
-    .features-section {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 0 16px;
-    }
+  .features-section {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 16px;
+  }
 
-    .chat-rooms-section {
-        margin: 0 16px;
-    }
+  .chat-rooms-section {
+    margin: 0 16px;
+  }
 }
 
 @media (max-width: 768px) {
-    .features-section {
-        grid-template-columns: 1fr;
-    }
+  .features-section {
+    grid-template-columns: 1fr;
+  }
 
-    .chat-lobby-container {
-        padding: 24px 0;
-    }
+  .chat-lobby-container {
+    padding: 24px 0;
+  }
 
-    .MuiPaginationItem-root {
-        min-width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
-        margin: 0 2px;
-    }
-} 
+  .MuiPaginationItem-root {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    margin: 0 2px;
+  }
+}

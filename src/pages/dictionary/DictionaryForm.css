@@ -167,7 +167,7 @@
 }
 
 .notice-text {
-  font-size: 1em !important; /* 🔹 더 작고 상대적인 단위로 */
+  font-size: 0.7em !important; /* 🔹 더 작고 상대적인 단위로 */
   color: #555;
   margin-top: 8px;
   line-height: 1.4;

@@ -32,7 +32,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         messages = await sync_to_async(
             lambda: list(
                 room.messages.order_by("-timestamp")[:30].values(
-                    "content", "sender__nickname", "timestamp"
+                    "content", "sender__nickname", "timestamp", "is_system"
                 )
             )
         )()
@@ -46,7 +46,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     "content": m["content"],
                     "sender": m["sender__nickname"],
-                    "timestamp": str(m["timestamp"])
+                    "timestamp": str(m["timestamp"]),
+                    "is_system": m["is_system"]
                 } for m in messages
             ]
         }))
@@ -95,7 +96,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "type": "chat_message",
                 "message": message,
                 "sender": user.nickname,
-                "timestamp": str(msg.timestamp)  # ISO 형식으로 보내기
+                "timestamp": str(msg.timestamp),
+                "is_system": False
             }
         )
 
@@ -104,5 +106,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "message": event["message"],
             "sender": event["sender"],
-            "timestamp": event["timestamp"]
+            "timestamp": event["timestamp"],
+            "is_system": event.get("is_system", False)
         }))

@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Container,
-  Autocomplete,
-  Paper,
-  Avatar,
-  Pagination,
-  Stack
-} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SearchIcon from '@mui/icons-material/Search';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Pagination,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import './ChatLobbyPage.css';
 import axiosInstance from '../../shared/api/axiosInstance';
+import './ChatLobbyPage.css';
 
 const ROOMS_PER_PAGE = 5;
 
@@ -30,6 +25,7 @@ const ChatLobbyPage = () => {
   const [userResults, setUserResults] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [page, setPage] = useState(1);
+  const [maxParticipants, setMaxParticipants] = useState(4);
 
   const totalPages = Math.ceil(rooms.length / ROOMS_PER_PAGE);
   const currentRooms = rooms.slice(
@@ -44,10 +40,10 @@ const ChatLobbyPage = () => {
   const fetchRooms = async () => {
     try {
       const res = await axiosInstance.get('/user/chat/list/', {
-        params: { q: search }
+        params: { q: search },
       });
       setRooms(res.data);
-      setPage(1); // 검색 결과가 변경될 때 첫 페이지로 이동
+      setPage(1);
     } catch (err) {
       console.error('방 목록 불러오기 실패:', err);
     }
@@ -69,7 +65,8 @@ const ChatLobbyPage = () => {
 
     const payload = {
       name: roomName,
-      members: selectedUsers.map((user) => user.nickname)
+      participants: selectedUsers.map((user) => user.nickname),
+      max_participants: maxParticipants, // ✅ 사용자가 설정한 값
     };
 
     try {
@@ -92,24 +89,26 @@ const ChatLobbyPage = () => {
 
   return (
     <div className="chat-lobby-container">
-      {/* 헤더 섹션 - 원래 스타일 유지 */}
       <div className="chat-lobby-header">
         <h1>💬 실시간 채팅</h1>
         <p>다른 팬들과 실시간으로 소통하고 정보를 공유해보세요</p>
       </div>
 
-      {/* 기능 섹션 */}
       <div className="features-section">
-        {/* 채팅방 생성 카드 */}
+        {/* 통합된 카드 */}
         <div className="feature-card create-room-card">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography
+              variant="h6"
+              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+            >
               <AddIcon /> 새로운 채팅방 만들기
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
-              새로운 채팅방을 만들어 대화를 시작하세요
+              채팅방 이름과 초대 유저를 입력하세요
             </Typography>
           </Box>
+
           <TextField
             fullWidth
             value={roomName}
@@ -119,34 +118,11 @@ const ChatLobbyPage = () => {
             size="small"
             sx={{ mb: 2 }}
           />
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={handleCreateRoom}
-            sx={{
-              bgcolor: 'white',
-              color: '#6C63FF',
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' }
-            }}
-          >
-            채팅방 만들기
-          </Button>
-        </div>
 
-        {/* 유저 초대 카드 */}
-        <div className="feature-card invite-users-card">
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <PersonAddIcon /> 참여할 유저 초대하기
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
-              친구들을 채팅방에 초대하세요
-            </Typography>
-          </Box>
           <Autocomplete
             multiple
             options={userResults}
-            getOptionLabel={(option) => option.username}
+            getOptionLabel={(option) => option.nickname}
             onChange={(e, newValue) => setSelectedUsers(newValue)}
             onInputChange={(e, value) => setUserQuery(value)}
             renderInput={(params) => (
@@ -159,23 +135,39 @@ const ChatLobbyPage = () => {
               />
             )}
           />
+
+          <TextField
+            type="number"
+            label="최대 인원 수"
+            value={maxParticipants}
+            onChange={(e) => setMaxParticipants(Number(e.target.value))}
+            inputProps={{ min: 2, max: 100 }}
+            fullWidth
+            size="small"
+            sx={{ mb: 2 }}
+          />
+
           <Button
             fullWidth
             variant="contained"
+            onClick={handleCreateRoom}
             sx={{
               bgcolor: 'white',
-              color: '#38B2AC',
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' }
+              color: '#6C63FF',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
             }}
           >
-            초대하기
+            채팅방 만들기
           </Button>
         </div>
 
         {/* 채팅방 검색 카드 */}
         <div className="feature-card search-card">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography
+              variant="h6"
+              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+            >
               <SearchIcon /> 채팅방 검색
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, color: '#666' }}>
@@ -197,7 +189,7 @@ const ChatLobbyPage = () => {
             onClick={fetchRooms}
             sx={{
               bgcolor: '#4A5568',
-              '&:hover': { bgcolor: '#2D3748' }
+              '&:hover': { bgcolor: '#2D3748' },
             }}
           >
             검색
@@ -205,20 +197,29 @@ const ChatLobbyPage = () => {
         </div>
       </div>
 
-      {/* 채팅방 목록 섹션 */}
       <div className="chat-rooms-section">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 3,
+          }}
+        >
           <Typography variant="h6">채팅방 목록</Typography>
           <Typography variant="body2" color="text.secondary">
             총 {rooms.length}개의 채팅방
           </Typography>
         </Box>
-        
+
         <div className="chat-room-list">
           <TransitionGroup>
             {currentRooms.map((room) => (
               <CSSTransition key={room.id} timeout={300} classNames="fade">
-                <div className="chat-room-item" onClick={() => navigate(`/chat/${room.id}`)}>
+                <div
+                  className="chat-room-item"
+                  onClick={() => navigate(`/chat/${room.id}`)}
+                >
                   <div className="chat-room-header">
                     <div className="chat-room-avatar">
                       {room.name[0].toUpperCase()}
@@ -226,9 +227,14 @@ const ChatLobbyPage = () => {
                     <div className="chat-room-info">
                       <div className="chat-room-title">{room.name}</div>
                       <div className="chat-room-meta">
-                        <span>👥 {room.current_participants}/{room.max_participants}명</span>
+                        <span>
+                          👥 {room.current_participants}/{room.max_participants}
+                          명
+                        </span>
                         <span>•</span>
-                        <span>{new Date(room.created_at).toLocaleString()}</span>
+                        <span>
+                          {new Date(room.created_at).toLocaleString()}
+                        </span>
                       </div>
                     </div>
                     <Button
@@ -236,7 +242,7 @@ const ChatLobbyPage = () => {
                       size="small"
                       sx={{
                         borderRadius: 2,
-                        minWidth: '100px'
+                        minWidth: '100px',
                       }}
                     >
                       참여하기
@@ -248,7 +254,6 @@ const ChatLobbyPage = () => {
           </TransitionGroup>
         </div>
 
-        {/* 결과가 없을 때 메시지 */}
         {rooms.length === 0 && (
           <Box sx={{ textAlign: 'center', py: 4 }}>
             <Typography variant="body1" color="text.secondary">
@@ -257,49 +262,44 @@ const ChatLobbyPage = () => {
           </Box>
         )}
 
-        {/* 페이지네이션 */}
-        <Box 
-          sx={{ 
-            display: 'flex', 
+        <Box
+          sx={{
+            display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             mt: 2,
             pt: 2,
-            borderTop: '1px solid rgba(0, 0, 0, 0.08)'
+            borderTop: '1px solid rgba(0, 0, 0, 0.08)',
           }}
         >
-          <Pagination 
-            count={totalPages || 1} 
-            page={page} 
+          <Pagination
+            count={totalPages || 1}
+            page={page}
             onChange={handlePageChange}
             color="primary"
             size="large"
-            showFirstButton 
+            showFirstButton
             showLastButton
             sx={{
               '& .MuiPaginationItem-root': {
                 fontSize: '0.95rem',
                 color: '#666',
                 '&:hover': {
-                  bgcolor: 'rgba(108, 99, 255, 0.08)'
-                }
+                  bgcolor: 'rgba(108, 99, 255, 0.08)',
+                },
               },
               '& .Mui-selected': {
                 bgcolor: '#6C63FF !important',
                 color: 'white',
                 fontWeight: 600,
                 '&:hover': {
-                  bgcolor: '#6C63FF !important'
-                }
-              }
+                  bgcolor: '#6C63FF !important',
+                },
+              },
             }}
           />
-          <Typography 
-            variant="body2" 
-            color="text.secondary"
-            sx={{ mt: 2 }}
-          >
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
             {page} / {totalPages || 1} 페이지
           </Typography>
         </Box>
