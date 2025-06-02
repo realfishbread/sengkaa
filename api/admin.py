@@ -7,12 +7,27 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 
+
 @admin.register(User)
 class CustomUserAdmin(BaseUserAdmin):
     model = User
     list_display = ['email', 'username', 'nickname', 'is_staff', 'is_superuser']
     search_fields = ['email', 'username', 'nickname']
     ordering = ['email']
+
+    # ✅ 여기부터 필드 커스터마이징
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('개인 정보', {'fields': ('username', 'nickname', 'profile_image')}),
+        ('권한', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'username', 'nickname'),
+        }),
+    )
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
