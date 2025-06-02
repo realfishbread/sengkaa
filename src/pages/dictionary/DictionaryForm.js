@@ -1,21 +1,69 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DictionaryForm.css';
 import {
   checkTermExists,
   createDictionaryItem,
   updateDictionaryItem,
+  fetchStarGroups,
 } from './api/DictionaryApi';
+
+const MAIN_CATEGORIES = [
+  { value: "", label: "선택하세요" },
+  { value: "아이돌", label: "아이돌" },
+  { value: "여자 아이돌", label: "여자 아이돌" },
+  { value: "남자 아이돌", label: "남자 아이돌" },
+  { value: "스트리머", label: "스트리머" },
+  { value: "게임", label: "게임" },
+  { value: "웹툰", label: "웹툰" },
+];
+
+const GENRE_TAG_TO_ID = {
+  아이돌: 1,
+  '여자 아이돌': 1,
+  '남자 아이돌': 2,
+  스트리머: 2,
+  게임: 3,
+  웹툰: 4,
+};
 
 function DictionaryForm({ onSave, onCancel, initialData = null }) {
   const [term, setTerm] = useState(initialData?.term || '');
   const [category, setCategory] = useState(initialData?.category || '');
+  const [subCategory, setSubCategory] = useState('');
+  const [subCategories, setSubCategories] = useState([]);
   const [definitions, setDefinitions] = useState(
     initialData?.definitions || [{ definition: '', example: '' }]
   );
   const [showCategory, setShowCategory] = useState(true);
   const [showDefinitions, setShowDefinitions] = useState(true);
   const navigate = useNavigate();
+
+  // 상위 카테고리가 변경될 때 하위 카테고리 목록 가져오기
+  useEffect(() => {
+    const loadSubCategories = async () => {
+      if (!category) {
+        setSubCategories([]);
+        return;
+      }
+
+      try {
+        const genreId = GENRE_TAG_TO_ID[category];
+        if (!genreId) {
+          setSubCategories([]);
+          return;
+        }
+
+        const groups = await fetchStarGroups(genreId);
+        setSubCategories(groups);
+      } catch (err) {
+        console.error('하위 카테고리 로딩 실패:', err);
+        setSubCategories([]);
+      }
+    };
+
+    loadSubCategories();
+  }, [category]);
 
   const handleAddDefinition = () => {
     setDefinitions([...definitions, { definition: '', example: '' }]);
@@ -28,13 +76,20 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
   };
 
   const handleSave = async () => {
-    if (!term) return alert('표제어를 입력해주세요.');
+    if (!term) return alert('용어를 입력해주세요.');
     if (!category) return alert('카테고리를 선택해주세요.');
-    if (!definitions[0].definition) return alert('뜻풀이를 입력해주세요.');
-    const payload = { term, category, definitions };
+    if (!subCategory) return alert('세부 카테고리를 선택해주세요.');
+    if (!definitions[0].definition) return alert('설명을 입력해주세요.');
+    
+    const payload = { 
+      term, 
+      category, 
+      star_group: subCategory,  // 세부 카테고리 추가
+      definitions 
+    };
+
     try {
       if (initialData) {
-        // 수정
         const updated = await updateDictionaryItem(initialData.id, payload);
         alert('수정 완료! ✅');
         onSave(updated);
@@ -46,9 +101,10 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
         // 초기화
         setTerm('');
         setCategory('');
+        setSubCategory('');
         setDefinitions([{ definition: '', example: '' }]);
       }
-      navigate('/dictionary'); // 목록 페이지로 이동
+      navigate('/dictionary');
     } catch (err) {
       console.error('등록 실패 ❌', err);
       alert('등록 중 오류가 발생했습니다');
@@ -56,7 +112,7 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
   };
 
   const handleCheckDuplicate = async () => {
-    if (!term) return alert('표제어를 입력해주세요!');
+    if (!term) return alert('용어를 입력해주세요!');
     try {
       const exists = await checkTermExists(term);
       if (exists) {
@@ -72,16 +128,16 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
 
   return (
     <div className="dictionary-form">
-      {/* 집필하기 */}
+      {/* 용어 작성 */}
       <section className="form-section">
-        <h3>집필하기</h3>
+        <h3>용어 작성</h3>
         <div className="form-group">
-          <label>표제어 *</label>
+          <label>용어 이름 *</label>
           <div className="input-inline">
             <input
               type="text"
               value={term}
-              placeholder="표제어를 입력해주세요"
+              placeholder="용어 이름을 입력해주세요"
               onChange={(e) => setTerm(e.target.value)}
             />
             {!initialData ? (
@@ -93,57 +149,75 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
         </div>
       </section>
 
-      {/* 표제어부 */}
+      {/* 분류 */}
       <section className="form-section collapsible">
         <h3 onClick={() => setShowCategory(!showCategory)}>
-          표제어부 {showCategory ? '▲' : '▼'}
+          분류 {showCategory ? '▲' : '▼'}
         </h3>
         {showCategory && (
           <div className="form-group">
-            <label>카테고리</label>
+            <label>카테고리 *</label>
             <div className="category-select-group">
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setSubCategory(''); // 상위 카테고리 변경 시 하위 카테고리 초기화
+                }}
               >
-                <option value="">선택하세요</option>
-                <option value="아이돌">아이돌</option>
-                <option value="여자 아이돌">여자 아이돌</option>
-                <option value="남자 아이돌">남자 아이돌</option>
-                <option value="스트리머">스트리머</option>
-                <option value="게임">게임</option>
-                <option value="웹툰">웹툰</option>
+                {MAIN_CATEGORIES.map(cat => (
+                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                ))}
               </select>
-              <button className="add-btn">＋</button>
             </div>
+
+            {category && (
+              <div className="subcategory-select-group">
+                <label>세부 카테고리 *</label>
+                <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className={subCategories.length === 0 ? 'disabled' : ''}
+                >
+                  <option value="">선택하세요</option>
+                  {subCategories.length > 0 ? (
+                    subCategories.map(sub => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))
+                  ) : (
+                    <option value="" disabled>검색 결과가 없습니다</option>
+                  )}
+                </select>
+              </div>
+            )}
           </div>
         )}
       </section>
 
-      {/* 뜻풀이부 */}
+      {/* 설명 */}
       <section className="form-section collapsible">
         <h3 onClick={() => setShowDefinitions(!showDefinitions)}>
-          뜻풀이부 {showDefinitions ? '▲' : '▼'}
+          설명 {showDefinitions ? '▲' : '▼'}
         </h3>
         {showDefinitions &&
           definitions.map((d, idx) => (
             <div key={idx} className="definition-block">
-              <h4>뜻풀이 {idx + 1}</h4>
+              <h4>설명 {idx + 1}</h4>
 
-              <label>뜻풀이 *</label>
+              <label>설명 *</label>
               <input
                 type="text"
-                placeholder="뜻풀이 입력란"
+                placeholder="용어에 대한 설명을 입력해주세요"
                 value={d.definition}
                 onChange={(e) =>
                   handleDefinitionChange(idx, 'definition', e.target.value)
                 }
               />
 
-              <label>예문</label>
+              <label>예시</label>
               <input
                 type="text"
-                placeholder="예문 입력란"
+                placeholder="용어를 사용한 예시를 입력해주세요"
                 value={d.example}
                 onChange={(e) =>
                   handleDefinitionChange(idx, 'example', e.target.value)
@@ -169,13 +243,13 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
       </section>
 
       <p className="notice-text">
-        ✏️ <strong>수정 전 확인해주세요!</strong>
+        ✏️ <strong>작성 전 확인해주세요!</strong>
         <br />
-        등록된 내용은 공유되는 정보입니다.
+        등록된 내용은 모든 사용자와 공유됩니다.
         <br />
-        <strong>개인의견보다는 객관적인 설명</strong> 위주로 작성해 주세요.
+        <strong>개인적인 의견보다는 객관적인 설명</strong>으로 작성해 주세요.
         <br />
-        삭제 요청시 관리자에게 알림이 갑니다.
+        삭제가 필요한 경우 관리자에게 요청됩니다.
       </p>
 
       {/* 저장/취소 */}
