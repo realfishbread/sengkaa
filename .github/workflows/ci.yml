@@ -56,7 +56,7 @@ jobs:
           source venv/bin/activate
 
       - name: Upload React build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: react-build
           path: ./build
@@ -67,11 +67,11 @@ jobs:
     steps:
 
       - name: Download React build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: react-build
           path: ./build
-          
+
       - name: Deploy React to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
