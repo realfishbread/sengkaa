@@ -111,7 +111,7 @@ const Home = () => {
 
   const fetchMainBanners = async () => {
     const res = await axios.get('https://eventcafe.site/user/main/banners/');
-    return res.data;
+    return res.data.results;
   };
 
   useEffect(() => {
