@@ -132,7 +132,7 @@ def verify_email_code(request):
 def login_view(request):
     email = request.data.get("email")
     password = request.data.get("password")
-
+    
     
     if not email or not password:
         return Response({"error": "이메일과 비밀번호를 모두 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
@@ -157,7 +157,7 @@ def login_view(request):
     except Exception as e:
         print("❌ profile_image.url 접근 중 오류:", e)
         profile_url = ""
-
+    star = user.star if hasattr(user, "star") else None
     
     try:
         image_url = request.build_absolute_uri(star.image.url) if star.image else None
@@ -166,15 +166,27 @@ def login_view(request):
         image_url = None
 
     # 스타 정보 포함
-    star = user.star
+    
+
+    # 그 다음에 안전하게 접근
+    try:
+        star_image_url = (
+            request.build_absolute_uri(star.image.url)
+            if star and star.image else None
+        )
+    except Exception as e:
+        print("❌ 스타 이미지 접근 오류:", e)
+        star_image_url = None
+
+    # star_info 정의
     star_info = {
-        "id": star.id,
-        "name": star.name,
-        "birthday": star.birthday.isoformat() if star.birthday else None,
-        "image": image_url,  # ✅ 여기만!
-        "group": star.group,
-        "display": star.display,
-    } if star else None
+        "id": star.id if star else None,
+        "name": star.name if star else None,
+        "birthday": star.birthday.isoformat() if star and star.birthday else None,
+        "image": star_image_url,
+        "group": star.group if star else None,
+        "display": star.display if star else None,
+    }
 
     # 토큰 발급
     refresh = RefreshToken.for_user(user)
