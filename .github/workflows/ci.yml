@@ -25,6 +25,14 @@ jobs:
       - name: Install React dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Set homepage for deployment
+        run: |
+          if grep -q '"homepage":' package.json; then
+            sed -i 's|"homepage": "[^"]*"|"homepage": "/frontend_static"|' package.json
+          else
+            sed -i '2i\  "homepage": "/frontend_static",' package.json
+          fi
+
       - name: Build React project
         run: |
           export CI=false
