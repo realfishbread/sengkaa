@@ -318,6 +318,22 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user.nickname} 알림: {self.message}"
+    
+
+
+class MainBanner(models.Model):
+    image = models.ImageField(upload_to='banners/')
+    caption = models.CharField(max_length=200)
+    link = models.URLField(blank=True)  # 배너 클릭 시 이동할 링크 (선택)
+    priority = models.PositiveIntegerField(default=0)  # 정렬 순서
+    is_active = models.BooleanField(default=True)  # 노출 여부
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['priority', '-created_at']
+
+    def __str__(self):
+        return self.caption
 
 
 @receiver(pre_save, sender=BirthdayCafe)

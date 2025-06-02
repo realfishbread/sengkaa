@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from api.models import Post
-from api.models import User, Report,Star  # 커스텀 User 모델
+from api.models import User, Report,Star, MainBanner  # 커스텀 User 모델
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.html import format_html
@@ -66,3 +66,12 @@ class StarAdmin(admin.ModelAdmin):
         return "No image"
 
     image_preview.short_description = "미리보기"
+
+
+
+@admin.register(MainBanner)
+class MainBannerAdmin(admin.ModelAdmin):
+    list_display = ['caption', 'priority', 'is_active', 'created_at']
+    list_editable = ['priority', 'is_active']
+    list_filter = ['is_active']
+    ordering = ['priority', '-created_at']

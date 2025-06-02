@@ -241,7 +241,8 @@ const KakaoMap = () => {
             </p>
             {selectedPlace.start_date && (
               <p>
-                <strong>🕒 이벤트 기간:</strong> {selectedPlace.start_date}
+                <strong>🕒 이벤트 기간:</strong> {selectedPlace.start_date} -{' '}
+                {selectedPlace.end_date}
               </p>
             )}
             {selectedPlace.goods && selectedPlace.goods.length > 0 && (

@@ -17,6 +17,7 @@ urlpatterns = [
     path('dictionary/', include('api.urls.dictionary_urls')),
     path('chat/', include('api.urls.chat_urls')),
     path('notifications/', include('api.urls.notification_urls')),
+    path('main/', include('api.urls.main_urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,16 +1,21 @@
 import { Box, Typography } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
-import '../styles/App.css';
-import { fetchPopularCafes, fetchPopularGames, fetchPopularYoutubers } from './birthday-cafe-register/api/EventSearchApi';
 import { fetchPopularVenues } from '../pages/venue/find-cafes/VenueSearchApi';
+import '../styles/App.css';
+import {
+  fetchPopularCafes,
+  fetchPopularGames,
+  fetchPopularYoutubers,
+} from './birthday-cafe-register/api/EventSearchApi';
 
 const SectionTitle = ({ title, category }) => {
   const navigate = useNavigate();
-  
+
   const handleMoreClick = (category) => {
     if (category === 'venue') {
       navigate('/venue-search');
@@ -20,31 +25,31 @@ const SectionTitle = ({ title, category }) => {
   };
 
   return (
-    <Box 
-      sx={{ 
+    <Box
+      sx={{
         position: 'relative',
         mb: 4,
         mt: 6,
         px: 2,
         maxWidth: 1200,
         margin: '0 auto',
-        width: '100%'
+        width: '100%',
       }}
     >
-      <Typography 
-        variant="h6" 
-        sx={{ 
+      <Typography
+        variant="h6"
+        sx={{
           fontSize: '1.25rem',
           fontWeight: 500,
           color: '#000',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         {title}
       </Typography>
       <Box
         onClick={() => handleMoreClick(category)}
-        sx={{ 
+        sx={{
           display: 'flex',
           alignItems: 'center',
           cursor: 'pointer',
@@ -54,32 +59,32 @@ const SectionTitle = ({ title, category }) => {
           transform: 'translateY(-50%)',
           '&:hover': {
             '& .more-text': {
-              color: '#000'
+              color: '#000',
             },
             '& .arrow': {
-              color: '#000'
-            }
-          }
+              color: '#000',
+            },
+          },
         }}
       >
-        <Typography 
+        <Typography
           className="more-text"
-          sx={{ 
+          sx={{
             fontSize: '0.875rem',
             color: '#666',
-            transition: 'color 0.2s'
+            transition: 'color 0.2s',
           }}
         >
           더보기
         </Typography>
-        <Typography 
+        <Typography
           className="arrow"
-          sx={{ 
+          sx={{
             fontSize: '0.875rem',
             color: '#666',
             ml: 0.5,
             mt: '-1px',
-            transition: 'color 0.2s'
+            transition: 'color 0.2s',
           }}
         >
           ›
@@ -95,13 +100,31 @@ const Home = () => {
   const streamerSliderRef = useRef(null);
   const gameSliderRef = useRef(null);
   const venueSliderRef = useRef(null);
+  const [mainSlides, setMainSlides] = useState([]);
 
   const [popularCafes, setPopularCafes] = useState({
     idol: [],
     streamer: [],
-    game: []
+    game: [],
   });
   const [reservableVenues, setReservableVenues] = useState([]);
+
+  const fetchMainBanners = async () => {
+    const res = await axios.get('https://eventcafe.site/user/main/banners/');
+    return res.data;
+  };
+
+  useEffect(() => {
+    const getSlides = async () => {
+      try {
+        const banners = await fetchMainBanners();
+        setMainSlides(banners);
+      } catch (err) {
+        console.error('🔥 메인 슬라이더 불러오기 실패:', err);
+      }
+    };
+    getSlides();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,8 +184,12 @@ const Home = () => {
       <main className="map-container">
         <div className="slider-wrapper">
           <Slider {...adSliderSettings}>
-            {slides.map((slide, index) => (
-              <div key={index} className="slide">
+            {mainSlides.map((slide, index) => (
+              <div
+                key={index}
+                className="slide"
+                onClick={() => slide.link && window.open(slide.link)}
+              >
                 <img src={slide.image} alt={slide.caption} />
                 <p>{slide.caption}</p>
               </div>
@@ -235,7 +262,9 @@ const Home = () => {
                   <img src={venue.image} alt={venue.name} />
                   <Box>
                     <Typography variant="h6">{venue.name}</Typography>
-                    <Typography variant="body2">{venue.road_address}</Typography>
+                    <Typography variant="body2">
+                      {venue.road_address}
+                    </Typography>
                   </Box>
                 </Box>
               </div>
