@@ -133,6 +133,7 @@ def login_view(request):
     email = request.data.get("email")
     password = request.data.get("password")
 
+    
     if not email or not password:
         return Response({"error": "이메일과 비밀번호를 모두 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -146,6 +147,16 @@ def login_view(request):
 
     if not user.is_active:
         return Response({"error": "⛔ 이 계정은 정지되었습니다. 관리자에게 문의해주세요."}, status=status.HTTP_403_FORBIDDEN)
+
+     # ✅ 여기서 안전하게 프로필 이미지 URL 처리
+    try:
+        profile_url = (
+            request.build_absolute_uri(user.profile_image.url)
+            if user.profile_image else ""
+        )
+    except Exception as e:
+        print("❌ profile_image.url 접근 중 오류:", e)
+        profile_url = ""
 
     # 스타 정보 포함
     star = user.star
@@ -167,10 +178,7 @@ def login_view(request):
         "username": user.username,
         "nickname": user.nickname,
         "email": user.email,
-        "profile_image": (
-            request.build_absolute_uri(user.profile_image.url)
-            if user.profile_image else ""
-        ),
+        "profile_image": profile_url,  # ✅ 여기만 바뀜!
         "star": star_info,
     }, status=status.HTTP_200_OK)
 
