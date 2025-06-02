@@ -93,24 +93,21 @@ const KakaoMap = () => {
   // ✅ 마커 클릭 핸들러 전역 바인딩
   useEffect(() => {
     window.handleMarkerClick = (placeName) => {
-      const ps = new window.kakao.maps.services.Places();
-      ps.keywordSearch(placeName, (data, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          const found = data.find((p) => p.place_name === placeName);
-          console.log('Found place data:', found);
-          if (found) {
-            setSelectedPlace({
-              ...found,
-              image_url:
-                found.image_url ||
-                'https://via.placeholder.com/400x200?text=No+Image',
-            });
-            console.log('Selected place after set:', found);
-          }
-        }
-      });
+      const matched = fetchedPlaces.find(
+        (place) => place.cafe_name === placeName
+      );
+      if (matched) {
+        setSelectedPlace({
+          ...matched,
+          image_url:
+            matched.image ||
+            'https://via.placeholder.com/400x200?text=No+Image',
+        });
+      } else {
+        console.warn('❗ 찾은 place 없음:', placeName);
+      }
     };
-  }, []);
+  }, [fetchedPlaces]);
   const fetchCafes = async (lat, lng, map) => {
     try {
       const response = await axiosInstance.get('/user/events/nearby/', {
@@ -146,14 +143,14 @@ const KakaoMap = () => {
           getCategory(place),
           map
         );
-        if (index === 0) {
-          setSelectedPlace({
-            ...place,
-            image_url:
-              place.image ||
-              'https://via.placeholder.com/400x200?text=No+Image',
-          });
-        }
+        // if (index === 0) {
+        //  setSelectedPlace({
+        //  ...place,
+        //  image_url:
+        //     place.image ||
+        //     'https://via.placeholder.com/400x200?text=No+Image',
+        //  });
+        //  }
       });
     } catch (e) {
       console.error('이벤트 불러오기 실패', e);
@@ -221,9 +218,12 @@ const KakaoMap = () => {
 
   return (
     <div className="kakao-map-container">
-      <div className={`info-panel ${selectedPlace ? '' : 'hidden'}`}>
-        {selectedPlace && (
-          <>
+      <div id="myMap" className="map-container" />
+
+      {/* ✅ 모달 형태 info-panel */}
+      {selectedPlace && (
+        <div className="modal-overlay" onClick={() => setSelectedPlace(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button
               className="close-button"
               onClick={() => setSelectedPlace(null)}
@@ -237,8 +237,7 @@ const KakaoMap = () => {
             />
             <h2 className="place-title">📍 {selectedPlace.cafe_name}</h2>
             <p>
-              <strong>🏠 주소:</strong>{' '}
-              {selectedPlace.road_address}
+              <strong>🏠 주소:</strong> {selectedPlace.road_address}
             </p>
             {selectedPlace.start_date && (
               <p>
@@ -267,19 +266,22 @@ const KakaoMap = () => {
                 </ul>
               </div>
             )}
-            <a
-              href={selectedPlace.place_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="place-link"
-            >
-              📌 카카오맵에서 보기
-            </a>
-          </>
-        )}
-      </div>
+            {selectedPlace.latitude && selectedPlace.longitude && (
+              <a
+                href={`https://map.kakao.com/link/map/${encodeURIComponent(
+                  selectedPlace.cafe_name
+                )},${selectedPlace.latitude},${selectedPlace.longitude}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="place-link"
+              >
+                📌 카카오맵에서 보기
+              </a>
+            )}
+          </div>
+        </div>
+      )}
 
-      <div id="myMap" className="map-container" />
       {isEmpty && (
         <div className="no-events-box">
           <p>📭 근처에 등록된 생일카페 이벤트가 없어요.</p>
