@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import './PaymentSuccessPage.css'; // ✅ 스타일 분리해서 여기에 연결
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
@@ -52,30 +53,29 @@ const PaymentSuccessPage = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '2rem' }}>
-      <h2>결제 요청까지 성공했어요.</h2>
-      <p>결제 승인하고 완료해보세요.</p>
+   <div className="payment-success-container">
+      <h2 className="payment-success-title">결제 요청이 완료되었습니다!</h2>
+      <p className="payment-success-subtitle">토스 결제 승인 버튼을 눌러주세요 :)</p>
 
-      <div style={{ marginTop: '2rem' }}>
+
+      <div className="payment-button-section">
         {!isSuccess ? (
-          <button onClick={verifyPayment} disabled={isLoading}>
+          <button
+            className="payment-button"
+            onClick={verifyPayment}
+            disabled={isLoading}
+          >
             {isLoading ? '승인 중...' : '결제 승인하기'}
           </button>
         ) : (
-          <p>결제가 완료되었습니다 🎉</p>
+          <p className="payment-complete-message">🎉 결제가 완료되었습니다 🎉</p>
         )}
       </div>
 
-      <div style={{ marginTop: '2rem', textAlign: 'left' }}>
-        <p>
-          <strong>결제 금액:</strong> {searchParams.get('amount')}원
-        </p>
-        <p>
-          <strong>주문번호:</strong> {searchParams.get('orderId')}
-        </p>
-        <p>
-          <strong>PaymentKey:</strong> {searchParams.get('paymentKey')}
-        </p>
+       <div className="payment-info">
+        <p><strong>결제 금액:</strong> {searchParams.get('amount')}원</p>
+        <p><strong>주문번호:</strong> {searchParams.get('orderId')}</p>
+        <p><strong>PaymentKey:</strong> {searchParams.get('paymentKey')}</p>
       </div>
     </div>
   );

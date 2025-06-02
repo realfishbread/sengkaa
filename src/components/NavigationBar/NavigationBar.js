@@ -1,5 +1,4 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { NotificationsOutlined } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -33,16 +32,8 @@ const NavigationBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      message: "슬국 님이 친구 요청을 수락했어요.",
-      time: "1일"
-    },
-    {
-      message: "조아서 님이 친구 요청을 수락했어요.",
-      time: "2일"
-    }
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const [openMenu, setOpenMenu] = useState(null);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -52,6 +43,30 @@ const NavigationBar = () => {
       return;
     }
     setOpenDrawer(open);
+  };
+
+  
+const subMenuToPath = (name) => {
+  const map = {
+    '이벤트 찾기': '/search',
+    '이벤트 등록': '/register',
+    '캘린더': '/calendar',
+    '사전': '/dictionary',
+    '장소 등록': '/venue',
+    '대관 찾기': '/venue-search',
+    '주변 카페': '/map',
+    '게시판': '/board',
+    '채팅': '/chat'
+  };
+  return map[name] || '/';
+};
+
+  const toggleSubMenu = (label) => {
+    if (openMenu === label) {
+      setOpenMenu(null);
+    } else {
+      setOpenMenu(label);
+    }
   };
 
   useEffect(() => {
@@ -138,6 +153,7 @@ const NavigationBar = () => {
           <Box sx={{ display: 'flex', gap: 2 }}>
             {/* 중앙: 메뉴 */}
             <Box className="nav-menu" sx={{ display: 'flex', gap: 2 }}>
+              
               <Box className="nav-item-wrapper">
                 {/* 메뉴 아이템: 이벤트 */}
                 <Button className="nav-item">이벤트</Button>
@@ -206,7 +222,13 @@ const NavigationBar = () => {
           </Box>
 
           {/* 검색창 */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box
+            sx={{
+              display: { xs: 'none', md: 'flex' }, // ✅ 모바일(xs)에서 안 보이게!
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
             <TextField
               variant="outlined"
               placeholder="찾으시는 최애가 있으신가요?"
