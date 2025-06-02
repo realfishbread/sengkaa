@@ -143,7 +143,11 @@ def login_view(request):
 
     if not check_password(password, user.password):
         return Response({"error": "비밀번호가 일치하지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
-    
+
+    if not user.is_active:
+        return Response({"error": "⛔ 이 계정은 정지되었습니다. 관리자에게 문의해주세요."}, status=status.HTTP_403_FORBIDDEN)
+
+    # 스타 정보 포함
     star = user.star
     star_info = {
         "id": star.id,
@@ -154,24 +158,21 @@ def login_view(request):
         "display": star.display,
     } if star else None
 
-    # ✅ 토큰 발급
-    if user is not None:
-        # ✅ 토큰 생성
-        refresh = RefreshToken.for_user(user)
-        return Response({
+    # 토큰 발급
+    refresh = RefreshToken.for_user(user)
+
+    return Response({
         "refresh": str(refresh),
-        "access":  str(refresh.access_token),
+        "access": str(refresh.access_token),
         "username": user.username,
         "nickname": user.nickname,
-        "email":    user.email,
+        "email": user.email,
         "profile_image": (
             request.build_absolute_uri(user.profile_image.url)
             if user.profile_image else ""
         ),
-        "star": star_info,  # ✨ 최애 스타 정보 추가
-        }, status=status.HTTP_200_OK)
-    else:
-        return Response({"error": "로그인 정보가 올바르지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
+        "star": star_info,
+    }, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"]) #비밀번호 리셋
