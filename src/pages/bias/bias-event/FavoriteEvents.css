@@ -1,0 +1,65 @@
+.event-card-container {
+  height: 100%;
+  transition: transform 0.2s ease;
+}
+
+.event-card-container:hover {
+  transform: translateY(-4px);
+}
+
+.event-card-content {
+  padding: 16px !important;
+}
+
+.event-card-inner {
+  display: flex;
+  gap: 16px;
+}
+
+.event-card-left {
+  flex: 0 0 40%;
+  position: relative;
+  padding-top: 56.25%; /* 16:9 비율 */
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.event-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.event-card-header-icons {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .event-card-inner {
+    flex-direction: column;
+  }
+
+  .event-card-left {
+    flex: none;
+    width: 100%;
+    padding-top: 140%; /* 포스터 비율 (약 1:1.4) */
+    margin-bottom: 12px;
+  }
+} 

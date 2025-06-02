@@ -1,188 +1,158 @@
-/* 전체 캘린더와 오른쪽 섹션(날씨, 일정)을 가로로 배치 */
-.calendar-layout {
-  display: flex;
-  min-height: 70vh;
-  max-width: 1200px; /* 최대 너비 설정 */
-  margin: 40px auto; /* 상하 여백 추가하고 중앙 정렬 */
-  background: #f0f0ff;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  gap: 20px;
-  justify-content: center; /* 중앙 정렬 */
-}
+/* SearchPlaces.css */
 
-/* 캘린더 패널 스타일 */
-.calendar-panel {
-  flex: 1;
-  max-width: 800px; /* 최대 너비 설정 */
-  background: #ffffff;
-  padding: 24px;
+/* 카드 전체 컨테이너 */
+.event-card-container {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-/* 오른쪽 섹션 (날씨, 일정) 스타일 */
-.right-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 300px; /* 너비 더 증가 */
-}
-
-/* 날씨 정보 박스 스타일 */
-.weather-box {
-  background: #e0f7fa;
-  padding: 30px;
-  border-radius: 12px;
+  background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  min-height: 130px;
-  width: 80%; /* 부모 컨테이너의 전체 너비 사용 */
+  margin-bottom: 16px;
+  overflow: hidden;
+  max-height: 350px;
 }
 
-.weather-box h3 {
-  margin-top: 0;
-  margin-bottom: 15px; /* 마진 증가 */
-  font-size: 1.3em; /* 폰트 크기 증가 */
-  color: #26a69a;
+.event-card-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.weather-box img {
-  width: 60px; /* 크기 증가 */
-  height: 60px; /* 크기 증가 */
-  margin-bottom: 10px;
+/* 카드 내부: 이미지 + 텍스트 */
+.event-card-inner {
+  display: flex;
+  gap: 16px;
+  padding: 12px;
+  align-items: flex-start;
 }
 
-.weather-box p {
-  font-size: 1.1em; /* 폰트 크기 증가 */
-  color: #4db6ac;
-  margin-bottom: 8px;
+/* 이미지 영역 */
+.event-card-left {
+  width: 120px;
+  height: 170px;
+  flex-shrink: 0;
 }
 
-/* 일정 상세 보기 박스 스타일 */
-.schedule-box {
-  background: #f9fafe;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  min-height: 300px;
-  max-height: 400px;
-  overflow-y: auto;
-  width: 80%; /* 부모 컨테이너의 전체 너비 사용 */
-}
-
-.schedule-box h3 {
-  margin-top: 0;
-  margin-bottom: 15px; /* 마진 증가 */
-  font-size: 1.2em; /* 폰트 크기 증가 */
-  color: #3f51b5;
-}
-
-/* 캘린더 전체 스타일 */
-.custom-calendar {
+.event-poster {
   width: 100%;
-  border: none;
-  font-family: 'Arial', sans-serif;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
-/* 캘린더 날짜 타일 스타일 */
-.react-calendar__tile {
-  height: 80px !important; /* 높이 더 줄임 */
-  max-width: none !important;
-  padding: 6px; /* 패딩 더 줄임 */
-  box-sizing: border-box;
+/* 텍스트 영역 */
+.event-card-right {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+/* 헤더: 아티스트명 + 아이콘 */
+.event-card-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-start;
-  overflow: hidden; /* 내용이 넘치면 숨김 */
+  margin-bottom: 0;
 }
 
-/* 날짜 숫자 스타일 */
-.react-calendar__tile > abbr {
-  margin-bottom: 2px; /* 간격 더 줄임 */
-  font-weight: 600;
-  font-size: 12px; /* 글자 크기 더 줄임 */
-}
-
-/* 날짜 타일 내 이벤트 리스트 세로 정렬 */
-.react-calendar__tile .event-list {
-  width: 100%;
+.event-card-header-icons {
   display: flex;
-  flex-direction: column;
-  gap: 1px; /* 간격 더 줄임 */
-  overflow: hidden;
+  gap: 8px;
 }
 
-/* 개별 이벤트 아이템 스타일 */
-.react-calendar__tile .event-item {
-  background: #e3e8ff;
-  color: #333;
-  border-radius: 4px;
-  font-size: 10px;
-  padding: 2px 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  cursor: default;
-  position: relative; /* 위치 상대값 추가 */
-}
-
-/* 연속된 이벤트 스타일 */
-.react-calendar__tile .event-item.continuous {
-  border-radius: 0;
-  margin: 0 -4px;
-  padding: 2px 8px;
-}
-
-.react-calendar__tile .event-item.continuous-start {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  margin-left: 0;
-}
-
-.react-calendar__tile .event-item.continuous-end {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  margin-right: 0;
-}
-
-/* 더 보기 버튼 스타일 (일정이 많을 때) */
-.react-calendar__tile .event-item.more {
-  background: #a3bffa;
-  color: white;
-  font-weight: 600;
+.event-card-header-icons svg {
   cursor: pointer;
-  user-select: none;
-  transition: background 0.2s ease;
-  font-size: 10px;
-  padding: 2px 4px;
+  color: #666;
+  font-size: 18px;
 }
 
-/* 일정 상세 보기 리스트 스타일 */
-.schedule-box ul {
-  list-style: disc;
-  padding-left: 20px; /* 패딩 증가 */
-  margin-top: 10px; /* 마진 증가 */
+/* 이벤트명 */
+.event-card-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2px;
+  line-height: 1.3;
 }
 
-/* 일정 목록 아이템 스타일 */
-.schedule-box li {
-  margin-bottom: 8px; /* 마진 증가 */
-  font-size: 1em; /* 폰트 크기 증가 */
-  line-height: 1.5;
+/* 주소 & 날짜 */
+.event-info {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
-/* 선택된 날짜 스타일 */
-.react-calendar__tile--active {
-  background: #dcf2ff !important;
-  color: #333 !important;
+/* 태그 컨테이너 */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
 }
 
-.react-calendar__tile--active:enabled:hover,
-.react-calendar__tile--active:enabled:focus {
-  background: #dcf2ff !important;
+/* 칩 스타일 */
+.event-card-chip {
+  background-color: #f0f0f0;
+  color: #666;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.event-tag-chip {
+  background-color: #fff2f6;
+  color: #ff4081;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 버튼 스타일 */
+.event-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.event-button.primary {
+  background-color: #ff4081;
+  color: white;
+}
+
+.event-button.secondary {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+/* 장르 토글 버튼 그룹 상단 필터 스타일 */
+.MuiToggleButtonGroup-root {
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.MuiToggleButton-root {
+  border-radius: 16px !important;
+  font-weight: 500 !important;
+  padding: 4px 12px !important;
+  font-size: 13px !important;
+  text-transform: none !important;
+  border: none !important;
+  background-color: #f0f0f0 !important;
+  color: #666 !important;
+}
+
+.MuiToggleButton-root.Mui-selected {
+  background-color: #ff4081 !important;
+  color: white !important;
 }

@@ -182,3 +182,58 @@
   border-left-color: #e14d4d;
   color: #a33;
 }
+
+.dictionary-form .category-select-group,
+.dictionary-form .subcategory-select-group {
+  margin-bottom: 16px;
+}
+
+.dictionary-form .subcategory-select-group {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.dictionary-form select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 13px;
+  background-color: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+
+.dictionary-form select:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+}
+
+.dictionary-form select:hover {
+  border-color: #1a73e8;
+}
+
+.dictionary-form select.disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.dictionary-form .no-data-message {
+  margin: 8px 0 0;
+  padding: 8px;
+  font-size: 12px;
+  color: #666;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  text-align: center;
+  border: 1px dashed #ddd;
+}

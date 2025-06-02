@@ -141,7 +141,18 @@ const DictionaryList = () => {
         ...res,
       }));
 
-      setActiveGroupTerms(res[groupName] || []); // ⭐ 이게 핵심
+      // 해당 그룹의 용어만 표시
+      setActiveGroupTerms(res[groupName] || []);
+      
+      // 다른 그룹의 용어는 숨김
+      Object.keys(expandedStars).forEach(key => {
+        if (key !== groupName) {
+          setExpandedStars(prev => ({
+            ...prev,
+            [key]: false
+          }));
+        }
+      });
     } catch (err) {
       console.error('🔥 스타별 용어 로딩 실패:', err);
     }
