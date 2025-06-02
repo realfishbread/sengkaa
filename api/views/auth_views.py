@@ -158,13 +158,20 @@ def login_view(request):
         print("❌ profile_image.url 접근 중 오류:", e)
         profile_url = ""
 
+    
+    try:
+        image_url = request.build_absolute_uri(star.image.url) if star.image else None
+    except Exception as e:
+        print("❌ 스타 이미지 접근 오류:", e)
+        image_url = None
+
     # 스타 정보 포함
     star = user.star
     star_info = {
         "id": star.id,
         "name": star.name,
         "birthday": star.birthday.isoformat() if star.birthday else None,
-        "image": star.image,
+        "image": image_url,  # ✅ 여기만!
         "group": star.group,
         "display": star.display,
     } if star else None
