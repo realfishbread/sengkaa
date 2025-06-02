@@ -1,6 +1,7 @@
 {
   "name": "begin-react",
   "version": "0.1.0",
+  "homepage": "/frontend_static",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",

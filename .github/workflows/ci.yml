@@ -55,6 +55,8 @@ jobs:
         run: |
           source venv/bin/activate
 
+      
+
       - name: Deploy React to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
