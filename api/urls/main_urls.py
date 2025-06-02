@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views.main_view import (
+from api.views.main_views import (
     MainBannerListView,
 )
 from django.conf import settings

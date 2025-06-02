@@ -44,7 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     nickname = models.CharField(max_length=12, unique=True, null=True, blank=True)
   # 사람들에게 보여지는 이름 (⭐필수⭐)
     user_type = models.CharField(max_length=20, choices=[('organizer', 'Organizer'), ('regular', 'Regular')])
-    profile_image = models.ImageField(upload_to="profile/", blank=True, null=True)
+    profile_image = models.ImageField(upload_to="profile/", max_length=500, blank=True, null=True)
     profile_image_url = models.TextField(blank=True, null=True)  # 🔥 추가
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -104,7 +104,7 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts")
     title = models.CharField(max_length=255)
     content = models.TextField()
-    image = models.ImageField(upload_to="post_images/", null=True, blank=True)
+    image = models.ImageField(upload_to="post_images/", max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     is_approved = models.BooleanField(default=True)  
@@ -172,7 +172,7 @@ class Star(models.Model):
     name = models.CharField(max_length=100)
     group = models.CharField(max_length=100, blank=True)
     display = models.CharField(max_length=200)
-    image = models.URLField(max_length=500, blank=True, null=True)  # ← null=True 추가
+    image = models.ImageField(upload_to='stars/', max_length=500, blank=True, null=True)
     birthday = models.DateField(null=True, blank=True)
     keywords = models.JSONField(default=list, blank=True)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)  # 🔥 외래키 연결
@@ -190,7 +190,7 @@ class BirthdayCafe(models.Model):
     end_date = models.DateField()
     road_address = models.CharField(max_length=200)
     detail_address = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    image = models.ImageField(upload_to='event_images/', max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')  # ✅ 추가!
     liked_events = models.ManyToManyField(User, related_name='liked_cafes', blank=True)
@@ -206,7 +206,7 @@ class Goods(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     price = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='goods/', null=True, blank=True)
+    image = models.ImageField(upload_to='goods/', max_length=500, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -237,12 +237,12 @@ class Venue(models.Model):
     venue_type = models.CharField(max_length=20, choices=VENUE_TYPE_CHOICES)
     road_address = models.CharField(max_length=255)
     detail_address = models.CharField(max_length=255)
-    main_image = models.ImageField(upload_to='venue_images/')
+    main_image = models.ImageField(upload_to='venue_images/', max_length=500, blank=True)
     rental_fee = models.PositiveIntegerField()
     deposit = models.PositiveIntegerField()
     operating_info = models.TextField(blank=True)
     operating_hours = models.CharField(max_length=255)
-    benefits_image = models.ImageField(upload_to='benefit_images/', null=True, blank=True)
+    benefits_image = models.ImageField(upload_to='benefit_images/',max_length=500, null=True, blank=True)
     description = models.TextField(blank=True)
     sns_type = models.CharField(max_length=50, blank=True)
     sns_account = models.CharField(max_length=255, blank=True)
@@ -322,7 +322,7 @@ class Notification(models.Model):
 
 
 class MainBanner(models.Model):
-    image = models.ImageField(upload_to='banners/')
+    image = models.ImageField(upload_to='banners/', max_length=500, null=False)
     caption = models.CharField(max_length=200)
     link = models.URLField(blank=True)  # 배너 클릭 시 이동할 링크 (선택)
     priority = models.PositiveIntegerField(default=0)  # 정렬 순서

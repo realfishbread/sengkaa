@@ -86,8 +86,11 @@ class StarAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview',)  # 상세 페이지에서도 미리보기 가능
 
     def image_preview(self, obj):
-        if obj.image:
-            return format_html(f'<img src="{obj.image}" width="150" style="object-fit: contain; border: 1px solid #ccc;" />')
+        if obj.image and hasattr(obj.image, 'url'):
+            return format_html(
+                '<img src="{}" width="150" style="object-fit: contain; border: 1px solid #ccc;" />',
+                obj.image.url
+            )
         return "No image"
 
     image_preview.short_description = "미리보기"
