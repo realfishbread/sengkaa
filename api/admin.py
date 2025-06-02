@@ -33,7 +33,8 @@ class ReportAdmin(admin.ModelAdmin):
     raw_id_fields = ['reporter', 'post']
     ordering = ['-created_at']
 
-    actions = ['delete_reported_posts', 'deactivate_reported_users']  # ✅ 여기 추가해야 함
+    actions = ['delete_reported_posts', 'deactivate_reported_users', 'restore_reported_users']
+
 
     def linked_post_title(self, obj):
         url = reverse('admin:api_post_change', args=[obj.post.id])
@@ -53,6 +54,15 @@ class ReportAdmin(admin.ModelAdmin):
             user.is_active = False
             user.save()
         self.message_user(request, f"{len(reported_users)}명의 게시글 작성자를 정지시켰습니다.")
+
+    @admin.action(description="✅ 정지된 사용자 다시 활성화하기")
+    def restore_reported_users(self, request, queryset):
+        reported_users = set(report.post.user for report in queryset)
+        for user in reported_users:
+            if not user.is_active:
+                user.is_active = True
+                user.save()
+        self.message_user(request, f"{len(reported_users)}명의 사용자를 다시 활성화했습니다.")
     
 
 @admin.register(Star)
