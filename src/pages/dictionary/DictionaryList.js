@@ -6,9 +6,9 @@ import {
   createDictionaryItem,
   fetchDictionaryList,
   fetchGroupedTermsByGenre,
-  fetchStarGroups,
   fetchTotalViews,
 } from './api/DictionaryApi';
+import {fetchGroupNamesByGenre} from '../../shared/api/fetchStarsByGroup'
 
 const TAGS = [
   '전체',
@@ -73,7 +73,7 @@ const DictionaryList = () => {
         const genreId = GENRE_TAG_TO_ID[selectedTag];
         if (!genreId) return;
 
-        const res = await fetchStarGroups(genreId);
+        const res = await fetchGroupNamesByGenre(genreId);
         setStarGroups(res); // ['르세라핌', '뉴진스'...]
 
         const dynamicCategoryKey = `${selectedTag}-category`; // 키도 유니크하게
@@ -96,7 +96,8 @@ const DictionaryList = () => {
   }, [selectedTag]);
 
   const filteredTerms = terms.filter((term) => {
-    const tagMatch = selectedTag === '전체' || term.category === selectedTag;
+     const tagMatch =
+    selectedTag === '전체' || term.genre_display === selectedTag;
     const keywordMatch =
       term.term.includes(searchKeyword) ||
       term.definitions?.some((d) => d.definition.includes(searchKeyword)) ||

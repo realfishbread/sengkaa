@@ -173,11 +173,7 @@ const Home = () => {
     arrows: false,
   };
 
-  const slides = [
-    { image: '/images/genshin.jpeg', caption: '원신 x 메가커피 콜라보' },
-    { image: '/images/honkai.png', caption: '붕괴 콜라보' },
-    { image: '/images/xx.jpg', caption: '흑집사 x 애니메이트 카페 콜라보' },
-  ];
+
 
   return (
     <div className="Home">

@@ -21,3 +21,26 @@ def get_star_list(request):
 
     serializer = StarSerializer(stars, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def stars_by_genre(request):
+    genre_id = request.query_params.get('genre_id')
+    stars = Star.objects.filter(genre__id=genre_id).values('id', 'name', 'group')
+    return Response(list(stars))
+
+
+# views.py
+@api_view(['GET'])
+def star_groups_by_genre(request):
+    genre_id = request.query_params.get('genre_id')
+    if not genre_id:
+        return Response({"error": "genre_id is required"}, status=400)
+
+    group_names = (
+        Star.objects.filter(genre_id=genre_id)
+        .exclude(group__isnull=True)
+        .exclude(group__exact="")
+        .values_list("group", flat=True)
+        .distinct()
+    )
+    return Response(sorted(group_names))

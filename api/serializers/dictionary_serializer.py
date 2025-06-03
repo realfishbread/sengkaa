@@ -10,15 +10,16 @@ class DictionaryDefinitionSerializer(serializers.ModelSerializer):
 class DictionaryTermSerializer(serializers.ModelSerializer):
     definitions = DictionaryDefinitionSerializer(many=True)
     genre = serializers.PrimaryKeyRelatedField(queryset=Genre.objects.all())
+    genre_display = serializers.SerializerMethodField()  # ✅ 추가
     user = serializers.PrimaryKeyRelatedField(read_only=True)  # ✅ 작성자 ID 포함
     # ✅ Write할 때는 ID 리스트로 받고
     star_group = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Star.objects.all()
+        many=True, queryset=Star.objects.all(), required=False
     )
 
     class Meta:
         model = DictionaryTerm
-        fields = ['id','genre', 'term', 'likes', 'views', 'definitions', 'user', 'star_group']
+        fields = ['id','genre','genre_display', 'term', 'likes', 'views', 'definitions', 'user', 'star_group']
 
     def create(self, validated_data):
         definitions_data = validated_data.pop('definitions')
@@ -60,8 +61,15 @@ class DictionaryTermSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['star_group_detail'] = [
-            {'id': star.id, 'name': star.name, 'group': star.group}
-            for star in instance.star_group.all()
-        ]
+        data['star_group_detail'] = []
+
+        if instance and hasattr(instance, 'star_group'):
+            data['star_group_detail'] = [
+                {'id': star.id, 'name': star.name, 'group': star.group}
+                for star in instance.star_group.all()
+            ]
+
         return data
+    
+    def get_genre_display(self, obj):
+        return obj.genre.display_name if obj.genre else None

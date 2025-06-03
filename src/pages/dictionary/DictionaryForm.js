@@ -7,6 +7,7 @@ import {
   updateDictionaryItem,
   fetchStarGroups,
 } from './api/DictionaryApi';
+import { fetchStarsByGenre } from '../../shared/api/fetchStarsByGroup';
 
 const MAIN_CATEGORIES = [
   { value: "", label: "선택하세요" },
@@ -21,9 +22,9 @@ const MAIN_CATEGORIES = [
 const GENRE_TAG_TO_ID = {
   아이돌: 1,
   '여자 아이돌': 1,
-  '남자 아이돌': 2,
+  '남자 아이돌': 6,
   스트리머: 2,
-  게임: 3,
+  게임: 5,
   웹툰: 4,
 };
 
@@ -54,7 +55,7 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
           return;
         }
 
-        const groups = await fetchStarGroups(genreId);
+        const groups = await fetchStarsByGenre(genreId);
         setSubCategories(groups);
       } catch (err) {
         console.error('하위 카테고리 로딩 실패:', err);
@@ -78,17 +79,28 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
   const handleSave = async () => {
     if (!term) return alert('용어를 입력해주세요.');
     if (!category) return alert('카테고리를 선택해주세요.');
-    if (!definitions[0].definition) return alert('뜻풀이를 입력해주세요.');
-    const payload = { term, category, definitions };
+    if (!definitions[0].definition) return alert('설명을 입력해주세요.');
+    
+    const payload = { 
+      term, 
+      category, 
+      star_group: subCategory,  // 세부 카테고리 추가
+      definitions 
+    };
+
     try {
       if (initialData) {
         const updated = await updateDictionaryItem(initialData.id, payload);
         alert('수정 완료! ✅');
         onSave(updated);
       } else {
-        const saved = await createDictionaryItem(payload);
-        alert('용어가 성공적으로 등록되었습니다! 🎉');
-        onSave(saved);
+       const saved = await createDictionaryItem(payload);
+      if (!saved || !saved.id) {
+        console.warn('⚠️ 저장은 되었으나 응답이 예상과 다릅니다:', saved);
+        return;
+      }
+      alert('용어가 성공적으로 등록되었습니다! 🎉');
+      onSave(saved);
 
         // 초기화
         setTerm('');
@@ -165,21 +177,27 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
 
             {category && (
               <div className="subcategory-select-group">
-                <label>세부 카테고리 *</label>
-                <select
-                  value={subCategory}
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  className={subCategories.length === 0 ? 'disabled' : ''}
-                >
-                  <option value="">선택하세요</option>
-                  {subCategories.length > 0 ? (
-                    subCategories.map(sub => (
-                      <option key={sub} value={sub}>{sub}</option>
-                    ))
-                  ) : (
-                    <option value="" disabled>검색 결과가 없습니다</option>
-                  )}
-                </select>
+                <label>세부 카테고리 (선택)</label>
+    
+<select
+  value={subCategory}
+  onChange={(e) => setSubCategory(Number(e.target.value) || '')}
+  className={subCategories.length === 0 ? 'disabled' : ''}
+>
+  <option value="">선택 안함 (전체 장르 용어)</option> {/* ✨ 핵심 UX 안내 */}
+
+  {subCategories.length > 0 ? (
+    subCategories.map((sub) => (
+      <option key={sub.id} value={sub.id}>
+        {sub.name}
+      </option>
+    ))
+  ) : (
+    <option value="" disabled>
+      검색 결과가 없습니다
+    </option>
+  )}
+</select>
               </div>
             )}
           </div>
