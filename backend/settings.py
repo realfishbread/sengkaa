@@ -60,7 +60,10 @@ INSTALLED_APPS = [
     'redis',
     "channels",
     "chat",  # 👈 WebSocket app
+    'storages'
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -116,7 +119,7 @@ DATABASES = {
         'NAME': 'eventcafe',
         'USER': 'eventcafe',
         'PASSWORD': 'eventcafe123',
-        'HOST': 'eventcafe.c76iaa8ycok0.ap-northeast-2.rds.amazonaws.com',
+        'HOST': 'eventcafee.c76iaa8ycok0.ap-northeast-2.rds.amazonaws.com',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -239,6 +242,18 @@ TOSS_SECRET_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6'
 
 TOSS_CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'
 
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+import os
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'eventcafe'
+AWS_S3_REGION_NAME = 'ap-northeast-2'  # 서울이면 이거
+AWS_QUERYSTRING_AUTH = False  # signed URL 안 쓰는 경우
+AWS_DEFAULT_ACL = None
 
 REST_FRAMEWORK = {
         

@@ -1,0 +1,60 @@
+.payment-success-container {
+  max-width: 500px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #fefefe;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.payment-success-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.payment-success-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.payment-button-section {
+  margin-bottom: 2rem;
+}
+
+.payment-button {
+  background-color: #3182f6;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.payment-button:disabled {
+  background-color: #a0c4ff;
+  cursor: not-allowed;
+}
+
+.payment-button:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.payment-complete-message {
+  font-size: 1.1rem;
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.payment-info {
+  text-align: left;
+  font-size: 0.95rem;
+  color: #333;
+  border-top: 1px solid #eee;
+  padding-top: 1.5rem;
+}

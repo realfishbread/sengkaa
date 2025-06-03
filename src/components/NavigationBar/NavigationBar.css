@@ -116,6 +116,7 @@
   z-index: 1000;
   border-radius: 8px; /* 4px에서 8px로 증가 */
   border: 1px solid #f0f0f0; /* 경계선 추가 */
+  overflow-y: auto;
 }
 
 /* 마우스 오버 시 서브메뉴 표시 */
@@ -272,12 +273,12 @@
     height: 36px !important;
   }
 
-  .search-bar {
-    width: 200px;
+   .search-bar {
+    display: none !important;
   }
   
   .search-bar .MuiOutlinedInput-root {
-    height: 36px;
+     display: none !important;
   }
 
   .right-section {
@@ -287,14 +288,20 @@
   }
   
   /* 서브메뉴 모바일 대응 */
-  .submenu {
-    position: fixed;
-    top: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    bottom: 60px;
+   .submenu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+    width: 160px !important;
+    bottom: auto !important;
+    z-index: 1000;
   }
+
+  .nav-item-wrapper:hover .submenu {
+    display: none !important;
+  }
+  
 }
 
 @media (max-width: 480px) {

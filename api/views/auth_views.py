@@ -132,7 +132,8 @@ def verify_email_code(request):
 def login_view(request):
     email = request.data.get("email")
     password = request.data.get("password")
-
+    
+    
     if not email or not password:
         return Response({"error": "이메일과 비밀번호를 모두 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -143,35 +144,62 @@ def login_view(request):
 
     if not check_password(password, user.password):
         return Response({"error": "비밀번호가 일치하지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
-    
-    star = user.star
-    star_info = {
-        "id": star.id,
-        "name": star.name,
-        "birthday": star.birthday.isoformat() if star.birthday else None,
-        "image": star.image,
-        "group": star.group,
-        "display": star.display,
-    } if star else None
 
-    # ✅ 토큰 발급
-    if user is not None:
-        # ✅ 토큰 생성
-        refresh = RefreshToken.for_user(user)
-        return Response({
-        "refresh": str(refresh),
-        "access":  str(refresh.access_token),
-        "username": user.username,
-        "nickname": user.nickname,
-        "email":    user.email,
-        "profile_image": (
+    if not user.is_active:
+        return Response({"error": "⛔ 이 계정은 정지되었습니다. 관리자에게 문의해주세요."}, status=status.HTTP_403_FORBIDDEN)
+
+     # ✅ 여기서 안전하게 프로필 이미지 URL 처리
+    try:
+        profile_url = (
             request.build_absolute_uri(user.profile_image.url)
             if user.profile_image else ""
-        ),
-        "star": star_info,  # ✨ 최애 스타 정보 추가
-        }, status=status.HTTP_200_OK)
-    else:
-        return Response({"error": "로그인 정보가 올바르지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
+        )
+    except Exception as e:
+        print("❌ profile_image.url 접근 중 오류:", e)
+        profile_url = ""
+    star = user.star if hasattr(user, "star") else None
+    
+    try:
+        image_url = request.build_absolute_uri(star.image.url) if star.image else None
+    except Exception as e:
+        print("❌ 스타 이미지 접근 오류:", e)
+        image_url = None
+
+    # 스타 정보 포함
+    
+
+    # 그 다음에 안전하게 접근
+    try:
+        star_image_url = (
+            request.build_absolute_uri(star.image.url)
+            if star and star.image else None
+        )
+    except Exception as e:
+        print("❌ 스타 이미지 접근 오류:", e)
+        star_image_url = None
+
+    # star_info 정의
+    star_info = {
+        "id": star.id if star else None,
+        "name": star.name if star else None,
+        "birthday": star.birthday.isoformat() if star and star.birthday else None,
+        "image": star_image_url,
+        "group": star.group if star else None,
+        "display": star.display if star else None,
+    }
+
+    # 토큰 발급
+    refresh = RefreshToken.for_user(user)
+
+    return Response({
+        "refresh": str(refresh),
+        "access": str(refresh.access_token),
+        "username": user.username,
+        "nickname": user.nickname,
+        "email": user.email,
+        "profile_image": profile_url,  # ✅ 여기만 바뀜!
+        "star": star_info,
+    }, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"]) #비밀번호 리셋

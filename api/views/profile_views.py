@@ -19,7 +19,7 @@ def user_profile(request):
             "id": star.id,
             "name": star.name,
             "birthday": star.birthday.isoformat() if star.birthday else None,  # ✅ 'YYYY-MM-DD'
-            "image": star.image,
+            "image": request.build_absolute_uri(star.image.url) if star.image else "",
             "group": star.group,
             "display": star.display,
         }
@@ -57,7 +57,7 @@ def user_profile_detail(request, nickname):
             "id": star.id,
             "name": star.name,
             "birthday": star.birthday.isoformat() if star.birthday else None,
-            "image": star.image,
+            "image": request.build_absolute_uri(star.image.url) if star.image else "",
             "group": star.group,
             "display": star.display,
         } if star else None

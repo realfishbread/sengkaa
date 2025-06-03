@@ -78,16 +78,8 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
   const handleSave = async () => {
     if (!term) return alert('용어를 입력해주세요.');
     if (!category) return alert('카테고리를 선택해주세요.');
-    if (!subCategory) return alert('세부 카테고리를 선택해주세요.');
-    if (!definitions[0].definition) return alert('설명을 입력해주세요.');
-    
-    const payload = { 
-      term, 
-      category, 
-      star_group: subCategory,  // 세부 카테고리 추가
-      definitions 
-    };
-
+    if (!definitions[0].definition) return alert('뜻풀이를 입력해주세요.');
+    const payload = { term, category, definitions };
     try {
       if (initialData) {
         const updated = await updateDictionaryItem(initialData.id, payload);
