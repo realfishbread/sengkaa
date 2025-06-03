@@ -150,7 +150,6 @@ export default function EditProfile() {
           </Button>
           {showModal && (
             <FavoriteStarModal
-              onClose={() => setShowModal(false)}
               onSelect={handleSelectStar}
             />
           )}
