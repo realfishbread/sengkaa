@@ -39,31 +39,65 @@ body {
 /* 슬라이더 공통 스타일 */
 .slider-wrapper {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 20px auto;
-    padding: 0;
+    padding: 0 20px;
     position: relative;
     box-sizing: border-box;
+    user-select: none;
+}
+
+.slide {
+    width: 100%;
+    height: 300px;
+    background-color: #f5f5f5;
 }
 
 .slide img {
     width: 100%;
-    max-height: 500px;
+    height: 100%;
     object-fit: contain;
+    pointer-events: none;
+    display: block;
 }
 
-.slide p {
-    text-align: center;
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-    color: #555;
+.slider-wrapper .slick-list {
+    cursor: grab;
+}
+
+.slider-wrapper .slick-list:active {
+    cursor: grabbing;
+}
+
+.slider-wrapper .slick-slide {
+    padding: 0;
+}
+
+.slider-wrapper img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.slider-wrapper .slick-dots {
+    bottom: 20px;
+}
+
+.slider-wrapper .slick-dots li button:before {
+    color: white;
+    opacity: 0.8;
+}
+
+.slider-wrapper .slick-dots li.slick-active button:before {
+    color: white;
+    opacity: 1;
 }
 
 /* 인기 아이돌 카페 스타일 */
 .popular-events .cafe-card {
-    min-width: 180px;
-    max-width: 180px;
-    width: 180px;
+    min-width: 200px;
+    max-width: 200px;
+    width: 200px;
     height: auto;
     padding: 0;
     background: none;
@@ -78,8 +112,8 @@ body {
 }
 
 .popular-events .cafe-card img {
-    width: 180px;
-    height: 240px;
+    width: 200px;
+    height: 280px;
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 8px;
@@ -109,7 +143,7 @@ body {
 .popular-events .slick-track {
     display: flex;
     align-items: flex-start;
-    gap: 0;
+    gap: 0px;
     padding: 10px 0;
     touch-action: pan-x;
 }
@@ -149,7 +183,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 5px;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -198,7 +232,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 5px;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -261,7 +295,7 @@ body {
 
 .reservable-venues .slick-track {
     display: flex;
-    gap: 10px;
+    gap: 0px;
     padding: 10px 0;
     touch-action: pan-x;
 }
@@ -334,4 +368,14 @@ body {
     gap: 16px;
     padding: 16px;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* 카드 슬라이드 스타일 */
+.cafe-slide {
+    padding: 0 20px;  /* 카드 좌우 여백 */
+}
+
+/* 대관 가능한 장소 카드 슬라이드 스타일 */
+.reservable-venues .cafe-slide {
+    padding: 0 10px;  /* 다른 섹션보다 좁은 여백 */
 }

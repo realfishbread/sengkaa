@@ -110,18 +110,33 @@ const Home = () => {
   const [reservableVenues, setReservableVenues] = useState([]);
 
   const fetchMainBanners = async () => {
-    const res = await axios.get('https://eventcafe.site/user/main/banners/');
-    return res.data.results;
+    try {
+      const res = await axios.get('https://eventcafe.site/user/main/banners/');
+      // 응답 데이터 로깅
+      console.log('API 응답 데이터:', res.data);
+      
+      // 중복 제거 전 데이터 길이
+      console.log('중복 제거 전 개수:', res.data.results.length);
+      
+      // 이미지 URL 기준으로 중복 제거
+      const uniqueBanners = Array.from(new Set(res.data.results.map(banner => banner.image)))
+        .map(image => res.data.results.find(banner => banner.image === image));
+      
+      // 중복 제거 후 데이터 길이
+      console.log('중복 제거 후 개수:', uniqueBanners.length);
+      console.log('최종 배너 데이터:', uniqueBanners);
+      
+      return uniqueBanners;
+    } catch (error) {
+      console.error('배너 데이터 가져오기 실패:', error);
+      return [];
+    }
   };
 
   useEffect(() => {
     const getSlides = async () => {
-      try {
-        const banners = await fetchMainBanners();
-        setMainSlides(banners);
-      } catch (err) {
-        console.error('🔥 메인 슬라이더 불러오기 실패:', err);
-      }
+      const banners = await fetchMainBanners();
+      setMainSlides(banners);
     };
     getSlides();
   }, []);
@@ -152,13 +167,18 @@ const Home = () => {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 4,
     slidesToScroll: 1,
     arrows: false,
+    draggable: true,
+    swipe: true,
+    swipeToSlide: true,
+    touchThreshold: 10,
+    variableWidth: true,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
+      { breakpoint: 1200, settings: { slidesToShow: 3 } },
+      { breakpoint: 900, settings: { slidesToShow: 2 } },
+      { breakpoint: 600, settings: { slidesToShow: 1 } },
     ],
   };
 
@@ -168,12 +188,17 @@ const Home = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    autoplay: false,
     arrows: false,
+    draggable: true,
+    swipe: true,
+    swipeToSlide: true,
+    touchThreshold: 10,
+    variableWidth: false,
+    adaptiveHeight: false,
+    centerMode: false,
+    fade: true
   };
-
-
 
   return (
     <div className="Home">
@@ -182,12 +207,23 @@ const Home = () => {
           <Slider {...adSliderSettings}>
             {mainSlides.map((slide, index) => (
               <div
-                key={index}
+                key={slide.id || index}
                 className="slide"
                 onClick={() => slide.link && window.open(slide.link)}
+                style={{ width: '100%' }}
               >
-                <img src={slide.image} alt={slide.caption} />
-                <p>{slide.caption}</p>
+                <img 
+                  src={slide.image} 
+                  alt={slide.caption || ''} 
+                  style={{ width: '100%', display: 'block' }}
+                  onLoad={(e) => {
+                    console.log('배너 이미지 실제 크기:', {
+                      width: e.target.naturalWidth,
+                      height: e.target.naturalHeight,
+                      ratio: (e.target.naturalWidth / e.target.naturalHeight).toFixed(2)
+                    });
+                  }}
+                />
               </div>
             ))}
           </Slider>

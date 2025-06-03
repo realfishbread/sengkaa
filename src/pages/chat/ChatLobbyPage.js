@@ -24,14 +24,14 @@ const ChatLobbyPage = () => {
   const [userQuery, setUserQuery] = useState('');
   const [userResults, setUserResults] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const [maxParticipants, setMaxParticipants] = useState(4);
 
-  const totalPages = Math.ceil(rooms.length / ROOMS_PER_PAGE);
-  const currentRooms = rooms.slice(
-    (page - 1) * ROOMS_PER_PAGE,
-    page * ROOMS_PER_PAGE
-  );
+  // 현재 페이지에 보여줄 채팅방 목록 계산
+  const currentRooms = Array.isArray(rooms) 
+    ? rooms.slice((page - 1) * ROOMS_PER_PAGE, page * ROOMS_PER_PAGE)
+    : [];
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -40,12 +40,25 @@ const ChatLobbyPage = () => {
   const fetchRooms = async () => {
     try {
       const res = await axiosInstance.get('/user/chat/list/', {
-        params: { q: search },
+        params: { 
+          q: search,
+          page: page,
+          per_page: ROOMS_PER_PAGE // 서버에 페이지당 개수 전달
+        },
       });
-      setRooms(res.data);
-      setPage(1);
+      const roomData = res.data.results || res.data;
+      setRooms(roomData);
+      
+      // 전체 개수가 있는 경우에만 페이지 수 계산
+      if (res.data.count !== undefined) {
+        setTotalPages(Math.ceil(res.data.count / ROOMS_PER_PAGE));
+      } else {
+        // 전체 개수가 없는 경우 현재 데이터 길이로 계산
+        setTotalPages(Math.ceil(roomData.length / ROOMS_PER_PAGE));
+      }
     } catch (err) {
       console.error('방 목록 불러오기 실패:', err);
+      setTotalPages(1);
     }
   };
 
@@ -79,7 +92,14 @@ const ChatLobbyPage = () => {
 
   useEffect(() => {
     fetchRooms();
-  }, [fetchRooms, search]);
+  }, [search]); // page 의존성 제거
+
+  // 페이지 변경 시 새로운 데이터 요청
+  useEffect(() => {
+    if (page > 1) {
+      fetchRooms();
+    }
+  }, [page]);
 
   useEffect(() => {
     if (userQuery.length >= 1) {
@@ -208,7 +228,7 @@ const ChatLobbyPage = () => {
         >
           <Typography variant="h6">채팅방 목록</Typography>
           <Typography variant="body2" color="text.secondary">
-            총 {rooms.length}개의 채팅방
+            총 {Array.isArray(rooms) ? rooms.length : 0}개의 채팅방
           </Typography>
         </Box>
 

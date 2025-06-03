@@ -51,9 +51,7 @@ const EventCalendar = () => {
       const formattedRanges = new Set();
 
       ranges.forEach(({ start, end }) => {
-        const rangeText = `📍 ${title} (${formatDate(start)} ~ ${formatDate(
-          end
-        )})`;
+        const rangeText = `📍 ${title}`;
 
         const current = new Date(start);
         while (current <= end) {
@@ -61,7 +59,6 @@ const EventCalendar = () => {
 
           if (!result[dateStr]) result[dateStr] = [];
 
-          // ✅ 날짜별로 동일한 rangeText가 없을 경우에만 추가
           if (!result[dateStr].includes(rangeText)) {
             result[dateStr].push(rangeText);
           }
