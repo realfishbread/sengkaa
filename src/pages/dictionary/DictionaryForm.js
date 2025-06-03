@@ -93,9 +93,13 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
         alert('수정 완료! ✅');
         onSave(updated);
       } else {
-        const saved = await createDictionaryItem(payload);
-        alert('용어가 성공적으로 등록되었습니다! 🎉');
-        onSave(saved);
+       const saved = await createDictionaryItem(payload);
+      if (!saved || !saved.id) {
+        console.warn('⚠️ 저장은 되었으나 응답이 예상과 다릅니다:', saved);
+        return;
+      }
+      alert('용어가 성공적으로 등록되었습니다! 🎉');
+      onSave(saved);
 
         // 초기화
         setTerm('');
@@ -173,7 +177,7 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
             {category && (
               <div className="subcategory-select-group">
                 <label>세부 카테고리 (선택)</label>
-                <label>세부 카테고리 (선택)</label>
+    
 <select
   value={subCategory}
   onChange={(e) => setSubCategory(Number(e.target.value) || '')}

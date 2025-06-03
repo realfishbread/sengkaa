@@ -96,7 +96,8 @@ const DictionaryList = () => {
   }, [selectedTag]);
 
   const filteredTerms = terms.filter((term) => {
-    const tagMatch = selectedTag === '전체' || term.category === selectedTag;
+     const tagMatch =
+    selectedTag === '전체' || term.genre_display === selectedTag;
     const keywordMatch =
       term.term.includes(searchKeyword) ||
       term.definitions?.some((d) => d.definition.includes(searchKeyword)) ||
