@@ -24,7 +24,8 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
       if (selectedGenreId === 0) {
         res = await axiosInstance.get('/user/star/stars/');
       } else {
-       res = await fetchStarsByGenre({ genre_id: selectedGenreId });
+       res = await fetchStarsByGenre(selectedGenreId); // ✅ 숫자만 넘겨줘야 함!
+
       }
       setStars(res.data);
     } catch (err) {
