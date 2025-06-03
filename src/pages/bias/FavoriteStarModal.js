@@ -44,25 +44,39 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
   }
 
   const filteredStars = (stars || []).filter((star) => {
-  const matchesGenre =
-    selectedGenreId === 0 || star.genre?.id === selectedGenreId;
-
   const matchesSearch =
     star.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     star.group?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     star.display?.toLowerCase().includes(searchTerm.toLowerCase());
 
-  return matchesGenre && matchesSearch;
+  return matchesSearch;
 });
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
+      
+     
       <div
         className="modal-container slide-in"
         onClick={(e) => e.stopPropagation()}
       >
         <h2>최애 스타 선택 ✨</h2>
-
+<button
+  className="close-button"
+  onClick={onClose}
+  style={{
+    position: 'absolute',
+    top: '16px',
+    right: '16px',
+    background: 'transparent',
+    border: 'none',
+    fontSize: '20px',
+    cursor: 'pointer',
+    color: '#aaa'
+  }}
+>
+  ✕
+</button>
         {/* ⭐ 장르 탭 */}
         <div className="genre-tabs">
           {genreList.map((g) => (
@@ -70,7 +84,9 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
   key={g.id}
   type="button"  // ✅ 이걸 꼭 추가!
   className={selectedGenreId === g.id ? 'active' : ''}
-  onClick={() => setSelectedGenreId(g.id)}
+  onClick={(e) => {
+    e.stopPropagation();
+  setSelectedGenreId(g.id)}}
 >
   {g.name === '전체' ? '전체' : g.name}
 </button>
@@ -112,10 +128,9 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
           )}
         </div>
 
-        <button className="close-button" onClick={onClose}>
-          닫기
-        </button>
+        
       </div>
+      
     </div>
   );
 };

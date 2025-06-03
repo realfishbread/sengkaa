@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import FavoriteStarModal from '../bias/FavoriteStarModal'; // 경로 확인해서 맞게 수정
-
+import './EditProfile.css';
 export default function EditProfile() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
@@ -150,7 +150,6 @@ export default function EditProfile() {
           </Button>
           {showModal && (
             <FavoriteStarModal
-              onClose={() => setShowModal(false)}
               onSelect={handleSelectStar}
             />
           )}
@@ -254,4 +253,5 @@ const styles = {
     cursor: 'pointer',
     transition: 'background-color 0.25s ease, transform 0.2s',
   },
+  
 };
