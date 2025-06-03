@@ -108,3 +108,5 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
                     star_group_names.add(star.group)
 
         return Response(sorted(star_group_names))
+    
+    

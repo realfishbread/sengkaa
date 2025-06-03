@@ -70,3 +70,6 @@ class DictionaryTermSerializer(serializers.ModelSerializer):
             ]
 
         return data
+    
+    def get_genre_display(self, obj):
+        return obj.genre.display_name if obj.genre else None

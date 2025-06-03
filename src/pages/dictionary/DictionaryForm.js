@@ -7,6 +7,7 @@ import {
   updateDictionaryItem,
   fetchStarGroups,
 } from './api/DictionaryApi';
+import { fetchStarsByGenre } from '../../shared/api/fetchStarsByGroup';
 
 const MAIN_CATEGORIES = [
   { value: "", label: "선택하세요" },
@@ -21,9 +22,9 @@ const MAIN_CATEGORIES = [
 const GENRE_TAG_TO_ID = {
   아이돌: 1,
   '여자 아이돌': 1,
-  '남자 아이돌': 2,
+  '남자 아이돌': 6,
   스트리머: 2,
-  게임: 3,
+  게임: 5,
   웹툰: 4,
 };
 
@@ -54,7 +55,7 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
           return;
         }
 
-        const groups = await fetchStarGroups(genreId);
+        const groups = await fetchStarsByGenre(genreId);
         setSubCategories(groups);
       } catch (err) {
         console.error('하위 카테고리 로딩 실패:', err);
