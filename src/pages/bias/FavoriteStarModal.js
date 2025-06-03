@@ -5,11 +5,12 @@ import { fetchStarsByGenre } from '../../shared/api/fetchStarsByGroup';
 
 const genreList = [
   { id: 0, name: '전체' },
-  { id: 1, name: 'idol' },
-  { id: 2, name: 'youtuber' },
-  { id: 3, name: 'comic' },
-  { id: 4, name: 'webtoon' },
-  { id: 5, name: 'game' },
+  { id: 1, name: '여자 아이돌' },
+  { id: 2, name: '스트리머' },
+  { id: 3, name: '애니' },
+  { id: 4, name: '웹툰' },
+  { id: 5, name: '게임' },
+  { id: 6, name: '남자 아이돌'}
 ];
 
 const FavoriteStarModal = ({ onClose, onSelect }) => {
@@ -37,17 +38,22 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
   fetchStars();
 }, [selectedGenreId]);
 
-  const filteredStars = stars.filter((star) => {
-    const matchesGenre =
-      selectedGenreId === 0 || star.genre?.id === selectedGenreId;
+ // 👉 여기가 바로 그 위치!
+  if (!stars || stars.length === 0) {
+    return <div style={{ padding: 20 }}>로딩 중...</div>;
+  }
 
-    const matchesSearch =
-      star.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      star.group?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      star.display?.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredStars = (stars || []).filter((star) => {
+  const matchesGenre =
+    selectedGenreId === 0 || star.genre?.id === selectedGenreId;
 
-    return matchesGenre && matchesSearch;
-  });
+  const matchesSearch =
+    star.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    star.group?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    star.display?.toLowerCase().includes(searchTerm.toLowerCase());
+
+  return matchesGenre && matchesSearch;
+});
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -60,13 +66,14 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
         {/* ⭐ 장르 탭 */}
         <div className="genre-tabs">
           {genreList.map((g) => (
-            <button
-              key={g.id}
-              className={selectedGenreId === g.id ? 'active' : ''}
-              onClick={() => setSelectedGenreId(g.id)}
-            >
-              {g.name === '전체' ? '전체' : g.name}
-            </button>
+           <button
+  key={g.id}
+  type="button"  // ✅ 이걸 꼭 추가!
+  className={selectedGenreId === g.id ? 'active' : ''}
+  onClick={() => setSelectedGenreId(g.id)}
+>
+  {g.name === '전체' ? '전체' : g.name}
+</button>
           ))}
         </div>
 
