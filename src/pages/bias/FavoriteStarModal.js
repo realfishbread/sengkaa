@@ -44,15 +44,12 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
   }
 
   const filteredStars = (stars || []).filter((star) => {
-  const matchesGenre =
-    selectedGenreId === 0 || star.genre?.id === selectedGenreId;
-
   const matchesSearch =
     star.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     star.group?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     star.display?.toLowerCase().includes(searchTerm.toLowerCase());
 
-  return matchesGenre && matchesSearch;
+  return matchesSearch;
 });
 
   return (
