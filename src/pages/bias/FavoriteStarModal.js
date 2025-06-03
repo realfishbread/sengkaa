@@ -84,7 +84,9 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
   key={g.id}
   type="button"  // ✅ 이걸 꼭 추가!
   className={selectedGenreId === g.id ? 'active' : ''}
-  onClick={() => setSelectedGenreId(g.id)}
+  onClick={(e) => {
+    e.stopPropagation();
+  setSelectedGenreId(g.id)}}
 >
   {g.name === '전체' ? '전체' : g.name}
 </button>
