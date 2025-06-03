@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../shared/api/axiosInstance';
 import './FavoriteStarModal.css';
+import { fetchStarsByGenre } from '../../shared/api/fetchStarsByGroup';
 
 const genreList = [
   { id: 0, name: '전체' },
@@ -17,8 +18,23 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
   const [selectedGenreId, setSelectedGenreId] = useState(0);
 
   useEffect(() => {
-    axiosInstance.get('/user/star/stars/').then((res) => setStars(res.data));
-  }, []);
+  const fetchStars = async () => {
+    try {
+      let res;
+      if (selectedGenreId === 0) {
+        res = await axiosInstance.get('/user/star/stars/');
+      } else {
+       res = await fetchStarsByGenre({ genre_id: selectedGenreId });
+      }
+      setStars(res.data);
+    } catch (err) {
+      console.error('스타 불러오기 실패 ❌', err);
+      setStars([]);
+    }
+  };
+
+  fetchStars();
+}, [selectedGenreId]);
 
   const filteredStars = stars.filter((star) => {
     const matchesGenre =
