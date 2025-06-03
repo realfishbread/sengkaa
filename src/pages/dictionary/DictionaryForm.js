@@ -81,11 +81,11 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
     if (!definitions[0].definition) return alert('설명을 입력해주세요.');
     
     const payload = { 
-      term, 
-      category, 
-      star_group: subCategory,  // 세부 카테고리 추가
-      definitions 
-    };
+  term, 
+  genre: GENRE_TAG_TO_ID[category], 
+  star_group: subCategory ? [subCategory] : [],
+  definitions 
+};
 
     try {
       if (initialData) {
@@ -172,21 +172,27 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
 
             {category && (
               <div className="subcategory-select-group">
-                <label>세부 카테고리 *</label>
-                <select
-                  value={subCategory}
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  className={subCategories.length === 0 ? 'disabled' : ''}
-                >
-                  <option value="">선택하세요</option>
-                  {subCategories.length > 0 ? (
-                    subCategories.map(sub => (
-                      <option key={sub} value={sub}>{sub}</option>
-                    ))
-                  ) : (
-                    <option value="" disabled>검색 결과가 없습니다</option>
-                  )}
-                </select>
+                <label>세부 카테고리 (선택)</label>
+                <label>세부 카테고리 (선택)</label>
+<select
+  value={subCategory}
+  onChange={(e) => setSubCategory(Number(e.target.value) || '')}
+  className={subCategories.length === 0 ? 'disabled' : ''}
+>
+  <option value="">선택 안함 (전체 장르 용어)</option> {/* ✨ 핵심 UX 안내 */}
+
+  {subCategories.length > 0 ? (
+    subCategories.map((sub) => (
+      <option key={sub.id} value={sub.id}>
+        {sub.name}
+      </option>
+    ))
+  ) : (
+    <option value="" disabled>
+      검색 결과가 없습니다
+    </option>
+  )}
+</select>
               </div>
             )}
           </div>

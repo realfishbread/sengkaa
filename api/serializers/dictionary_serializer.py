@@ -13,7 +13,7 @@ class DictionaryTermSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)  # ✅ 작성자 ID 포함
     # ✅ Write할 때는 ID 리스트로 받고
     star_group = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Star.objects.all()
+        many=True, queryset=Star.objects.all(), required=False
     )
 
     class Meta:
