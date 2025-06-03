@@ -100,13 +100,18 @@
   margin-bottom: 8px;
 }
 
+/* FavoriteStarModal.css */
 .close-button {
-  margin-top: 10px;
-  background: #888;
-  color: white;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 20px;
+  background: transparent;
   border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 600;
   cursor: pointer;
+  color: #aaa;
+}
+
+.close-button:hover {
+  color: #333;
 }

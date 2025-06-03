@@ -54,12 +54,29 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
+      
+     
       <div
         className="modal-container slide-in"
         onClick={(e) => e.stopPropagation()}
       >
         <h2>최애 스타 선택 ✨</h2>
-
+<button
+  className="close-button"
+  onClick={onClose}
+  style={{
+    position: 'absolute',
+    top: '16px',
+    right: '16px',
+    background: 'transparent',
+    border: 'none',
+    fontSize: '20px',
+    cursor: 'pointer',
+    color: '#aaa'
+  }}
+>
+  ✕
+</button>
         {/* ⭐ 장르 탭 */}
         <div className="genre-tabs">
           {genreList.map((g) => (
@@ -109,10 +126,9 @@ const FavoriteStarModal = ({ onClose, onSelect }) => {
           )}
         </div>
 
-        <button className="close-button" onClick={onClose}>
-          닫기
-        </button>
+        
       </div>
+      
     </div>
   );
 };
