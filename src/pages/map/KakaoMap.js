@@ -51,6 +51,41 @@ const KakaoMap = () => {
     general: '#ffffff',
   };
 
+  // ✅ 지도 초기화
+  const initMap = () => {
+    const { kakao } = window;
+    if (!kakao || !kakao.maps) return;
+
+    const container = document.getElementById('myMap');
+    const options = {
+      center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+      level: 4,
+    };
+
+    const map = new kakao.maps.Map(container, options);
+
+    const defaultMarkerImage = new kakao.maps.MarkerImage(
+      markerIcons.general,
+      new kakao.maps.Size(40, 40),
+      { offset: new kakao.maps.Point(20, 40) }
+    );
+
+    new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+      image: defaultMarkerImage,
+      map,
+    });
+
+    // 🧠 idle 이벤트로 지도 움직임 감지
+    kakao.maps.event.addListener(map, 'idle', () => {
+      const center = map.getCenter();
+      fetchCafes(center.getLat(), center.getLng(), map);
+    });
+
+    // ✅ 초기 마커 세팅
+    fetchCafes(userLocation.lat, userLocation.lng, map);
+  };
+
   // ✅ SDK 로드 및 지도 초기화
   useEffect(() => {
     const script = document.createElement('script');
@@ -66,7 +101,7 @@ const KakaoMap = () => {
         }
       });
     };
-  }, [userLocation.lat, userLocation.lng]);
+  }, [userLocation.lat, userLocation.lng ]);
 
   // ✅ 사용자 위치 갱신
   useEffect(() => {
@@ -110,7 +145,7 @@ const KakaoMap = () => {
   }, [fetchedPlaces]);
   const fetchCafes = async (lat, lng, map) => {
     try {
-      const response = await axios.get('/user/events/nearby/', {
+      const response = await axios.get('https://eventcafe.site/user/events/nearby/', {
         params: {
           lat,
           lng,
@@ -157,40 +192,7 @@ const KakaoMap = () => {
     }
   };
 
-  // ✅ 지도 초기화
-  const initMap = () => {
-    const { kakao } = window;
-    if (!kakao || !kakao.maps) return;
-
-    const container = document.getElementById('myMap');
-    const options = {
-      center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      level: 4,
-    };
-
-    const map = new kakao.maps.Map(container, options);
-
-    const defaultMarkerImage = new kakao.maps.MarkerImage(
-      markerIcons.general,
-      new kakao.maps.Size(40, 40),
-      { offset: new kakao.maps.Point(20, 40) }
-    );
-
-    new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      image: defaultMarkerImage,
-      map,
-    });
-
-    // 🧠 idle 이벤트로 지도 움직임 감지
-    kakao.maps.event.addListener(map, 'idle', () => {
-      const center = map.getCenter();
-      fetchCafes(center.getLat(), center.getLng(), map);
-    });
-
-    // ✅ 초기 마커 세팅
-    fetchCafes(userLocation.lat, userLocation.lng, map);
-  };
+  
 
   // ✅ 마커 출력 함수 (initMap 바깥으로 분리)
   const displayMarker = (place, category, map) => {

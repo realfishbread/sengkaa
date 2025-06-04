@@ -1,7 +1,12 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 let loginModalCallback = null;
 
+let navigateToLogin = null;
+export const injectNavigateToLogin = (navigator) => {
+  navigateToLogin = navigator;
+};
 // ① 인스턴스 만들기
 const axiosInstance = axios.create({
   baseURL: 'https://eventcafe.site',
@@ -52,14 +57,14 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-    console.log('📌 loginModalCallback 존재함?', loginModalCallback);
-    if (error.response?.status === 403) {
-      if (typeof loginModalCallback === 'function') {
-        loginModalCallback();
-      } else {
-        console.warn('❌ loginModalCallback이 아직 없음');
-      }
-    }
+  if (error.response?.status === 403) {
+  if (typeof loginModalCallback === 'function') {
+    loginModalCallback();
+  }
+  if (typeof navigateToLogin === 'function') {
+    navigateToLogin('/login', { state: { backgroundLocation: window.location } });
+  }
+}
 
     return Promise.reject(error);
   }

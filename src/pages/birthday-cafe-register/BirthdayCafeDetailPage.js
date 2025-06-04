@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import axiosInstance from '../../shared/api/axiosInstance';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import axios from 'axios';
 
 const BirthdayCafeDetailPage = () => {
   const { id } = useParams();
@@ -23,8 +24,8 @@ const BirthdayCafeDetailPage = () => {
   useEffect(() => {
     const fetchCafeDetail = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/user/events/birthday-cafes/${id}/`
+        const response = await axios.get(
+          `https://eventcafe.site/user/events/birthday-cafes/${id}/`
         );
         setCafe(response.data);
         setIsLiked(response.data.is_liked);
