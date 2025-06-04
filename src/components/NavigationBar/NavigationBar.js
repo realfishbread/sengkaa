@@ -193,7 +193,7 @@ const subMenuToPath = (name) => {
               </Box>
 
               <Button className="nav-item" onClick={() => navigate('/map')}>
-                주변 카페
+                주변 이벤트
               </Button>
               <Button
                 className="nav-item"

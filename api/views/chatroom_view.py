@@ -174,3 +174,24 @@ def get_chat_room_detail(request, room_id):
 
     serializer = ChatRoomSerializer(room)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_chatroom_access(request, room_id):
+    """
+    채팅방 입장 전 유저의 권한을 확인하는 엔드포인트
+    - 로그인 여부 → DRF가 처리함 (403)
+    - 방 존재 여부 확인
+    - (선택) 참여자 포함 여부 확인 가능
+    """
+    try:
+        room = ChatRoom.objects.get(id=room_id)
+
+        # 🚫 아래 조건을 켜면 '참여자만 입장 가능' 설정도 가능
+        if not room.participants.filter(user_id=request.user.id).exists():
+            return Response({"error": "채팅방에 참여 중이 아닙니다."}, status=403)
+
+        return Response({"ok": True})
+
+    except ChatRoom.DoesNotExist:
+        return Response({"error": "존재하지 않는 채팅방입니다."}, status=404)

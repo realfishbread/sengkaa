@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import axiosInstance from '../../shared/api/axiosInstance';
 import './ChatLobbyPage.css';
+import { requireAuthBeforeEnter } from '../../components/hooks/requireAuthBeforeEnter';
+import axios from 'axios';
 
 const ROOMS_PER_PAGE = 5;
 
@@ -39,7 +41,7 @@ const ChatLobbyPage = () => {
 
   const fetchRooms = async () => {
     try {
-      const res = await axiosInstance.get('/user/chat/list/', {
+      const res = await axios.get('https://eventcafe.site/user/chat/list/', {
         params: { 
           q: search,
           page: page,
@@ -264,6 +266,7 @@ const ChatLobbyPage = () => {
                         borderRadius: 2,
                         minWidth: '100px',
                       }}
+                      onClick={() => requireAuthBeforeEnter(`/user/chat/${room.id}/check/`, `/chat/${room.id}`)}
                     >
                       참여하기
                     </Button>

@@ -10,7 +10,8 @@ from api.views.chatroom_view import (
     search_users,
     get_chat_messages,
     mark_messages_as_read,
-    get_chat_room_detail
+    get_chat_room_detail,
+    check_chatroom_access
 )
 
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('rooms/<uuid:room_id>/messages/', get_chat_messages),
     path("rooms/<uuid:room_id>/mark-read/", mark_messages_as_read),
     path('rooms/<uuid:room_id>/', get_chat_room_detail),
+    path('chat/<int:room_id>/check/', check_chatroom_access),
 ]

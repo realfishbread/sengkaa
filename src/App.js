@@ -1,6 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation, RouterProvider } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
@@ -33,7 +33,10 @@ import Settings from './pages/settings/Settings';
 import VenueSearch from './pages/venue/find-cafes/VenueSearch';
 import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
 import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
-import { injectLoginModalHandler } from './shared/api/axiosInstance';
+import {
+  injectLoginModalHandler,
+  injectNavigateToLogin,
+} from './shared/api/axiosInstance';
 
 import './styles/App.css';
 
@@ -52,17 +55,17 @@ const theme = createTheme({
   },
 });
 
-
-
 function AppRoutes() {
   const location = useLocation();
   const state = location.state;
 
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  const navigate = useNavigate();
   useEffect(() => {
     injectLoginModalHandler(() => setShowLoginModal(true));
-  }, []);
+    injectNavigateToLogin(navigate); // ✅ 추가!
+  }, [navigate]);
 
   return (
     <>
@@ -99,8 +102,14 @@ function AppRoutes() {
           <Route path="chat/:roomId" element={<ChatPage />} />
           <Route path="result" element={<SearchResults />} />
           <Route path="/favorite-events" element={<FavoriteEvents />} />
-          <Route path="/user/bookings/payment/success/page/" element={<PaymentSuccessPage />} />
-          <Route path="/user/bookings/payment/fail" element={<PaymentFailPage />} />
+          <Route
+            path="/user/bookings/payment/success/page/"
+            element={<PaymentSuccessPage />}
+          />
+          <Route
+            path="/user/bookings/payment/fail"
+            element={<PaymentFailPage />}
+          />
           <Route path="chat-list" element={<ChatLobbyPage />} />
         </Route>
       </Routes>

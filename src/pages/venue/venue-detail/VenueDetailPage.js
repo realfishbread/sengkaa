@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 import { UserContext } from '../../../context/UserContext'; // 사용자 정보 컨텍스트
 import axiosInstance from '../../../shared/api/axiosInstance';
 import TossModal from '../../toss/TossModal'; // 결제 모달 컴포넌트
+import axios from 'axios'; // axios 라이브러리
 
 const VenueDetailPage = () => {
   const { id } = useParams();
@@ -26,11 +27,11 @@ const VenueDetailPage = () => {
 
   useEffect(() => {
     const fetchVenue = async () => {
-      const res = await axiosInstance.get(`/user/venues/${id}/`);
+      const res = await axios.get(`https://eventcafe.site/user/venues/${id}/`);
       setVenue(res.data);
 
-      const bookedRes = await axiosInstance.get(
-        `/user/bookings/reserved-dates/${id}/`
+      const bookedRes = await axios.get(
+        `https://eventcafe.site/user/bookings/reserved-dates/${id}/`
       );
       setBookedDates(bookedRes.data.map((dateStr) => new Date(dateStr))); // 날짜 문자열 → Date 객체로
     };

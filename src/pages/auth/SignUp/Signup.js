@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomTextField from '../../../components/common/CustomTextField';
 import { buttonStyle } from '../../../components/common/Styles';
 // 추가 import
@@ -100,7 +100,7 @@ const SignupPage = () => {
 
       console.log('회원가입 성공:', response.data);
       alert('회원가입 성공! 로그인하세요.');
-      window.location.href = '/login';
+      navigate('/login', { state: { backgroundLocation: window.location } });
     } catch (err) {
       console.error('회원가입 실패:', err.response?.data);
       setError(
