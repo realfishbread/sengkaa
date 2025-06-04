@@ -93,6 +93,33 @@ body {
     opacity: 1;
 }
 
+/* 섹션 공통 스타일 */
+.popular-events,
+.popular-streamers,
+.popular-games,
+.reservable-venues {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.popular-events .slick-track,
+.popular-streamers .slick-track,
+.popular-games .slick-track,
+.reservable-venues .slick-track {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.popular-events .slider-wrapper,
+.popular-streamers .slider-wrapper,
+.popular-games .slider-wrapper,
+.reservable-venues .slider-wrapper {
+    padding: 0;
+}
+
 /* 인기 아이돌 카페 스타일 */
 .popular-events .cafe-card {
     min-width: 200px;
@@ -112,8 +139,8 @@ body {
 }
 
 .popular-events .cafe-card img {
-    width: 200px;
-    height: 280px;
+    width: 200px;  /* 4 */
+    height: 300px;  /* 6 - 4:6 비율 */
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 8px;
@@ -140,35 +167,6 @@ body {
     display: none;
 }
 
-.popular-events .slick-track {
-    display: flex;
-    align-items: flex-start;
-    gap: 0px;
-    padding: 10px 0;
-    touch-action: pan-x;
-}
-
-.popular-events .slider-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0;
-    position: relative;
-    box-sizing: border-box;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    user-select: none;
-}
-
-.popular-events .slick-list {
-    cursor: grab;
-}
-
-.popular-events .slick-list:active {
-    cursor: grabbing;
-}
-
 /* 인기 스트리머 콜라보 스타일 */
 .popular-streamers .cafe-card {
     min-width: 160px;
@@ -188,11 +186,11 @@ body {
 }
 
 .popular-streamers .cafe-card img {
-    width: 100%;
-    height: 100%;
-    min-height: 240px;
-    max-height: 320px;
-    object-fit: contain;
+    width: 200px;  /* 4 */
+    height: 250px;  /* 5 - 4:5 비율 (스트리머는 좀 더 정사각형에 가깝게) */
+    min-height: unset;
+    max-height: unset;
+    object-fit: cover;
     border-radius: 12px;
     margin-bottom: 8px;
 }
@@ -232,16 +230,16 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0;
+    margin: 0 20px;  /* 좌우 여백 추가 */
     box-sizing: border-box;
 }
 
 .popular-games .cafe-card img {
-    width: 100%;
-    height: 100%;
-    min-height: 240px;
-    max-height: 320px;
-    object-fit: contain;
+    width: 240px;  /* 6 */
+    height: 160px;  /* 4 - 6:4 비율 (게임은 가로로 길게) */
+    min-height: unset;
+    max-height: unset;
+    object-fit: cover;
     border-radius: 12px;
     margin-bottom: 8px;
 }
@@ -268,38 +266,6 @@ body {
 }
 
 /* 대관 가능한 장소 스타일 */
-.reservable-venues .slider-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0;
-    position: relative;
-    box-sizing: border-box;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    user-select: none;
-}
-
-.reservable-venues .slider-wrapper::-webkit-scrollbar {
-    display: none;
-}
-
-.reservable-venues .slick-list {
-    cursor: grab;
-}
-
-.reservable-venues .slick-list:active {
-    cursor: grabbing;
-}
-
-.reservable-venues .slick-track {
-    display: flex;
-    gap: 0px;
-    padding: 10px 0;
-    touch-action: pan-x;
-}
-
 .reservable-venues .cafe-card {
     border: 1px solid #eee;
     padding: 10px;
@@ -342,6 +308,30 @@ body {
     font-size: 0.85rem;
     color: #777;
     line-height: 1.4;
+}
+
+/* 슬라이더 트랙 기본 스타일 */
+.reservable-venues .slick-track {
+    display: flex;
+    gap: 0px;
+    padding: 10px 0;
+    touch-action: pan-x;
+}
+
+.reservable-venues .slick-track::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+}
+
+.reservable-venues .slider-wrapper {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.reservable-venues .slider-wrapper::-webkit-scrollbar {
+    display: none;
 }
 
 /* 기타 스타일 */
