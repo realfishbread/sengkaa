@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from '../../shared/api/axiosInstance';
+import axios from 'axios'
 import './KakaoMap.css';
 const KakaoMap = () => {
   const [userLocation, setUserLocation] = useState({
@@ -110,7 +110,7 @@ const KakaoMap = () => {
   }, [fetchedPlaces]);
   const fetchCafes = async (lat, lng, map) => {
     try {
-      const response = await axiosInstance.get('/user/events/nearby/', {
+      const response = await axios.get('/user/events/nearby/', {
         params: {
           lat,
           lng,
