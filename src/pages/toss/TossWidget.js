@@ -36,10 +36,10 @@ const TossWidget = ({ clientKey, orderId, orderName, amount, user }) => {
               orderName,
               customerName: user.username || '익명 유저',
               customerEmail: user.email || '',
-              successUrl: `${window.location.origin}/user/bookings/payment/success/page/?dates=${encodeURIComponent(
+              successUrl: `${window.location.origin}/payment/success/page/?dates=${encodeURIComponent(
                 bookingDates
               )}`,
-              failUrl: `${window.location.origin}/user/bookings/payment/fail/`,
+              failUrl: `${window.location.origin}/payment/fail/`,
             });
           } catch (error) {
             console.error('결제 위젯 오류:', error);
