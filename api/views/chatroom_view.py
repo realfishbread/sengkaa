@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from api.serializers.chatroom_serializer import ChatRoomSerializer, MessageSerializer
 from api.models import ChatRoom, User, ChatRoomInvite, Notification, Message
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes
 from django.contrib.auth import get_user_model
@@ -14,7 +14,7 @@ User = get_user_model()
 
 # views.py
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def create_chat_room(request):
     serializer = ChatRoomSerializer(data=request.data, context={"request": request})
     if serializer.is_valid():
@@ -65,7 +65,7 @@ def list_chat_rooms(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def invite_user_to_room(request, room_id):
     nickname = request.data.get('nickname')
     if not nickname:
@@ -103,7 +103,7 @@ def invite_user_to_room(request, room_id):
     
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def respond_to_invite(request, room_id):
     action = request.data.get('action')
 
@@ -129,7 +129,7 @@ def respond_to_invite(request, room_id):
         return Response({"error": "action은 'accept' 또는 'reject'여야 해요."}, status=400)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def search_users(request):
     q = request.GET.get("q", "")
     users = User.objects.filter(nickname__icontains=q).exclude(user_id=request.user.id)[:10]
@@ -176,7 +176,7 @@ def get_chat_room_detail(request, room_id):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def check_chatroom_access(request, room_id):
     """
     채팅방 입장 전 유저의 권한을 확인하는 엔드포인트

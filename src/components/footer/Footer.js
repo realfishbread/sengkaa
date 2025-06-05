@@ -2,8 +2,8 @@ import { Instagram, Twitter } from '@mui/icons-material';
 import { Box, Container, IconButton, Link, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import Logo from '../../components/common/Logo';
-import PrivacyPolicyModal from '../../pages/auth/SignUp/policy/PrivacyPolicyModal';
-import TermsModal from '../../pages/auth/SignUp/policy/TermsModal';
+import PrivacyPolicyModal from '../../pages/policy/PrivacyPolicyModal';
+import TermsModal from '../../pages/policy/TermsModal';
 import './Footer.css';
 
 const Footer = () => {

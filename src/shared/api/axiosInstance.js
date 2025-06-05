@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 let loginModalCallback = null;
+
+export const getLoginModalHandler = () => loginModalCallback;
 
 let navigateToLogin = null;
 export const injectNavigateToLogin = (navigator) => {
@@ -57,14 +58,23 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-  if (error.response?.status === 403) {
-  if (typeof loginModalCallback === 'function') {
-    loginModalCallback();
-  }
-  if (typeof navigateToLogin === 'function') {
-    navigateToLogin('/login', { state: { backgroundLocation: window.location } });
-  }
-}
+    if (error.response?.status === 403) {
+      // 인증이 필요한 API에 대한 접근 시 로그인 모달 표시
+      if (error.response?.data?.detail === 'Authentication credentials were not provided.' ||
+          error.response?.data?.detail === 'Invalid token.' ||
+          error.response?.data?.detail === 'Token has expired.' ||
+          error.response?.data?.detail === 'You do not have permission to perform this action.') {
+        if (typeof loginModalCallback === 'function') {
+          loginModalCallback();
+        }
+        if (typeof navigateToLogin === 'function') {
+          navigateToLogin('/login', { state: { backgroundLocation: window.location } });
+        }
+      } else {
+        // 권한 부족 에러의 경우 사용자에게 알림
+        console.error('권한이 없습니다:', error.response?.data?.detail);
+      }
+    }
 
     return Promise.reject(error);
   }

@@ -23,6 +23,7 @@ def get_star_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def stars_by_genre(request):
     genre_id = request.query_params.get('genre_id')
     stars = Star.objects.filter(genre__id=genre_id).values('id', 'name', 'group')
@@ -31,6 +32,7 @@ def stars_by_genre(request):
 
 # views.py
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def star_groups_by_genre(request):
     genre_id = request.query_params.get('genre_id')
     if not genre_id:

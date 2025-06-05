@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.shortcuts import redirect
 from api.serializers.booking_serializer import MyBookedVenueSerializer
@@ -7,19 +7,19 @@ from api.models import Booking, Venue
 import base64
 from datetime import datetime, timedelta
 import requests
-from rest_framework.permissions import AllowAny
 from django.conf import settings
 from uuid import uuid4
+from api.permissions import IsAuthenticatedOrReadOnly
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])  # 내 예약 목록은 로그인한 사용자만 볼 수 있음
 def my_booked_venues(request):
     my_bookings = Booking.objects.filter(user=request.user, is_paid=True)
     serializer = MyBookedVenueSerializer(my_bookings, many=True, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])  # 필요 시 AllowAny로 변경 가능
+@permission_classes([AllowAny])  # 예약 가능한 날짜는 누구나 볼 수 있음
 def reserved_dates(request, venue_id):
     bookings = Booking.objects.filter(
         venue_id=venue_id,
@@ -31,10 +31,8 @@ def reserved_dates(request, venue_id):
 
     return Response(date_list)
 
-
-
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])  # 결제 요청은 로그인한 사용자만 가능
 def create_payment_request(request):
     user = request.user
     venue_id = request.data.get('venue_id')
@@ -83,7 +81,6 @@ def toss_payment_success_page(request):
     """
     params = request.GET.urlencode()
     return redirect(f'/payment/success/page/?{params}')
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

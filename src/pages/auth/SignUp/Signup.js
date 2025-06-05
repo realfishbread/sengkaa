@@ -12,13 +12,18 @@ import {
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import CustomTextField from '../../../components/common/CustomTextField';
+import { injectLoginModalHandler } from '../../../shared/api/axiosInstance';
+import { getLoginModalHandler } from '../../../shared/api/axiosInstance';
 import { buttonStyle } from '../../../components/common/Styles';
 // 추가 import
 import { useNavigate } from 'react-router-dom';
-import AgePolicyModal from './policy/AgePoilcyModal';
-import PrivacyPolicyModal from './policy/PrivacyPolicyModal';
-import TermsModal from './policy/TermsModal';
+import AgePolicyModal from '../../policy/AgePoilcyModal';
+import PrivacyPolicyModal from '../../policy/PrivacyPolicyModal';
+import TermsModal from '../../policy/TermsModal';
 import './Signup.css';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 const SignupPage = () => {
   const [username, setUsername] = useState(''); // 🔹 추가 (이름 필드)
@@ -47,7 +52,18 @@ const SignupPage = () => {
   const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
   const [openAgeModal, setOpenAgeModal] = useState(false);
 
+ const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [snackbarMessage, setSnackbarMessage] = useState('');
+const [snackbarSeverity, setSnackbarSeverity] = useState('info'); // 'success' | 'error'
+const [showLoginButton, setShowLoginButton] = useState(false);
+
   const navigate = useNavigate();
+
+  const showSnackbar = (message, severity = 'info') => {
+  setSnackbarMessage(message);
+  setSnackbarSeverity(severity);
+  setSnackbarOpen(true);
+};
 
   useEffect(() => {
     let timerInterval;
@@ -77,14 +93,14 @@ const SignupPage = () => {
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.');
+      alert('비밀번호가 일치하지 않습니다.', 'error');
       return;
     }
     if (!code) {
-      setError('이메일 인증을 완료해주세요.');
+     alert('이메일 인증을 완료해주세요.', 'error');
       return;
     }
-    setError(''); // 🔹 에러 초기화
+    alert(''); // 🔹 에러 초기화
 
     try {
       const response = await axios.post(
@@ -99,13 +115,16 @@ const SignupPage = () => {
       );
 
       console.log('회원가입 성공:', response.data);
-      alert('회원가입 성공! 로그인하세요.');
-      navigate('/login', { state: { backgroundLocation: window.location } });
+      alert('회원가입 성공! 로그인하세요.','success');
+      const showLoginModal = getLoginModalHandler();
+if (typeof showLoginModal === 'function') {
+  showLoginModal(); // 로그인 모달 바로 뜨게!
+}
     } catch (err) {
       console.error('회원가입 실패:', err.response?.data);
-      setError(
+      alert(
         err.response?.data?.error || '회원가입 실패. 다시 시도해주세요.'
-      );
+      ,'error');
     }
   };
 
@@ -122,7 +141,7 @@ const SignupPage = () => {
       setIsEmailVerified(true); // ✅ 인증 완료 상태 저장
     } catch (err) {
       console.error('인증 실패:', err.response?.data);
-      setError('❌ 인증 코드가 잘못되었거나 만료되었습니다.');
+      alert('❌ 인증 코드가 잘못되었거나 만료되었습니다.');
     }
   };
 
@@ -585,6 +604,23 @@ const SignupPage = () => {
           </Button>
         </Box>
       </Container>
+
+    <Snackbar
+  open={snackbarOpen}
+  autoHideDuration={3000}
+  onClose={() => setSnackbarOpen(false)}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+>
+  <MuiAlert
+    elevation={6}
+    variant="filled"
+    onClose={() => setSnackbarOpen(false)}
+    severity={snackbarSeverity}
+    sx={{ width: '100%' }}
+  >
+    {snackbarMessage}
+  </MuiAlert>
+</Snackbar>
     </Box>
   );
 };
