@@ -103,11 +103,11 @@ function AppRoutes() {
           <Route path="result" element={<SearchResults />} />
           <Route path="/favorite-events" element={<FavoriteEvents />} />
           <Route
-            path="/user/bookings/payment/success/page/"
+            path="/payment/success/page/"
             element={<PaymentSuccessPage />}
           />
           <Route
-            path="/user/bookings/payment/fail"
+            path="/payment/fail"
             element={<PaymentFailPage />}
           />
           <Route path="chat-list" element={<ChatLobbyPage />} />
