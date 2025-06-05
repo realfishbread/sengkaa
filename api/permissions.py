@@ -21,3 +21,12 @@ class IsAuthenticatedOrReadOnly(BasePermission):
             
         # 쓰기 요청은 인증된 사용자만 허용
         return bool(request.user and request.user.is_authenticated)
+
+    def handle_no_permission(self, request):
+        response = super().handle_no_permission(request)
+        if response:
+            response.data = {
+                'detail': response.data.get('detail', ''),
+                'requires_auth': True  # 인증이 필요한 API임을 표시
+            }
+        return response
