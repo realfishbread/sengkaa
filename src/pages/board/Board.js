@@ -17,6 +17,7 @@ import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import '../../styles/fade.css'; // ✅ 만든 fade.css 경로에 맞게 import
 import ReportModal from './api/ReportModal'; // 신고 모달 컴포넌트 추가
+import axios from 'axios';
 
 const Board = () => {
   const [posts, setPosts] = useState([]);

@@ -14,7 +14,7 @@ const PaymentSuccessPage = () => {
     const paymentKey = searchParams.get('paymentKey');
     const orderId = searchParams.get('orderId');
     const amount = searchParams.get('amount');
-    const dates = localStorage.getItem('booking_dates'); // ✅ 날짜 기억해뒀던 것 꺼내기
+    const dates = sessionStorage.getItem('booking_dates'); // ✅ 날짜 기억해뒀던 것 꺼내기
     const parsedDates = dates ? JSON.parse(dates) : [];
 
     if (!paymentKey || !orderId || !amount || parsedDates.length === 0) {

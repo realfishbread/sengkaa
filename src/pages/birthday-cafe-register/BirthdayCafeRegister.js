@@ -104,7 +104,7 @@ const BirthdayCafeRegister = () => {
     formData.append('detail_address', detailAddress);
     formData.append('start_date', startDate?.toISOString().slice(0, 10));
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
-    formData.append('genre', genre); // 🔥 여기 수정
+    formData.append('genre', genreMap[genre]);  // ← 숫자로 바꿔서 전송
     formData.append('star', selectedStar?.id ?? null); // null이면 NULL로 전송됨
     formData.append('latitude', null); // ✅ 위도 추가
     formData.append('longitude', null); // ✅ 경도 추가

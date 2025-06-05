@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.db.models import Sum
 from api.models import DictionaryTerm
 from api.serializers.dictionary_serializer import DictionaryTermSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
 from api.permissions import IsOwnerOrReadOnly  # ✅ 커스텀 권한 클래스 임포트
 from django.http import JsonResponse
@@ -18,7 +18,7 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'check', 'total_views'] or self.request.method == 'GET':
             return [AllowAny()]
-        return [IsAuthenticated()]
+        return [IsAuthenticatedOrReadOnly()]
 
     def get_queryset(self):
         queryset = DictionaryTerm.objects.all()
