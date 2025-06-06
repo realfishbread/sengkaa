@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import axiosInstance from '../../../shared/api/axiosInstance';
+import axiosInstance from '../../shared/api/axiosInstance';
 import './FavoriteEvents.css';
 
 const FavoriteEvents = () => {

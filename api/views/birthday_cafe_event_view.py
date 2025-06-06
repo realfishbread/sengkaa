@@ -109,7 +109,7 @@ class BirthdayCafeDetailAPIView(RetrieveAPIView):
         instance = self.get_object()
         instance.view_count += 1  # ✅ 조회수 증가
         instance.save(update_fields=['view_count'])
-        serializer = self.get_serializer(instance)
+        serializer = self.get_serializer(instance, context={'request': request})
         return Response(serializer.data)
     
     def get_serializer_context(self):

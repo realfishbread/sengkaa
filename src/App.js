@@ -8,8 +8,7 @@ import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
 import KakaoRedirectPage from './pages/auth/Login/KakaoRedirectPage';
 import LoginModalWrapper from './pages/auth/Login/LoginModalWrapper';
 import SignupPage from './pages/auth/SignUp/Signup';
-import FavoriteEvents from './pages/bias/bias-event/FavoriteEvents';
-import FavoriteStarModal from './pages/bias/FavoriteStarModal';
+import FavoriteEvents from './pages/bias-event/FavoriteEvents';
 import BirthdayCafeDetailPage from './pages/birthday-cafe-register/BirthdayCafeDetailPage';
 import BirthdayCafeRegister from './pages/birthday-cafe-register/BirthdayCafeRegister';
 import SearchPlaces from './pages/birthday-cafe-register/SearchPlaces';
@@ -91,7 +90,6 @@ function AppRoutes() {
           <Route path="search" element={<SearchPlaces />} />
           <Route path="venue-search" element={<VenueSearch />} />
           <Route path="post/edit/:postId" element={<ModifyPost />} />
-          <Route path="select-star" element={<FavoriteStarModal />} />
           <Route path="my-bookings" element={<MyBookingsPage />} />
           <Route path="oauth/kakao/redirect" element={<KakaoRedirectPage />} />
           <Route path="venues/:id" element={<VenueDetailPage />} />
@@ -108,7 +106,7 @@ function AppRoutes() {
           />
           <Route path="/payment/fail" element={<PaymentFailPage />} />
           <Route path="chat-list" element={<ChatLobbyPage />} />
-          <Route path="/star/:id" element={<StarDetailPage />} />
+          <Route path="star/:id" element={<StarDetailPage />} />
         </Route>
       </Routes>
       {state?.backgroundLocation && location.pathname === '/login' && (

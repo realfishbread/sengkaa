@@ -7,7 +7,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFoundBox from '../../components/common/NotFoundBox';
 import { UserContext } from '../../context/UserContext';
@@ -124,7 +124,8 @@ const ProfilePage = () => {
         {/* 자기소개(bio)가 있을 때만 보여주기 */}
         {profile.bio && (
           <>
-            <Divider sx={{ my: 4, borderColor: '#eee' }} />
+            <br />
+            <br />
             <Typography
               variant="subtitle2"
               fontWeight="bold"
@@ -141,7 +142,8 @@ const ProfilePage = () => {
             </Typography>
           </>
         )}
-        <Divider sx={{ my: 4, borderColor: '#eee' }} />
+        <br />
+        <br />
         <Typography
           variant="body2"
           color="text.secondary"
@@ -150,6 +152,49 @@ const ProfilePage = () => {
         >
           가입일: {new Date(profile.created_at).toLocaleDateString()}
         </Typography>
+
+        {/* ⭐ 여기에 최애 스타 추가 */}
+        {profile.star && (
+          <>
+            <Divider sx={{ my: 4, borderColor: '#eee' }} />
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              sx={{ textAlign: 'center', color: '#6C63FF', mb: 1 }}
+            >
+              ⭐ 최애 스타
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 1,
+                mt: 1,
+              }}
+            >
+              <img
+                src={profile.star.image}
+                alt={profile.star.name}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid #6C63FF',
+                }}
+              />
+              <Typography variant="body1" fontWeight="bold" color="#333">
+                {profile.star.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {profile.star.group}
+              </Typography>
+            </Box>
+          </>
+        )}
+       
+        
 
         {/* 프로필 주인 여부 체크 */}
         {isMyProfile ? (
@@ -173,6 +218,7 @@ const ProfilePage = () => {
             >
               ✏️ 프로필 수정
             </Button>
+            <br />
           </>
         ) : (
           <>
@@ -208,8 +254,11 @@ const ProfilePage = () => {
             </Button>
           </>
         )}
+       
       </Paper>
+       <br />
     </Box>
+    
   );
 };
 

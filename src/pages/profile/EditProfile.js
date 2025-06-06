@@ -2,8 +2,9 @@ import { Button } from '@mui/material'; // 👈 이거 꼭 필요!
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
-import FavoriteStarModal from '../bias/FavoriteStarModal'; // 경로 확인해서 맞게 수정
+import SelectStarModal from '../star/SelectStarModal'; // ✅ 모달 컴포넌트
 import './EditProfile.css';
+
 export default function EditProfile() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
@@ -148,11 +149,16 @@ export default function EditProfile() {
           >
             최애 스타 선택
           </Button>
-          {showModal && (
-            <FavoriteStarModal
-              onSelect={handleSelectStar}
-            />
-          )}
+
+          <SelectStarModal
+            open={showModal}
+            onClose={() => setShowModal(false)}
+            onSelect={(star) => {
+              setSelectedStarId(star.id);
+              setSelectedStarImage(star.image);
+              setShowModal(false);
+            }}
+          />
           <div style={styles.buttonContainer}>
             <button type="submit" style={styles.saveButton}>
               저장하기
@@ -253,5 +259,4 @@ const styles = {
     cursor: 'pointer',
     transition: 'background-color 0.25s ease, transform 0.2s',
   },
-  
 };
