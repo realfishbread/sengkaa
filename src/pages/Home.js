@@ -178,6 +178,8 @@ const Home = () => {
     swipeToSlide: true,
     touchThreshold: 10,
     variableWidth: true,
+    slidesPerRow: 1,
+    adaptiveHeight: false,
     responsive: [
       { breakpoint: 1200, settings: { slidesToShow: 3 } },
       { breakpoint: 900, settings: { slidesToShow: 2 } },
@@ -335,42 +337,44 @@ const Home = () => {
       <section className="popular-games">
         <SectionTitle title="🔥 인기 게임 콜라보" category="game" />
         <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
-          <Slider ref={gameSliderRef} {...sliderSettings}>
-            {popularCafes.game.map((cafe, index) => (
-              <div key={index} className="cafe-slide">
-                <Box
-                  sx={{
-                    width: 230, // 고정 폭(슬라이드 간 간격 일정)
-                    mx: 'auto',
-                    marginTop: '1rem',
-                    marginBottom: '2rem',
-                    bgcolor: '#ffffff', // 회색 배경
-                    borderRadius: 3,
-                    p: 1.5, // 이미지와 배경 사이 여백
-                    boxShadow: '0 6px 15px rgba(1,0,0,0.1)',
-                    transition: 'transform .2s',
-                    '&:hover': { transform: 'translateY(-4px)' },
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => navigate(`/birthday-cafes/${cafe.id}`)}
-                >
-                  <Box className="cafe-card">
-                    <img src={cafe.image} alt={cafe.cafe_name} />
-                    <Box className="MuiBox-root">
-                      <Typography
-                        variant="subtitle2"
-                        noWrap
-                        textAlign="center"
-                        sx={{ mt: 1, fontWeight: 500 }}
-                      >
-                        {cafe.group_name || cafe.cafe_name}
-                      </Typography>
+          <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'hidden' }}>
+            <Slider ref={gameSliderRef} {...sliderSettings}>
+              {popularCafes.game.map((cafe, index) => (
+                <div key={index} className="cafe-slide">
+                  <Box
+                    sx={{
+                      width: 230, // 고정 폭(슬라이드 간 간격 일정)
+                      mx: 'auto',
+                      marginTop: '1rem',
+                      marginBottom: '2rem',
+                      bgcolor: '#ffffff', // 회색 배경
+                      borderRadius: 3,
+                      p: 1.5, // 이미지와 배경 사이 여백
+                      boxShadow: '0 6px 15px rgba(1,0,0,0.1)',
+                      transition: 'transform .2s',
+                      '&:hover': { transform: 'translateY(-4px)' },
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => navigate(`/birthday-cafes/${cafe.id}`)}
+                  >
+                    <Box className="cafe-card">
+                      <img src={cafe.image} alt={cafe.cafe_name} />
+                      <Box className="MuiBox-root">
+                        <Typography
+                          variant="subtitle2"
+                          noWrap
+                          textAlign="center"
+                          sx={{ mt: 1, fontWeight: 500 }}
+                        >
+                          {cafe.group_name || cafe.cafe_name}
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </div>
-            ))}
-          </Slider>
+                </div>
+              ))}
+            </Slider>
+          </div>
         </div>
       </section>
 
