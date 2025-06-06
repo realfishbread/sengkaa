@@ -155,7 +155,7 @@ const BirthdayCafeDetailPage = () => {
 
             {cafe.star && (
               <Box mt={4}>
-                <Typography variant="h6">최애 스타</Typography>
+                <Typography variant="h6">스타</Typography>
                 <Box display="flex" alignItems="center" gap={2} mt={1}>
                   <img
                     src={cafe.star.image}

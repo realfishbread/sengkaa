@@ -238,6 +238,7 @@ const Home = () => {
         </div>
       </main>
       <br />
+      <Box className="section" >
       <br />
       <br />
 
@@ -378,7 +379,7 @@ const Home = () => {
 
       <section className="reservable-venues">
         <SectionTitle title="대관 가능한 장소" category="venue" />
-        <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
+        <div className="slider-wrapper" >
           <Slider ref={venueSliderRef} {...sliderSettings}>
             {reservableVenues.map((venue, index) => (
               <div key={index} className="cafe-slide">
@@ -396,7 +397,11 @@ const Home = () => {
           </Slider>
         </div>
       </section>
+      <br />
+      <br />
+      </Box>
     </div>
+    
   );
 };
 

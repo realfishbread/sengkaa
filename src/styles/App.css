@@ -371,3 +371,6 @@ body {
   padding: 0 10px; /* 다른 섹션보다 좁은 여백 */
 }
 
+.section{
+    background-color: #fafafa;
+}
