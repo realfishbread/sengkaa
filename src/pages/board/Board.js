@@ -17,7 +17,6 @@ import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import '../../styles/fade.css'; // ✅ 만든 fade.css 경로에 맞게 import
 import ReportModal from './api/ReportModal'; // 신고 모달 컴포넌트 추가
-import axios from 'axios';
 
 const Board = () => {
   const [posts, setPosts] = useState([]);
@@ -169,7 +168,18 @@ const Board = () => {
 
       {/* ✅ 글작성 버튼 오른쪽 정렬 */}
       <Box sx={{ textAlign: 'right', mb: 4 }}>
-        <Button variant="contained" onClick={() => navigate('/post')}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            if (!user) {
+              navigate('/login', {
+                state: { from: '/board' },
+              }); // 🔥 비로그인 → 모달 켜기
+            } else {
+              navigate('/post');
+            } // 로그인 → 글쓰기 페이지
+          }}
+        >
           글 작성
         </Button>
       </Box>
@@ -472,7 +482,7 @@ const Board = () => {
                           취소
                         </Button>
                       </Typography>
-                    )} 
+                    )}
                     <Stack direction="row" spacing={1} alignItems="center">
                       <input
                         type="text"

@@ -1,3 +1,5 @@
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {
   Box,
   Card,
@@ -5,21 +7,24 @@ import {
   Chip,
   Divider,
   Grid,
-  Typography,
   IconButton,
+  Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axiosInstance from '../../shared/api/axiosInstance';
 import axios from 'axios';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
+import axiosInstance from '../../shared/api/axiosInstance';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BirthdayCafeDetailPage = () => {
   const { id } = useParams();
   const [cafe, setCafe] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const { user } = useContext(UserContext);
+   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCafeDetail = async () => {
@@ -29,7 +34,7 @@ const BirthdayCafeDetailPage = () => {
         );
         setCafe(response.data);
         setIsLiked(response.data.is_liked);
-        setLikeCount(response.data.liked_count || 0);
+        setLikeCount(response.data.like_count || 0);
       } catch (error) {
         console.error('이벤트 상세 불러오기 실패:', error);
       }
@@ -45,6 +50,11 @@ const BirthdayCafeDetailPage = () => {
       setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
     } catch (error) {
       console.error('찜 실패:', error);
+      if (error.response?.status === 403) {
+        console.warn('로그인 필요!');
+        navigate('/login', { state: { from: '/birthday-cafes/:id' } });
+        
+      }
       // 에러는 axiosInstance의 인터셉터에서 처리됨
     }
   };
@@ -55,23 +65,29 @@ const BirthdayCafeDetailPage = () => {
     <Box sx={{ maxWidth: '1200px', mx: 'auto', p: 4 }}>
       <Grid container spacing={4}>
         <Grid item xs={12} md={5}>
-          <Box sx={{ 
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center'
-          }}>
-            <Card sx={{ 
+          <Box
+            sx={{
               width: '100%',
-              maxWidth: '400px',
-              mb: 4,
-              bgcolor: 'transparent',
-              boxShadow: 'none'
-            }}>
-              <Box sx={{ 
-                position: 'relative',
-                paddingTop: '170%', // 1:1.7 비율로 수정
-                width: '100%'
-              }}>
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <Card
+              sx={{
+                width: '100%',
+                maxWidth: '400px',
+                mb: 4,
+                bgcolor: 'transparent',
+                boxShadow: 'none',
+              }}
+            >
+              <Box
+                sx={{
+                  position: 'relative',
+                  paddingTop: '170%', // 1:1.7 비율로 수정
+                  width: '100%',
+                }}
+              >
                 <CardMedia
                   component="img"
                   image={cafe.image}
@@ -83,7 +99,7 @@ const BirthdayCafeDetailPage = () => {
                     width: '100%',
                     height: '100%',
                     objectFit: 'contain',
-                    objectPosition: 'top'
+                    objectPosition: 'top',
                   }}
                 />
               </Box>
@@ -92,7 +108,11 @@ const BirthdayCafeDetailPage = () => {
         </Grid>
         <Grid item xs={12} md={7}>
           <Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Typography variant="h4" fontWeight="bold" gutterBottom>
                 {cafe.cafe_name}
               </Typography>
@@ -144,7 +164,9 @@ const BirthdayCafeDetailPage = () => {
                     style={{ borderRadius: 10 }}
                   />
                   <Box>
-                    <Typography variant="subtitle1">{cafe.star.name}</Typography>
+                    <Typography variant="subtitle1">
+                      {cafe.star.name}
+                    </Typography>
                     <Typography variant="body2" color="text.secondary">
                       {cafe.star.group}
                     </Typography>

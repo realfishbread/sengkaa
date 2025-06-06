@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchStarsByGenre } from '../../shared/api/fetchStarsByGroup';
 import './DictionaryForm.css';
 import {
   checkTermExists,
   createDictionaryItem,
   updateDictionaryItem,
-  fetchStarGroups,
 } from './api/DictionaryApi';
-import { fetchStarsByGenre } from '../../shared/api/fetchStarsByGroup';
 
 const MAIN_CATEGORIES = [
-  { value: "", label: "선택하세요" },
-  { value: "아이돌", label: "아이돌" },
-  { value: "여자 아이돌", label: "여자 아이돌" },
-  { value: "남자 아이돌", label: "남자 아이돌" },
-  { value: "스트리머", label: "스트리머" },
-  { value: "게임", label: "게임" },
-  { value: "웹툰", label: "웹툰" },
+  { value: '', label: '선택하세요' },
+  { value: '아이돌', label: '아이돌' },
+  { value: '여자 아이돌', label: '여자 아이돌' },
+  { value: '남자 아이돌', label: '남자 아이돌' },
+  { value: '스트리머', label: '스트리머' },
+  { value: '게임', label: '게임' },
+  { value: '웹툰', label: '웹툰' },
 ];
 
 const GENRE_TAG_TO_ID = {
@@ -80,12 +79,12 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
     if (!term) return alert('용어를 입력해주세요.');
     if (!category) return alert('카테고리를 선택해주세요.');
     if (!definitions[0].definition) return alert('설명을 입력해주세요.');
-    
-    const payload = { 
-      term, 
-      category, 
-      star_group: subCategory,  // 세부 카테고리 추가
-      definitions 
+
+    const payload = {
+      term,
+      category,
+      star_group: subCategory, // 세부 카테고리 추가
+      definitions,
     };
 
     try {
@@ -94,13 +93,13 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
         alert('수정 완료! ✅');
         onSave(updated);
       } else {
-       const saved = await createDictionaryItem(payload);
-      if (!saved || !saved.id) {
-        console.warn('⚠️ 저장은 되었으나 응답이 예상과 다릅니다:', saved);
-        return;
-      }
-      alert('용어가 성공적으로 등록되었습니다! 🎉');
-      onSave(saved);
+        const saved = await createDictionaryItem(payload);
+        if (!saved || !saved.id) {
+          console.warn('⚠️ 저장은 되었으나 응답이 예상과 다릅니다:', saved);
+          return;
+        }
+        alert('용어가 성공적으로 등록되었습니다! 🎉');
+        onSave(saved);
 
         // 초기화
         setTerm('');
@@ -169,8 +168,10 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
                   setSubCategory(''); // 상위 카테고리 변경 시 하위 카테고리 초기화
                 }}
               >
-                {MAIN_CATEGORIES.map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                {MAIN_CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -178,26 +179,26 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
             {category && (
               <div className="subcategory-select-group">
                 <label>세부 카테고리 (선택)</label>
-    
-<select
-  value={subCategory}
-  onChange={(e) => setSubCategory(Number(e.target.value) || '')}
-  className={subCategories.length === 0 ? 'disabled' : ''}
->
-  <option value="">선택 안함 (전체 장르 용어)</option> {/* ✨ 핵심 UX 안내 */}
 
-  {subCategories.length > 0 ? (
-    subCategories.map((sub) => (
-      <option key={sub.id} value={sub.id}>
-        {sub.name}
-      </option>
-    ))
-  ) : (
-    <option value="" disabled>
-      검색 결과가 없습니다
-    </option>
-  )}
-</select>
+                <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(Number(e.target.value) || '')}
+                  className={subCategories.length === 0 ? 'disabled' : ''}
+                >
+                  <option value="">선택 안함 (전체 장르 용어)</option>{' '}
+                  {/* ✨ 핵심 UX 안내 */}
+                  {subCategories.length > 0 ? (
+                    subCategories.map((sub) => (
+                      <option key={sub.id} value={sub.id}>
+                        {sub.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      검색 결과가 없습니다
+                    </option>
+                  )}
+                </select>
               </div>
             )}
           </div>
