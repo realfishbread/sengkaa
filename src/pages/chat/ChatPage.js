@@ -92,7 +92,6 @@ const ChatPage = ({ profile_image }) => {
     );
 
     ws.current.onmessage = (e) => {
-      // 🔥 여기에 들어가야 해!
       try {
         const data = JSON.parse(e.data);
 
@@ -102,6 +101,7 @@ const ChatPage = ({ profile_image }) => {
             message: m.content,
             nickname: m.sender,
             timestamp: m.timestamp,
+            is_system: m.is_system
           }));
           setMessages(normalized);
         } else if (data.message && data.sender) {
@@ -111,6 +111,7 @@ const ChatPage = ({ profile_image }) => {
               message: data.message,
               nickname: data.sender,
               timestamp: data.timestamp,
+              is_system: data.is_system
             },
           ]);
         } else {
@@ -183,66 +184,88 @@ const ChatPage = ({ profile_image }) => {
               <Box
                 key={idx}
                 sx={{
-                  alignSelf:
-                    msg.nickname === nickname ? 'flex-end' : 'flex-start',
+                  alignSelf: msg.is_system ? 'center' : msg.nickname === nickname ? 'flex-end' : 'flex-start',
                   mb: 2,
                   display: 'flex',
                   flexDirection: 'row',
                   alignItems: 'flex-start',
                   gap: 2,
                   width: '100%',
-                  justifyContent:
-                    msg.nickname === nickname ? 'flex-end' : 'flex-start',
+                  justifyContent: msg.is_system ? 'center' : msg.nickname === nickname ? 'flex-end' : 'flex-start',
                 }}
               >
-                {msg.nickname !== nickname && (
-                  <Avatar
-                    src={''}
+                {msg.is_system ? (
+                  <Box
                     sx={{
-                      width: 36,
-                      height: 36,
-                      bgcolor: 'secondary.main',
-                      flexShrink: 0,
-                      cursor: 'pointer', // ✅ 커서 포인터 추가
-                      '&:hover': {
-                        opacity: 0.8, // ✅ 호버 효과 살짝
-                      },
+                      backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                      padding: '8px 16px',
+                      borderRadius: '20px',
+                      maxWidth: '80%',
                     }}
-                    onClick={() => navigate(`/profile/${msg.nickname}`)} // ✅ 여기가 핵심!
                   >
-                    {msg.nickname && msg.nickname[0]
-                      ? msg.nickname[0].toUpperCase()
-                      : '?'}
-                  </Avatar>
-                )}
-                <Box
-                  sx={{
-                    maxWidth: '70%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 0.5,
-                  }}
-                >
-                  {msg.nickname !== nickname && (
                     <Typography
-                      variant="caption"
+                      variant="body2"
                       sx={{
                         color: 'text.secondary',
-                        ml: msg.nickname === nickname ? 'auto' : 0,
+                        fontStyle: 'italic',
+                        textAlign: 'center'
                       }}
-                    >
-                      {msg.nickname}
-                    </Typography>
-                  )}
-                  <MessageBubble isUser={msg.nickname === nickname}>
-                    <Typography
-                      variant="body1"
-                      sx={{ wordBreak: 'break-word' }}
                     >
                       {msg.message}
                     </Typography>
-                  </MessageBubble>
-                </Box>
+                  </Box>
+                ) : (
+                  <>
+                    {msg.nickname !== nickname && (
+                      <Avatar
+                        src={''}
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          bgcolor: 'secondary.main',
+                          flexShrink: 0,
+                          cursor: 'pointer',
+                          '&:hover': {
+                            opacity: 0.8,
+                          },
+                        }}
+                        onClick={() => navigate(`/profile/${msg.nickname}`)}
+                      >
+                        {msg.nickname && msg.nickname[0]
+                          ? msg.nickname[0].toUpperCase()
+                          : '?'}
+                      </Avatar>
+                    )}
+                    <Box
+                      sx={{
+                        maxWidth: '70%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 0.5,
+                      }}
+                    >
+                      {msg.nickname !== nickname && (
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: 'text.secondary',
+                            ml: msg.nickname === nickname ? 'auto' : 0,
+                          }}
+                        >
+                          {msg.nickname}
+                        </Typography>
+                      )}
+                      <MessageBubble isUser={msg.nickname === nickname}>
+                        <Typography
+                          variant="body1"
+                          sx={{ wordBreak: 'break-word' }}
+                        >
+                          {msg.message}
+                        </Typography>
+                      </MessageBubble>
+                    </Box>
+                  </>
+                )}
               </Box>
             ))
           ) : (

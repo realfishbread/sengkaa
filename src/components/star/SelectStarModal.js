@@ -1,34 +1,22 @@
-// 최애 구독
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Modal,
   Box,
   Typography,
   Grid,
   IconButton,
-  TextField,
-  InputAdornment,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
-import axiosInstance from '../../shared/api/axiosInstance';
 
 const SelectStarModal = ({ open, onClose, onSelect }) => {
-  const [stars, setStars] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    if (open) {
-      axiosInstance
-        .get('/user/star/stars/')
-        .then((res) => setStars(res.data))
-        .catch((err) => console.error('스타 목록 불러오기 실패:', err));
-    }
-  }, [open]);
-
-  const filteredStars = stars.filter(star => 
-    star.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const stars = [
+    { id: 1, name: '미연', image: 'https://i.imgur.com/example1.jpg' },
+    { id: 2, name: '민니', image: 'https://i.imgur.com/example2.jpg' },
+    { id: 3, name: '전소연', image: 'https://i.imgur.com/example3.jpg' },
+    { id: 4, name: '수진', image: 'https://i.imgur.com/example4.jpg' },
+    { id: 5, name: '슈화', image: 'https://i.imgur.com/example5.jpg' },
+    { id: 6, name: '우기', image: 'https://i.imgur.com/example6.jpg' },
+  ];
 
   return (
     <Modal
@@ -42,13 +30,13 @@ const SelectStarModal = ({ open, onClose, onSelect }) => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: { xs: '95%', sm: '90%', md: '80%' },
-          maxWidth: '1200px',
+          width: { xs: '90%', sm: '80%', md: '70%' },
+          maxWidth: '900px',
           maxHeight: '80vh',
           bgcolor: 'background.paper',
           borderRadius: 3,
           boxShadow: 24,
-          p: 3,
+          p: 4,
           overflow: 'auto',
           '&::-webkit-scrollbar': {
             width: '8px',
@@ -75,38 +63,16 @@ const SelectStarModal = ({ open, onClose, onSelect }) => {
           </IconButton>
         </Box>
 
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="스타 이름으로 검색"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{
-            mb: 3,
-            '& .MuiOutlinedInput-root': {
-              borderRadius: 2,
-              backgroundColor: 'rgba(0,0,0,0.03)',
-            }
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'text.secondary' }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-
-        <Grid container spacing={2} justifyContent="flex-start">
-          {filteredStars.map((star) => (
-            <Grid item xs={3} sm={2} md={1.5} key={star.id}>
+        <Grid container spacing={4} justifyContent="center">
+          {stars.map((star) => (
+            <Grid item xs={6} sm={4} md={4} key={star.id}>
               <Box
                 onClick={() => onSelect(star)}
                 sx={{
                   cursor: 'pointer',
                   position: 'relative',
                   width: '100%',
-                  paddingTop: '100%',
+                  paddingTop: '100%', // 1:1 비율 유지
                   borderRadius: '50%',
                   overflow: 'hidden',
                   transition: 'all 0.3s ease',
@@ -131,9 +97,8 @@ const SelectStarModal = ({ open, onClose, onSelect }) => {
                     right: 0,
                     bottom: 0,
                     backgroundImage: `url(${star.image})`,
-                    backgroundSize: '115% auto',
-                    backgroundPosition: 'center 25%',
-                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                   }}
                 />
                 <Box
@@ -163,7 +128,6 @@ const SelectStarModal = ({ open, onClose, onSelect }) => {
                       transition: 'all 0.3s ease',
                       textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                       fontWeight: 600,
-                      fontSize: '1rem',
                     }}
                   >
                     {star.name}
@@ -178,4 +142,4 @@ const SelectStarModal = ({ open, onClose, onSelect }) => {
   );
 };
 
-export default SelectStarModal;
+export default SelectStarModal; 
