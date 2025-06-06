@@ -3,10 +3,6 @@ import axios from 'axios';
 let loginModalCallback = null;
 let navigateToLogin = null;
 
-
-
-
-
 export const getLoginModalHandler = () => loginModalCallback; // ✅ 이 줄 추가!
 export const injectLoginModalHandler = (callback) => {
   loginModalCallback = callback;
@@ -40,9 +36,10 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       // 403 에러 처리
       if (error.response.status === 403) {
-        const errorMessage = error.response.data?.detail || error.response.data?.message || '';
+        const errorMessage =
+          error.response.data?.detail || error.response.data?.message || '';
         const requiresAuth = error.response.data?.requires_auth;
-        
+
         // 인증이 필요한 API인 경우에만 로그인 모달 표시
         if (requiresAuth) {
           if (typeof loginModalCallback === 'function') {
@@ -51,14 +48,17 @@ axiosInstance.interceptors.response.use(
           return Promise.reject(error);
         }
       }
-      
+
       // 401 에러 처리
       if (error.response.status === 401) {
-        const errorMessage = error.response.data?.detail || error.response.data?.message || '';
-        if (errorMessage.includes('token') || 
-            errorMessage.includes('인증') || 
-            errorMessage.includes('authentication') ||
-            errorMessage.includes('credentials')) {
+        const errorMessage =
+          error.response.data?.detail || error.response.data?.message || '';
+        if (
+          errorMessage.includes('token') ||
+          errorMessage.includes('인증') ||
+          errorMessage.includes('authentication') ||
+          errorMessage.includes('credentials')
+        ) {
           if (typeof loginModalCallback === 'function') {
             loginModalCallback();
           }

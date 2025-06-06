@@ -1,7 +1,15 @@
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Box, Card, CardContent, CircularProgress, Container, Grid, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../../shared/api/axiosInstance';
 import './FavoriteEvents.css';
@@ -24,12 +32,14 @@ const FavoriteEvents = () => {
       });
   }, []);
 
-
   const handleLikeToggle = async (eventId, e) => {
     e.stopPropagation();
+
+    const confirmed = window.confirm('정말 찜을 취소하시겠습니까?');
+    if (!confirmed) return; // ❌ 아니오 누르면 함수 종료
     try {
       await axiosInstance.post(`/user/events/${eventId}/like/`);
-      setEvents(events.filter(event => event.id !== eventId));
+      setEvents(events.filter((event) => event.id !== eventId));
     } catch (err) {
       console.error('찜 취소 실패:', err);
     }
@@ -82,7 +92,9 @@ const FavoriteEvents = () => {
           {events.map((event) => (
             <Grid item xs={12} sm={6} key={event.id}>
               <Card
-                onClick={() => window.location.href = `https://eventcafe.site/user/events/birthday-cafes/${event.id}/`}
+                onClick={() =>
+                  (window.location.href = `https://eventcafe.site/user/events/birthday-cafes/${event.id}/`)
+                }
                 className="event-card-container"
                 sx={{ cursor: 'pointer' }}
               >
@@ -105,16 +117,16 @@ const FavoriteEvents = () => {
                         </Typography>
                         <Box className="event-card-header-icons">
                           <FavoriteIcon
-  sx={{
-    color: '#ff4081',
-    cursor: 'pointer',
-    transition: '0.2s',
-    '&:hover': {
-      color: '#d81b60',
-    },
-  }}
-  onClick={(e) => handleLikeToggle(event.id, e)}
-/>
+                            sx={{
+                              fill: '#ff4081',
+                              cursor: 'pointer',
+                              transition: '0.2s',
+                              '&:hover': {
+                                fill: '#d81b60',
+                              },
+                            }}
+                            onClick={(e) => handleLikeToggle(event.id, e)}
+                          />
                           <ShareIcon
                             sx={{ color: '#ccc', ml: 1 }}
                             onClick={(e) => handleShare(event.id, e)}

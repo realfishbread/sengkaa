@@ -12,12 +12,18 @@ export const EventSearchApi = async ({
   if (keyword) params.append('keyword', keyword);
   if (startDate) params.append('startDate', startDate);
   if (endDate) params.append('endDate', endDate);
-  if (genre) params.append('star_genre', genre); // genre가 스타 장르라면
+  if (genre) params.append('star_genre', genre);
   if (sort) params.append('sort', sort);
 
+  const token = localStorage.getItem('accessToken');
+
+  const headers = token ? { Authorization: `Bearer ${token}` } : {}; // ✅ 세션 안 쓰니까 withCredentials 필요 없음
+
   const response = await axios.get(
-    `https://eventcafe.site/user/events/birthday-cafes/search/?${params.toString()}`
+    `https://eventcafe.site/user/events/birthday-cafes/search/?${params.toString()}`,
+    { headers }
   );
+
   return response.data.results || [];
 };
 

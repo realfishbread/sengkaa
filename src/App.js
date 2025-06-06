@@ -30,6 +30,7 @@ import EditProfile from './pages/profile/EditProfile';
 import ProfilePage from './pages/profile/ProfilePage';
 import SearchResults from './pages/search/SearchResult';
 import Settings from './pages/settings/Settings';
+import StarDetailPage from './pages/star/StarDetailPage';
 import VenueSearch from './pages/venue/find-cafes/VenueSearch';
 import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
 import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
@@ -37,7 +38,6 @@ import {
   injectLoginModalHandler,
   injectNavigateToLogin,
 } from './shared/api/axiosInstance';
-import StarDetailPage from './pages/star/StarDetailPage';
 
 import './styles/App.css';
 
@@ -70,9 +70,9 @@ function AppRoutes() {
   return (
     <>
       <Routes location={state?.backgroundLocation || location}>
+        <Route path="/login" element={<LoginModalWrapper />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-
           <Route path="board" element={<Board />} />
           <Route path="post" element={<Post />} />
           <Route path="calendar" element={<EventCalendar />} />
@@ -106,27 +106,13 @@ function AppRoutes() {
             path="/payment/success/page/"
             element={<PaymentSuccessPage />}
           />
-          <Route
-            path="/payment/fail"
-            element={<PaymentFailPage />}
-          />
+          <Route path="/payment/fail" element={<PaymentFailPage />} />
           <Route path="chat-list" element={<ChatLobbyPage />} />
           <Route path="/star/:id" element={<StarDetailPage />} />
         </Route>
       </Routes>
-
-      {showLoginModal && (
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <LoginModalWrapper
-                open={true}
-                onClose={() => setShowLoginModal(false)}
-              />
-            }
-          />
-        </Routes>
+      {state?.backgroundLocation && location.pathname === '/login' && (
+        <LoginModalWrapper open={true} onClose={() => navigate(-1)} />
       )}
     </>
   );

@@ -12,18 +12,15 @@ import {
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import CustomTextField from '../../../components/common/CustomTextField';
-import { injectLoginModalHandler } from '../../../shared/api/axiosInstance';
-import { getLoginModalHandler } from '../../../shared/api/axiosInstance';
 import { buttonStyle } from '../../../components/common/Styles';
 // 추가 import
-import { useNavigate, useLocation } from 'react-router-dom';
+import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AgePolicyModal from '../../policy/AgePoilcyModal';
 import PrivacyPolicyModal from '../../policy/PrivacyPolicyModal';
 import TermsModal from '../../policy/TermsModal';
 import './Signup.css';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-
 
 const SignupPage = () => {
   const [username, setUsername] = useState(''); // 🔹 추가 (이름 필드)
@@ -52,19 +49,19 @@ const SignupPage = () => {
   const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
   const [openAgeModal, setOpenAgeModal] = useState(false);
 
- const [snackbarOpen, setSnackbarOpen] = useState(false);
-const [snackbarMessage, setSnackbarMessage] = useState('');
-const [snackbarSeverity, setSnackbarSeverity] = useState('info'); // 'success' | 'error'
-const [showLoginButton, setShowLoginButton] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info'); // 'success' | 'error'
+  const [showLoginButton, setShowLoginButton] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const showSnackbar = (message, severity = 'info') => {
-  setSnackbarMessage(message);
-  setSnackbarSeverity(severity);
-  setSnackbarOpen(true);
-};
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   useEffect(() => {
     let timerInterval;
@@ -98,7 +95,7 @@ const [showLoginButton, setShowLoginButton] = useState(false);
       return;
     }
     if (!code) {
-     alert('이메일 인증을 완료해주세요.', 'error');
+      alert('이메일 인증을 완료해주세요.', 'error');
       return;
     }
     alert(''); // 🔹 에러 초기화
@@ -117,11 +114,13 @@ const [showLoginButton, setShowLoginButton] = useState(false);
 
       console.log('회원가입 성공:', response.data);
       showSnackbar('회원가입이 완료되었습니다!', 'success');
-      
+
       // 회원가입 성공 후 로그인 모달 표시
-      navigate('/login', {
-        state: { backgroundLocation: location }
-      });
+      setTimeout(() => {
+        navigate('/login', {
+          state: { backgroundLocation: location },
+        });
+      }, 1000);
     } catch (err) {
       console.error('회원가입 실패:', err.response?.data);
       showSnackbar(
@@ -219,7 +218,7 @@ const [showLoginButton, setShowLoginButton] = useState(false);
   const handleSignupSuccess = () => {
     // 회원가입 성공 후 로그인 모달 표시
     navigate('/login', {
-      state: { backgroundLocation: location }
+      state: { backgroundLocation: location },
     });
   };
 
@@ -615,33 +614,28 @@ const [showLoginButton, setShowLoginButton] = useState(false);
             </Typography>
           </Box>
 
-          <Button
-            variant="contained"
-            type="submit"
-            fullWidth
-            sx={buttonStyle}
-          >
+          <Button variant="contained" type="submit" fullWidth sx={buttonStyle}>
             회원가입
           </Button>
         </Box>
       </Container>
 
-    <Snackbar
-  open={snackbarOpen}
-  autoHideDuration={3000}
-  onClose={() => setSnackbarOpen(false)}
-  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
->
-  <MuiAlert
-    elevation={6}
-    variant="filled"
-    onClose={() => setSnackbarOpen(false)}
-    severity={snackbarSeverity}
-    sx={{ width: '100%' }}
-  >
-    {snackbarMessage}
-  </MuiAlert>
-</Snackbar>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 };

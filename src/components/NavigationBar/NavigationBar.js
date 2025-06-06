@@ -23,7 +23,6 @@ import Logo from '../common/Logo';
 import './NavigationBar.css';
 import NotificationBell from './NotificationBell';
 import NotificationModal from './NotificationModal';
-import SearchModal from '../SearchModal';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -35,7 +34,6 @@ const NavigationBar = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [openMenu, setOpenMenu] = useState(null);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -47,21 +45,20 @@ const NavigationBar = () => {
     setOpenDrawer(open);
   };
 
-  
-const subMenuToPath = (name) => {
-  const map = {
-    '이벤트 찾기': '/search',
-    '이벤트 등록': '/register',
-    '캘린더': '/calendar',
-    '사전': '/dictionary',
-    '장소 등록': '/venue',
-    '대관 찾기': '/venue-search',
-    '주변 카페': '/map',
-    '게시판': '/board',
-    '채팅': '/chat'
+  const subMenuToPath = (name) => {
+    const map = {
+      '이벤트 찾기': '/search',
+      '이벤트 등록': '/register',
+      캘린더: '/calendar',
+      사전: '/dictionary',
+      '장소 등록': '/venue',
+      '대관 찾기': '/venue-search',
+      '주변 카페': '/map',
+      게시판: '/board',
+      채팅: '/chat',
+    };
+    return map[name] || '/';
   };
-  return map[name] || '/';
-};
 
   const toggleSubMenu = (label) => {
     if (openMenu === label) {
@@ -155,7 +152,6 @@ const subMenuToPath = (name) => {
           <Box sx={{ display: 'flex', gap: 2 }}>
             {/* 중앙: 메뉴 */}
             <Box className="nav-menu" sx={{ display: 'flex', gap: 2 }}>
-              
               <Box className="nav-item-wrapper">
                 {/* 메뉴 아이템: 이벤트 */}
                 <Button className="nav-item">이벤트</Button>
@@ -195,7 +191,7 @@ const subMenuToPath = (name) => {
               </Box>
 
               <Button className="nav-item" onClick={() => navigate('/map')}>
-                카페 지도
+                주변 이벤트
               </Button>
               <Button
                 className="nav-item"
@@ -226,7 +222,7 @@ const subMenuToPath = (name) => {
           {/* 검색창 */}
           <Box
             sx={{
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'none', md: 'flex' }, // ✅ 모바일(xs)에서 안 보이게!
               alignItems: 'center',
               gap: 2,
             }}
@@ -236,14 +232,18 @@ const subMenuToPath = (name) => {
               placeholder="찾으시는 최애가 있으신가요?"
               size="small"
               className="search-bar"
-              onClick={() => setSearchModalOpen(true)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <SearchIcon />
                   </InputAdornment>
                 ),
-                readOnly: true,
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  navigate(`/result?query=${encodeURIComponent(searchTerm)}`);
+                  setSearchTerm('');
+                }
               }}
             />
           </Box>
@@ -314,12 +314,6 @@ const subMenuToPath = (name) => {
         open={notificationOpen}
         onClose={() => setNotificationOpen(false)}
         notifications={notifications}
-      />
-
-      {/* SearchModal */}
-      <SearchModal
-        open={searchModalOpen}
-        onClose={() => setSearchModalOpen(false)}
       />
     </>
   );

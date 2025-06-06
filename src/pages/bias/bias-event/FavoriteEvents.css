@@ -59,6 +59,8 @@
   gap: 8px;
 }
 
+
+
 @media (max-width: 600px) {
   .event-card-inner {
     flex-direction: column;

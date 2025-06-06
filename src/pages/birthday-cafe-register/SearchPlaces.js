@@ -1,5 +1,5 @@
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import {
   Box,
@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NotFoundBox from '../../components/common/NotFoundBox';
+import axiosInstance from '../../shared/api/axiosInstance';
 import { EventSearchApi } from './api/EventSearchApi';
 
 import './SearchPlaces.css';
@@ -28,6 +29,7 @@ const SearchPlaces = () => {
   const [events, setEvents] = useState([]);
   const [sort, setSort] = useState('');
   const [genreLabel, setGenreLabel] = useState('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -70,6 +72,26 @@ const SearchPlaces = () => {
     fetchEvents();
   }, [keyword, startDate, endDate, genreLabel, sort]);
 
+  const handleLikeToggle = async (eventId, e) => {
+    e.stopPropagation();
+    try {
+      await axiosInstance.post(`/user/events/${eventId}/like/`);
+      setEvents((prevEvents) =>
+        prevEvents.map((event) =>
+          event.id === eventId ? { ...event, is_liked: !event.is_liked } : event
+        )
+      );
+    } catch (err) {
+      if (err.response?.status === 403) {
+        console.warn('로그인 필요!');
+        navigate('/login', {
+          state: { from: '/search' },
+        }); // ✅ 여기가 닫혀야 함
+      } else {
+        console.error('찜 토글 실패:', err);
+      }
+    }
+  };
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
@@ -198,14 +220,14 @@ const SearchPlaces = () => {
                         </Typography>
                         <Box className="event-card-header-icons">
                           {event.is_liked ? (
-                            <BookmarkIcon
-                              sx={{ color: '#ff4081', cursor: 'pointer' }}
-                              onClick={(e) => e.stopPropagation()}
+                            <FavoriteIcon
+                              sx={{ color: '#ff4081 !important', cursor: 'pointer' }} // 💗 진한 핑크
+                              onClick={(e) => handleLikeToggle(event.id, e)}
                             />
                           ) : (
-                            <BookmarkBorderIcon
+                            <FavoriteBorderIcon
                               sx={{ color: '#ccc', cursor: 'pointer' }}
-                              onClick={(e) => e.stopPropagation()}
+                              onClick={(e) => handleLikeToggle(event.id, e)}
                             />
                           )}
                           <ShareIcon
