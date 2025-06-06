@@ -23,6 +23,7 @@ import Logo from '../common/Logo';
 import './NavigationBar.css';
 import NotificationBell from './NotificationBell';
 import NotificationModal from './NotificationModal';
+import SearchModal from '../../components/SearchModal';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const NavigationBar = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [openMenu, setOpenMenu] = useState(null);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -222,7 +224,7 @@ const NavigationBar = () => {
           {/* 검색창 */}
           <Box
             sx={{
-              display: { xs: 'none', md: 'flex' }, // ✅ 모바일(xs)에서 안 보이게!
+              display: { xs: 'none', md: 'flex' },
               alignItems: 'center',
               gap: 2,
             }}
@@ -239,6 +241,7 @@ const NavigationBar = () => {
                   </InputAdornment>
                 ),
               }}
+              onClick={() => setSearchModalOpen(true)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   navigate(`/result?query=${encodeURIComponent(searchTerm)}`);
@@ -249,6 +252,12 @@ const NavigationBar = () => {
           </Box>
         </Toolbar>
       </AppBar>
+
+      {/* SearchModal */}
+      <SearchModal
+        open={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+      />
 
       <Divider sx={{ borderBottomWidth: 1, borderColor: '#eee' }} />
 

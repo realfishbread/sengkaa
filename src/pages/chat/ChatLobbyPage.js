@@ -253,10 +253,6 @@ const ChatLobbyPage = () => {
                           👥 {room.current_participants}/{room.max_participants}
                           명
                         </span>
-                        <span>•</span>
-                        <span>
-                          {new Date(room.created_at).toLocaleString()}
-                        </span>
                       </div>
                     </div>
                     <Button
