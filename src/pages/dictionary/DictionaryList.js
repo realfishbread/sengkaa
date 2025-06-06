@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
+import { fetchGroupNamesByGenre } from '../../shared/api/fetchStarsByGroup';
 import DictionaryDetail from './DictionaryDetail';
 import DictionaryForm from './DictionaryForm';
 import './DictionaryList.css';
@@ -8,7 +11,6 @@ import {
   fetchGroupedTermsByGenre,
   fetchTotalViews,
 } from './api/DictionaryApi';
-import {fetchGroupNamesByGenre} from '../../shared/api/fetchStarsByGroup'
 
 const TAGS = [
   '전체',
@@ -37,12 +39,15 @@ const DictionaryList = () => {
   const [totalViews, setTotalViews] = useState(0);
   const [openCategories, setOpenCategories] = useState({});
   const [categorySearches, setCategorySearches] = useState({});
+  const { user } = useContext(UserContext);
 
   const [groupedTerms, setGroupedTerms] = useState({});
   const [expandedStars, setExpandedStars] = useState({});
   const [starGroups, setStarGroups] = useState([]); // 🔥
   const [categories, setCategories] = useState({});
   const [activeGroupTerms, setActiveGroupTerms] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadTerms = async () => {
@@ -96,8 +101,8 @@ const DictionaryList = () => {
   }, [selectedTag]);
 
   const filteredTerms = terms.filter((term) => {
-     const tagMatch =
-    selectedTag === '전체' || term.genre_display === selectedTag;
+    const tagMatch =
+      selectedTag === '전체' || term.genre_display === selectedTag;
     const keywordMatch =
       term.term.includes(searchKeyword) ||
       term.definitions?.some((d) => d.definition.includes(searchKeyword)) ||
@@ -144,13 +149,13 @@ const DictionaryList = () => {
 
       // 해당 그룹의 용어만 표시
       setActiveGroupTerms(res[groupName] || []);
-      
+
       // 다른 그룹의 용어는 숨김
-      Object.keys(expandedStars).forEach(key => {
+      Object.keys(expandedStars).forEach((key) => {
         if (key !== groupName) {
-          setExpandedStars(prev => ({
+          setExpandedStars((prev) => ({
             ...prev,
-            [key]: false
+            [key]: false,
           }));
         }
       });
@@ -199,7 +204,19 @@ const DictionaryList = () => {
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
         />
-        <button className="write-term-btn" onClick={() => setShowForm(true)}>
+        <button
+          className="write-term-btn"
+          onClick={() => {
+            if (!user) {
+              // ① 비로그인: /login 으로 보내면서 “돌아올 곳” 남기기
+              navigate('/login', { state: { from: '/dictionary' } });
+              // 혹은 setShowLoginModal(true) 로 모달 열어도 됨
+            } else {
+              // ② 로그인: 작성 폼 오픈
+              setShowForm(true);
+            }
+          }}
+        >
           용어 작성
         </button>
       </div>

@@ -1,18 +1,29 @@
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
+import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance'; // axios 인스턴스
 import './EventCalendar.css';
+
 
 const EventCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [weather, setWeather] = useState(null);
   const { user } = useContext(UserContext);
-
+  const navigate = useNavigate();
+const [askLogin, setAskLogin] = useState(false);
   const [events, setEvents] = useState({});
+
+  useEffect(() => {
+    // ⬅️ ③ 추가
+   if (!user ) {         // loading 끝난 뒤에만 질문
+     setAskLogin(true);             // 모달 오픈
+   }
+  }, [user, navigate]);
 
   const formatDate = (date) => {
     const localDate = new Date(
@@ -133,6 +144,7 @@ const EventCalendar = () => {
   }, [user]);
 
   return (
+    <>
     <div className="calendar-layout">
       <div className="calendar-panel">
         <h2>나의 덕질 일정</h2>
@@ -190,6 +202,16 @@ const EventCalendar = () => {
         </div>
       </div>
     </div>
+
+    {/* ↓ 로그인 확인 모달 */}
+    <LoginConfirmDialog
+      open={askLogin}
+      onClose={() => setAskLogin(false)}                      // 취소
+      onConfirm={() =>
+        navigate('/login', { state: { from: '/calendar' } }) // 로그인
+      }
+    />
+    </>
   );
 };
 
