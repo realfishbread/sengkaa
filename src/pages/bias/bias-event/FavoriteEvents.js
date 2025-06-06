@@ -24,6 +24,7 @@ const FavoriteEvents = () => {
       });
   }, []);
 
+
   const handleLikeToggle = async (eventId, e) => {
     e.stopPropagation();
     try {
@@ -104,9 +105,16 @@ const FavoriteEvents = () => {
                         </Typography>
                         <Box className="event-card-header-icons">
                           <FavoriteIcon
-                            sx={{ color: '#ff4081', cursor: 'pointer' }}
-                            onClick={(e) => handleLikeToggle(event.id, e)}
-                          />
+  sx={{
+    color: '#ff4081',
+    cursor: 'pointer',
+    transition: '0.2s',
+    '&:hover': {
+      color: '#d81b60',
+    },
+  }}
+  onClick={(e) => handleLikeToggle(event.id, e)}
+/>
                           <ShareIcon
                             sx={{ color: '#ccc', ml: 1 }}
                             onClick={(e) => handleShare(event.id, e)}
