@@ -27,6 +27,7 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     goods = GoodsSerializer(many=True, read_only=True)
     latitude = serializers.FloatField(required=False, allow_null=True)
     longitude = serializers.FloatField(required=False, allow_null=True)
+    star = StarSerializer(read_only=True)
 
     class Meta:
         model = BirthdayCafe
@@ -54,12 +55,13 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         return False  # 명확하게 False 반환
     
     def get_star(self, obj):
+        request = self.context.get('request')
         return {
             "id": obj.star.id,
             "name": obj.star.name,
             "group": obj.star.group,
             "display": obj.star.display,
-            "image": self.context['request'].build_absolute_uri(obj.star.image.url) if obj.star.image else None,
+            "image": request.build_absolute_uri(obj.star.image.url) if obj.star.image else None,
         }
     
 class BirthdayCafeListSerializer(serializers.ModelSerializer):
