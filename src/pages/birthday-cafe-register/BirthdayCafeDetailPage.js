@@ -148,7 +148,7 @@ const BirthdayCafeDetailPage = () => {
               <Grid item xs={6}>
                 <Typography variant="subtitle1">장소</Typography>
                 <Typography>
-                  {cafe.road_address} {cafe.detail_address}
+                  {cafe.road_address}
                 </Typography>
               </Grid>
             </Grid>

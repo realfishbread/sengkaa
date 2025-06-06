@@ -229,6 +229,9 @@ const Home = () => {
                     });
                   }}
                 />
+                <Typography variant="body2" sx={{ textAlign: 'center', mt: 1 }}>
+                  {slide.caption}
+                </Typography>
               </div>
             ))}
           </Slider>

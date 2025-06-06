@@ -9,7 +9,8 @@ from api.views.auth_views import (
     send_reset_password_email,
     verify_reset_code,
     reset_password,
-    check_nickname
+    check_nickname,
+    verify_token
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,4 +27,5 @@ urlpatterns = [
     path('reset-password/', reset_password, name="reset_password"),
     path('check-nickname/', check_nickname, name="check_nickname"),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('verify/', verify_token, name='verify_token'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

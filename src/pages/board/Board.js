@@ -39,14 +39,22 @@ const Board = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      const savedUser = JSON.parse(localStorage.getItem('userInfo'));
-      if (savedUser) setUser(savedUser);
-    }
+  const savedUser = JSON.parse(localStorage.getItem('userInfo'));
 
-    fetchPosts('all'); // ✅ 최초 로딩
-  }, []);
+  if (savedUser) {
+    // ✅ 서버에 토큰 유효성 검증 요청 보내기 (예: /auth/verify/)
+    axiosInstance.get('/user/verify/')
+      .then(() => {
+        setUser(savedUser); // 유효하면 로그인 유지
+      })
+      .catch(() => {
+        localStorage.removeItem('userInfo'); // 무효하면 삭제
+        setUser(null);
+      });
+  }
 
+  fetchPosts('all');
+}, []);
   const fetchPosts = (type, page = 1) => {
     setFilter(type);
     setCurrentPage(page);
@@ -68,6 +76,16 @@ const Board = () => {
   const handleReplySubmit = (postId) => {
     if (!replyContent[postId]) return; // 빈 댓글 방지
 
+    if (!user || !user.nickname) {
+      const savedUser = JSON.parse(localStorage.getItem('userInfo'));
+      if (!savedUser || !savedUser.nickname) {
+        setAskLogin(true);
+        return;
+      } else {
+        setUser(savedUser);
+      }
+    }
+
     axiosInstance
       .post('/user/posts/replies/', {
         post: postId,
@@ -82,6 +100,11 @@ const Board = () => {
       })
       .catch((err) => {
         console.error(err);
+        // ✅ 인증 실패 시 로그인 모달
+        if (err.response?.status === 401) {
+          setAskLogin(true);
+          return;
+        }
         if (!user) {
           // loading 끝난 뒤에만 질문
           setAskLogin(true); // 모달 오픈

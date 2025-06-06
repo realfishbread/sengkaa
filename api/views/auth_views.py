@@ -307,3 +307,9 @@ def check_nickname(request):
         return Response({"available": False, "message": "이미 사용 중인 닉네임입니다."})
     else:
         return Response({"available": True, "message": "사용 가능한 닉네임입니다."})
+    
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # 👈 이게 핵심이야!
+def verify_token(request):
+    return Response({"message": "Token is valid ✅", "user": request.user.nickname})
