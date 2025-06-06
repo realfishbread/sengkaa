@@ -17,7 +17,23 @@ export const EventSearchApi = async ({
 
   const token = localStorage.getItem('accessToken');
 
-  const headers = token ? { Authorization: `Bearer ${token}` } : {}; // ✅ 세션 안 쓰니까 withCredentials 필요 없음
+  let headers = {};
+
+  try {
+    if (token) {
+      const [, payload] = token.split('.');
+      const parsed = JSON.parse(atob(payload));
+      const now = Math.floor(Date.now() / 1000);
+
+      if (parsed.exp > now) {
+        headers.Authorization = `Bearer ${token}`;
+      } else {
+        console.warn('⛔️ 토큰 만료됨, 헤더에 포함되지 않음');
+      }
+    }
+  } catch (e) {
+    console.warn('⛔️ 토큰 파싱 실패:', e);
+  }
 
   const response = await axios.get(
     `https://eventcafe.site/user/events/birthday-cafes/search/?${params.toString()}`,
