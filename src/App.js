@@ -37,6 +37,7 @@ import {
   injectLoginModalHandler,
   injectNavigateToLogin,
 } from './shared/api/axiosInstance';
+import StarDetailPage from './pages/star/StarDetailPage';
 
 import './styles/App.css';
 
@@ -110,6 +111,7 @@ function AppRoutes() {
             element={<PaymentFailPage />}
           />
           <Route path="chat-list" element={<ChatLobbyPage />} />
+          <Route path="/star/:id" element={<StarDetailPage />} />
         </Route>
       </Routes>
 

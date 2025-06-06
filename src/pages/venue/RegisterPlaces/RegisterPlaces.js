@@ -5,7 +5,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomTextField from '../../../components/common/CustomTextField';
 import FlexInputButton from '../../../components/common/FlexInputButton';
 import ImageUploader from '../../../components/common/ImageUploader';
@@ -25,19 +25,43 @@ const VenueRegister = () => {
   const [roadAddress, setRoadAddress] = useState(''); // 도로명주소
   const [detailAddress, setDetailAddress] = useState(''); // 상세주소
   const [mainImage, setMainImage] = useState(null); // 가게 메인 이미지
+  const [mainImagePreview, setMainImagePreview] = useState(null); // 메인 이미지 미리보기 URL
   const [rentalFee, setRentalFee] = useState('');
   const [deposit, setDeposit] = useState('');
   const [operatingInfo, setOperatingInfo] = useState('');
   const [operatingHours, setOperatingHours] = useState('');
   const [benefitsImage, setBenefitsImage] = useState(null); // 특전 예시 이미지
+  const [benefitsImagePreview, setBenefitsImagePreview] = useState(null); // 특전 이미지 미리보기 URL
   const [description, setDescription] = useState('');
   const [snsType, setSnsType] = useState(''); // ✅ SNS 선택 상태
   const [snsAccount, setSnsAccount] = useState(''); // ✅ SNS 계정 입력 상태
+
+  // Cleanup function for image preview URLs
+  useEffect(() => {
+    return () => {
+      if (mainImagePreview) {
+        URL.revokeObjectURL(mainImagePreview);
+      }
+      if (benefitsImagePreview) {
+        URL.revokeObjectURL(benefitsImagePreview);
+      }
+    };
+  }, [mainImagePreview, benefitsImagePreview]);
 
   // ✅ 이미지 업로드 핸들러
   const handleImageUpload = (event, setImage) => {
     const file = event.target.files[0];
     setImage(file); // 👉 원본 file 저장
+    
+    // 이미지 미리보기를 위한 URL 생성
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      if (setImage === setMainImage) {
+        setMainImagePreview(imageUrl);
+      } else if (setImage === setBenefitsImage) {
+        setBenefitsImagePreview(imageUrl);
+      }
+    }
   };
 
   const openPostcode = () => {
@@ -160,7 +184,7 @@ const VenueRegister = () => {
           />
           {mainImage && (
             <img
-              src={mainImage}
+              src={mainImagePreview}
               alt="미리보기"
               style={{ width: '100px', marginTop: '10px' }}
             />
@@ -217,7 +241,7 @@ const VenueRegister = () => {
           />
           {benefitsImage && (
             <img
-              src={benefitsImage}
+              src={benefitsImagePreview}
               alt="미리보기"
               style={{ width: '100px', marginTop: '10px' }}
             />

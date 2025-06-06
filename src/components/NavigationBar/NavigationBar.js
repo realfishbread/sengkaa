@@ -23,6 +23,7 @@ import Logo from '../common/Logo';
 import './NavigationBar.css';
 import NotificationBell from './NotificationBell';
 import NotificationModal from './NotificationModal';
+import SearchModal from '../SearchModal';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const NavigationBar = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [openMenu, setOpenMenu] = useState(null);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -193,7 +195,7 @@ const subMenuToPath = (name) => {
               </Box>
 
               <Button className="nav-item" onClick={() => navigate('/map')}>
-                주변 이벤트
+                카페 지도
               </Button>
               <Button
                 className="nav-item"
@@ -224,7 +226,7 @@ const subMenuToPath = (name) => {
           {/* 검색창 */}
           <Box
             sx={{
-              display: { xs: 'none', md: 'flex' }, // ✅ 모바일(xs)에서 안 보이게!
+              display: { xs: 'none', md: 'flex' },
               alignItems: 'center',
               gap: 2,
             }}
@@ -234,18 +236,14 @@ const subMenuToPath = (name) => {
               placeholder="찾으시는 최애가 있으신가요?"
               size="small"
               className="search-bar"
+              onClick={() => setSearchModalOpen(true)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <SearchIcon />
                   </InputAdornment>
                 ),
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  navigate(`/result?query=${encodeURIComponent(searchTerm)}`);
-                  setSearchTerm('');
-                }
+                readOnly: true,
               }}
             />
           </Box>
@@ -316,6 +314,12 @@ const subMenuToPath = (name) => {
         open={notificationOpen}
         onClose={() => setNotificationOpen(false)}
         notifications={notifications}
+      />
+
+      {/* SearchModal */}
+      <SearchModal
+        open={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
       />
     </>
   );

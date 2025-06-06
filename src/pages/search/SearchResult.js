@@ -1,6 +1,6 @@
 // pages/SearchResults.jsx
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../shared/api/axiosInstance';
 import {
   Box,
@@ -8,10 +8,15 @@ import {
   Grid,
   CircularProgress,
   Divider,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
 } from '@mui/material';
 
 const SearchResults = () => {
   const [params] = useSearchParams();
+  const navigate = useNavigate();
   const query = params.get('query');
 
   const [loading, setLoading] = useState(true);
@@ -24,8 +29,27 @@ const SearchResults = () => {
       try {
         setLoading(true);
 
-        const [starRes, eventRes, venueRes] = await Promise.all([
-          axiosInstance.get(`/user/star/stars/?keyword=${query}`),
+        // 검색어가 숫자인 경우 스타 상세 페이지로 직접 이동
+        if (!isNaN(query) && query.trim() !== '') {
+          navigate(`/star/${query}`);
+          return;
+        }
+
+        // 스타 검색 결과 먼저 확인
+        const starRes = await axiosInstance.get(`/user/star/stars/?keyword=${query}`);
+        
+        // 정확히 일치하는 스타가 있는 경우 바로 이동
+        if (starRes.data.length === 1 && 
+            starRes.data[0].display.replace(/\s+/g, '') === query.replace(/\s+/g, '')) {
+          navigate(`/star/${starRes.data[0].id}`);
+          return;
+        }
+
+        // 일치하는 스타가 없거나 여러 명인 경우 검색 결과 표시
+        setStars(starRes.data);
+
+        // 나머지 검색 결과 가져오기
+        const [eventRes, venueRes] = await Promise.all([
           axiosInstance.get(`/user/events/birthday-cafes/search/`, {
             params: { keyword: query },
           }),
@@ -34,7 +58,6 @@ const SearchResults = () => {
           }),
         ]);
 
-        setStars(starRes.data);
         setEvents(eventRes.data.results || []);
         setVenues(venueRes.data.results || []);
       } catch (err) {
@@ -45,8 +68,13 @@ const SearchResults = () => {
     };
 
     if (query) fetchData();
-  }, [query]);
+  }, [query, navigate]);
 
+  const handleStarClick = (starId) => {
+    navigate(`/star/${starId}`);
+  };
+
+  // 로딩 중일 때 표시
   if (loading) {
     return (
       <Box textAlign="center" mt={10}>
@@ -70,14 +98,30 @@ const SearchResults = () => {
           <Grid container spacing={2} mt={1}>
             {stars.map((star) => (
               <Grid item xs={6} sm={4} md={3} key={star.id}>
-                <Box textAlign="center">
-                  <img
-                    src={star.image}
-                    alt={star.display}
-                    style={{ width: '100%', borderRadius: '10px' }}
-                  />
-                  <Typography mt={1}>{star.display}</Typography>
-                </Box>
+                <Card 
+                  sx={{ 
+                    height: '100%',
+                    transition: 'transform 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-4px)'
+                    }
+                  }}
+                >
+                  <CardActionArea onClick={() => handleStarClick(star.id)}>
+                    <CardMedia
+                      component="img"
+                      image={star.image}
+                      alt={star.display}
+                      sx={{ 
+                        aspectRatio: '1',
+                        objectFit: 'cover'
+                      }}
+                    />
+                    <CardContent>
+                      <Typography align="center">{star.display}</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
               </Grid>
             ))}
           </Grid>
