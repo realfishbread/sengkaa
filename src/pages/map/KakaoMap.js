@@ -287,7 +287,10 @@ const KakaoMap = () => {
 
       {isEmpty && (
         <div className="no-events-box">
-          <p>📭 근처에 등록된 생일카페 이벤트가 없어요.</p>
+          <p>
+            <span role="img" aria-label="info">ℹ️</span>
+            현재 위치에서 5km 이내에 등록된 이벤트가 없습니다
+          </p>
         </div>
       )}
     </div>

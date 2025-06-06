@@ -11,9 +11,9 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../shared/api/axiosInstance';
+import axios from 'axios';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import axios from 'axios';
 
 const BirthdayCafeDetailPage = () => {
   const { id } = useParams();
@@ -45,6 +45,7 @@ const BirthdayCafeDetailPage = () => {
       setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
     } catch (error) {
       console.error('찜 실패:', error);
+      // 에러는 axiosInstance의 인터셉터에서 처리됨
     }
   };
 

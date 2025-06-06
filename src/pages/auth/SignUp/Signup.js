@@ -16,7 +16,7 @@ import { injectLoginModalHandler } from '../../../shared/api/axiosInstance';
 import { getLoginModalHandler } from '../../../shared/api/axiosInstance';
 import { buttonStyle } from '../../../components/common/Styles';
 // 추가 import
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AgePolicyModal from '../../policy/AgePoilcyModal';
 import PrivacyPolicyModal from '../../policy/PrivacyPolicyModal';
 import TermsModal from '../../policy/TermsModal';
@@ -58,6 +58,7 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('info'); // 'success' |
 const [showLoginButton, setShowLoginButton] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const showSnackbar = (message, severity = 'info') => {
   setSnackbarMessage(message);
@@ -115,16 +116,18 @@ const [showLoginButton, setShowLoginButton] = useState(false);
       );
 
       console.log('회원가입 성공:', response.data);
-      alert('회원가입 성공! 로그인하세요.','success');
-      const showLoginModal = getLoginModalHandler();
-if (typeof showLoginModal === 'function') {
-  showLoginModal(); // 로그인 모달 바로 뜨게!
-}
+      showSnackbar('회원가입이 완료되었습니다!', 'success');
+      
+      // 회원가입 성공 후 로그인 모달 표시
+      navigate('/login', {
+        state: { backgroundLocation: location }
+      });
     } catch (err) {
       console.error('회원가입 실패:', err.response?.data);
-      alert(
-        err.response?.data?.error || '회원가입 실패. 다시 시도해주세요.'
-      ,'error');
+      showSnackbar(
+        err.response?.data?.error || '회원가입 중 오류가 발생했습니다.',
+        'error'
+      );
     }
   };
 
@@ -213,6 +216,25 @@ if (typeof showLoginModal === 'function') {
     setAgree14(checked);
   };
 
+  const handleSignupSuccess = () => {
+    // 회원가입 성공 후 로그인 모달 표시
+    navigate('/login', {
+      state: { backgroundLocation: location }
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // ... existing validation code ...
+
+    try {
+      await handleSignup();
+      handleSignupSuccess();
+    } catch (error) {
+      // ... existing error handling ...
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -258,7 +280,7 @@ if (typeof showLoginModal === 'function') {
         <Box
           component="form"
           onSubmit={(e) => {
-            e.preventDefault(); // 폼 제출 기본 동작 방지
+            e.preventDefault();
             handleSignup();
           }}
           sx={{
@@ -597,7 +619,6 @@ if (typeof showLoginModal === 'function') {
             variant="contained"
             type="submit"
             fullWidth
-            onClick={handleSignup}
             sx={buttonStyle}
           >
             회원가입

@@ -58,13 +58,12 @@ const theme = createTheme({
 function AppRoutes() {
   const location = useLocation();
   const state = location.state;
-
+  const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const navigate = useNavigate();
   useEffect(() => {
     injectLoginModalHandler(() => setShowLoginModal(true));
-    injectNavigateToLogin(navigate); // ✅ 추가!
+    injectNavigateToLogin(navigate);
   }, [navigate]);
 
   return (
@@ -114,15 +113,14 @@ function AppRoutes() {
         </Route>
       </Routes>
 
-      {/* ✅ 로그인 모달은 백그라운드 location 있을 때만 렌더링 */}
-      {(state?.backgroundLocation || showLoginModal) && (
+      {showLoginModal && (
         <Routes>
           <Route
             path="/login"
             element={
               <LoginModalWrapper
                 open={true}
-                onClose={() => window.history.back()}
+                onClose={() => setShowLoginModal(false)}
               />
             }
           />
