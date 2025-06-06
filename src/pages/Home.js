@@ -239,7 +239,7 @@ const Home = () => {
       <br />
 
       <section className="popular-events">
-        <SectionTitle title="인기 아이돌 카페" category="idol" />
+        <SectionTitle title="🔥 인기 아이돌 카페" category="idol" />
 
         <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
           <Slider ref={idolSliderRef} {...sliderSettings}>
@@ -284,7 +284,7 @@ const Home = () => {
       <br />
 
       <section className="popular-streamers">
-        <SectionTitle title="인기 스트리머 콜라보" category="streamer" />
+        <SectionTitle title="🔥 인기 스트리머 콜라보" category="streamer" />
         <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
           <Slider ref={streamerSliderRef} {...sliderSettings}>
             {popularCafes.streamer.map((cafe, index) => (
@@ -329,7 +329,7 @@ const Home = () => {
       <br />
 
       <section className="popular-games">
-        <SectionTitle title="인기 게임 콜라보" category="game" />
+        <SectionTitle title="🔥 인기 게임 콜라보" category="game" />
         <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
           <Slider ref={gameSliderRef} {...sliderSettings}>
             {popularCafes.game.map((cafe, index) => (

@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -53,7 +54,7 @@ const Board = () => {
     if (type === 'open') url = '/user/posts/open/';
     else if (type === 'closed') url = '/user/posts/closed/';
 
-    axiosInstance
+    axios
       .get(url, { params: { page } }) // ✅ 쿼리로 페이지 넘기기
       .then((res) => {
         setPosts(res.data.results); // ✅ 페이지네이션 응답일 때는 .results
@@ -85,7 +86,7 @@ const Board = () => {
   };
 
   const fetchReplies = (postId) => {
-    axiosInstance
+    axios
       .get(`/user/posts/${postId}/replies/`)
       .then((res) => {
         setReplies((prev) => ({ ...prev, [postId]: res.data }));

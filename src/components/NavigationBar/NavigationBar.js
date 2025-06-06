@@ -216,6 +216,12 @@ const NavigationBar = () => {
                   >
                     채팅
                   </Button>
+                  <Button
+                    onClick={() => navigate('/dictionary')}
+                    className="submenu-item"
+                  >
+                    덕질 사전
+                  </Button>
                 </Box>
               </Box>
             </Box>
