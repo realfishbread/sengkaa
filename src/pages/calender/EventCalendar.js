@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
-import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useNavigate } from 'react-router-dom';
+import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance'; // axios 인스턴스
 import './EventCalendar.css';
-
 
 const EventCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -15,14 +14,15 @@ const EventCalendar = () => {
   const [weather, setWeather] = useState(null);
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
-const [askLogin, setAskLogin] = useState(false);
+  const [askLogin, setAskLogin] = useState(false);
   const [events, setEvents] = useState({});
 
   useEffect(() => {
     // ⬅️ ③ 추가
-   if (!user ) {         // loading 끝난 뒤에만 질문
-     setAskLogin(true);             // 모달 오픈
-   }
+    if (!user) {
+      // loading 끝난 뒤에만 질문
+      setAskLogin(true); // 모달 오픈
+    }
   }, [user, navigate]);
 
   const formatDate = (date) => {
@@ -145,72 +145,72 @@ const [askLogin, setAskLogin] = useState(false);
 
   return (
     <>
-    <div className="calendar-layout">
-      <div className="calendar-panel">
-        <h2>나의 덕질 일정</h2>
-        <Calendar
-          onChange={handleDateClick}
-          value={selectedDate}
-          className="custom-calendar"
-          tileContent={({ date }) => {
-            const dateStr = formatDate(date);
-            const eventList = events[dateStr] || [];
+      <div className="calendar-layout">
+        <div className="calendar-panel">
+          <h2>나의 덕질 일정</h2>
+          <Calendar
+            onChange={handleDateClick}
+            value={selectedDate}
+            className="custom-calendar"
+            tileContent={({ date }) => {
+              const dateStr = formatDate(date);
+              const eventList = events[dateStr] || [];
 
-            return (
-              <div className="event-list">
-                {eventList.slice(0, 2).map((event, idx) => (
-                  <div key={idx} className="event-item">
-                    {event}
-                  </div>
-                ))}
-                {eventList.length > 2 && (
-                  <div className="event-item more">+ 더 보기</div>
-                )}
-              </div>
-            );
-          }}
-        />
-      </div>
-
-      <div className="right-section">
-        <div className="weather-box">
-          <h3>{weather?.location || '날씨 정보'}</h3>
-          {weather ? (
-            weather.error ? (
-              <p>{weather.error}</p>
-            ) : (
-              <div>
-                <img src={weather.condition.icon} alt="날씨 아이콘" />
-                <p>{weather.condition.text}</p>
-                <p>{weather.temp_c}°C</p>
-              </div>
-            )
-          ) : (
-            <p>날씨 정보를 불러오는 중...</p>
-          )}
+              return (
+                <div className="event-list">
+                  {eventList.slice(0, 2).map((event, idx) => (
+                    <div key={idx} className="event-item">
+                      {event}
+                    </div>
+                  ))}
+                  {eventList.length > 2 && (
+                    <div className="event-item more">+ 더 보기</div>
+                  )}
+                </div>
+              );
+            }}
+          />
         </div>
 
-        <div className="schedule-box">
-          <h3>{formatDate(selectedDate)} 일정</h3>
-          <ul>
-            {selectedEvents.length > 0 ? (
-              selectedEvents.map((event, idx) => <li key={idx}>{event}</li>)
+        <div className="right-section">
+          <div className="weather-box">
+            <h3>{weather?.location || '날씨 정보'}</h3>
+            {weather ? (
+              weather.error ? (
+                <p>{weather.error}</p>
+              ) : (
+                <div>
+                  <img src={weather.condition.icon} alt="날씨 아이콘" />
+                  <p>{weather.condition.text}</p>
+                  <p>{weather.temp_c}°C</p>
+                </div>
+              )
             ) : (
-              <li>일정이 없습니다.</li>
+              <p>날씨 정보를 불러오는 중...</p>
             )}
-          </ul>
+          </div>
+
+          <div className="schedule-box">
+            <h3>{formatDate(selectedDate)} 일정</h3>
+            <ul>
+              {selectedEvents.length > 0 ? (
+                selectedEvents.map((event, idx) => <li key={idx}>{event}</li>)
+              ) : (
+                <li>일정이 없습니다.</li>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
 
-    {/* ↓ 로그인 확인 모달 */}
-    <LoginConfirmDialog
-      open={askLogin}
-      onClose={() => setAskLogin(false)}                      // 취소
-      onConfirm={() =>
-        navigate('/login', { state: { from: '/calendar' } }) // 로그인
-      }
-    />
+      {/* ↓ 로그인 확인 모달 */}
+      <LoginConfirmDialog
+        open={askLogin}
+        onClose={() => setAskLogin(false)} // 취소
+        onConfirm={
+          () => navigate('/login', { state: { from: '/calendar' } }) // 로그인
+        }
+      />
     </>
   );
 };
