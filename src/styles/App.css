@@ -3,94 +3,95 @@
 /* 기본 레이아웃 스타일 */
 html,
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont,
-        'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #root {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .header {
-    background: #dcf2ff;
-    color: #333;
-    padding: 0.4rem;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 500;
+  background: #dcf2ff;
+  color: #333;
+  padding: 0.4rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .Home {
-    margin-top: 20px;
-    flex: 1;
-    width: 100%;
-    box-sizing: border-box;
+  margin-top: 20px;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 슬라이더 공통 스타일 */
 .slider-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
-    position: relative;
-    box-sizing: border-box;
-    user-select: none;
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+  position: relative;
+  box-sizing: border-box;
+  user-select: none;
 }
 
 .slide {
-    width: 100%;
-    height: 300px;
-    background-color: #f5f5f5;
+  width: 100%;
+  height: 300px;
+  background-color: #f5f5f5;
 }
 
 .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    pointer-events: none;
-    display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
 }
 
 .slider-wrapper .slick-list {
-    cursor: grab;
+  cursor: grab;
 }
 
 .slider-wrapper .slick-list:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 .slider-wrapper .slick-slide {
-    padding: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .slider-wrapper img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
 }
 
 .slider-wrapper .slick-dots {
-    bottom: 20px;
+  bottom: 20px;
 }
 
 .slider-wrapper .slick-dots li button:before {
-    color: white;
-    opacity: 0.8;
+  color: white;
+  opacity: 0.8;
 }
 
 .slider-wrapper .slick-dots li.slick-active button:before {
-    color: white;
-    opacity: 1;
+  color: white;
+  opacity: 1;
 }
 
 /* 섹션 공통 스타일 */
@@ -98,274 +99,275 @@ body {
 .popular-streamers,
 .popular-games,
 .reservable-venues {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .popular-events .slick-track,
 .popular-streamers .slick-track,
 .popular-games .slick-track,
 .reservable-venues .slick-track {
-    margin-left: 0;
-    padding-left: 0;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .popular-events .slider-wrapper,
 .popular-streamers .slider-wrapper,
 .popular-games .slider-wrapper,
 .reservable-venues .slider-wrapper {
-    padding: 0;
+  padding: 0;
 }
 
 /* 인기 아이돌 카페 스타일 */
 .popular-events .cafe-card {
-    min-width: 200px;
-    max-width: 200px;
-    width: 200px;
-    height: auto;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    box-sizing: border-box;
+  min-width: 200px;
+  max-width: 200px;
+  width: 200px;
+  height: auto;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .popular-events .cafe-card img {
-    width: 200px;  /* 4 */
-    height: 300px;  /* 6 - 4:6 비율 */
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 8px;
+  width: 200px; /* 4 */
+  height: 300px; /* 6 - 4:6 비율 */
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 8px;
 }
 
 .popular-events .cafe-card .MuiBox-root {
-    display: block !important;
-    text-align: center;
-    width: 100%;
-    padding: 0 4px;
+  display: block !important;
+  text-align: center;
+  width: 100%;
+  padding: 0 4px;
 }
 
 .popular-events .cafe-card .MuiBox-root p:first-child {
-    font-size: 14px;
-    font-weight: 600;
-    color: #000000 !important;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000 !important;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .popular-events .cafe-card .MuiBox-root p:last-child {
-    display: none;
+  display: none;
 }
 
 /* 인기 스트리머 콜라보 스타일 */
 .popular-streamers .cafe-card {
-    min-width: 160px;
-    max-width: 200px;
-    width: auto;
-    height: auto;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    box-sizing: border-box;
+  min-width: 160px;
+  max-width: 200px;
+  width: auto;
+  height: auto;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .popular-streamers .cafe-card img {
-    width: 200px;  /* 4 */
-    height: 250px;  /* 5 - 4:5 비율 (스트리머는 좀 더 정사각형에 가깝게) */
-    min-height: unset;
-    max-height: unset;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 8px;
+  width: 200px; /* 4 */
+  height: 250px; /* 5 - 4:5 비율 (스트리머는 좀 더 정사각형에 가깝게) */
+  min-height: unset;
+  max-height: unset;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 8px;
 }
 
 .popular-streamers .cafe-card .MuiBox-root {
-    display: block !important;
-    text-align: center;
-    width: 100%;
-    padding: 0 4px;
+  display: block !important;
+  text-align: center;
+  width: 100%;
+  padding: 0 4px;
 }
 
 .popular-streamers .cafe-card .MuiBox-root p:first-child {
-    font-size: 14px;
-    font-weight: 600;
-    color: #000000 !important;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000 !important;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .popular-streamers .cafe-card .MuiBox-root p:last-child {
-    display: none;
+  display: none;
 }
 
 /* 인기 게임 콜라보 스타일 */
 .popular-games .cafe-card {
-    min-width: 160px;
-    max-width: 200px;
-    width: auto;
-    height: auto;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 20px;  /* 좌우 여백 추가 */
-    box-sizing: border-box;
+  min-width: 160px;
+  max-width: 200px;
+  width: auto;
+  height: auto;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 20px; /* 좌우 여백 추가 */
+  box-sizing: border-box;
 }
 
 .popular-games .cafe-card img {
-    width: 240px;  /* 6 */
-    height: 160px;  /* 4 - 6:4 비율 (게임은 가로로 길게) */
-    min-height: unset;
-    max-height: unset;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 8px;
+  width: 240px; /* 6 */
+  height: 160px; /* 4 - 6:4 비율 (게임은 가로로 길게) */
+  min-height: unset;
+  max-height: unset;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 8px;
 }
 
 .popular-games .cafe-card .MuiBox-root {
-    display: block !important;
-    text-align: center;
-    width: 100%;
-    padding: 0 4px;
+  display: block !important;
+  text-align: center;
+  width: 100%;
+  padding: 0 4px;
 }
 
 .popular-games .cafe-card .MuiBox-root p:first-child {
-    font-size: 14px;
-    font-weight: 600;
-    color: #000000 !important;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000 !important;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .popular-games .cafe-card .MuiBox-root p:last-child {
-    display: none;
+  display: none;
 }
 
 /* 대관 가능한 장소 스타일 */
 .reservable-venues .cafe-card {
-    border: 1px solid #eee;
-    padding: 10px;
-    width: 280px;
-    height: auto;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    border-radius: 12px;
-    overflow: hidden;
-    margin: 0 5px;
-    box-sizing: border-box;
+  border: 1px solid #eee;
+  padding: 10px;
+  width: 280px;
+  height: auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 5px;
+  box-sizing: border-box;
 }
 
 .reservable-venues .cafe-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .reservable-venues .cafe-card h6,
 .reservable-venues .cafe-card p {
-    display: block;
-    text-align: left;
-    margin: 0;
-    padding: 0;
+  display: block;
+  text-align: left;
+  margin: 0;
+  padding: 0;
 }
 
 .reservable-venues .cafe-card h6 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
 }
 
 .reservable-venues .cafe-card p {
-    font-size: 0.85rem;
-    color: #777;
-    line-height: 1.4;
+  font-size: 0.85rem;
+  color: #777;
+  line-height: 1.4;
 }
 
 /* 슬라이더 트랙 기본 스타일 */
 .reservable-venues .slick-track {
-    display: flex;
-    gap: 0px;
-    padding: 10px 0;
-    touch-action: pan-x;
+  display: flex;
+  gap: 0px;
+  padding: 10px 0;
+  touch-action: pan-x;
 }
 
 .reservable-venues .slick-track::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari, Opera */
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .reservable-venues .slider-wrapper {
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .reservable-venues .slider-wrapper::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* 기타 스타일 */
 .map {
-    width: 90%;
-    height: 60vh;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  height: 60vh;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .layout-content {
-    flex: 1;
-    overflow: visible;
+  flex: 1;
+  overflow: visible;
 }
 
 .layout-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .grid-container {
-    display: grid;
-    gap: 16px;
-    padding: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 /* 카드 슬라이드 스타일 */
 .cafe-slide {
-    padding: 0 20px;  /* 카드 좌우 여백 */
+  padding: 0 20px; /* 카드 좌우 여백 */
 }
 
 /* 대관 가능한 장소 카드 슬라이드 스타일 */
 .reservable-venues .cafe-slide {
-    padding: 0 10px;  /* 다른 섹션보다 좁은 여백 */
+  padding: 0 10px; /* 다른 섹션보다 좁은 여백 */
 }
+
