@@ -4,7 +4,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from api.serializers.report_serializer import ReportSerializer
 from api.models import Report
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def report_post(request):
