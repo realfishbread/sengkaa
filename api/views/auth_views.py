@@ -313,3 +313,31 @@ def check_nickname(request):
 @permission_classes([IsAuthenticated])  # 👈 이게 핵심이야!
 def verify_token(request):
     return Response({"message": "Token is valid ✅", "user": request.user.nickname})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apply_for_organizer(request):
+    user = request.user
+
+    if user.user_type == 'organizer' and user.organizer_verified:
+        return Response({'message': '이미 인증된 사장님입니다.'})
+
+    # ✅ 일반 유저도 여기서 사장 전환 + 인증 요청 가능
+    user.user_type = 'organizer'
+    user.organizer_verified = False
+    user.save()
+
+    return Response({'message': '사장 신청이 접수되었습니다. 관리자 승인 후 사용 가능합니다.'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_organizer_status(request):
+    user = request.user
+    if user.user_type != 'organizer':
+        return Response({'status': '❌ 일반 사용자', 'verified': False})
+
+    return Response({
+        'status': '✅ 인증 완료' if user.organizer_verified else '🔒 인증 대기 중',
+        'verified': user.organizer_verified
+    })

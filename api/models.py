@@ -251,6 +251,7 @@ class Venue(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     view_count = models.PositiveIntegerField(default=0)  # ✅ 조회수 추가
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_venues')
+    business_license = models.ImageField(upload_to='business_licenses/', blank=True, null=True)
 
     def __str__(self):
         return self.name

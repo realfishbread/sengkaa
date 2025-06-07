@@ -1,20 +1,38 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from api.models import Post
-from api.models import User, Report,Star, MainBanner  # 커스텀 User 모델
+from api.models import User, Report,Star, MainBanner, Venue  # 커스텀 User 모델
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.html import format_html
+from django.contrib import messages
 
 
+
+@admin.action(description="✅ 선택한 유저 사장 인증 승인")
+def approve_organizers(modeladmin, request, queryset):
+    updated = queryset.update(organizer_verified='approved')
+    modeladmin.message_user(request, f"{updated}명의 유저가 인증되었습니다.", messages.SUCCESS)
+
+@admin.action(description="❌ 선택한 유저 사장 인증 거절")
+def reject_organizers(modeladmin, request, queryset):
+    updated = queryset.update(organizer_verified='rejected')
+    modeladmin.message_user(request, f"{updated}명의 유저가 거절되었습니다.", messages.ERROR)
+
+@admin.action(description="⏳ 선택한 유저 인증 대기 상태로 변경")
+def pending_organizers(modeladmin, request, queryset):
+    updated = queryset.update(organizer_verified='pending')
+    modeladmin.message_user(request, f"{updated}명의 유저가 인증 대기 상태로 변경되었습니다.", messages.WARNING)
 
 @admin.register(User)
 class CustomUserAdmin(BaseUserAdmin):
     model = User
     list_display = ['email', 'username', 'nickname', 'user_type', 'organizer_verified', 'is_staff', 'is_superuser']
     search_fields = ['email', 'username', 'nickname']
+    list_editable = ['organizer_verified']  # ✅ 이 줄 추가
     list_filter = ['organizer_verified']
     ordering = ['email']
+    actions = [approve_organizers, reject_organizers, pending_organizers]
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -106,4 +124,22 @@ class MainBannerAdmin(admin.ModelAdmin):
     ordering = ['priority', '-created_at']
 
 
-# admin.py
+@admin.register(Venue)
+class VenueAdmin(admin.ModelAdmin):
+    list_display = ['name', 'owner', 'organizer_verified_status', 'business_license_link']  # ✅ 추가
+    readonly_fields = ['business_license_link']  # ✅ 상세페이지에서도 보기
+    list_filter = ['owner__organizer_verified', 'business_license']
+
+    def organizer_verified_status(self, obj):
+        return obj.owner.organizer_verified if obj.owner else False
+    organizer_verified_status.boolean = True
+    organizer_verified_status.short_description = '사장 인증됨?'
+
+    def business_license_link(self, obj):
+        if obj.business_license:
+            return format_html('<a href="{}" target="_blank">📄 다운로드</a>', obj.business_license.url)
+        return "없음"
+    business_license_link.short_description = '사업자등록증'
+
+
+

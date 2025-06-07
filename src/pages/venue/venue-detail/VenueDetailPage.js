@@ -6,6 +6,7 @@ import {
   Container,
   Typography,
 } from '@mui/material';
+import axios from 'axios'; // axios 라이브러리
 import { format, isSameDay } from 'date-fns'; // 날짜 비교용
 import { useContext, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
@@ -14,7 +15,6 @@ import { useParams } from 'react-router-dom';
 import { UserContext } from '../../../context/UserContext'; // 사용자 정보 컨텍스트
 import axiosInstance from '../../../shared/api/axiosInstance';
 import TossModal from '../../toss/TossModal'; // 결제 모달 컴포넌트
-import axios from 'axios'; // axios 라이브러리
 
 const VenueDetailPage = () => {
   const { id } = useParams();
@@ -79,10 +79,10 @@ const VenueDetailPage = () => {
               component="img"
               image={venue.main_image_url}
               alt={venue.name}
-              sx={{ 
+              sx={{
                 width: '100%',
                 height: '600px',
-                objectFit: 'cover'
+                objectFit: 'cover',
               }}
             />
           </Card>
@@ -95,7 +95,9 @@ const VenueDetailPage = () => {
           </Typography>
 
           <Box sx={{ mt: 2 }}>
-            <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>장르</Typography>
+            <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>
+              장르
+            </Typography>
             <Box sx={{ mb: 2 }}>
               <Button
                 variant="outlined"
@@ -109,8 +111,8 @@ const VenueDetailPage = () => {
                   color: '#333',
                   '&:hover': {
                     backgroundColor: '#f0f0f0',
-                    borderColor: '#e0e0e0'
-                  }
+                    borderColor: '#e0e0e0',
+                  },
                 }}
               >
                 {venue.venue_type || '카페'}
@@ -119,118 +121,153 @@ const VenueDetailPage = () => {
 
             <Box sx={{ display: 'grid', gap: 2 }}>
               <Box>
-                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>날짜</Typography>
+                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>
+                  날짜
+                </Typography>
                 <Typography variant="body1" sx={{ fontWeight: 500 }}>
                   {venue.operating_hours}
                 </Typography>
               </Box>
 
               <Box>
-                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>장소</Typography>
+                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>
+                  장소
+                </Typography>
                 <Typography variant="body1" sx={{ fontWeight: 500 }}>
                   {venue.road_address}
                 </Typography>
               </Box>
 
               <Box>
-                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>대관료</Typography>
+                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>
+                  대관료
+                </Typography>
                 <Typography variant="body1" sx={{ fontWeight: 500 }}>
                   ₩{venue.rental_fee?.toLocaleString()}
                 </Typography>
               </Box>
 
               <Box>
-                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>운영 정보</Typography>
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-line', wordBreak: 'break-word' }}>
+                <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>
+                  운영 정보
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ whiteSpace: 'pre-line', wordBreak: 'break-word' }}
+                >
                   {venue.operating_info}
                 </Typography>
               </Box>
 
               {venue.sns_account && (
                 <Box>
-                  <Typography variant="subtitle1" sx={{ color: '#666', mb: 0.5 }}>SNS</Typography>
-                  <Typography variant="body1">
-                    {venue.sns_account}
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: '#666', mb: 0.5 }}
+                  >
+                    SNS
                   </Typography>
+                  <Typography variant="body1">{venue.sns_account}</Typography>
                 </Box>
               )}
             </Box>
           </Box>
 
           {/* 구분선 추가 */}
-          <Box sx={{ 
-            my: 4,
-            height: '1px',
-            backgroundColor: '#e0e0e0'
-          }} />
+          <Box
+            sx={{
+              my: 4,
+              height: '1px',
+              backgroundColor: '#e0e0e0',
+            }}
+          />
 
           {/* 예약 섹션 */}
-          <Box sx={{ 
-            backgroundColor: '#f8f9fa',
-            borderRadius: 2,
-            p: 3,
-            border: '1px solid #e0e0e0'
-          }}>
-            <Typography 
-              variant="h6" 
-              fontWeight={600} 
+          <Box
+            sx={{
+              backgroundColor: '#f8f9fa',
+              borderRadius: 2,
+              p: 3,
+              border: '1px solid #e0e0e0',
+            }}
+          >
+            <Typography
+              variant="h6"
+              fontWeight={600}
               mb={2}
               sx={{
                 color: '#1976d2',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 1
+                gap: 1,
               }}
             >
-              <Box component="span" sx={{ 
-                width: 4,
-                height: 24,
-                backgroundColor: '#1976d2',
-                borderRadius: 1,
-                display: 'inline-block',
-                mr: 1
-              }}/>
+              <Box
+                component="span"
+                sx={{
+                  width: 4,
+                  height: 24,
+                  backgroundColor: '#1976d2',
+                  borderRadius: 1,
+                  display: 'inline-block',
+                  mr: 1,
+                }}
+              />
               예약할 날짜를 선택하세요
             </Typography>
 
-            <Box sx={{
-              background: '#fff',
-              borderRadius: 2,
-              p: 2,
-              mb: 2,
-              border: '1px solid #e0e0e0'
-            }}>
+            <Box
+              sx={{
+                background: '#fff',
+                borderRadius: 2,
+                p: 2,
+                mb: 2,
+                border: '1px solid #e0e0e0',
+              }}
+            >
               <Calendar
                 onChange={setDate}
                 value={date}
                 selectRange={true}
                 tileDisabled={({ date, view }) =>
-                  view === 'month' && bookedDates.some((d) => isSameDay(d, date))
+                  view === 'month' &&
+                  bookedDates.some((d) => isSameDay(d, date))
                 }
               />
             </Box>
 
-            <Button
-              variant="contained"
-              fullWidth
-              sx={{
-                py: 1.5,
-                backgroundColor: '#1976d2',
-                borderRadius: 2,
-                fontWeight: 600,
-                fontSize: '1.1rem',
-                '&:hover': {
-                  backgroundColor: '#1565c0',
-                },
-                '&:disabled': {
-                  backgroundColor: '#e0e0e0',
-                }
-              }}
-              onClick={handleReserve}
-              disabled={!user}
-            >
-              예약하고 결제하기
-            </Button>
+            {venue?.owner?.user_type === 'organizer' ? (
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{
+                  py: 1.5,
+                  backgroundColor: '#1976d2',
+                  borderRadius: 2,
+                  fontWeight: 600,
+                  fontSize: '1.1rem',
+                  '&:hover': {
+                    backgroundColor: '#1565c0',
+                  },
+                  '&:disabled': {
+                    backgroundColor: '#e0e0e0',
+                  },
+                }}
+                onClick={handleReserve}
+                disabled={!user}
+              >
+                예약하고 결제하기
+              </Button>
+            ) : (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body1" color="text.secondary">
+                  <strong>
+                    ⚠️ 이 장소는 아직 사업자 인증이 완료되지 않아 예약할 수
+                    없습니다.
+                  </strong>
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

@@ -14,7 +14,7 @@ from api.serializers.venue_serializer import VenueDetailSerializer, VenueListSer
 def create_venue(request):
     serializer = VenueDetailSerializer(data=request.data, context={"request": request})
     if serializer.is_valid():
-        serializer.save()  # 유저 저장
+        serializer.save(owner=request.user)
         return Response({'message': '장소가 등록되었습니다!', 'data': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
