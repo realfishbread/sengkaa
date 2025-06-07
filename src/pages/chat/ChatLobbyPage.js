@@ -8,13 +8,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
+import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import './ChatLobbyPage.css';
-import { requireAuthBeforeEnter } from '../../components/hooks/requireAuthBeforeEnter';
-import axios from 'axios';
 
 const ROOMS_PER_PAGE = 5;
 
@@ -29,9 +30,11 @@ const ChatLobbyPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const [maxParticipants, setMaxParticipants] = useState(4);
+  const [askLogin, setAskLogin] = useState(false);
+  const { user } = useState(UserContext);
 
   // 현재 페이지에 보여줄 채팅방 목록 계산
-  const currentRooms = Array.isArray(rooms) 
+  const currentRooms = Array.isArray(rooms)
     ? rooms.slice((page - 1) * ROOMS_PER_PAGE, page * ROOMS_PER_PAGE)
     : [];
 
@@ -42,15 +45,15 @@ const ChatLobbyPage = () => {
   const fetchRooms = async () => {
     try {
       const res = await axios.get('https://eventcafe.site/user/chat/list/', {
-        params: { 
+        params: {
           q: search,
           page: page,
-          per_page: ROOMS_PER_PAGE // 서버에 페이지당 개수 전달
+          per_page: ROOMS_PER_PAGE, // 서버에 페이지당 개수 전달
         },
       });
       const roomData = res.data.results || res.data;
       setRooms(roomData);
-      
+
       // 전체 개수가 있는 경우에만 페이지 수 계산
       if (res.data.count !== undefined) {
         setTotalPages(Math.ceil(res.data.count / ROOMS_PER_PAGE));
@@ -110,220 +113,241 @@ const ChatLobbyPage = () => {
   }, [userQuery]);
 
   return (
-    <div className="chat-lobby-container">
-      <div className="chat-lobby-header">
-        <h1>💬 실시간 채팅</h1>
-        <p>다른 팬들과 실시간으로 소통하고 정보를 공유해보세요</p>
-      </div>
+    <>
+      <div className="chat-lobby-container">
+        <div className="chat-lobby-header">
+          <h1>💬 실시간 채팅</h1>
+          <p>다른 팬들과 실시간으로 소통하고 정보를 공유해보세요</p>
+        </div>
 
-      <div className="features-section">
-        {/* 통합된 카드 */}
-        <div className="feature-card create-room-card">
-          <Box sx={{ mb: 2 }}>
-            <Typography
-              variant="h6"
-              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+        <div className="features-section">
+          {/* 통합된 카드 */}
+          <div className="feature-card create-room-card">
+            <Box sx={{ mb: 2 }}>
+              <Typography
+                variant="h6"
+                sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+              >
+                <AddIcon /> 새로운 채팅방 만들기
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
+                채팅방 이름과 초대 유저를 입력하세요
+              </Typography>
+            </Box>
+
+            <TextField
+              fullWidth
+              value={roomName}
+              onChange={(e) => setRoomName(e.target.value)}
+              placeholder="채팅방 이름"
+              variant="outlined"
+              size="small"
+              sx={{ mb: 2 }}
+            />
+
+            <Autocomplete
+              multiple
+              options={userResults}
+              getOptionLabel={(option) => option.nickname}
+              onChange={(e, newValue) => setSelectedUsers(newValue)}
+              onInputChange={(e, value) => setUserQuery(value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  placeholder="유저 검색"
+                  size="small"
+                  sx={{ mb: 2 }}
+                />
+              )}
+            />
+
+            <TextField
+              type="number"
+              label="최대 인원 수"
+              value={maxParticipants}
+              onChange={(e) => setMaxParticipants(Number(e.target.value))}
+              inputProps={{ min: 2, max: 100 }}
+              fullWidth
+              size="small"
+              sx={{ mb: 2 }}
+            />
+
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleCreateRoom}
+              sx={{
+                bgcolor: 'white',
+                color: '#6C63FF',
+                '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
+              }}
             >
-              <AddIcon /> 새로운 채팅방 만들기
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
-              채팅방 이름과 초대 유저를 입력하세요
+              채팅방 만들기
+            </Button>
+          </div>
+
+          {/* 채팅방 검색 카드 */}
+          <div className="feature-card search-card">
+            <Box sx={{ mb: 2 }}>
+              <Typography
+                variant="h6"
+                sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+              >
+                <SearchIcon /> 채팅방 검색
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1, color: '#666' }}>
+                원하는 채팅방을 찾아보세요
+              </Typography>
+            </Box>
+            <TextField
+              fullWidth
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="채팅방 이름으로 검색"
+              variant="outlined"
+              size="small"
+              sx={{ mb: 2 }}
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={fetchRooms}
+              sx={{
+                bgcolor: '#4A5568',
+                '&:hover': { bgcolor: '#2D3748' },
+              }}
+            >
+              검색
+            </Button>
+          </div>
+        </div>
+
+        <div className="chat-rooms-section">
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 3,
+            }}
+          >
+            <Typography variant="h6">채팅방 목록</Typography>
+            <Typography variant="body2" color="text.secondary">
+              총 {Array.isArray(rooms) ? rooms.length : 0}개의 채팅방
             </Typography>
           </Box>
 
-          <TextField
-            fullWidth
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-            placeholder="채팅방 이름"
-            variant="outlined"
-            size="small"
-            sx={{ mb: 2 }}
-          />
-
-          <Autocomplete
-            multiple
-            options={userResults}
-            getOptionLabel={(option) => option.nickname}
-            onChange={(e, newValue) => setSelectedUsers(newValue)}
-            onInputChange={(e, value) => setUserQuery(value)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                placeholder="유저 검색"
-                size="small"
-                sx={{ mb: 2 }}
-              />
-            )}
-          />
-
-          <TextField
-            type="number"
-            label="최대 인원 수"
-            value={maxParticipants}
-            onChange={(e) => setMaxParticipants(Number(e.target.value))}
-            inputProps={{ min: 2, max: 100 }}
-            fullWidth
-            size="small"
-            sx={{ mb: 2 }}
-          />
-
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={handleCreateRoom}
-            sx={{
-              bgcolor: 'white',
-              color: '#6C63FF',
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
-            }}
-          >
-            채팅방 만들기
-          </Button>
-        </div>
-
-        {/* 채팅방 검색 카드 */}
-        <div className="feature-card search-card">
-          <Box sx={{ mb: 2 }}>
-            <Typography
-              variant="h6"
-              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-            >
-              <SearchIcon /> 채팅방 검색
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 1, color: '#666' }}>
-              원하는 채팅방을 찾아보세요
-            </Typography>
-          </Box>
-          <TextField
-            fullWidth
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="채팅방 이름으로 검색"
-            variant="outlined"
-            size="small"
-            sx={{ mb: 2 }}
-          />
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={fetchRooms}
-            sx={{
-              bgcolor: '#4A5568',
-              '&:hover': { bgcolor: '#2D3748' },
-            }}
-          >
-            검색
-          </Button>
-        </div>
-      </div>
-
-      <div className="chat-rooms-section">
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            mb: 3,
-          }}
-        >
-          <Typography variant="h6">채팅방 목록</Typography>
-          <Typography variant="body2" color="text.secondary">
-            총 {Array.isArray(rooms) ? rooms.length : 0}개의 채팅방
-          </Typography>
-        </Box>
-
-        <div className="chat-room-list">
-          <TransitionGroup>
-            {currentRooms.map((room) => (
-              <CSSTransition key={room.id} timeout={300} classNames="fade">
-                <div
-                  className="chat-room-item"
-                  onClick={() => navigate(`/chat/${room.id}`)}
-                >
-                  <div className="chat-room-header">
-                    <div className="chat-room-avatar">
-                      {room.name[0].toUpperCase()}
-                    </div>
-                    <div className="chat-room-info">
-                      <div className="chat-room-title">{room.name}</div>
-                      <div className="chat-room-meta">
-                        <span>
-                          👥 {room.current_participants}/{room.max_participants}
-                          명
-                        </span>
+          <div className="chat-room-list">
+            <TransitionGroup>
+              {currentRooms.map((room) => (
+                <CSSTransition key={room.id} timeout={300} classNames="fade">
+                  <div
+                    className="chat-room-item"
+                    onClick={() => navigate(`/chat/${room.id}`)}
+                  >
+                    <div className="chat-room-header">
+                      <div className="chat-room-avatar">
+                        {room.name[0].toUpperCase()}
                       </div>
+                      <div className="chat-room-info">
+                        <div className="chat-room-title">{room.name}</div>
+                        <div className="chat-room-meta">
+                          <span>
+                            👥 {room.current_participants}/
+                            {room.max_participants}명
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          borderRadius: 2,
+                          minWidth: '100px',
+                        }}
+                        onClick={() => {
+                          console.log('room.participants', room.participants);
+                          console.log('user', user);
+                          if (!user|| !user.nickname) {
+                            setAskLogin(true); // 🔒 로그인 유도
+                          } else if (!room.participants.includes(user.id)) {
+                            alert(
+                              '이 채팅방에 참여할 수 있는 권한이 없습니다.'
+                            ); // 🛑 거부 처리
+                          } else {
+                            navigate(`/chat/${room.id}`); // ✅ 입장
+                          }
+                        }}
+                      >
+                        참여하기
+                      </Button>
                     </div>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        borderRadius: 2,
-                        minWidth: '100px',
-                      }}
-                      onClick={() => requireAuthBeforeEnter(`/user/chat/${room.id}/check/`, `/chat/${room.id}`)}
-                    >
-                      참여하기
-                    </Button>
                   </div>
-                </div>
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-        </div>
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
+          </div>
 
-        {rooms.length === 0 && (
-          <Box sx={{ textAlign: 'center', py: 4 }}>
-            <Typography variant="body1" color="text.secondary">
-              채팅방이 없습니다.
+          {rooms.length === 0 && (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="body1" color="text.secondary">
+                채팅방이 없습니다.
+              </Typography>
+            </Box>
+          )}
+
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mt: 2,
+              pt: 2,
+              borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+            }}
+          >
+            <Pagination
+              count={totalPages || 1}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+              showFirstButton
+              showLastButton
+              sx={{
+                '& .MuiPaginationItem-root': {
+                  fontSize: '0.95rem',
+                  color: '#666',
+                  '&:hover': {
+                    bgcolor: 'rgba(108, 99, 255, 0.08)',
+                  },
+                },
+                '& .Mui-selected': {
+                  bgcolor: '#6C63FF !important',
+                  color: 'white',
+                  fontWeight: 600,
+                  '&:hover': {
+                    bgcolor: '#6C63FF !important',
+                  },
+                },
+              }}
+            />
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              {page} / {totalPages || 1} 페이지
             </Typography>
           </Box>
-        )}
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            mt: 2,
-            pt: 2,
-            borderTop: '1px solid rgba(0, 0, 0, 0.08)',
-          }}
-        >
-          <Pagination
-            count={totalPages || 1}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-            size="large"
-            showFirstButton
-            showLastButton
-            sx={{
-              '& .MuiPaginationItem-root': {
-                fontSize: '0.95rem',
-                color: '#666',
-                '&:hover': {
-                  bgcolor: 'rgba(108, 99, 255, 0.08)',
-                },
-              },
-              '& .Mui-selected': {
-                bgcolor: '#6C63FF !important',
-                color: 'white',
-                fontWeight: 600,
-                '&:hover': {
-                  bgcolor: '#6C63FF !important',
-                },
-              },
-            }}
-          />
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-            {page} / {totalPages || 1} 페이지
-          </Typography>
-        </Box>
+        </div>
       </div>
-    </div>
+      <LoginConfirmDialog
+        open={askLogin}
+        onClose={() => setAskLogin(false)} // 취소
+        onConfirm={
+          () => navigate('/login', { state: { from: '/chat-list' } }) // 로그인
+        }
+      />
+    </>
   );
 };
 

@@ -51,6 +51,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)  # 🌟✨ bio 필드 추가!
+    organizer_verified = models.BooleanField(default=False)
+
     # 🔥 문제 해결 핵심: related_name 수정
     groups = models.ManyToManyField(
         Group,
@@ -248,6 +250,7 @@ class Venue(models.Model):
     sns_account = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     view_count = models.PositiveIntegerField(default=0)  # ✅ 조회수 추가
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_venues')
 
     def __str__(self):
         return self.name

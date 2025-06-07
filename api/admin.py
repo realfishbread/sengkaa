@@ -11,21 +11,22 @@ from django.utils.html import format_html
 @admin.register(User)
 class CustomUserAdmin(BaseUserAdmin):
     model = User
-    list_display = ['email', 'username', 'nickname', 'is_staff', 'is_superuser']
+    list_display = ['email', 'username', 'nickname', 'user_type', 'organizer_verified', 'is_staff', 'is_superuser']
     search_fields = ['email', 'username', 'nickname']
+    list_filter = ['organizer_verified']
     ordering = ['email']
 
-    # ✅ 여기부터 필드 커스터마이징
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('개인 정보', {'fields': ('username', 'nickname', 'profile_image')}),
         ('권한', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('사장 인증', {'fields': ('user_type', 'organizer_verified')}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'username', 'nickname'),
+            'fields': ('email', 'password1', 'password2', 'username', 'nickname', 'user_type'),
         }),
     )
 
@@ -103,3 +104,6 @@ class MainBannerAdmin(admin.ModelAdmin):
     list_editable = ['priority', 'is_active']
     list_filter = ['is_active']
     ordering = ['priority', '-created_at']
+
+
+# admin.py

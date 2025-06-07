@@ -60,3 +60,18 @@ def venue_detail(request, venue_id):
 
     serializer = VenueDetailSerializer(venue, context={'request': request})
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def check_venue_reservable(request, venue_id):
+    try:
+        venue = Venue.objects.get(id=venue_id)
+    except Venue.DoesNotExist:
+        return Response({'error': '존재하지 않는 장소입니다.'}, status=404)
+
+    owner = venue.owner
+    if owner.user_type != 'organizer' or not owner.organizer_verified:
+        return Response({'reservable': False, 'reason': '이 장소는 인증된 사장님이 등록한 장소가 아닙니다.'})
+
+    return Response({'reservable': True})

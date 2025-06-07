@@ -17,13 +17,13 @@ import {
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import SearchModal from '../../components/SearchModal';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import Logo from '../common/Logo';
 import './NavigationBar.css';
 import NotificationBell from './NotificationBell';
 import NotificationModal from './NotificationModal';
-import SearchModal from '../../components/SearchModal';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -280,6 +280,7 @@ const NavigationBar = () => {
               src={user?.profile_image || ''}
               alt={user?.nickname}
               sx={{ width: 80, height: 80, margin: 'auto' }}
+              onClick={() => navigate(`/profile/${user?.nickname}`)}
             />
             <Typography variant="h6" sx={{ mt: 1 }}>
               {user?.nickname || '사용자'}
@@ -292,17 +293,8 @@ const NavigationBar = () => {
           <Divider sx={{ my: 2 }} />
 
           <List>
-            <ListItem
-              button
-              onClick={() => navigate(`/profile/${user?.nickname}`)}
-            >
-              <ListItemText primary="내 프로필" />
-            </ListItem>
             <ListItem button onClick={() => navigate('/settings')}>
               <ListItemText primary="설정" />
-            </ListItem>
-            <ListItem button onClick={() => navigate('/dictionary')}>
-              <ListItemText primary="덕질 사전" />
             </ListItem>
             <ListItem button onClick={() => navigate('/my-bookings')}>
               <ListItemText primary="내 예약 목록" />
