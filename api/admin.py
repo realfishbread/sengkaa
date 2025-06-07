@@ -103,6 +103,7 @@ class ReportAdmin(admin.ModelAdmin):
 class StarAdmin(admin.ModelAdmin):
     list_display = ('name', 'group', 'image_preview')  # 리스트 페이지에도 미리보기
     readonly_fields = ('image_preview',)  # 상세 페이지에서도 미리보기 가능
+    search_fields = ['name', 'group']  # ✅ 요거 추가!
 
     def image_preview(self, obj):
         if obj.image and hasattr(obj.image, 'url'):
