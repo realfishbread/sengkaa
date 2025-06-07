@@ -1,5 +1,5 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axiosInstance from '../../../shared/api/axiosInstance';
 
 const ReportModal = ({ postId, onClose }) => {
@@ -15,7 +15,7 @@ const ReportModal = ({ postId, onClose }) => {
     setIsSubmitting(true);
     try {
       await axiosInstance.post('/user/reports/report-post/', {
-        post: postId,
+        post_id: postId,
         reason: reportContent,
       });
       alert('신고가 접수되었습니다.');

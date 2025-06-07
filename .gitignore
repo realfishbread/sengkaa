@@ -24,4 +24,5 @@ yarn-error.log*
 
 .env
 
-venv
+venv/
+.venv/

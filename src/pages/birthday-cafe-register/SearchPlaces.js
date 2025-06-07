@@ -13,12 +13,13 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
 import NotFoundBox from '../../components/common/NotFoundBox';
+import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
 import { EventSearchApi } from './api/EventSearchApi';
-
 import './SearchPlaces.css';
 
 const SearchPlaces = () => {
@@ -30,6 +31,8 @@ const SearchPlaces = () => {
   const [sort, setSort] = useState('');
   const [genreLabel, setGenreLabel] = useState('');
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const { user } = useContext(UserContext);
+  const [askLogin, setAskLogin] = useState(false);
 
   const navigate = useNavigate();
 
@@ -84,59 +87,94 @@ const SearchPlaces = () => {
     } catch (err) {
       if (err.response?.status === 403) {
         console.warn('로그인 필요!');
-        navigate('/login', {
-          state: { from: '/search' },
-        }); // ✅ 여기가 닫혀야 함
+        if (!user) {
+          // loading 끝난 뒤에만 질문
+          setAskLogin(true); // 모달 오픈
+        } else {
+          alert('찜에 실패하였습니다. 다시 시도해주세요.');
+        }
       } else {
         console.error('찜 토글 실패:', err);
       }
     }
   };
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
-        이벤트 찾기
-      </Typography>
+    <>
+      <Container maxWidth="lg" sx={{ py: 6 }}>
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          이벤트 찾기
+        </Typography>
 
-      {/* 필터 영역 */}
-      <Box mb={4}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              label="이벤트명 검색"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              fullWidth
-            />
+        {/* 필터 영역 */}
+        <Box mb={4}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="이벤트명 검색"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <TextField
+                label="시작일"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <TextField
+                label="종료일"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                fullWidth
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={6} sm={3}>
-            <TextField
-              label="시작일"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <TextField
-              label="종료일"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-        </Grid>
 
-        {/* 장르 필터 */}
-        <Box mt={3}>
+          {/* 장르 필터 */}
+          <Box mt={3}>
+            <ToggleButtonGroup
+              value={genreLabel}
+              exclusive
+              onChange={(e, newLabel) => setGenreLabel(newLabel || '')}
+              sx={{
+                '& .MuiToggleButton-root': {
+                  border: '1px solid #ddd',
+                  borderRadius: '20px',
+                  minWidth: '60px',
+                  fontWeight: 'bold',
+                  px: 2,
+                  py: 0.5,
+                  color: '#333',
+                },
+                '& .Mui-selected': {
+                  backgroundColor: '#f0f0f0',
+                  color: '#000',
+                  borderColor: '#999',
+                },
+              }}
+            >
+              {GENRE_LABELS.map((label) => (
+                <ToggleButton key={label} value={label}>
+                  {label}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </Box>
+        </Box>
+
+        <Box mt={1}>
           <ToggleButtonGroup
-            value={genreLabel}
+            value={sort}
             exclusive
-            onChange={(e, newLabel) => setGenreLabel(newLabel || '')}
+            onChange={(e, newSort) => setSort(newSort || '')}
             sx={{
               '& .MuiToggleButton-root': {
                 border: '1px solid #ddd',
@@ -148,157 +186,142 @@ const SearchPlaces = () => {
                 color: '#333',
               },
               '& .Mui-selected': {
-                backgroundColor: '#f0f0f0',
+                backgroundColor: '#dff0ff',
                 color: '#000',
-                borderColor: '#999',
+                borderColor: '#3399ff',
               },
             }}
           >
-            {GENRE_LABELS.map((label) => (
-              <ToggleButton key={label} value={label}>
-                {label}
-              </ToggleButton>
-            ))}
+            <ToggleButton value="latest">최신순</ToggleButton>
+            <ToggleButton value="likes">좋아요순</ToggleButton>
+            <ToggleButton value="views">조회수순</ToggleButton>
           </ToggleButtonGroup>
         </Box>
-      </Box>
 
-      <Box mt={1}>
-        <ToggleButtonGroup
-          value={sort}
-          exclusive
-          onChange={(e, newSort) => setSort(newSort || '')}
-          sx={{
-            '& .MuiToggleButton-root': {
-              border: '1px solid #ddd',
-              borderRadius: '20px',
-              minWidth: '60px',
-              fontWeight: 'bold',
-              px: 2,
-              py: 0.5,
-              color: '#333',
-            },
-            '& .Mui-selected': {
-              backgroundColor: '#dff0ff',
-              color: '#000',
-              borderColor: '#3399ff',
-            },
-          }}
-        >
-          <ToggleButton value="latest">최신순</ToggleButton>
-          <ToggleButton value="likes">좋아요순</ToggleButton>
-          <ToggleButton value="views">조회수순</ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
+        {/* 카드 리스트 */}
+        <Grid container spacing={3}>
+          {events.length > 0 ? (
+            events.map((event) => (
+              <Grid item xs={12} sm={6} md={6} key={event.id}>
+                <Card
+                  onClick={() => navigate(`/birthday-cafes/${event.id}`)}
+                  className="event-card-container"
+                  sx={{ cursor: 'pointer' }}
+                >
+                  <CardContent className="event-card-content">
+                    <Box className="event-card-inner">
+                      {/* 왼쪽 이미지 */}
+                      <Box className="event-card-left">
+                        <img
+                          src={event.image}
+                          alt={event.cafe_name}
+                          className="event-poster"
+                        />
+                      </Box>
 
-      {/* 카드 리스트 */}
-      <Grid container spacing={3}>
-        {events.length > 0 ? (
-          events.map((event) => (
-            <Grid item xs={12} sm={6} md={6} key={event.id}>
-              <Card
-                onClick={() => navigate(`/birthday-cafes/${event.id}`)}
-                className="event-card-container"
-                sx={{ cursor: 'pointer' }}
-              >
-                <CardContent className="event-card-content">
-                  <Box className="event-card-inner">
-                    {/* 왼쪽 이미지 */}
-                    <Box className="event-card-left">
-                      <img
-                        src={event.image}
-                        alt={event.cafe_name}
-                        className="event-poster"
-                      />
-                    </Box>
-
-                    {/* 오른쪽 정보 */}
-                    <Box className="event-card-right">
-                      <Box className="event-card-header">
-                        <Typography variant="subtitle1" fontWeight="bold">
-                          {event.star_display || '아티스트/그룹명'}
-                        </Typography>
-                        <Box className="event-card-header-icons">
-                          {event.is_liked ? (
-                            <FavoriteIcon
-                              sx={{ color: '#ff4081 !important', cursor: 'pointer' }} // 💗 진한 핑크
-                              onClick={(e) => handleLikeToggle(event.id, e)}
+                      {/* 오른쪽 정보 */}
+                      <Box className="event-card-right">
+                        <Box className="event-card-header">
+                          <Typography variant="subtitle1" fontWeight="bold">
+                            {event.star_display || '아티스트/그룹명'}
+                          </Typography>
+                          <Box className="event-card-header-icons">
+                            {event.is_liked ? (
+                              <FavoriteIcon
+                                sx={{
+                                  color: '#ff4081 !important',
+                                  cursor: 'pointer',
+                                }} // 💗 진한 핑크
+                                onClick={(e) => handleLikeToggle(event.id, e)}
+                              />
+                            ) : (
+                              <FavoriteBorderIcon
+                                sx={{ color: '#ccc', cursor: 'pointer' }}
+                                onClick={(e) => handleLikeToggle(event.id, e)}
+                              />
+                            )}
+                            <ShareIcon
+                              sx={{ color: '#ccc', ml: 1 }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const url = `${window.location.origin}/birthday-cafes/${event.id}`;
+                                navigator.clipboard
+                                  .writeText(url)
+                                  .then(() => alert('링크가 복사되었습니다!'))
+                                  .catch(() => alert('복사 실패 😢'));
+                              }}
                             />
-                          ) : (
-                            <FavoriteBorderIcon
-                              sx={{ color: '#ccc', cursor: 'pointer' }}
-                              onClick={(e) => handleLikeToggle(event.id, e)}
+                          </Box>
+                        </Box>
+
+                        <Typography
+                          variant="h6"
+                          component="div"
+                          sx={{
+                            fontWeight: 'bold',
+                            fontStyle: 'italic',
+                            mb: 1,
+                          }}
+                        >
+                          {event.cafe_name || '이벤트명'}
+                        </Typography>
+
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mb: 0.5 }}
+                        >
+                          📍 {event.road_address || '상세 위치 없음'}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mb: 1 }}
+                        >
+                          📅 {event.start_date} ~ {event.end_date}
+                        </Typography>
+
+                        <Box
+                          sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}
+                        >
+                          {event.genre && (
+                            <Chip
+                              label={event.genre}
+                              size="small"
+                              className="event-card-chip"
                             />
                           )}
-                          <ShareIcon
-                            sx={{ color: '#ccc', ml: 1 }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const url = `${window.location.origin}/birthday-cafes/${event.id}`;
-                              navigator.clipboard
-                                .writeText(url)
-                                .then(() => alert('링크가 복사되었습니다!'))
-                                .catch(() => alert('복사 실패 😢'));
-                            }}
-                          />
+                          {event.tags?.map((tag, i) => (
+                            <Chip
+                              key={i}
+                              label={tag}
+                              size="small"
+                              className="event-tag-chip"
+                            />
+                          ))}
                         </Box>
                       </Box>
-
-                      <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ fontWeight: 'bold', fontStyle: 'italic', mb: 1 }}
-                      >
-                        {event.cafe_name || '이벤트명'}
-                      </Typography>
-
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mb: 0.5 }}
-                      >
-                        📍 {event.road_address || '상세 위치 없음'}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mb: 1 }}
-                      >
-                        📅 {event.start_date} ~ {event.end_date}
-                      </Typography>
-
-                      <Box
-                        sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}
-                      >
-                        {event.genre && (
-                          <Chip
-                            label={event.genre}
-                            size="small"
-                            className="event-card-chip"
-                          />
-                        )}
-                        {event.tags?.map((tag, i) => (
-                          <Chip
-                            key={i}
-                            label={tag}
-                            size="small"
-                            className="event-tag-chip"
-                          />
-                        ))}
-                      </Box>
                     </Box>
-                  </Box>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12}>
+              <NotFoundBox />
             </Grid>
-          ))
-        ) : (
-          <Grid item xs={12}>
-            <NotFoundBox />
-          </Grid>
-        )}
-      </Grid>
-    </Container>
+          )}
+        </Grid>
+      </Container>
+
+      <LoginConfirmDialog
+        open={askLogin}
+        onClose={() => setAskLogin(false)} // 취소
+        onConfirm={
+          () => navigate('/login', { state: { from: '/calendar' } }) // 로그인
+        }
+      />
+    </>
   );
 };
 

@@ -1,4 +1,11 @@
-import { Box, Typography } from '@mui/material';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import {
+  Box,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,8 +20,43 @@ import {
   fetchPopularYoutubers,
 } from './birthday-cafe-register/api/EventSearchApi';
 
+const PrevArrow = ({ onClick }) => (
+  <IconButton
+    onClick={onClick}
+    sx={{
+      position: 'absolute',
+      left: 0,
+      top: '40%',
+      zIndex: 2,
+      background: '#fff',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+      '&:hover': { background: '#f0f0f0' },
+    }}
+  >
+    <ArrowBackIos />
+  </IconButton>
+);
+
+const NextArrow = ({ onClick }) => (
+  <IconButton
+    onClick={onClick}
+    sx={{
+      position: 'absolute',
+      right: 0,
+      top: '40%',
+      zIndex: 2,
+      background: '#fff',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+      '&:hover': { background: '#f0f0f0' },
+    }}
+  >
+    <ArrowForwardIos />
+  </IconButton>
+);
+
 const SectionTitle = ({ title, category }) => {
   const navigate = useNavigate();
+  
 
   const handleMoreClick = (category) => {
     if (category === 'venue') {
@@ -101,6 +143,8 @@ const Home = () => {
   const gameSliderRef = useRef(null);
   const venueSliderRef = useRef(null);
   const [mainSlides, setMainSlides] = useState([]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [popularCafes, setPopularCafes] = useState({
     idol: [],
@@ -172,7 +216,9 @@ const Home = () => {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
-    arrows: false,
+    arrows: !isMobile,
+    prevArrow: !isMobile ? <PrevArrow /> : null,
+    nextArrow: !isMobile ? <NextArrow /> : null,
     draggable: true,
     swipe: true,
     swipeToSlide: true,
@@ -240,110 +286,64 @@ const Home = () => {
         </div>
       </main>
       <br />
-      <Box className="section" >
-      <br />
-      <br />
+      <Box className="section">
+        <br />
+        <br />
 
-      <section className="popular-events">
-        <SectionTitle title="🔥 인기 아이돌 카페" category="idol" />
+        <section className="popular-events">
+          <SectionTitle title="🔥 인기 아이돌 카페" category="idol" />
 
-        <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
-          <Slider ref={idolSliderRef} {...sliderSettings}>
-            {popularCafes.idol.map((cafe, index) => (
-              <div key={index} className="cafe-slide">
-                <Box
-                  sx={{
-                    width: 200, // 고정 폭(슬라이드 간 간격 일정)
-                    mx: 'auto',
-                    marginTop: '1rem',
-                    marginBottom: '2rem',
-                    bgcolor: '#ffffff', // 회색 배경
-                    borderRadius: 3,
-                    p: 1.5, // 이미지와 배경 사이 여백
-                    boxShadow: '0 6px 15px rgba(1,0,0,0.1)',
-                    transition: 'transform .2s',
-                    '&:hover': { transform: 'translateY(-4px)' },
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => navigate(`/birthday-cafes/${cafe.id}`)}
-                >
-                  <Box className="cafe-card">
-                    <img src={cafe.image} alt={cafe.cafe_name} />
-                    <Box className="MuiBox-root">
-                      <Typography
-                        variant="subtitle2"
-                        noWrap
-                        textAlign="center"
-                        sx={{ fontWeight: 500 }}
-                      >
-                        {cafe.group_name || cafe.cafe_name}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </div>
-            ))}
-          </Slider>
-        </div>
-      </section>
-
-      <br />
-
-      <section className="popular-streamers">
-        <SectionTitle title="🔥 인기 스트리머 콜라보" category="streamer" />
-        <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
-          <Slider ref={streamerSliderRef} {...sliderSettings}>
-            {popularCafes.streamer.map((cafe, index) => (
-              <div key={index} className="cafe-slide">
-                <Box
-                  sx={{
-                    width: 200, // 고정 폭(슬라이드 간 간격 일정)
-                    mx: 'auto',
-                    marginTop: '1rem',
-                    marginBottom: '2rem',
-                    bgcolor: '#ffffff', // 회색 배경
-                    borderRadius: 3,
-                    p: 1.5, // 이미지와 배경 사이 여백
-                    boxShadow: '0 6px 15px rgba(1,0,0,0.1)',
-                    transition: 'transform .2s',
-                    '&:hover': { transform: 'translateY(-4px)' },
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => navigate(`/birthday-cafes/${cafe.id}`)}
-                >
-                  <Box className="cafe-card">
-                    <img src={cafe.image} alt={cafe.cafe_name} />
-                    <Box className="MuiBox-root">
-                      <Typography
-                        variant="subtitle2"
-                        noWrap
-                        textAlign="center"
-                        sx={{ mt: 1, fontWeight: 500 }}
-                      >
-                        {cafe.group_name || cafe.cafe_name}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </div>
-            ))}
-          </Slider>
-        </div>
-      </section>
-
-      <br />
-      <br />
-
-      <section className="popular-games">
-        <SectionTitle title="🔥 인기 게임 콜라보" category="game" />
-        <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
-          <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'hidden' }}>
-            <Slider ref={gameSliderRef} {...sliderSettings}>
-              {popularCafes.game.map((cafe, index) => (
+          <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
+            <Slider ref={idolSliderRef} {...sliderSettings}>
+              {popularCafes.idol.map((cafe, index) => (
                 <div key={index} className="cafe-slide">
                   <Box
                     sx={{
-                      width: 230, // 고정 폭(슬라이드 간 간격 일정)
+                      width: 200, // 고정 폭(슬라이드 간 간격 일정)
+                      mx: 'auto',
+                      marginTop: '1rem',
+                      marginBottom: '2rem',
+                      bgcolor: '#ffffff', // 회색 배경
+                      borderRadius: 3,
+                      p: 1.5, // 이미지와 배경 사이 여백
+                      boxShadow: '0 6px 15px rgba(1,0,0,0.1)',
+                      transition: 'transform .2s',
+                      '&:hover': { transform: 'translateY(-4px)' },
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => navigate(`/birthday-cafes/${cafe.id}`)}
+                  >
+                    <Box className="cafe-card">
+                      <img src={cafe.image} alt={cafe.cafe_name} />
+                      <Box className="MuiBox-root">
+                        <Typography
+                          variant="subtitle2"
+                          noWrap
+                          textAlign="center"
+                          sx={{ fontWeight: 500 }}
+                        >
+                          {cafe.group_name || cafe.cafe_name}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </section>
+
+        <br />
+
+        <section className="popular-streamers">
+          <SectionTitle title="🔥 인기 스트리머 콜라보" category="streamer" />
+          <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
+            <Slider ref={streamerSliderRef} {...sliderSettings}>
+              {popularCafes.streamer.map((cafe, index) => (
+                <div key={index} className="cafe-slide">
+                  <Box
+                    sx={{
+                      width: 200, // 고정 폭(슬라이드 간 간격 일정)
                       mx: 'auto',
                       marginTop: '1rem',
                       marginBottom: '2rem',
@@ -375,37 +375,88 @@ const Home = () => {
               ))}
             </Slider>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <br />
-      <br />
+        <br />
+        <br />
 
-      <section className="reservable-venues">
-        <SectionTitle title="대관 가능한 장소" category="venue" />
-        <div className="slider-wrapper" >
-          <Slider ref={venueSliderRef} {...sliderSettings}>
-            {reservableVenues.map((venue, index) => (
-              <div key={index} className="cafe-slide">
-                <Box className="cafe-card">
-                  <img src={venue.image} alt={venue.name} />
-                  <Box>
-                    <Typography variant="h6">{venue.name}</Typography>
-                    <Typography variant="body2">
-                      {venue.road_address}
-                    </Typography>
+        <section className="popular-games">
+          <SectionTitle title="🔥 인기 게임 콜라보" category="game" />
+          <div className="slider-wrapper" style={{ marginBottom: '2rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                overflowX: 'hidden',
+              }}
+            >
+              <Slider ref={gameSliderRef} {...sliderSettings}>
+                {popularCafes.game.map((cafe, index) => (
+                  <div key={index} className="cafe-slide">
+                    <Box
+                      sx={{
+                        width: 230, // 고정 폭(슬라이드 간 간격 일정)
+                        mx: 'auto',
+                        marginTop: '1rem',
+                        marginBottom: '2rem',
+                        bgcolor: '#ffffff', // 회색 배경
+                        borderRadius: 3,
+                        p: 1.5, // 이미지와 배경 사이 여백
+                        boxShadow: '0 6px 15px rgba(1,0,0,0.1)',
+                        transition: 'transform .2s',
+                        '&:hover': { transform: 'translateY(-4px)' },
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => navigate(`/birthday-cafes/${cafe.id}`)}
+                    >
+                      <Box className="cafe-card">
+                        <img src={cafe.image} alt={cafe.cafe_name} />
+                        <Box className="MuiBox-root">
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            textAlign="center"
+                            sx={{ mt: 1, fontWeight: 500 }}
+                          >
+                            {cafe.group_name || cafe.cafe_name}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          </div>
+        </section>
+
+        <br />
+        <br />
+
+        <section className="reservable-venues">
+          <SectionTitle title="대관 가능한 장소" category="venue" />
+          <div className="slider-wrapper">
+            <Slider ref={venueSliderRef} {...sliderSettings}>
+              {reservableVenues.map((venue, index) => (
+                <div key={index} className="cafe-slide">
+                  <Box className="cafe-card">
+                    <img src={venue.image} alt={venue.name} />
+                    <Box>
+                      <Typography variant="h6">{venue.name}</Typography>
+                      <Typography variant="body2">
+                        {venue.road_address}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </div>
-            ))}
-          </Slider>
-        </div>
-      </section>
-      <br />
-      <br />
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </section>
+        <br />
+        <br />
       </Box>
     </div>
-    
   );
 };
 

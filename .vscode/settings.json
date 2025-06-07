@@ -1,0 +1,7 @@
+{
+  "python.analysis.extraPaths": [
+    "./", 
+    "./api"
+  ],
+  "python.pythonPath": "C:\\Users\\yunhe\\OneDrive\\Desktop\\zolzak\\venv\\Scripts\\python.exe"
+}
