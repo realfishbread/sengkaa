@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
@@ -31,7 +31,7 @@ const ChatLobbyPage = () => {
   const [page, setPage] = useState(1);
   const [maxParticipants, setMaxParticipants] = useState(4);
   const [askLogin, setAskLogin] = useState(false);
-  const { user } = useState(UserContext);
+  const { user } = useContext(UserContext);
 
   // 현재 페이지에 보여줄 채팅방 목록 계산
   const currentRooms = Array.isArray(rooms)
