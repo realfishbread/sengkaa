@@ -43,7 +43,7 @@ const Board = () => {
 
   if (savedUser) {
     // ✅ 서버에 토큰 유효성 검증 요청 보내기 (예: /auth/verify/)
-    axiosInstance.get('/user/verify/')
+    axiosInstance.get('/user/auth/verify/')
       .then(() => {
         setUser(savedUser); // 유효하면 로그인 유지
       })

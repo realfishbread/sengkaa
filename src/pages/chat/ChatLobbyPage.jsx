@@ -13,14 +13,15 @@ import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
-import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
+import { UserContext } from '../../context/UserContext';
 import './ChatLobbyPage.css';
 
 const ROOMS_PER_PAGE = 5;
 
 const ChatLobbyPage = () => {
   const navigate = useNavigate();
+
   const [roomName, setRoomName] = useState('');
   const [search, setSearch] = useState('');
   const [rooms, setRooms] = useState([]);
@@ -31,7 +32,7 @@ const ChatLobbyPage = () => {
   const [page, setPage] = useState(1);
   const [maxParticipants, setMaxParticipants] = useState(4);
   const [askLogin, setAskLogin] = useState(false);
-  const { user } = useContext(UserContext);
+  const {user}=useContext(UserContext);
 
   // 현재 페이지에 보여줄 채팅방 목록 계산
   const currentRooms = Array.isArray(rooms)
@@ -92,6 +93,16 @@ const ChatLobbyPage = () => {
       navigate(`/chat/${res.data.id}`);
     } catch (err) {
       console.error('방 만들기 실패:', err);
+      if (err.response?.status === 401) {
+          setAskLogin(true);
+          return;
+        }
+        if (!user) {
+          // loading 끝난 뒤에만 질문
+          setAskLogin(true); // 모달 오픈
+        } else {
+          alert('댓글 등록에 실패했습니다.');
+        }
     }
   };
 
@@ -267,17 +278,7 @@ const ChatLobbyPage = () => {
                           minWidth: '100px',
                         }}
                         onClick={() => {
-                          console.log('room.participants', room.participants);
-                          console.log('user', user);
-                          if (!user|| !user.nickname) {
-                            setAskLogin(true); // 🔒 로그인 유도
-                          } else if (!room.participants.includes(user.id)) {
-                            alert(
-                              '이 채팅방에 참여할 수 있는 권한이 없습니다.'
-                            ); // 🛑 거부 처리
-                          } else {
-                            navigate(`/chat/${room.id}`); // ✅ 입장
-                          }
+                          navigate(`/chat/${room.id}`); // ✅ 입장
                         }}
                       >
                         참여하기
