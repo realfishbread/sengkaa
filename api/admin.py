@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from api.models import Post
-from api.models import User, Report,Star, MainBanner, Venue  # 커스텀 User 모델
+from api.models import User, Report,Star, MainBanner, Venue, BirthdayCafe, Goods  # 커스텀 User 모델
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.html import format_html
@@ -142,5 +142,15 @@ class VenueAdmin(admin.ModelAdmin):
         return "없음"
     business_license_link.short_description = '사업자등록증'
 
+class GoodsInline(admin.TabularInline):
+    model = Goods
+    extra = 1
 
-
+@admin.register(BirthdayCafe)
+class BirthdayCafeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'cafe_name', 'user', 'start_date', 'end_date', 'genre', 'star']  # 원하는 필드로 구성
+    search_fields = ['cafe_name', 'description']
+    list_filter = ['start_date', 'end_date', 'genre']
+    raw_id_fields = ['user', 'star']
+    inlines = [GoodsInline]
+   
