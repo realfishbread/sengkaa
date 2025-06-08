@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
-import { fetchGroupNamesByGenre } from '../../shared/api/fetchStarsByGroup';
+import { fetchGroupNamesByGenre, fetchMultiGenreGroups } from '../../shared/api/fetchStarsByGroup';
 import DictionaryDetail from './DictionaryDetail';
 import DictionaryForm from './DictionaryForm';
 import './DictionaryList.css';
@@ -23,9 +23,9 @@ const TAGS = [
 ];
 
 const GENRE_TAG_TO_ID = {
-  아이돌: 1,
+  아이돌: [1,6],
   '여자 아이돌': 1,
-  '남자 아이돌': 2,
+  '남자 아이돌': 6,
   스트리머: 2,
   게임: 3,
   웹툰: 4,
@@ -73,32 +73,38 @@ const DictionaryList = () => {
   }, []);
 
   useEffect(() => {
-    const loadStarGroups = async () => {
-      try {
+  const loadStarGroups = async () => {
+    try {
+      let res;
+
+      if (selectedTag === '아이돌') {
+        // ✅ 여자(1), 남자(6) 아이돌 그룹 전부 불러오기
+        res = await fetchMultiGenreGroups([1, 6]);
+      } else {
         const genreId = GENRE_TAG_TO_ID[selectedTag];
         if (!genreId) return;
-
-        const res = await fetchGroupNamesByGenre(genreId);
-        setStarGroups(res); // ['르세라핌', '뉴진스'...]
-
-        const dynamicCategoryKey = `${selectedTag}-category`; // 키도 유니크하게
-        const newCategory = {
-          [dynamicCategoryKey]: {
-            title: selectedTag,
-            items: res, // group 리스트
-          },
-        };
-
-        setCategories(newCategory); // 🔥 상태로 관리
-      } catch (err) {
-        console.error('스타 그룹 불러오기 실패 ❌', err);
+        res = await fetchGroupNamesByGenre(genreId);
       }
-    };
 
-    if (selectedTag !== '전체' && selectedTag !== '아이돌') {
-      loadStarGroups();
+      setStarGroups(res);
+
+      const dynamicCategoryKey = `${selectedTag}-category`;
+      const newCategory = {
+        [dynamicCategoryKey]: {
+          title: selectedTag,
+          items: res,
+        },
+      };
+      setCategories(newCategory);
+    } catch (err) {
+      console.error('스타 그룹 불러오기 실패 ❌', err);
     }
-  }, [selectedTag]);
+  };
+
+  if (selectedTag !== '전체') {
+    loadStarGroups();
+  }
+}, [selectedTag]);
 
   const filteredTerms = terms.filter((term) => {
     const tagMatch =

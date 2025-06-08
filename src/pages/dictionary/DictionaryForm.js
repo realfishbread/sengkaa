@@ -19,7 +19,7 @@ const MAIN_CATEGORIES = [
 ];
 
 const GENRE_TAG_TO_ID = {
-  아이돌: 1,
+  '아이돌': [1, 6], 
   '여자 아이돌': 1,
   '남자 아이돌': 6,
   스트리머: 2,
@@ -48,14 +48,25 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
       }
 
       try {
-        const genreId = GENRE_TAG_TO_ID[category];
-        if (!genreId) {
-          setSubCategories([]);
-          return;
+        let allGroups = [];
+
+        if (category === '아이돌') {
+          const [female, male] = await Promise.all([
+            fetchStarsByGenre(1),
+            fetchStarsByGenre(6),
+          ]);
+          const combined = [...female, ...male];
+          setSubCategories(combined);
+        } else {
+          const genreId = GENRE_TAG_TO_ID[category];
+          if (!genreId) {
+            setSubCategories([]);
+            return;
+          }
+          allGroups = await fetchStarsByGenre(genreId);
         }
 
-        const groups = await fetchStarsByGenre(genreId);
-        setSubCategories(groups);
+        setSubCategories(allGroups);
       } catch (err) {
         console.error('하위 카테고리 로딩 실패:', err);
         setSubCategories([]);
@@ -83,7 +94,8 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
     const payload = {
       term,
       category,
-      star_group: subCategory, // 세부 카테고리 추가
+      genre: GENRE_TAG_TO_ID[category], // ✅ 여기 숫자로 매핑
+      star_group: subCategory ? [subCategory] : [], // ✅ 배열로 감싸기
       definitions,
     };
 
@@ -110,6 +122,7 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
       navigate('/dictionary');
     } catch (err) {
       console.error('등록 실패 ❌', err);
+      console.error('🚨 서버 응답 메시지:', err?.response?.data); // 👈 이거 추가!
       alert('등록 중 오류가 발생했습니다');
     }
   };
@@ -252,16 +265,6 @@ function DictionaryForm({ onSave, onCancel, initialData = null }) {
             </div>
           ))}
       </section>
-
-      <p className="notice-text">
-        ✏️ <strong>작성 전 확인해주세요!</strong>
-        <br />
-        등록된 내용은 모든 사용자와 공유됩니다.
-        <br />
-        <strong>개인적인 의견보다는 객관적인 설명</strong>으로 작성해 주세요.
-        <br />
-        삭제가 필요한 경우 관리자에게 요청됩니다.
-      </p>
 
       {/* 저장/취소 */}
       <div className="form-buttons">

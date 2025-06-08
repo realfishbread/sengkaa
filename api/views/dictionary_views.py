@@ -54,7 +54,7 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
         exists = DictionaryTerm.objects.filter(term=term).exists()
         return Response({"exists": exists})
 
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], permission_classes=[AllowAny])
     def total_views(self, request):
         total = DictionaryTerm.objects.aggregate(total_views=Sum("views"))["total_views"] or 0
         return Response({"total_views": total})
@@ -62,7 +62,7 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    @action(detail=False, methods=["get"], url_path="grouped-by-star-group")
+    @action(detail=False, methods=["get"], url_path="grouped-by-star-group", permission_classes=[AllowAny])
     def grouped_by_star_group(self, request):
         terms = DictionaryTerm.objects.prefetch_related('star_group')
         grouped = defaultdict(list)
@@ -82,7 +82,7 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
 
         return Response(grouped)
     
-    @action(detail=False, methods=["get"], url_path="terms-by-genre")
+    @action(detail=False, methods=["get"], url_path="terms-by-genre", permission_classes=[AllowAny])
     def get_terms_by_genre(self, request):
         genre_id = request.query_params.get("genre_id")
         try:
@@ -93,19 +93,41 @@ class DictionaryTermViewSet(viewsets.ModelViewSet):
         except Genre.DoesNotExist:
             return Response({'error': '장르가 존재하지 않음'}, status=404)
         
-    @action(detail=False, methods=["get"], url_path="star-groups")
+    @action(detail=False, methods=["get"], url_path="star-groups", permission_classes=[AllowAny])
     def star_groups_by_genre(self, request):
         genre_id = request.query_params.get("genre_id")
         if not genre_id:
             return Response({"error": "genre_id is required"}, status=400)
 
-        terms = DictionaryTerm.objects.filter(genre__id=genre_id).prefetch_related('star_group')
+        # ✅ DictionaryTerm이 아닌 Star 모델에서 직접 필터링
+        stars = Star.objects.filter(genre__id=genre_id)
 
         star_group_names = set()
-        for term in terms:
-            for star in term.star_group.all():
-                if star.group:
-                    star_group_names.add(star.group)
+        for star in stars:
+            if star.group:
+                star_group_names.add(star.group)
+
+        return Response(sorted(star_group_names))
+    
+    @action(detail=False, methods=["get"], url_path="star-groups-multi", permission_classes=[AllowAny])
+    def star_groups_by_genres(self, request):
+        genre_ids_param = request.query_params.get('genre_ids')  # 예: "1,6"
+
+        if not genre_ids_param:
+            return Response({"error": "genre_ids is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            genre_ids = [int(i) for i in genre_ids_param.split(",")]
+        except ValueError:
+            return Response({"error": "Invalid genre_ids format"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # ✅ 여러 장르 ID로 스타 필터링
+        stars = Star.objects.filter(genre__id__in=genre_ids)
+
+        star_group_names = set()
+        for star in stars:
+            if star.group:
+                star_group_names.add(star.group)
 
         return Response(sorted(star_group_names))
     

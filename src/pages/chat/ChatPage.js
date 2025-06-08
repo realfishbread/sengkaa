@@ -346,7 +346,7 @@ const ChatPage = ({ profile_image }) => {
         open={askLogin}
         onClose={() => setAskLogin(false)} // 취소
         onConfirm={
-          () => navigate('/login', { state: { from: '/calendar' } }) // 로그인
+          () => navigate('/login', { state: { from: '/chat-list' } }) // 로그인
         }
       />
     </>
