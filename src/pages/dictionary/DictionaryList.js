@@ -1,7 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
-import { fetchGroupNamesByGenre, fetchMultiGenreGroups } from '../../shared/api/fetchStarsByGroup';
+import {
+  fetchGroupNamesByGenre,
+  fetchMultiGenreGroups,
+} from '../../shared/api/fetchStarsByGroup';
 import DictionaryDetail from './DictionaryDetail';
 import DictionaryForm from './DictionaryForm';
 import './DictionaryList.css';
@@ -20,15 +23,17 @@ const TAGS = [
   '스트리머',
   '게임',
   '웹툰',
+  '만화'
 ];
 
 const GENRE_TAG_TO_ID = {
-  아이돌: [1,6],
+  아이돌: [1, 6],
   '여자 아이돌': 1,
   '남자 아이돌': 6,
   스트리머: 2,
-  게임: 3,
+  게임: 5,
   웹툰: 4,
+  만화: 3
 };
 const DictionaryList = () => {
   const [selectedTag, setSelectedTag] = useState('전체');
@@ -73,46 +78,52 @@ const DictionaryList = () => {
   }, []);
 
   useEffect(() => {
-  const loadStarGroups = async () => {
-    try {
-      let res;
+    const loadStarGroups = async () => {
+      try {
+        let res;
 
-      if (selectedTag === '아이돌') {
-        // ✅ 여자(1), 남자(6) 아이돌 그룹 전부 불러오기
-        res = await fetchMultiGenreGroups([1, 6]);
-      } else {
-        const genreId = GENRE_TAG_TO_ID[selectedTag];
-        if (!genreId) return;
-        res = await fetchGroupNamesByGenre(genreId);
+        if (selectedTag === '아이돌') {
+          // ✅ 여자(1), 남자(6) 아이돌 그룹 전부 불러오기
+          res = await fetchMultiGenreGroups([1, 6]);
+        } else {
+          const genreId = GENRE_TAG_TO_ID[selectedTag];
+          if (!genreId) return;
+          res = await fetchGroupNamesByGenre(genreId);
+        }
+
+        setStarGroups(res);
+
+        const dynamicCategoryKey = `${selectedTag}-category`;
+        const newCategory = {
+          [dynamicCategoryKey]: {
+            title: selectedTag,
+            items: res,
+          },
+        };
+        setCategories(newCategory);
+      } catch (err) {
+        console.error('스타 그룹 불러오기 실패 ❌', err);
       }
+    };
 
-      setStarGroups(res);
-
-      const dynamicCategoryKey = `${selectedTag}-category`;
-      const newCategory = {
-        [dynamicCategoryKey]: {
-          title: selectedTag,
-          items: res,
-        },
-      };
-      setCategories(newCategory);
-    } catch (err) {
-      console.error('스타 그룹 불러오기 실패 ❌', err);
+    if (selectedTag !== '전체') {
+      loadStarGroups();
     }
-  };
-
-  if (selectedTag !== '전체') {
-    loadStarGroups();
-  }
-}, [selectedTag]);
+  }, [selectedTag]);
 
   const filteredTerms = terms.filter((term) => {
-    const tagMatch =
-      selectedTag === '전체' || term.genre_display === selectedTag;
+    const selectedIds = GENRE_TAG_TO_ID[selectedTag];
+    const genreIdList = Array.isArray(selectedIds)
+      ? selectedIds
+      : [selectedIds];
+
+    const tagMatch = selectedTag === '전체' || genreIdList.includes(term.genre); // ✅ genre 필드를 숫자로 비교
+
     const keywordMatch =
       term.term.includes(searchKeyword) ||
       term.definitions?.some((d) => d.definition.includes(searchKeyword)) ||
-      term.star_group?.some((star) => star.includes(searchKeyword)); // 🔥추가됨
+      term.star_group?.some((star) => star.includes(searchKeyword));
+
     return tagMatch && keywordMatch;
   });
 
@@ -315,21 +326,44 @@ const DictionaryList = () => {
       )}
 
       <div className="term-card-list">
-        {(activeGroupTerms || filteredTerms).map((term) => (
-          <div
-            key={term.id}
-            className="term-card"
-            onClick={() => handleTermClick(term)}
-          >
-            <div className="term-title">{term.term}</div>
-            <div className="term-definition">
-              {term.definitions?.[0]?.definition}
-            </div>
-            <div className="term-meta">
-              ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
-            </div>
-          </div>
-        ))}
+        {activeGroupTerms
+          ? // ⭐ 특정 그룹 클릭했을 때는 그 그룹에 해당하는 용어만 표시
+            activeGroupTerms.map((term) => (
+              <div
+                key={term.id}
+                className="term-card"
+                onClick={() => handleTermClick(term)}
+              >
+                <div className="term-title">{term.term}</div>
+                <div className="term-definition">
+                  {term.definitions?.[0]?.definition}
+                </div>
+                <div className="term-meta">
+                  ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
+                </div>
+              </div>
+            ))
+          : // ⭐ 그룹을 클릭하지 않은 상태면, 그룹 없는 용어 먼저, 그다음 그룹 있는 용어
+            [
+              ...filteredTerms.filter((t) => t.star_group.length === 0),
+              filteredTerms.filter((t) => t.star_group.length > 0),
+            ]
+              .flat()
+              .map((term) => (
+                <div
+                  key={term.id}
+                  className="term-card"
+                  onClick={() => handleTermClick(term)}
+                >
+                  <div className="term-title">{term.term}</div>
+                  <div className="term-definition">
+                    {term.definitions?.[0]?.definition}
+                  </div>
+                  <div className="term-meta">
+                    ❤️ {term.likes} &nbsp;&nbsp; 👁 {term.views}
+                  </div>
+                </div>
+              ))}
       </div>
 
       {selectedTerm && (
