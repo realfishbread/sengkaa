@@ -120,8 +120,8 @@ const BirthdayCafeRegister = () => {
     formData.append('detail_address', detailAddress);
     formData.append('start_date', startDate?.toISOString().slice(0, 10));
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
-    formData.append('genre', selectedStar?.genre || genre); 
-    formData.append('star_id', selectedStar?.id ?? null); // null이면 NULL로 전송됨
+    formData.append('genre', selectedStar?.genre || genreMap[genre]); // ← 숫자 보장
+    formData.append('star_id', selectedStar?.id ?? null); // 유지
     formData.append('latitude', null); // ✅ 위도 추가
     formData.append('longitude', null); // ✅ 경도 추가
 

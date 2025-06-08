@@ -31,7 +31,7 @@ def create_birthday_event(request):
         i += 1
 
      # ⭐️ Star 객체 직접 매핑
-    star_id = data.get('star')
+    star_id = data.get('star_id')
     star_obj = None
     if star_id:
         try:
@@ -46,15 +46,15 @@ def create_birthday_event(request):
         'detail_address': data.get('detail_address'),
         'start_date': data.get('start_date'),
         'end_date': data.get('end_date'),
+        'star_id': star_id,
         'genre': data.get('genre'),
-        'star': data.get('star'),
         'image': files.get('image'),
         'goods': goods,
     }
 
     serializer = BirthdayCafeDetailSerializer(data=payload, context={'request': request})
     if serializer.is_valid():
-        serializer.save(user=request.user,  star=star_obj)  # ✅ 핵심!
+        serializer.save(user=request.user)  
         return Response({"message": "이벤트 등록 성공", "data": serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
