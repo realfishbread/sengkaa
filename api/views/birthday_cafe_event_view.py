@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, parser_classes, permission_class
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
-from api.models import BirthdayCafe
+from api.models import BirthdayCafe, Star
 from api.serializers.birthday_cafe_serializer import BirthdayCafeDetailSerializer, BirthdayCafeListSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView, RetrieveAPIView
@@ -30,6 +30,15 @@ def create_birthday_event(request):
         })
         i += 1
 
+     # ⭐️ Star 객체 직접 매핑
+    star_id = data.get('star')
+    star_obj = None
+    if star_id:
+        try:
+            star_obj = Star.objects.get(id=star_id)
+        except Star.DoesNotExist:
+            return Response({'error': '해당 스타가 존재하지 않습니다.'}, status=400)
+
     payload = {
         'cafe_name': data.get('cafe_name'),
         'description': data.get('description'),
@@ -45,7 +54,7 @@ def create_birthday_event(request):
 
     serializer = BirthdayCafeDetailSerializer(data=payload, context={'request': request})
     if serializer.is_valid():
-        serializer.save(user=request.user)  # ✅ 핵심!
+        serializer.save(user=request.user,  star=star_obj)  # ✅ 핵심!
         return Response({"message": "이벤트 등록 성공", "data": serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

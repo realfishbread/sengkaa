@@ -28,6 +28,9 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     latitude = serializers.FloatField(required=False, allow_null=True)
     longitude = serializers.FloatField(required=False, allow_null=True)
     star = StarSerializer(read_only=True)
+    star_id = serializers.PrimaryKeyRelatedField(
+        queryset=Star.objects.all(), source='star', write_only=True
+    )
 
     class Meta:
         model = BirthdayCafe
