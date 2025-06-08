@@ -32,6 +32,7 @@ const BirthdayCafeDetailPage = () => {
         const response = await axios.get(
           `https://eventcafe.site/user/events/birthday-cafes/${id}/`
         );
+         console.log('받은 데이터:', response.data); // 🧪 디버깅
         setCafe(response.data);
         setIsLiked(response.data.is_liked);
         setLikeCount(response.data.like_count || 0);
