@@ -40,8 +40,8 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
         goods_data = validated_data.pop('goods', [])
         birthday_cafe = BirthdayCafe.objects.create(**validated_data)
 
-        for good in goods_data:
-            Goods.objects.create(birthday_cafe=birthday_cafe, **good)
+        for good_data in goods_data:
+            Goods.objects.create(event=birthday_cafe, **good_data)  # ✅ event로 연결
 
         return birthday_cafe
 
