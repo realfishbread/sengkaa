@@ -31,7 +31,7 @@ const BirthdayCafeRegister = () => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
 
-  const [selectedStar, setSelectedStar] = useState('');
+  const [selectedStar, setSelectedStar] = useState(null); // ✅ 초기값을 null로
 
   const [genre, setGenre] = useState('idol'); // 유저가 선택한 장르
   const [starList, setStarList] = useState([]); // 선택된 장르의 리스트만 담김
@@ -52,6 +52,12 @@ const BirthdayCafeRegister = () => {
       setAskLogin(true); // 모달 오픈
     }
   }, [user, navigate]);
+  useEffect(() => {
+  if (selectedStar) {
+    console.log('🌟 selectedStar가 선택됨:', selectedStar);
+    console.log('🌟 id:', selectedStar.id);
+  }
+}, [selectedStar]);
 
 
 
