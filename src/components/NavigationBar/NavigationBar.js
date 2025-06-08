@@ -1,4 +1,8 @@
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
+import SettingsIcon from '@mui/icons-material/Settings';
 import {
   AppBar,
   Avatar,
@@ -270,16 +274,37 @@ const NavigationBar = () => {
       {/* Drawer (사용자 프로필, 설정 등) */}
       <Drawer anchor="right" open={openDrawer} onClose={toggleDrawer(false)}>
         <Box
-          sx={{ width: 250, p: 2 }}
+          sx={{
+            width: 250,
+            height: '100%', // 전체 높이 확보
+            position: 'relative', // 하단 고정을 위해 기준 설정
+            p: 2,
+          }}
           role="presentation"
           onClick={toggleDrawer(false)}
           onKeyDown={toggleDrawer(false)}
         >
-          <Box sx={{ textAlign: 'center', mb: 2 }}>
+          {/* 🔹 상단 프로필 영역 */}
+          <Box
+            sx={{
+              textAlign: 'center',
+              mb: 2,
+              cursor: 'pointer',
+              transition: 'transform 0.15s ease-in-out',
+              '&:hover': {
+                transform: 'scale(1.02)',
+                opacity: 0.9,
+              },
+            }}
+          >
             <Avatar
               src={user?.profile_image || ''}
               alt={user?.nickname}
-              sx={{ width: 80, height: 80, margin: 'auto' }}
+              sx={{
+                width: 80,
+                height: 80,
+                margin: 'auto',
+              }}
               onClick={() => navigate(`/profile/${user?.nickname}`)}
             />
             <Typography variant="h6" sx={{ mt: 1 }}>
@@ -290,30 +315,48 @@ const NavigationBar = () => {
             </Typography>
           </Box>
 
-          <Divider sx={{ my: 2 }} />
-
+          {/* 🔹 일반 메뉴 (스크롤 가능하게 하고 싶으면 여기에 overflow 설정 가능) */}
           <List>
-            <ListItem button onClick={() => navigate('/settings')}>
-              <ListItemText primary="설정" />
-            </ListItem>
             <ListItem button onClick={() => navigate('/my-bookings')}>
+              <EventNoteIcon sx={{ minWidth: 40 }} />
               <ListItemText primary="내 예약 목록" />
             </ListItem>
             <ListItem button onClick={() => navigate('/favorite-events')}>
+              <FavoriteIcon sx={{ minWidth: 40 }} />
               <ListItemText primary="찜한 이벤트" />
             </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                setUser(null);
-                navigate('/');
-              }}
-            >
-              <ListItemText primary="로그아웃" />
-            </ListItem>
           </List>
+
+          {/* ✅ 하단 고정 메뉴 */}
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 20,
+              left: 0,
+              width: '100%',
+              px: 2,
+            }}
+          >
+            <Divider sx={{ mb: 1 }} />
+            <List>
+              <ListItem button onClick={() => navigate('/settings')}>
+                <SettingsIcon sx={{ minWidth: 40 }} />
+                <ListItemText primary="설정" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => {
+                  localStorage.removeItem('accessToken');
+                  localStorage.removeItem('refreshToken');
+                  setUser(null);
+                  navigate('/');
+                }}
+              >
+                <LogoutIcon sx={{ minWidth: 40 }} />
+                <ListItemText primary="로그아웃" />
+              </ListItem>
+            </List>
+          </Box>
         </Box>
       </Drawer>
 

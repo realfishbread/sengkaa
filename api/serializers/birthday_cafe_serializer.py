@@ -18,7 +18,7 @@ class GoodsSerializer(serializers.ModelSerializer):
 
 class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    goods = GoodsSerializer(many=True, read_only=True)  # related_name='goods'
+    goods = GoodsSerializer(many=True, read_only=False)  # related_name='goods'
     image = serializers.ImageField(required=False)  # ✅ write용 필드 추가
     image_url = serializers.SerializerMethodField()  # ✅ 조회용 필드 따로
     location = serializers.SerializerMethodField()
@@ -32,6 +32,15 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = BirthdayCafe
         fields ='__all__'
+
+    def create(self, validated_data):
+        goods_data = validated_data.pop('goods', [])
+        birthday_cafe = BirthdayCafe.objects.create(**validated_data)
+
+        for good in goods_data:
+            Goods.objects.create(birthday_cafe=birthday_cafe, **good)
+
+        return birthday_cafe
 
     def get_image_url(self, obj):
         request = self.context.get('request')

@@ -180,6 +180,60 @@ const BirthdayCafeDetailPage = () => {
             </Box>
           </Grid>
         </Grid>
+        {cafe.goods && cafe.goods.length > 0 && (
+          <Box mt={6}>
+            <Typography variant="h5" fontWeight="bold" gutterBottom>
+              🎁 현장 굿즈
+            </Typography>
+            <Typography variant="body2" color="text.secondary" mb={3}>
+              이벤트 현장에서 만날 수 있는 굿즈를 소개해요!
+            </Typography>
+            <Grid container spacing={2}>
+              {cafe.goods.map((item) => (
+                <Grid item xs={12} sm={6} md={4} key={item.id}>
+                  <Card
+                    sx={{
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      p: 2,
+                      borderRadius: 3,
+                      boxShadow: '0 2px 10px rgba(0,0,0,0.05)', // ✅ 부드러운 그림자
+                      transition: 'transform 0.2s',
+                      '&:hover': {
+                        transform: 'scale(1.02)', // ✅ 살짝 확대되는 효과
+                      },
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      image={item.image}
+                      alt={item.name}
+                      sx={{
+                        width: '100%',
+                        height: 160,
+                        objectFit: 'cover',
+                        borderRadius: 2,
+                      }}
+                    />
+                    <Box mt={2} textAlign="center">
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.description}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" mt={1}>
+                        💸 {item.price.toLocaleString()}원
+                      </Typography>
+                    </Box>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        )}
       </Box>
       <LoginConfirmDialog
         open={askLogin}
