@@ -9,7 +9,7 @@ import {
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from '../../components/common/CustomTextField';
 import FlexInputButton from '../../components/common/FlexInputButton';
@@ -22,6 +22,8 @@ import {
   titleStyle,
 } from '../../components/common/Styles';
 import axiosInstance from '../../shared/api/axiosInstance';
+import { UserContext } from '../../context/UserContext';
+import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
 
 const BirthdayCafeRegister = () => {
   const navigate = useNavigate(); // ✅ 훅 사용
@@ -39,9 +41,22 @@ const BirthdayCafeRegister = () => {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  
+
+  const {user} = useContext(UserContext)
+  const [askLogin, setAskLogin] = useState(false);
+    useEffect(() => {
+    // ⬅️ ③ 추가
+    if (!user) {
+      // loading 끝난 뒤에만 질문
+      setAskLogin(true); // 모달 오픈
+    }
+  }, [user, navigate]);
+
+
 
   const genreMap = {
-    idol: 1,
+    idol: '1,6',
     youtuber: 2,
     comic: 3,
     webtoon: 4,
@@ -49,8 +64,9 @@ const BirthdayCafeRegister = () => {
   };
 
   useEffect(() => {
+    const genreParam = genre === 'idol' ? '1,6' : genre;
     axiosInstance
-      .get(`/user/star/stars/?genre=${genreMap[genre]}`)
+      .get(`/user/star/stars/?genre=${genreParam}`)
       .then((res) => {
         setStarList(res.data);
       })
@@ -93,7 +109,7 @@ const BirthdayCafeRegister = () => {
 
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
-      navigate('/login'); // 홈에 감성 로그인 알림 띄우기
+      setAskLogin(true); // 모달 오픈
       return;
     }
 
@@ -104,7 +120,7 @@ const BirthdayCafeRegister = () => {
     formData.append('detail_address', detailAddress);
     formData.append('start_date', startDate?.toISOString().slice(0, 10));
     formData.append('end_date', endDate?.toISOString().slice(0, 10));
-    formData.append('genre', genreMap[genre]);  // ← 숫자로 바꿔서 전송
+    formData.append('genre', genre); 
     formData.append('star', selectedStar?.id ?? null); // null이면 NULL로 전송됨
     formData.append('latitude', null); // ✅ 위도 추가
     formData.append('longitude', null); // ✅ 경도 추가
@@ -189,6 +205,7 @@ const BirthdayCafeRegister = () => {
   };
 
   return (
+    <>
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={boxStyle}>
         <Typography sx={titleStyle}>이벤트 등록</Typography>
@@ -419,6 +436,14 @@ const BirthdayCafeRegister = () => {
         </form>
       </Box>
     </LocalizationProvider>
+    <LoginConfirmDialog
+        open={askLogin}
+        onClose={() => setAskLogin(false)} // 취소
+        onConfirm={
+          () => navigate('/login', { state: { from: '/register' } }) // 로그인
+        }
+      />
+    </>
   );
 };
 

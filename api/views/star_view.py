@@ -11,8 +11,8 @@ def get_star_list(request):
     if genre:
         try:
             # 숫자로 들어온 경우 (id 기반 필터링)
-            genre_id = int(genre)
-            stars = Star.objects.filter(genre_id=genre_id)
+            genre_ids = genre.split(',')  # <- 이렇게 받아서
+            stars = Star.objects.filter(genre__id__in=genre_ids)
         except ValueError:
             # 문자열로 들어온 경우 (장르 이름 기반 필터링)
             stars = Star.objects.filter(genre__name=genre)
