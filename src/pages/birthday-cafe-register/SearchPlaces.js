@@ -35,14 +35,12 @@ const SearchPlaces = () => {
   const navigate = useNavigate();
 
   const GENRE_MAP = {
-    아이돌: 'idol',
+    아이돌: 'idol,boy_idol', // ✅ 복수 genre
     유튜버: 'youtuber',
     웹툰: 'webtoon',
     게임: 'game',
     애니: 'anime',
   };
-
-  
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -134,7 +132,7 @@ const SearchPlaces = () => {
                   <Box className="event-card-header-icons">
                     {event.is_liked ? (
                       <FavoriteIcon
-                        sx={{ color: '#ff4081 !important' , cursor: 'pointer' }}
+                        sx={{ color: '#ff4081 !important', cursor: 'pointer' }}
                         onClick={(e) => handleLikeToggle(event.id, e)}
                       />
                     ) : (

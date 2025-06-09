@@ -341,3 +341,24 @@ def get_organizer_status(request):
         'status': '✅ 인증 완료' if user.organizer_verified else '🔒 인증 대기 중',
         'verified': user.organizer_verified
     })
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        if user.id != request.user.id:
+            return Response({'error': '본인만 탈퇴할 수 있습니다.'}, status=403)
+
+        # 소프트 삭제 처리
+        user.is_deleted = True
+        user.nickname = '탈퇴한 사용자'
+        user.email = f'deleted_{user.id}@deleted.com'  # 중복 방지
+        user.set_unusable_password()  # 로그인을 아예 막음
+        user.save()
+
+        return Response({'message': '회원 탈퇴 완료'}, status=200)
+
+    except User.DoesNotExist:
+        return Response({'error': '사용자 없음'}, status=404)

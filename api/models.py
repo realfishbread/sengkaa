@@ -52,6 +52,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)  # 🌟✨ bio 필드 추가!
     organizer_verified = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+
 
     # 🔥 문제 해결 핵심: related_name 수정
     groups = models.ManyToManyField(

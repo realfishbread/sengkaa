@@ -44,13 +44,26 @@ export const EventSearchApi = async ({
 };
 
 export const fetchPopularCafes = async () => {
-  const res = await axios.get(
-    'https://eventcafe.site/user/events/birthday-cafes/search/?star_genre=idol',
-    {
-      params: { sort: 'views' },
-    }
+  const [boyRes, girlRes] = await Promise.all([
+    axios.get('https://eventcafe.site/user/events/birthday-cafes/search/', {
+      params: { star_genre: 'boy_idol', sort: 'views' },
+    }),
+    axios.get('https://eventcafe.site/user/events/birthday-cafes/search/', {
+      params: { star_genre: 'idol', sort: 'views' },
+    }),
+  ]);
+
+  const merged = [...boyRes.data.results, ...girlRes.data.results];
+
+  // 중복 제거
+  const deduplicated = Array.from(
+    new Map(merged.map((item) => [item.id, item])).values()
   );
-  return res.data.results;
+
+  // ✅ view_count 기준 재정렬
+  const sorted = deduplicated.sort((a, b) => b.view_count - a.view_count);
+
+  return sorted;
 };
 
 export const fetchPopularGames = async () => {

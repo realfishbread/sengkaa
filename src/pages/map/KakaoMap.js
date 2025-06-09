@@ -1,5 +1,5 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import axios from 'axios'
 import './KakaoMap.css';
 const KakaoMap = () => {
   const [userLocation, setUserLocation] = useState({
@@ -101,7 +101,7 @@ const KakaoMap = () => {
         }
       });
     };
-  }, [userLocation.lat, userLocation.lng ]);
+  }, [userLocation.lat, userLocation.lng]);
 
   // ✅ 사용자 위치 갱신
   useEffect(() => {
@@ -145,54 +145,60 @@ const KakaoMap = () => {
   }, [fetchedPlaces]);
   const fetchCafes = async (lat, lng, map) => {
     try {
-      const response = await axios.get('https://eventcafe.site/user/events/nearby/', {
-        params: {
-          lat,
-          lng,
-          radius: 5,
-        },
-      });
+      const response = await axios.get(
+        'https://eventcafe.site/user/events/nearby/',
+        {
+          params: {
+            lat,
+            lng,
+            radius: 5,
+          },
+        }
+      );
 
       const data = response.data;
       console.log('✅ 받아온 이벤트 목록:', data);
-      setFetchedPlaces(data); // 🔥 저장
+      const today = new Date();
+      const validEvents = data.filter((event) => {
+        const endDate = new Date(event.end_date);
+        return endDate >= today;
+      });
+      setFetchedPlaces(validEvents); // 🔥 저장
 
-      setIsEmpty(data.length === 0);
-      if (data.length === 0) return;
+      setIsEmpty(validEvents.length === 0);
+      if (validEvents.length === 0) return;
 
       const bounds = new window.kakao.maps.LatLngBounds();
 
-      data.forEach((place, index) => {
+      validEvents.forEach((place, index) => {
         const latlng = new window.kakao.maps.LatLng(
           place.latitude,
           place.longitude
         );
-        bounds.extend(latlng); // 🔥 지도 경계에 포함
+        bounds.extend(latlng);
         displayMarker(
           {
             ...place,
             x: place.longitude,
             y: place.latitude,
-            image_url: `${place.image}`, // ✅ 여기 직접 넣기!
+            image_url: `${place.image}`,
           },
           getCategory(place),
           map
         );
-        // if (index === 0) {
-        //  setSelectedPlace({
-        //  ...place,
-        //  image_url:
-        //     place.image ||
-        //     'https://via.placeholder.com/400x200?text=No+Image',
-        //  });
-        //  }
       });
+      // if (index === 0) {
+      //  setSelectedPlace({
+      //  ...place,
+      //  image_url:
+      //     place.image ||
+      //     'https://via.placeholder.com/400x200?text=No+Image',
+      //  });
+      //  }
     } catch (e) {
       console.error('이벤트 불러오기 실패', e);
     }
   };
-
-  
 
   // ✅ 마커 출력 함수 (initMap 바깥으로 분리)
   const displayMarker = (place, category, map) => {
@@ -288,7 +294,9 @@ const KakaoMap = () => {
       {isEmpty && (
         <div className="no-events-box">
           <p>
-            <span role="img" aria-label="info">ℹ️</span>
+            <span role="img" aria-label="info">
+              ℹ️
+            </span>
             현재 위치에서 5km 이내에 등록된 이벤트가 없습니다
           </p>
         </div>

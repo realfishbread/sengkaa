@@ -48,6 +48,12 @@ class CustomUserAdmin(BaseUserAdmin):
         }),
     )
 
+    def delete_model(self, request, obj):
+        obj.is_deleted = True
+        obj.nickname = "deleted_user"
+        obj.email = f"deleted_{obj.id}@deleted.com"
+        obj.save()
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'user', 'is_approved', 'created_at']

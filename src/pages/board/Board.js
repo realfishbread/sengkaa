@@ -38,23 +38,30 @@ const Board = () => {
   const [askLogin, setAskLogin] = useState(false);
   const navigate = useNavigate();
 
+  const getDisplayNickname = (nickname) => {
+    return nickname === '탈퇴한 사용자' || nickname === 'deleted_user'
+      ? '탈퇴한 사용자'
+      : nickname;
+  };
+
   useEffect(() => {
-  const savedUser = JSON.parse(localStorage.getItem('userInfo'));
+    const savedUser = JSON.parse(localStorage.getItem('userInfo'));
 
-  if (savedUser) {
-    // ✅ 서버에 토큰 유효성 검증 요청 보내기 (예: /auth/verify/)
-    axiosInstance.get('/user/auth/verify/')
-      .then(() => {
-        setUser(savedUser); // 유효하면 로그인 유지
-      })
-      .catch(() => {
-        localStorage.removeItem('userInfo'); // 무효하면 삭제
-        setUser(null);
-      });
-  }
+    if (savedUser) {
+      // ✅ 서버에 토큰 유효성 검증 요청 보내기 (예: /auth/verify/)
+      axiosInstance
+        .get('/user/auth/verify/')
+        .then(() => {
+          setUser(savedUser); // 유효하면 로그인 유지
+        })
+        .catch(() => {
+          localStorage.removeItem('userInfo'); // 무효하면 삭제
+          setUser(null);
+        });
+    }
 
-  fetchPosts('all');
-}, []);
+    fetchPosts('all');
+  }, []);
   const fetchPosts = (type, page = 1) => {
     setFilter(type);
     setCurrentPage(page);
@@ -245,16 +252,24 @@ const Board = () => {
                     src={post.profile_image}
                     alt={post.nickname}
                     sx={{ cursor: 'pointer' }}
-                    onClick={() => navigate(`/profile/${post.nickname}`)}
+                    onClick={() => {
+                      if (post.nickname !== '탈퇴한 사용자') {
+                        navigate(`/profile/${post.nickname}`);
+                      }
+                    }}
                   />
                   <Box>
                     <Typography
                       variant="subtitle2"
                       fontWeight="bold"
                       sx={{ cursor: 'pointer' }}
-                      onClick={() => navigate(`/profile/${post.nickname}`)}
+                      onClick={() => {
+                        if (post.nickname !== '탈퇴한 사용자') {
+                          navigate(`/profile/${post.nickname}`);
+                        }
+                      }}
                     >
-                      {post.nickname}
+                      {getDisplayNickname(post.nickname)}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       {new Date(post.created_at).toLocaleString()}
@@ -440,7 +455,7 @@ const Board = () => {
                                     navigate(`/profile/${reply.user.nickname}`)
                                   }
                                 >
-                                  {reply.user.nickname}
+                                  {getDisplayNickname(reply.user.nickname)}
                                 </span>{' '}
                                 ({new Date(reply.created_at).toLocaleString()}):{' '}
                                 {reply.content}

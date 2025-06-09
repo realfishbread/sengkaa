@@ -90,7 +90,8 @@ class BirthdayCafeSearchAPIView(ListAPIView):
             queryset = queryset.filter(star__id=star_id)
 
         if star_genre:
-            queryset = queryset.filter(star__genre__name__iexact=star_genre)  # ⭐️ 장르 이름으로 필터
+            genre_list = [g.strip() for g in star_genre.split(',')]
+            queryset = queryset.filter(star__genre__name__in=genre_list)  # ⭐️ 장르 이름으로 필터
 
         if start_date:
             queryset = queryset.filter(start_date__gte=start_date)
