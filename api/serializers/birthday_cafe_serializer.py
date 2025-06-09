@@ -24,7 +24,6 @@ class BirthdayCafeDetailSerializer(serializers.ModelSerializer):
     location = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
-    goods = GoodsSerializer(many=True, read_only=True)
     latitude = serializers.FloatField(required=False, allow_null=True)
     longitude = serializers.FloatField(required=False, allow_null=True)
     star = StarSerializer(read_only=True)
