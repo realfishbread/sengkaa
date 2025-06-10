@@ -26,6 +26,15 @@ const BirthdayCafeDetailPage = () => {
   const navigate = useNavigate();
   const [askLogin, setAskLogin] = useState(false);
 
+  const GENRE_ID_MAP = {
+  '1': 'idol',
+  '2': 'youtuber',
+  '3': 'anime',
+  '4': 'webtoon',
+  '5': 'game',
+  '6': 'idol', // boy_idol 포함
+};
+
   useEffect(() => {
     const fetchCafeDetail = async () => {
       try {
@@ -139,7 +148,7 @@ const BirthdayCafeDetailPage = () => {
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <Typography variant="subtitle1">장르</Typography>
-                  <Chip label={cafe.genre} />
+                  <Chip label={GENRE_ID_MAP[cafe.genre] || cafe.genre} />
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="subtitle1">조회수</Typography>

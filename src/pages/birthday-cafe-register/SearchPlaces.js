@@ -42,6 +42,15 @@ const SearchPlaces = () => {
     애니: 'anime',
   };
 
+  const GENRE_ID_MAP = {
+    1: 'idol',
+    2: 'youtuber',
+    3: 'anime',
+    4: 'webtoon',
+    5: 'game',
+    6: 'idol', // boy_idol 포함
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -172,7 +181,12 @@ const SearchPlaces = () => {
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {event.genre && <Chip label={event.genre} size="small" />}
+                  {event.genre && (
+                    <Chip
+                      label={GENRE_ID_MAP[event.genre] || event.genre}
+                      size="small"
+                    />
+                  )}
                   {event.tags?.map((tag, i) => (
                     <Chip key={i} label={tag} size="small" />
                   ))}

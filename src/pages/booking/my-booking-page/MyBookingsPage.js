@@ -15,6 +15,33 @@ const MyBookingsPage = () => {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
 
+  const groupConsecutiveDates = (dates) => {
+  if (!Array.isArray(dates)) return [];
+
+  // 날짜 정렬
+  const sorted = [...dates].sort();
+  const result = [];
+  let temp = [sorted[0]];
+
+  for (let i = 1; i < sorted.length; i++) {
+    const prev = new Date(sorted[i - 1]);
+    const curr = new Date(sorted[i]);
+    const diff = (curr - prev) / (1000 * 60 * 60 * 24);
+
+    if (diff === 1) {
+      temp.push(sorted[i]);
+    } else {
+      result.push([...temp]);
+      temp = [sorted[i]];
+    }
+  }
+  result.push(temp); // 마지막 그룹 추가
+  return result;
+};
+
+const formatDateRange = (group) =>
+  group.length === 1 ? group[0] : `${group[0]} ~ ${group[group.length - 1]}`;
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
