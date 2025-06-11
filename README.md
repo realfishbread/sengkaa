@@ -10,7 +10,7 @@
 >앱 프로젝트 리포지토리:
 [링크](https://github.com/JYJ-0605/eventcafeapp)   
 
-- FE web, Devops, BE: realfishbread
+- FE web, app Devops, BE: realfishbread
 - FE web, app, Design: JYJ-0605
 
 
@@ -24,5 +24,5 @@
 
 | 이름 | 담당 역할 및 구현 사항 |
 |------|------------------------|
-| **최윤희 (realfishbread)L** | - 웹 프론트엔드 주요 기능 구현 (React)<br> - Django 기반 백엔드 구축 및 API 개발<br> - Redis 기반 인증 및 토큰 시스템 구현<br> - EC2 및 Nginx를 활용한 배포 설정<br> - CI/CD 자동 배포 구성 (GitHub Actions) |
-| **주예진 (JYJ-0605)** | - 앱 프론트엔드 (React Native) 구현<br> - 웹 프론트엔드 일부 서브 기능 및 디자인<br> - UI/UX 디자인 설계 |
+| **최윤희 (realfishbread)L** | - 웹, 앱 프론트엔드 주요 기능 구현 (React)<br> - Django 기반 백엔드 구축 및 API 개발<br> - Redis 기반 인증 및 토큰 시스템 구현<br> - EC2 및 Nginx를 활용한 배포 설정<br> - CI/CD 자동 배포 구성 (GitHub Actions) |
+| **주예진 (JYJ-0605)** | - 앱 프론트엔드 (React Native) UI UX 구현<br> - 웹 프론트엔드 서브 기능 및 디자인<br> - UI/UX 디자인 설계 총괄 |
