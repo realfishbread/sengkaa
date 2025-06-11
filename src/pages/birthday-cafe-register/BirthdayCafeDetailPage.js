@@ -27,13 +27,13 @@ const BirthdayCafeDetailPage = () => {
   const [askLogin, setAskLogin] = useState(false);
 
   const GENRE_ID_MAP = {
-  '1': 'idol',
-  '2': 'youtuber',
-  '3': 'anime',
-  '4': 'webtoon',
-  '5': 'game',
-  '6': 'idol', // boy_idol 포함
-};
+    1: 'idol',
+    2: 'youtuber',
+    3: 'anime',
+    4: 'webtoon',
+    5: 'game',
+    6: 'idol', // boy_idol 포함
+  };
 
   useEffect(() => {
     const fetchCafeDetail = async () => {
@@ -41,7 +41,7 @@ const BirthdayCafeDetailPage = () => {
         const response = await axios.get(
           `https://eventcafe.site/user/events/birthday-cafes/${id}/`
         );
-         console.log('받은 데이터:', response.data); // 🧪 디버깅
+        console.log('받은 데이터:', response.data); // 🧪 디버깅
         setCafe(response.data);
         setIsLiked(response.data.is_liked);
         setLikeCount(response.data.like_count || 0);
@@ -222,8 +222,9 @@ const BirthdayCafeDetailPage = () => {
                       alt={item.name}
                       sx={{
                         width: '100%',
-                        height: 160,
-                        objectFit: 'cover',
+                        height: 'auto', // ✅ 자동 높이
+                        maxHeight: 300, // 너무 긴 건 제한
+                        objectFit: 'contain', // ✅ 이미지 비율 유지
                         borderRadius: 2,
                       }}
                     />

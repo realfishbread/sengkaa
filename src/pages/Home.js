@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
+import Spacer from '../components/common/Spacer';
 import { fetchPopularVenues } from '../pages/venue/find-cafes/VenueSearchApi';
 import '../styles/App.css';
 import {
@@ -56,7 +57,6 @@ const NextArrow = ({ onClick }) => (
 
 const SectionTitle = ({ title, category }) => {
   const navigate = useNavigate();
-  
 
   const handleMoreClick = (category) => {
     if (category === 'venue') {
@@ -277,6 +277,7 @@ const Home = () => {
                     });
                   }}
                 />
+                <br />
                 <Typography variant="body2" sx={{ textAlign: 'center', mt: 1 }}>
                   {slide.caption}
                 </Typography>
@@ -285,9 +286,9 @@ const Home = () => {
           </Slider>
         </div>
       </main>
-      <br />
+      {/* 밑에 br 대신에 씁니다 */}
+      <Spacer size={6} />
       <Box className="section">
-        <br />
         <br />
 
         <section className="popular-events">
@@ -377,8 +378,7 @@ const Home = () => {
           </div>
         </section>
 
-        <br />
-        <br />
+        <Spacer size={6} />
 
         <section className="popular-games">
           <SectionTitle title="🔥 인기 게임 콜라보" category="game" />
@@ -430,8 +430,7 @@ const Home = () => {
           </div>
         </section>
 
-        <br />
-        <br />
+        <Spacer size={6} />
 
         <section className="reservable-venues">
           <SectionTitle title="대관 가능한 장소" category="venue" />
@@ -453,8 +452,7 @@ const Home = () => {
             </Slider>
           </div>
         </section>
-        <br />
-        <br />
+        <Spacer size={6} />
       </Box>
     </div>
   );

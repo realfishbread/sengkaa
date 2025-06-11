@@ -371,6 +371,17 @@ body {
   padding: 0 10px; /* 다른 섹션보다 좁은 여백 */
 }
 
-.section{
-    background-color: #fafafa;
+.section {
+  background-color: #fafafa;
+}
+
+/* 기본 점 색상 */
+.slick-dots li button:before {
+  color: #888 !important; /* 원하는 기본 색상 */
+  opacity: 1;
+}
+
+/* 현재 활성화된 점 색상 */
+.slick-dots li.slick-active button:before {
+  color: #1976d2 !important; /* 원하는 강조 색상 (예: 파란색) */
 }

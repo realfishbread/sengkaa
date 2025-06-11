@@ -32,7 +32,10 @@ const SearchPlaces = () => {
   const [events, setEvents] = useState([]);
   const [askLogin, setAskLogin] = useState(false);
   const { user } = useContext(UserContext);
+  const [isWide, setIsWide] = useState(false);
   const navigate = useNavigate();
+
+  
 
   const GENRE_MAP = {
     아이돌: 'idol,boy_idol', // ✅ 복수 genre
@@ -71,6 +74,8 @@ const SearchPlaces = () => {
 
     fetchEvents();
   }, [keyword, startDate, endDate, genreLabel, sort]);
+
+  
 
   const today = new Date();
 
@@ -117,6 +122,7 @@ const SearchPlaces = () => {
       );
     }
 
+ 
     return list.map((event) => (
       <Grid item xs={12} sm={6} md={6} key={event.id}>
         <Card
