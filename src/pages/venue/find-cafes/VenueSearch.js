@@ -9,6 +9,7 @@ import {
   Grid,
   TextField,
   ToggleButtonGroup,
+  ToggleButton,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -70,7 +71,7 @@ const VenueSearch = () => {
       </Typography>
 
       {/* 필터 영역 */}
-      <Box mb={4}>
+      <Box mb={4} mt ={3}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <TextField
@@ -102,16 +103,20 @@ const VenueSearch = () => {
           </Grid>
           <Grid item xs={12}>
             {/* 🔹 커스텀 카테고리 버튼 */}
-            <Box>
+            <Box >
+              <ToggleButtonGroup sx={{gap:1}}>
               {['카페', '음식점', '전시회', '포토부스', '파티룸'].map((type) => (
-                <CustomToggleButton
+                <ToggleButton
                   key={type}
                   selected={venueType === type}
                   onClick={() => handleVenueTypeChange(type)}
+                  className='btn-base'
+                  
                 >
                   {type}
-                </CustomToggleButton>
+                </ToggleButton>
               ))}
+              </ToggleButtonGroup>
             </Box>
           </Grid>
         </Grid>

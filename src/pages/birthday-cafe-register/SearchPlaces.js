@@ -8,7 +8,11 @@ import {
   CardContent,
   Chip,
   Container,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -34,8 +38,6 @@ const SearchPlaces = () => {
   const { user } = useContext(UserContext);
   const [isWide, setIsWide] = useState(false);
   const navigate = useNavigate();
-
-  
 
   const GENRE_MAP = {
     아이돌: 'idol,boy_idol', // ✅ 복수 genre
@@ -74,8 +76,6 @@ const SearchPlaces = () => {
 
     fetchEvents();
   }, [keyword, startDate, endDate, genreLabel, sort]);
-
-  
 
   const today = new Date();
 
@@ -122,7 +122,6 @@ const SearchPlaces = () => {
       );
     }
 
- 
     return list.map((event) => (
       <Grid item xs={12} sm={6} md={6} key={event.id}>
         <Card
@@ -215,7 +214,7 @@ const SearchPlaces = () => {
         {/* 필터 */}
         <Box mb={4}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={4} mt={3}>
               <TextField
                 label="이벤트명 검색"
                 value={keyword}
@@ -223,7 +222,7 @@ const SearchPlaces = () => {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid item xs={6} sm={4} mt={3}>
               <TextField
                 label="시작일"
                 type="date"
@@ -233,7 +232,7 @@ const SearchPlaces = () => {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid item xs={6} sm={4} mt={3}>
               <TextField
                 label="종료일"
                 type="date"
@@ -246,14 +245,19 @@ const SearchPlaces = () => {
           </Grid>
 
           {/* 장르 필터 */}
-          <Box mt={3}>
+          <Box
+            mt={3}
+            display="flex"
+            justifyContent="space-between" // ✅ 왼쪽: 필터명 / 오른쪽: 정렬 선택
+            alignItems="center"
+            flexWrap="wrap"
+          >
             <ToggleButtonGroup
               value={genreLabel}
               exclusive
               onChange={(e, newLabel) => setGenreLabel(newLabel || '')}
               sx={{
                 '& .MuiToggleButton-root': {
-                  border: 'none',
                   borderRadius: '20px',
                   minWidth: '60px',
                   fontWeight: 'bold',
@@ -272,46 +276,36 @@ const SearchPlaces = () => {
               }}
             >
               {Object.keys(GENRE_MAP).map((label) => (
-                <ToggleButton key={label} value={label}>
+                <ToggleButton key={label} value={label} className="btn-base">
                   {label}
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>
-          </Box>
-        </Box>
 
-        {/* 정렬 필터 */}
-        <Box mt={1}>
-          <ToggleButtonGroup
-            value={sort}
-            exclusive
-            onChange={(e, newSort) => setSort(newSort || '')}
-            sx={{
-              '& .MuiToggleButton-root': {
-                border: '1px solid #ddd',
-                borderRadius: '20px',
-                fontWeight: 'bold',
-                px: 2,
-                py: 0.5,
-                color: '#333',
-              },
-              '& .Mui-selected': {
-                backgroundColor: '#dff0ff',
-                color: '#000',
-                borderColor: '#3399ff',
-              },
-            }}
-          >
-            <ToggleButton value="latest">최신순</ToggleButton>
-            <ToggleButton value="likes">좋아요순</ToggleButton>
-            <ToggleButton value="views">조회수순</ToggleButton>
-          </ToggleButtonGroup>
+            {/* 정렬 필터 */}
+
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <InputLabel id="sort-label">정렬 기준</InputLabel>
+              <Select
+                labelId="sort-label"
+                value={sort}
+                label="정렬 기준"
+                onChange={(e) => setSort(e.target.value)}
+              >
+                <MenuItem value="">선택 안함</MenuItem>
+                <MenuItem value="latest">최신순</MenuItem>
+                <MenuItem value="likes">좋아요순</MenuItem>
+                <MenuItem value="views">조회수순</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Box>
 
         {/* 진행중 */}
         <Typography variant="h5" mt={5} mb={1} fontWeight="bold">
           🎉 지금 진행 중인 이벤트
         </Typography>
+        <br />
         <Grid container spacing={3}>
           {renderEventCards(ongoingEvents)}
         </Grid>
@@ -320,6 +314,7 @@ const SearchPlaces = () => {
         <Typography variant="h5" mt={5} mb={1} fontWeight="bold">
           🕒 다가오는 이벤트
         </Typography>
+        <br />
         <Grid container spacing={3}>
           {renderEventCards(upcomingEvents)}
         </Grid>
@@ -328,6 +323,7 @@ const SearchPlaces = () => {
         <Typography variant="h5" mt={5} mb={1} fontWeight="bold">
           ⏳ 지난 이벤트
         </Typography>
+        <br />
         <Grid container spacing={3}>
           {renderEventCards(pastEvents)}
         </Grid>

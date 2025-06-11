@@ -11,7 +11,9 @@ from api.views.auth_views import (
     reset_password,
     check_nickname,
     verify_token,
-    apply_for_organizer
+    apply_for_organizer,
+    get_organizer_status,
+    delete_user
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,5 +31,7 @@ urlpatterns = [
     path('check-nickname/', check_nickname, name="check_nickname"),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('verify/', verify_token, name='verify_token'),
-    path('auth/apply-organizer/', apply_for_organizer, name='apply_for_organizer'),
+    path('apply-organizer/', apply_for_organizer, name='apply_for_organizer'),
+    path('status-for-org/', get_organizer_status, name='get_organizer_status'),
+    path('delete-user/', delete_user, name='delete_user'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
