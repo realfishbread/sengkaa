@@ -385,3 +385,28 @@ body {
 .slick-dots li.slick-active button:before {
   color: #1976d2 !important; /* 원하는 강조 색상 (예: 파란색) */
 }
+
+@media (max-width: 768px) {
+  .popular-events .cafe-card,
+  .popular-streamers .cafe-card,
+  .popular-games .cafe-card,
+  .reservable-venues .cafe-card {
+    min-width: 160px !important;
+    max-width: 160px !important;
+  }
+
+  .popular-events .cafe-card img,
+  .popular-streamers .cafe-card img {
+    width: 160px;
+    height: 240px;
+  }
+
+  .popular-games .cafe-card img {
+    width: 200px;
+    height: 130px;
+  }
+
+  .reservable-venues .cafe-card {
+    width: 220px;
+  }
+}
