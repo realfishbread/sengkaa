@@ -73,7 +73,7 @@ const VenueSearch = () => {
       {/* 필터 영역 */}
       <Box mb={4} mt ={3}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} mt={3}>
             <TextField
               label="장소명 검색"
               value={keyword}
@@ -81,7 +81,7 @@ const VenueSearch = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6} sm={4}>
+          <Grid item xs={6} sm={4} mt={3}>
             <TextField
               label="이용 시작일"
               type="date"
@@ -91,7 +91,7 @@ const VenueSearch = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6} sm={4}>
+          <Grid item xs={6} sm={4} mt={3}>
             <TextField
               label="이용 종료일"
               type="date"

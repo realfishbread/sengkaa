@@ -218,7 +218,7 @@ const SearchPlaces = () => {
         </Typography>
 
         {/* 필터 */}
-        <Box mb={4}>
+        <Box mb={4} mt ={3}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4} mt={3}>
               <TextField
@@ -252,7 +252,7 @@ const SearchPlaces = () => {
 
           {/* 장르 필터 */}
           <Box
-            mt={3}
+            mt={2}
             display="flex"
             justifyContent="space-between" // ✅ 왼쪽: 필터명 / 오른쪽: 정렬 선택
             alignItems="center"
