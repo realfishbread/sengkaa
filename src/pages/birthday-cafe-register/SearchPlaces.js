@@ -78,13 +78,19 @@ const SearchPlaces = () => {
   }, [keyword, startDate, endDate, genreLabel, sort]);
 
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const { upcomingEvents, ongoingEvents, pastEvents } = useMemo(() => {
-    const parsed = events.map((e) => ({
-      ...e,
-      start_date_obj: new Date(e.start_date),
-      end_date_obj: new Date(e.end_date),
-    }));
+    const parsed = events.map((e) => {
+      const start = new Date(e.start_date);
+      const end = new Date(e.end_date);
+      end.setHours(23, 59, 59, 999); // 👉 끝나는 날도 포함되게 설정
+      return {
+        ...e,
+        start_date_obj: start,
+        end_date_obj: end,
+      };
+    });
 
     return {
       upcomingEvents: parsed.filter((e) => e.start_date_obj > today),
