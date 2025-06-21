@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../shared/api/axiosInstance';
+import AdBanner from '../../components/common/AdComponent';
 
 const BirthdayCafeDetailPage = () => {
   const { id } = useParams();
@@ -190,6 +191,7 @@ const BirthdayCafeDetailPage = () => {
             </Box>
           </Grid>
         </Grid>
+        <AdBanner />
         {cafe.goods && cafe.goods.length > 0 && (
           <Box mt={6}>
             <Typography variant="h5" fontWeight="bold" gutterBottom>
