@@ -24,6 +24,7 @@ import {
 import axiosInstance from '../../shared/api/axiosInstance';
 import { UserContext } from '../../context/UserContext';
 import LoginConfirmDialog from '../../components/common/LoginConfirmDialog';
+import {fetchGroupNamesByGenre} from '../../shared/api/fetchStarsByGroup';
 
 const BirthdayCafeRegister = () => {
   const navigate = useNavigate(); // ✅ 훅 사용
@@ -71,6 +72,7 @@ const BirthdayCafeRegister = () => {
 
   useEffect(() => {
     const genreParam = genre === 'idol' ? '1,6' : genre;
+    fetchGroupNamesByGenre(genreParam);
     axiosInstance
       .get(`/user/star/stars/?genre=${genreParam}`)
       .then((res) => {

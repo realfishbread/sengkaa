@@ -30,7 +30,6 @@ def stars_by_genre(request):
     return Response(list(stars))
 
 
-# views.py
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def star_groups_by_genre(request):
@@ -38,11 +37,18 @@ def star_groups_by_genre(request):
     if not genre_id:
         return Response({"error": "genre_id is required"}, status=400)
 
+    # 쉼표가 있든 없든 안전하게 리스트화
+    genre_ids = [gid.strip() for gid in genre_id.split(',') if gid.strip().isdigit()]
+
+    if not genre_ids:
+        return Response({"error": "No valid genre_id"}, status=400)
+
     group_names = (
-        Star.objects.filter(genre_id=genre_id)
+        Star.objects.filter(genre__id__in=genre_ids)
         .exclude(group__isnull=True)
         .exclude(group__exact="")
         .values_list("group", flat=True)
         .distinct()
     )
+
     return Response(sorted(group_names))
