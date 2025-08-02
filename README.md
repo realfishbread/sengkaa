@@ -17,8 +17,6 @@
 
 ---
 
->앱 프로젝트 상세 진행 노션:
-[링크](https://www.notion.so/1f3cd9738881816294cbcbde78bede66) 
 
 >앱 프로젝트 리포지토리:
 [링크](https://github.com/JYJ-0605/eventcafeapp)   
