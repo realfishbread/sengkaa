@@ -3,11 +3,15 @@ certifi==2025.1.31
 channels==4.2.2
 channels_redis==4.2.1
 charset-normalizer==3.4.1
+cryptography==49.0.0
 Django==4.2.20
 django-cors-headers==4.7.0
 django-extensions==3.2.3
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.5.0
+django-storages==1.14.4
+boto3==1.35.99
+python-dotenv==1.0.1
 idna==3.10
 msgpack==1.1.0
 mysqlclient==2.2.7

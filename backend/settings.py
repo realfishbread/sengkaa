@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 
 
@@ -19,20 +20,16 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 이미지 업로드 경로
-MEDIA_URL  = "/media/"
+# DJANGO_ENV=dev(기본) 또는 prod → .env.dev / .env.prod 로드
+DJANGO_ENV = os.environ.get('DJANGO_ENV', 'dev')
+load_dotenv(BASE_DIR / f'.env.{DJANGO_ENV}')
+
+
+MEDIA_URL  = "/media/" # 이미지 업로드 경로
 MEDIA_ROOT = BASE_DIR / "media"   # BASE_DIR은 settings 맨 위 이미 있음
+SECRET_KEY = os.environ.get('SECRET_KEY') # django 암호화용 키
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%%j)l=t7e*z2&(h^)6i(sdp8hhd&931fhuqh@#qk7e501yo64i'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = os.environ.get('DEBUG', 'True') == 'True' # 배포시엔 꺼야한다
 ALLOWED_HOSTS = ["eventcafe.site", "www.eventcafe.site", "127.0.0.1", "localhost"]
 
 
@@ -42,6 +39,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+
 
 
 # Application definition
@@ -56,7 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',  # React와 연결할 때 필요
     'api',          # 생성한 앱 추가
-    'django_extensions',  # ✅ django-extensions 추가
+    'django_extensions',  # django-extensions 추가
     'redis',
     "channels",
     "chat",  # 👈 WebSocket app
@@ -94,8 +93,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
-ASGI_APPLICATION = 'backend.asgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application' # 일반 http는 wsgi
+ASGI_APPLICATION = 'backend.asgi.application' # websocket은 asgi
 
 CHANNEL_LAYERS = {
     "default": {
@@ -109,18 +108,16 @@ CHANNEL_LAYERS = {
 }
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 import pymysql
 pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eventcafe',
-        'USER': 'eventcafe',
-        'PASSWORD': 'eventcafe123',
-        'HOST': 'eventcafee.c76iaa8ycok0.ap-northeast-2.rds.amazonaws.com',
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'connect_timeout': 600,
@@ -186,8 +183,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'eventcafe649@gmail.com'         # 여기 사용하고 싶은 Gmail 주소
-EMAIL_HOST_PASSWORD = 'igxcdrfdjmylywtb'   # Gmail 앱 비밀번호
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')         # 여기 사용하고 싶은 Gmail 주소
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')   # Gmail 앱 비밀번호
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
@@ -234,23 +231,21 @@ if IS_APP:
 else:
     KAKAO_REDIRECT_URI = "https://eventcafe.site/user/social/oauth/kakao/callback"
     
-KAKAO_REST_API_KEY="4083ddda8b18709f62bb857f2c52f127"
+KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY')
 
 AUTH_USER_MODEL = 'api.User'
 
-TOSS_SECRET_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6'
+TOSS_SECRET_KEY = os.environ.get('TOSS_SECRET_KEY')
 
-TOSS_CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'
+TOSS_CLIENT_KEY = os.environ.get('TOSS_CLIENT_KEY')
 
 
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-import os
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'eventcafe'
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'eventcafe')
+AWS_LOCATION = os.environ.get('AWS_LOCATION', 'media/eventcafe')  # 버킷 내 실제 파일 경로 (media/eventcafe/banners/... 등)
 AWS_S3_REGION_NAME = 'ap-northeast-2'  # 서울이면 이거
 AWS_QUERYSTRING_AUTH = False  # signed URL 안 쓰는 경우
 AWS_DEFAULT_ACL = None
