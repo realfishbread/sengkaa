@@ -40,9 +40,9 @@ jobs:
 
      
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5   # also bump v3 → v5, v3 is outdated
         with:
-          python-version: 3.9.21 # Django 지원 버전
+          python-version: "3.11"  # Django 4.2 supports 3.8–3.12
 
       - name: Install Django dependencies
         run: |
