@@ -1,7 +1,9 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+
 import Layout from './Layout';
+
 import RequestCodePage from './pages/auth/ForgotPassword/RequestCodePage';
 import ResetPasswordPage from './pages/auth/ForgotPassword/ResetPasswordPage';
 import VerifyCodePage from './pages/auth/ForgotPassword/VerifyCodePage';
@@ -33,10 +35,9 @@ import StarDetailPage from './pages/star/StarDetailPage';
 import VenueSearch from './pages/venue/find-cafes/VenueSearch';
 import RegisterPlaces from './pages/venue/RegisterPlaces/RegisterPlaces';
 import VenueDetailPage from './pages/venue/venue-detail/VenueDetailPage';
-import {
-  injectLoginModalHandler,
-  injectNavigateToLogin,
-} from './shared/api/axiosInstance';
+
+
+import { injectLoginModalHandler, injectNavigateToLogin, } from './shared/api/axiosInstance';
 
 import './styles/App.css';
 
@@ -58,6 +59,7 @@ const theme = createTheme({
 function AppRoutes() {
   const location = useLocation();
   const state = location.state;
+  
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
 
@@ -93,17 +95,11 @@ function AppRoutes() {
           <Route path="my-bookings" element={<MyBookingsPage />} />
           <Route path="oauth/kakao/redirect" element={<KakaoRedirectPage />} />
           <Route path="venues/:id" element={<VenueDetailPage />} />
-          <Route
-            path="birthday-cafes/:id"
-            element={<BirthdayCafeDetailPage />}
-          />
+          <Route path="birthday-cafes/:id" element={<BirthdayCafeDetailPage />}/>
           <Route path="chat/:roomId" element={<ChatPage />} />
           <Route path="result" element={<SearchResults />} />
           <Route path="/favorite-events" element={<FavoriteEvents />} />
-          <Route
-            path="/payment/success/page/"
-            element={<PaymentSuccessPage />}
-          />
+          <Route path="/payment/success/page/" element={<PaymentSuccessPage />} />
           <Route path="/payment/fail" element={<PaymentFailPage />} />
           <Route path="chat-list" element={<ChatLobbyPage />} />
           <Route path="star/:id" element={<StarDetailPage />} />

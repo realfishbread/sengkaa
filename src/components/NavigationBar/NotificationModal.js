@@ -1,5 +1,5 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {
